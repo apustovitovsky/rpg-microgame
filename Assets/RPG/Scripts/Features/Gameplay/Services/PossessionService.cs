@@ -1,14 +1,10 @@
-using UnityEngine;
-using VContainer;
-using VContainer.Unity;
-
 namespace RPG.Gameplay
 {
     public sealed class PossessionService : IPossessionService
     {
         private readonly IGameplayInputRouter _gameplayInput;
         private readonly ICameraService _cameraService;
-        private IPlayerInputHandler _playerInputHandler;
+        private IActorInputHandler _currentActorHandler;
 
         public PossessionService(
             IGameplayInputRouter gameplayInput,
@@ -18,29 +14,26 @@ namespace RPG.Gameplay
             _cameraService = cameraService;
         }
 
-        public void Possess(LifetimeScope scope)
+        public void Possess(Actor actor)
         {
-            if (scope == null) return;
-
             Unpossess();
 
-            _playerInputHandler = scope.Container.Resolve<IPlayerInputHandler>();
-            var controller = scope.Container.Resolve<CharacterController>();
+            _currentActorHandler = actor.InputHandler;
 
-            _gameplayInput.SetHandler(_playerInputHandler);
-            _cameraService.SetHandler(_playerInputHandler);
-            _cameraService.SetTarget(controller.transform);
+            _gameplayInput.SetHandler(_currentActorHandler);
+            _cameraService.SetHandler(_currentActorHandler);
+            _cameraService.SetTarget(actor.Root);
         }
 
         public void Unpossess()
         {
-            if (_playerInputHandler == null) return;
+            if (_currentActorHandler == null) return;
 
-            _gameplayInput.RemoveHandler(_playerInputHandler);
-            _cameraService.RemoveHandler(_playerInputHandler);
+            _gameplayInput.RemoveHandler(_currentActorHandler);
+            _cameraService.RemoveHandler(_currentActorHandler);
             _cameraService.RemoveTarget();
 
-            _playerInputHandler = null;
+            _currentActorHandler = null;
         }
     }
 }

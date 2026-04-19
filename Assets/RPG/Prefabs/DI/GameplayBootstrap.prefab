@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5614576174119783040}
-  - component: {fileID: 2475354741373708375}
+  - component: {fileID: 4699016843249294496}
   m_Layer: 0
   m_Name: GameplayBootstrap
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 1355096735333217646}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2475354741373708375
+--- !u!114 &4699016843249294496
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,14 +42,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3365262438825384400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab070d665f7928c4eb9e87a6bc542c7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.GameplayScope
+  m_Script: {fileID: 11500000, guid: 6254e1b78beb5f149871422d8c9ad252, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: RPG.Core::RPG.Core.ModularScope
   parentReference:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  _gameplayConfig: {fileID: 11400000, guid: c217fed00f953514f93a23206c9782f0, type: 2}
+  _installers:
+  - {fileID: 11400000, guid: 4d2d8a64527c7764da43891b5677264f, type: 2}
 --- !u!1001 &3455045984516997942
 PrefabInstance:
   m_ObjectHideFlags: 0

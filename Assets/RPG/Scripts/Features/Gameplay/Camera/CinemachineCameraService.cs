@@ -8,19 +8,19 @@ namespace RPG.Gameplay
     public sealed class CinemachineCameraService : ICameraService, ICameraInputHandler, ITickable, IDisposable
     {
         private readonly CinemachineCamera _camera;
-        private IPlayerInputHandler _playerInputHandler;
+        private IActorInputHandler _playerInputHandler;
 
         public CinemachineCameraService(CinemachineCamera camera)
         {
             _camera = camera;
         }
 
-        public void SetHandler(IPlayerInputHandler handler)
+        public void SetHandler(IActorInputHandler handler)
         {
             _playerInputHandler = handler;
         }
 
-        public void RemoveHandler(IPlayerInputHandler handler)
+        public void RemoveHandler(IActorInputHandler handler)
         {
             if (_playerInputHandler == handler) _playerInputHandler = null;
         }

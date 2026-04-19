@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdac1ce16277baa4cbba4ec91e1c73c9, type: 3}
+  m_Name: GameplayInstaller
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.GameplayInstallerSO
+  _gameplayConfig: {fileID: 11400000, guid: c217fed00f953514f93a23206c9782f0, type: 2}

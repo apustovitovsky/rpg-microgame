@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5614576174119783040}
-  - component: {fileID: 5100675169398391898}
+  - component: {fileID: 5007797569855159471}
   m_Layer: 0
   m_Name: MainMenuBootstrap
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 8003098717943186699}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5100675169398391898
+--- !u!114 &5007797569855159471
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,14 +42,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3365262438825384400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecf567ee92f043e40a16b3687216bc8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: RPG.MainMenu::RPG.MainMenu.MainMenuScope
+  m_Script: {fileID: 11500000, guid: 6254e1b78beb5f149871422d8c9ad252, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: RPG.Core::RPG.Core.ModularScope
   parentReference:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  _mainMenuConfig: {fileID: 11400000, guid: 25cf0d420c9e8524f80f8733638e7381, type: 2}
+  _installers:
+  - {fileID: 11400000, guid: 9e1fd5fa2c6b419469f691a27127a10d, type: 2}
 --- !u!1001 &5921169907738096467
 PrefabInstance:
   m_ObjectHideFlags: 0

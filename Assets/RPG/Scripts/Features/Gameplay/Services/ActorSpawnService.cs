@@ -1,0 +1,31 @@
+using UnityEngine;
+using VContainer.Unity;
+
+namespace RPG.Gameplay
+{
+    public sealed class ActorSpawnService : IActorSpawnService
+    {
+        private readonly IActorFactory _factory;
+        private readonly IPossessionService _possessionService;
+
+        public ActorSpawnService(
+            IActorFactory factory,
+            IPossessionService possessionService)
+        {
+            _factory = factory;
+            _possessionService = possessionService;
+        }
+
+        public Actor SpawnAndPossess(LifetimeScope prefab, Vector3 position, Quaternion rotation = default)
+        {
+            var actor = Spawn(prefab, position, rotation);
+            _possessionService.Possess(actor);
+            return actor;
+        }
+
+        public Actor Spawn(LifetimeScope prefab, Vector3 position, Quaternion rotation = default)
+        {
+            return _factory.Create(prefab, position, rotation);
+        }
+    }
+}

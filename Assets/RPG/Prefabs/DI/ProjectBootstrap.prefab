@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6380611248123023415}
-  - component: {fileID: -5454319605585306930}
+  - component: {fileID: -2170690773861052682}
   m_Layer: 0
   m_Name: ProjectBootstrap
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-5454319605585306930
+--- !u!114 &-2170690773861052682
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,11 +41,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5345506247820736487}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73d2db75fc68caf4295b610f1f7318ef, type: 3}
+  m_Script: {fileID: 11500000, guid: 6254e1b78beb5f149871422d8c9ad252, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: RPG.Core::RPG.Core.ProjectScope
+  m_EditorClassIdentifier: RPG.Core::RPG.Core.ModularScope
   parentReference:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  _projectConfig: {fileID: 11400000, guid: eec67f8fe1e5fd6419eec088dda12411, type: 2}
+  _installers:
+  - {fileID: 11400000, guid: 4ebba9be2ae54ac4d8b09e700ef9ed12, type: 2}

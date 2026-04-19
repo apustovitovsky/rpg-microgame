@@ -7,7 +7,7 @@ namespace RPG.Gameplay
     public sealed class GameplayInputRouter : IGameplayInputRouter, InputSystem_Actions.IPlayerActions, IDisposable
     {
         private readonly InputSystem_Actions _input;
-        private IPlayerInputHandler _playerHandler;
+        private IActorInputHandler _playerHandler;
         private ICameraInputHandler _cameraHandler;
 
         public GameplayInputRouter(InputSystem_Actions input)
@@ -17,7 +17,7 @@ namespace RPG.Gameplay
             _input.Player.SetCallbacks(this);
         }
 
-        public void SetHandler(IPlayerInputHandler handler)
+        public void SetHandler(IActorInputHandler handler)
         {
             _playerHandler = handler;
         }
@@ -27,7 +27,7 @@ namespace RPG.Gameplay
             _cameraHandler = handler;
         }
 
-        public void RemoveHandler(IPlayerInputHandler handler)
+        public void RemoveHandler(IActorInputHandler handler)
         {
             if (_playerHandler == handler) _playerHandler = null;
         }

@@ -1,9 +1,5 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using VContainer;
 using VContainer.Unity;
 
 namespace RPG.Core
@@ -14,33 +10,31 @@ namespace RPG.Core
         private readonly LoadingScreenPresenter _loadingScreenPresenter;
         private readonly ProjectConfigSO _projectConfig;
         private readonly LifetimeScope _rootScope;
+        private readonly SceneReadinessChannel _readinessChannel;
 
         public SceneCoordinator(
             ISceneLoadingService sceneLoadingService,
             LoadingScreenPresenter loadingScreenPresenter,
-            ProjectConfigSO gameplayConfig,
-            LifetimeScope rootScope)
+            ProjectConfigSO projectConfig,
+            LifetimeScope rootScope,
+            SceneReadinessChannel readinessChannel)
         {
             _sceneLoadingService = sceneLoadingService;
             _loadingScreenPresenter = loadingScreenPresenter;
-            _projectConfig = gameplayConfig;
+            _projectConfig = projectConfig;
             _rootScope = rootScope;
+            _readinessChannel = readinessChannel;
         }
 
         private async UniTask LoadSceneWithLoadingScreen(string sceneName)
         {
+            _readinessChannel.Reset();
             _loadingScreenPresenter.ShowLoadingScreen();
-
-            var sceneScope = await _sceneLoadingService.LoadSceneAsync(sceneName, _rootScope);
 
             try
             {
-                var initiator = sceneScope != null ? sceneScope.Container.ResolveOrDefault<ISceneInitiator>() : null;
-
-                if (initiator != null)
-                {
-                    await initiator.Ready;
-                }
+                await _sceneLoadingService.LoadSceneAsync(sceneName, _rootScope);
+                await _readinessChannel.Completion;
             }
             finally
             {

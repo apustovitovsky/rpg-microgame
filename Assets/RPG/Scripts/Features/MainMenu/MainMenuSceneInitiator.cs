@@ -5,15 +5,19 @@ using VContainer.Unity;
 
 namespace RPG.MainMenu
 {
-    public class MainMenuSceneInitiator : ISceneInitiator, IAsyncStartable
+    public class MainMenuSceneInitiator : IAsyncStartable
     {
-        private readonly UniTaskCompletionSource<bool> _readyTcs = new();
-        public UniTask<bool> Ready => _readyTcs.Task;
+        private readonly SceneReadinessChannel _readinessChannel;
+
+        public MainMenuSceneInitiator(SceneReadinessChannel readinessChannel)
+        {
+            _readinessChannel = readinessChannel;
+        }
 
         public async UniTask StartAsync(CancellationToken cancellation = default)
         {
             await UniTask.Yield(PlayerLoopTiming.Update, cancellation);
-            _readyTcs.TrySetResult(true);
+            _readinessChannel.Complete(true);
         }
     }
 }

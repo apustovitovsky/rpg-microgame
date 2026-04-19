@@ -6,28 +6,29 @@ using VContainer.Unity;
 
 namespace RPG.Gameplay
 {
-    public class GameplaySceneInitiator : ISceneInitiator, IAsyncStartable
+    public class GameplaySceneInitiator : IAsyncStartable
     {
         private readonly ISceneLoadingService _sceneLoadingService;
         private readonly GameplayConfigSO _gameplayConfig;
         private readonly IGameplayInputRouter _inputRouter;
         private readonly ICameraInputHandler _cameraInput;
-        private readonly ICharacterSpawnService _characterSpawnService;
-        private readonly UniTaskCompletionSource<bool> _readyTcs = new();
-        public UniTask<bool> Ready => _readyTcs.Task;
+        private readonly IActorSpawnService _characterSpawnService;
+        private readonly SceneReadinessChannel _readinessChannel;
 
         public GameplaySceneInitiator(
             ISceneLoadingService sceneLoadingService,
             GameplayConfigSO gameplayConfig,
             IGameplayInputRouter inputRouter,
             ICameraInputHandler cameraInput,
-            ICharacterSpawnService characterSpawnService)
+            IActorSpawnService characterSpawnService,
+            SceneReadinessChannel readinessChannel)
         {
             _sceneLoadingService = sceneLoadingService;
             _gameplayConfig = gameplayConfig;
             _inputRouter = inputRouter;
             _cameraInput = cameraInput;
             _characterSpawnService = characterSpawnService;
+            _readinessChannel = readinessChannel;
         }
 
         public async UniTask StartAsync(CancellationToken cancellation = default)
@@ -35,10 +36,10 @@ namespace RPG.Gameplay
             await _sceneLoadingService.LoadSceneAdditiveAsync(_gameplayConfig.WorldScene);
             _inputRouter.SetHandler(_cameraInput);
 
-            _characterSpawnService.SpawnTurret(Vector3.zero);
-            _characterSpawnService.SpawnDrone(Vector3.zero);
+            _characterSpawnService.Spawn(_gameplayConfig.DronePrefab, Vector3.zero);
+            _characterSpawnService.SpawnAndPossess(_gameplayConfig.PlayerPrefab, Vector3.zero);
 
-            _readyTcs.TrySetResult(true);
+            _readinessChannel.Complete(true);
         }
     }
 }
