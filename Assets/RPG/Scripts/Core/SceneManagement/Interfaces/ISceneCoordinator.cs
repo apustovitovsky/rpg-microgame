@@ -7,5 +7,6 @@ namespace RPG.Core
         UniTask LoadMainMenuScene();
         UniTask LoadRPGScene();
         UniTask LoadFPSScene();
+        UniTask LoadSyntyScene();
     }
 }

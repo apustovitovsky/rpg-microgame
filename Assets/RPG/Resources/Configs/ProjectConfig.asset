@@ -17,3 +17,4 @@ MonoBehaviour:
   <MainMenuScene>k__BackingField: RPG/Scenes/MainMenuScene
   <RPGScene>k__BackingField: RPG/Scenes/GameplayScene
   <FPSScene>k__BackingField: FPS/Scenes/MainScene
+  <SyntyScene>k__BackingField: Synty/AnimationBaseLocomotion/Samples/Scenes/Demo_01

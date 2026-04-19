@@ -20,6 +20,7 @@ namespace RPG.MainMenu
             _view.BeginPlayRPGButton.onClick.AddListener(OnBeginPlayRPGClicked);
             _view.BeginPlayFPSButton.onClick.AddListener(OnBeginPlayFPSClicked);
             _view.ExitGameButton.onClick.AddListener(OnExitGameClicked);
+            _view.BeginPlaySyntyButton.onClick.AddListener(OnBeginPlaySyntyClicked);
         }
 
         private void OnBeginPlayRPGClicked()
@@ -30,6 +31,11 @@ namespace RPG.MainMenu
         private void OnBeginPlayFPSClicked()
         {
             _sceneCoordinator.LoadFPSScene();
+        }
+
+        private void OnBeginPlaySyntyClicked()
+        {
+            _sceneCoordinator.LoadSyntyScene();
         }
 
         private void OnExitGameClicked()

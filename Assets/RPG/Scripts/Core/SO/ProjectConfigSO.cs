@@ -10,5 +10,6 @@ namespace RPG.Core
         [field: SerializeField] public string MainMenuScene { get; private set; }
         [field: SerializeField] public string RPGScene { get; private set; }
         [field: SerializeField] public string FPSScene { get; private set; }
+        [field: SerializeField] public string SyntyScene { get; private set; }
     }
 }

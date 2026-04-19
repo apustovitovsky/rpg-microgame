@@ -26,10 +26,14 @@ namespace RPG.Core
             _readinessChannel = readinessChannel;
         }
 
-        private async UniTask LoadSceneWithLoadingScreen(string sceneName)
+        private async UniTask LoadScene(string sceneName, bool showLoadingScreen = true)
         {
             _readinessChannel.Reset();
-            _loadingScreenPresenter.ShowLoadingScreen();
+
+            if (showLoadingScreen)
+            {
+                _loadingScreenPresenter.ShowLoadingScreen();
+            }
 
             try
             {
@@ -44,17 +48,22 @@ namespace RPG.Core
 
         public async UniTask LoadMainMenuScene()
         {
-            await LoadSceneWithLoadingScreen(_projectConfig.MainMenuScene);
+            await LoadScene(_projectConfig.MainMenuScene, showLoadingScreen: false);
         }
 
         public async UniTask LoadRPGScene()
         {
-            await LoadSceneWithLoadingScreen(_projectConfig.RPGScene);
+            await LoadScene(_projectConfig.RPGScene);
         }
 
         public async UniTask LoadFPSScene()
         {
-            await LoadSceneWithLoadingScreen(_projectConfig.FPSScene);
+            await LoadScene(_projectConfig.FPSScene, showLoadingScreen: false);
+        }
+
+        public async UniTask LoadSyntyScene()
+        {
+            await LoadScene(_projectConfig.SyntyScene, showLoadingScreen: false);
         }
 
         public async UniTask StartAsync(CancellationToken cancellation = default)

@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/RPG/Scenes/WorldScene.unity
     guid: fde5ce2fd00e69147b6bc232ddf4d0f6
+  - enabled: 1
+    path: Assets/Synty/AnimationBaseLocomotion/Samples/Scenes/Demo_01.unity
+    guid: 223db587197b08446b261af28a0744b6
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 743d9d079bea0f547a8e1b76070a80ae,
       type: 3}
