@@ -14,8 +14,8 @@ namespace RPG.Gameplay
             var builder = context.Builder;
 
             builder.Register<ActorGravityService>(Lifetime.Scoped)
-                   .WithParameter(gravityForce)
-                   .AsImplementedInterfaces();
+                .WithParameter(gravityForce)
+                .AsImplementedInterfaces();
         }
     }
 }

@@ -13,15 +13,17 @@ namespace RPG.Gameplay
             _parentScope = parentScope;
         }
 
-        public Actor Create(LifetimeScope prefab, Vector3 position, Quaternion rotation = default)
+        public LifetimeScope Create(LifetimeScope prefab, Vector3 position, Quaternion rotation = default)
         {
             LifetimeScope instance;
+
             using (LifetimeScope.EnqueueParent(_parentScope))
             {
                 instance = Object.Instantiate(prefab, position, rotation);
                 instance.name = prefab.name;
             }
-            return new Actor(instance.transform, instance.Container.Resolve<IActorInputHandler>());
+            
+            return instance;
         }
     }
 }

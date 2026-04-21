@@ -1,3 +1,6 @@
+using VContainer;
+using VContainer.Unity;
+
 namespace RPG.Gameplay
 {
     public sealed class PossessionService : IPossessionService
@@ -14,15 +17,15 @@ namespace RPG.Gameplay
             _cameraService = cameraService;
         }
 
-        public void Possess(Actor actor)
+        public void Possess(LifetimeScope actor)
         {
             Unpossess();
 
-            _currentActorHandler = actor.InputHandler;
+            _currentActorHandler = actor.Container.Resolve<IActorInputHandler>();
 
             _gameplayInput.SetHandler(_currentActorHandler);
             _cameraService.SetHandler(_currentActorHandler);
-            _cameraService.SetTarget(actor.Root);
+            _cameraService.SetTarget(actor.transform);
         }
 
         public void Unpossess()

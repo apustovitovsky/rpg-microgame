@@ -14,7 +14,6 @@ namespace RPG.Gameplay
 
             builder.RegisterComponentInHierarchy<CharacterController>()
                 .UnderTransform(context.Scope.transform);
-
         }
     }
 }

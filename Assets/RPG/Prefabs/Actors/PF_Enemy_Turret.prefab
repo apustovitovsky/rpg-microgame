@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1521007957284072012}
   - component: {fileID: 4952707194174993026}
-  - component: {fileID: 6004782716808131346}
   - component: {fileID: 9194442102086525668}
+  - component: {fileID: 6880396733495787828}
   m_Layer: 0
   m_Name: Hitbox Base
   m_TagString: Untagged
@@ -55,20 +55,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.15, z: 1}
   m_Center: {x: 0, y: 0.075, z: 0}
---- !u!114 &6004782716808131346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 594405854206730852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9b0ce1bb69c96b49a7ac1098a7f5796, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DamageMultiplier: 1
-  SensibilityToSelfdamage: 0.5
 --- !u!65 &9194442102086525668
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -90,6 +76,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.2, y: 0.5, z: 0.2}
   m_Center: {x: 0, y: 0.3, z: 0}
+--- !u!114 &6880396733495787828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594405854206730852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 638562eda160188449bcdb8deb977511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.ActorHitbox
 --- !u!1 &1055246761355575399
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,6 +200,7 @@ GameObject:
   - component: {fileID: 3444686158330356048}
   - component: {fileID: 7575246686348438283}
   - component: {fileID: -754158071631575764}
+  - component: {fileID: -7412501918093734058}
   m_Layer: 0
   m_Name: PF_Enemy_Turret
   m_TagString: Untagged
@@ -292,6 +291,22 @@ MonoBehaviour:
   autoInjectGameObjects: []
   _installers:
   - {fileID: 11400000, guid: 65a49105eb2e8484fb906d9eb40427a2, type: 2}
+--- !u!114 &-7412501918093734058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015434656898269652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7741ef673c7f1c84180dabc25deec5d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.ActorRuntimeRefs
+  <AimPoint>k__BackingField: {fileID: 0}
+  <UiAnchor>k__BackingField: {fileID: 0}
+  <Hitboxes>k__BackingField:
+  - {fileID: 6880396733495787828}
 --- !u!1 &2201913640410082181
 GameObject:
   m_ObjectHideFlags: 0

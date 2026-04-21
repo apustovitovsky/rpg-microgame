@@ -64,6 +64,7 @@ GameObject:
   - component: {fileID: 1614318205656627459}
   - component: {fileID: 2251487017503882937}
   - component: {fileID: 7296839596654510245}
+  - component: {fileID: 5383378300360564306}
   m_Layer: 0
   m_Name: PF_Enemy_Drone
   m_TagString: Untagged
@@ -255,6 +256,22 @@ MonoBehaviour:
   autoInjectGameObjects: []
   _installers:
   - {fileID: 11400000, guid: 737b48aca3f8ca04cb72eda5fdeb9010, type: 2}
+--- !u!114 &5383378300360564306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015434656898269652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7741ef673c7f1c84180dabc25deec5d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.ActorRuntimeRefs
+  <AimPoint>k__BackingField: {fileID: 3175718064325614203}
+  <UiAnchor>k__BackingField: {fileID: 0}
+  <Hitboxes>k__BackingField:
+  - {fileID: 4125145230945767359}
 --- !u!1 &2201913640410082181
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,7 +395,7 @@ GameObject:
   - component: {fileID: 381893446485871685}
   - component: {fileID: 4657678879490380143}
   - component: {fileID: 168451937821874537}
-  - component: {fileID: 862342350251935012}
+  - component: {fileID: 4125145230945767359}
   m_Layer: 0
   m_Name: HitBox
   m_TagString: Untagged
@@ -430,7 +447,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.48
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &862342350251935012
+--- !u!114 &4125145230945767359
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -439,11 +456,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6421371450313891992}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9b0ce1bb69c96b49a7ac1098a7f5796, type: 3}
+  m_Script: {fileID: 11500000, guid: 638562eda160188449bcdb8deb977511, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  DamageMultiplier: 1
-  SensibilityToSelfdamage: 0.5
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.ActorHitbox
 --- !u!1 &7448957880145452174
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,14 +16,14 @@ namespace RPG.Gameplay
             _possessionService = possessionService;
         }
 
-        public Actor SpawnAndPossess(LifetimeScope prefab, Vector3 position, Quaternion rotation = default)
+        public LifetimeScope SpawnAndPossess(LifetimeScope prefab, Vector3 position, Quaternion rotation = default)
         {
-            var actor = Spawn(prefab, position, rotation);
-            _possessionService.Possess(actor);
-            return actor;
+            var actorId = Spawn(prefab, position, rotation);
+            _possessionService.Possess(actorId);
+            return actorId;
         }
 
-        public Actor Spawn(LifetimeScope prefab, Vector3 position, Quaternion rotation = default)
+        public LifetimeScope Spawn(LifetimeScope prefab, Vector3 position, Quaternion rotation = default)
         {
             return _factory.Create(prefab, position, rotation);
         }
