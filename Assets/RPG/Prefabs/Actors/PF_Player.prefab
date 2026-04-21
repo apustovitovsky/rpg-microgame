@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 1912447486875605749}
   - component: {fileID: -5166056413676136848}
   - component: {fileID: 7846602193108847942}
+  - component: {fileID: 1298332856407455844}
   m_Layer: 0
   m_Name: PF_Player
   m_TagString: Untagged
@@ -230,6 +231,18 @@ MonoBehaviour:
   <UiAnchor>k__BackingField: {fileID: 0}
   <Hitboxes>k__BackingField:
   - {fileID: 6716968938287014511}
+--- !u!114 &1298332856407455844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6793277797321537927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a0d300970c5bcf4d90f319b61db052e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.ActorPickupReceiver
 --- !u!1 &8730638189870054717
 GameObject:
   m_ObjectHideFlags: 0

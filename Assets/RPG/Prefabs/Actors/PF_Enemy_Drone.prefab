@@ -65,6 +65,7 @@ GameObject:
   - component: {fileID: 2251487017503882937}
   - component: {fileID: 7296839596654510245}
   - component: {fileID: 5383378300360564306}
+  - component: {fileID: 7497728022137386498}
   m_Layer: 0
   m_Name: PF_Enemy_Drone
   m_TagString: Untagged
@@ -272,6 +273,18 @@ MonoBehaviour:
   <UiAnchor>k__BackingField: {fileID: 0}
   <Hitboxes>k__BackingField:
   - {fileID: 4125145230945767359}
+--- !u!114 &7497728022137386498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015434656898269652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a0d300970c5bcf4d90f319b61db052e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.ActorPickupReceiver
 --- !u!1 &2201913640410082181
 GameObject:
   m_ObjectHideFlags: 0

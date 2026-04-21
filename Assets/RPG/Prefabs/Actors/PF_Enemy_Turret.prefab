@@ -201,6 +201,7 @@ GameObject:
   - component: {fileID: 7575246686348438283}
   - component: {fileID: -754158071631575764}
   - component: {fileID: -7412501918093734058}
+  - component: {fileID: 7084024060291341493}
   m_Layer: 0
   m_Name: PF_Enemy_Turret
   m_TagString: Untagged
@@ -307,6 +308,18 @@ MonoBehaviour:
   <UiAnchor>k__BackingField: {fileID: 0}
   <Hitboxes>k__BackingField:
   - {fileID: 6880396733495787828}
+--- !u!114 &7084024060291341493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015434656898269652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a0d300970c5bcf4d90f319b61db052e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.ActorPickupReceiver
 --- !u!1 &2201913640410082181
 GameObject:
   m_ObjectHideFlags: 0
