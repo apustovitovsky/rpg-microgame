@@ -43,7 +43,10 @@ namespace RPG.Gameplay
 
         private void OnTriggerEnter(Collider other)
         {
-            if (_pickupService.TryCollect(_pickup, other))
+            if (!other.TryGetComponent<IPickupCollector>(out var collector))
+                return;
+
+            if (_pickupService.TryCollect(_pickup, collector))
             {
                 OnCollected();
                 Destroy(gameObject);

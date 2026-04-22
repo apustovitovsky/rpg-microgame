@@ -15,10 +15,10 @@ namespace RPG.Gameplay
 
         public bool TryCollect(IPickupCollector collector)
         {
-            if (collector.Inventory == null)
+            if (!collector.TryGet<IInventory>(out var inventory))
                 return false;
 
-            collector.Inventory.AddGold(_amount);
+            inventory.AddGold(_amount);
 
             IsCollected = true;
             OnCollected();

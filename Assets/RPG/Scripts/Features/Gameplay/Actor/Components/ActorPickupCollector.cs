@@ -10,8 +10,6 @@ namespace RPG.Gameplay
         private IInventory _actorInventory;
         
         public string Name => name;
-        public IHealth Health => _actorHealth;
-        public IInventory Inventory => _actorInventory;
 
         [Inject]
         public void Construct(
@@ -20,6 +18,24 @@ namespace RPG.Gameplay
         {
             _actorHealth = actorHealth;
             _actorInventory = actorInventory;
+        }
+
+        public bool TryGet<T>(out T service) where T : class
+        {
+            if (_actorHealth is T healthService)
+            {
+                service = healthService;
+                return true;
+            }
+
+            if (_actorInventory is T inventoryService)
+            {
+                service = inventoryService;
+                return true;
+            }
+
+            service = null;
+            return false;
         }
     }
 }

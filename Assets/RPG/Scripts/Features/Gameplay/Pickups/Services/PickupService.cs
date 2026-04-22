@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,9 +7,9 @@ namespace RPG.Gameplay
     {
         private readonly HashSet<IPickup> _inProgress = new();
 
-        public bool TryCollect(IPickup pickup, Collider other)
+        public bool TryCollect(IPickup pickup, IPickupCollector collector)
         {
-            if (pickup == null || pickup.IsCollected)
+            if (pickup == null || collector == null || pickup.IsCollected)
                 return false;
 
             if (!_inProgress.Add(pickup))
@@ -18,9 +17,6 @@ namespace RPG.Gameplay
 
             try
             {
-                if (!other.TryGetComponent<IPickupCollector>(out var collector))
-                    return false;
-
                 if (!pickup.TryCollect(collector))
                     return false;
 

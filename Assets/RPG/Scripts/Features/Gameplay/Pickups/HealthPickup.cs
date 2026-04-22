@@ -12,13 +12,13 @@ namespace RPG.Gameplay
 
         public bool TryCollect(IPickupCollector collector)
         {
-            if (collector.Health == null)
+            if (!collector.TryGet<IHealth>(out var health))
                 return false;
 
-            if (collector.Health.IsFull)
+            if (health.IsFull)
                 return false;
 
-            collector.Health.Heal(_amount);
+            health.Heal(_amount);
 
             IsCollected = true;
             OnCollected();

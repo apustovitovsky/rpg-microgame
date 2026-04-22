@@ -5,7 +5,6 @@ namespace RPG.Gameplay
     public interface IPickupCollector
     {
         string Name { get; }
-        IInventory Inventory { get; }
-        IHealth Health { get; }
+        bool TryGet<T>(out T service) where T : class;
     }
 }
