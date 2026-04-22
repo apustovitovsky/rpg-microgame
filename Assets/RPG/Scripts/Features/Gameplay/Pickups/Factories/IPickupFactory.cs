@@ -4,6 +4,6 @@ namespace RPG.Gameplay
 {
     public interface IPickupFactory
     {
-        void Create(Pickup prefab, Vector3 position);
+        Pickup Create(PickupDefinitionSO definition, Vector3 position);
     }
 }

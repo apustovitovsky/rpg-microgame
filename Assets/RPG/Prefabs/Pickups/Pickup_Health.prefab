@@ -116,7 +116,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9085daa5bb577344d9b09a56276a6500, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.FloatingPickup
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.WorldPickup
   <Definition>k__BackingField: {fileID: 11400000, guid: 88157b2fa69cbc84baefbb94d887e0ec,
     type: 2}
   VerticalBobFrequency: 1
