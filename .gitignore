@@ -42,6 +42,7 @@
 
 # Claude Code
 .claude/
+/docs/
 
 # Visual Studio cache directory
 .vs/
