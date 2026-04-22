@@ -2,35 +2,32 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using VContainer.Unity;
 
 namespace RPG.Gameplay
 {
     [DisallowMultipleComponent]
-    public sealed class PickupSpawner : MonoBehaviour
+    public sealed class PickupSpawner : MonoBehaviour, IInitializable, IDisposable
     {
-        [SerializeField] private WorldPickup _pickup;
+        [Tooltip("Pickup definition")]
+        [field: SerializeField] public PickupDefinitionSO Definition { get; private set; }
+
+        [SerializeField] private Pickup _pickup;
         [SerializeField] private bool _respawns = true;
         [SerializeField] private float _respawnCooldown = 10f;
 
         private bool _isRespawnPending;
 
-        private void Awake()
+        public void Initialize()
         {
             if (_pickup != null)
             {
                 _pickup.Collected += OnPickupCollected;
+                _pickup.Respawn();
             }
         }
 
-        private void OnDestroy()
-        {
-            if (_pickup != null)
-            {
-                _pickup.Collected -= OnPickupCollected;
-            }
-        }
-
-        private void OnPickupCollected(WorldPickup pickup)
+        private void OnPickupCollected(Pickup pickup)
         {
             if (!_respawns || _isRespawnPending)
                 return;
@@ -45,7 +42,7 @@ namespace RPG.Gameplay
             try
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(_respawnCooldown), cancellationToken: cancellationToken);
-                _pickup?.Respawn();
+                if (_pickup != null) _pickup.Respawn();
             }
             catch (OperationCanceledException)
             {
@@ -53,6 +50,13 @@ namespace RPG.Gameplay
             finally
             {
                 _isRespawnPending = false;
+            }
+        }
+        public void Dispose()
+        {
+            if (_pickup != null)
+            {
+                _pickup.Collected -= OnPickupCollected;
             }
         }
     }

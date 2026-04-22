@@ -43,14 +43,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6254e1b78beb5f149871422d8c9ad252, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: RPG.Core::RPG.Core.ModularScope
   parentReference:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
   _installers:
-  - {fileID: 11400000, guid: 4d2d8a64527c7764da43891b5677264f, type: 2}
+  - {fileID: 11400000, guid: 812ce7dc4c5ac9048ad207f135566e87, type: 2}
 --- !u!1001 &3455045984516997942
 PrefabInstance:
   m_ObjectHideFlags: 0

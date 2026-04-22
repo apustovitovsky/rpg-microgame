@@ -32,9 +32,6 @@ namespace RPG.Gameplay
             builder.Register<GameplayInputRouter>(Lifetime.Singleton)
                 .As<IGameplayInputRouter>();
 
-            builder.Register<PickupCollectionService>(Lifetime.Singleton)
-                .As<IPickupCollectionService>();
-
             builder.RegisterComponentInNewPrefab(_gameplayConfig.VirtualCamera, Lifetime.Singleton);
 
             builder.Register<CinemachineCameraService>(Lifetime.Singleton)

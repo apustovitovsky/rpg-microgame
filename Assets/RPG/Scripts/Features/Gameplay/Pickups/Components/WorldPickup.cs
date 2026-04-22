@@ -1,101 +1,65 @@
 using UnityEngine;
-using VContainer;
-using System;
-
 
 namespace RPG.Gameplay
 {
-    [RequireComponent(typeof(Collider))]
-    [DisallowMultipleComponent]
-    public class WorldPickup : MonoBehaviour
+    public sealed class WorldPickup : Pickup
     {
-        private IPickupCollectionService _pickupService;
-        private Func<PickupDefinitionSO, WorldPickup, IPickupInstance> _pickupFactory;
-        private IPickupInstance _pickup;
-        private Collider _collider;
-        private bool _isAvailable = true;
+        [Tooltip("Frequency at which the item will move up and down")]
+        public float VerticalBobFrequency = 1f;
 
-        [field: SerializeField] public PickupDefinitionSO Definition { get; private set; }
-        public bool IsCollected { get; private set; }
+        [Tooltip("Distance the item will move up and down")]
+        public float BobbingAmount = 1f;
+        [Tooltip("Rotation angle per second")] public float RotatingSpeed = 360f;
 
-        public event Action<WorldPickup> Collected;
+        [Tooltip("Sound played on pickup")] public AudioClip PickupSfx;
+        [Tooltip("VFX spawned on pickup")] public GameObject PickupVfxPrefab;
+        Vector3 m_StartPosition;
+        bool m_HasPlayedFeedback;
 
-        [Inject]
-        public void Construct(
-            IPickupCollectionService pickupService,
-            Func<PickupDefinitionSO, WorldPickup, IPickupInstance> pickupFactory)
+        private void Start()
         {
-            _pickupService = pickupService;
-            _pickupFactory = pickupFactory;
+            // Remember start position for animation
+            m_StartPosition = transform.position;
+        }
+        
+        void Update()
+        {
+            // Handle bobbing
+            float bobbingAnimationPhase = ((Mathf.Sin(Time.time * VerticalBobFrequency) * 0.5f) + 0.5f) * BobbingAmount;
+            transform.position = m_StartPosition + Vector3.up * bobbingAnimationPhase;
+
+            // Handle rotating
+            transform.Rotate(Vector3.up, RotatingSpeed * Time.deltaTime, Space.Self);
         }
 
-        private void Reset()
+        protected override void OnCollected()
         {
-            EnsureTrigger();
+            PlayPickupFeedback();
+            Hide();
         }
 
-        private void OnValidate()
+        protected override void OnRespawned()
         {
-            EnsureTrigger();
+            m_HasPlayedFeedback = false;
+            m_StartPosition = transform.position;
         }
 
-        private void Awake()
+        public void PlayPickupFeedback()
         {
-            EnsureTrigger();
-            InitializePickupInstance();
-        }
-
-        private void EnsureTrigger()
-        {
-            _collider = _collider != null ? _collider : GetComponent<Collider>();
-            if (_collider != null) _collider.isTrigger = true;
-        }
-
-        public void Respawn()
-        {
-            _isAvailable = true;
-            IsCollected = false;
-            gameObject.SetActive(true);
-            InitializePickupInstance();
-            OnRespawned();
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (!_isAvailable || _pickupService == null || _pickup == null)
+            if (m_HasPlayedFeedback)
                 return;
 
-            if (!other.TryGetComponent<IPickupCollector>(out var collector))
-                return;
-
-            if (_pickupService.TryCollect(_pickup, collector))
+            if (PickupSfx)
             {
-                _isAvailable = false;
-                IsCollected = true;
-                OnCollected();
-                Collected?.Invoke(this);
+                // AudioUtility.CreateSFX(PickupSfx, transform.position, AudioUtility.AudioGroups.Pickup, 0f);
             }
-        }
 
-        protected void Hide()
-        {
-            gameObject.SetActive(false);
-        }
+            if (PickupVfxPrefab)
+            {
+                // var pickupVfxInstance = Instantiate(PickupVfxPrefab, transform.position, Quaternion.identity);
+            }
 
-        protected virtual void OnCollected()
-        {
-            Destroy(gameObject);
-        }
-
-        protected virtual void OnRespawned()
-        {
-        }
-
-        private void InitializePickupInstance()
-        {
-            _pickup = Definition != null
-                ? _pickupFactory?.Invoke(Definition, this)
-                : null;
+            m_HasPlayedFeedback = true;
         }
     }
 }

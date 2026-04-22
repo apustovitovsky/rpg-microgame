@@ -534,7 +534,7 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 499976351}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &562497535
+--- !u!1001 &508275975
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -544,33 +544,18 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2529580269645609529, guid: a2f6639d930629c44aea8552fd6b657b,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2529580269645609529, guid: a2f6639d930629c44aea8552fd6b657b,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2529580269645609529, guid: a2f6639d930629c44aea8552fd6b657b,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2529580269645609529, guid: a2f6639d930629c44aea8552fd6b657b,
-        type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.03
+      value: -0.4572983
       objectReference: {fileID: 0}
     - target: {fileID: 2529580269645609529, guid: a2f6639d930629c44aea8552fd6b657b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.7500005
       objectReference: {fileID: 0}
     - target: {fileID: 2529580269645609529, guid: a2f6639d930629c44aea8552fd6b657b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1.4329795
       objectReference: {fileID: 0}
     - target: {fileID: 2529580269645609529, guid: a2f6639d930629c44aea8552fd6b657b,
         type: 3}
@@ -610,7 +595,7 @@ PrefabInstance:
     - target: {fileID: 2529580269645609534, guid: a2f6639d930629c44aea8552fd6b657b,
         type: 3}
       propertyPath: m_Name
-      value: Loot_Health
+      value: Pickup_Health
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3932,4 +3917,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 1382797829}
   - {fileID: 1708557757}
-  - {fileID: 562497535}
+  - {fileID: 508275975}

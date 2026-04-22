@@ -68,7 +68,7 @@ namespace RPG.Core
 
         public async UniTask StartAsync(CancellationToken cancellation = default)
         {
-            await LoadMainMenuScene();
+            await LoadRPGScene();
         }
     }
 }

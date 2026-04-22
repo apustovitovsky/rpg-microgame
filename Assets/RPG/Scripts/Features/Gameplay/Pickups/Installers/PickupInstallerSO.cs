@@ -15,11 +15,16 @@ namespace RPG.Gameplay
             builder.Register<PickupCollectionService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.RegisterFactory<PickupDefinitionSO, WorldPickup, IPickupInstance>(
-                (definition, worldPickup) => new PickupInstance(definition, worldPickup));
+            builder.RegisterFactory<PickupDefinitionSO, IPickupInstance>(
+                (definition) => new PickupInstance(definition));
+
+            // builder.RegisterFactory<PickupDefinitionSO, Pickup>(
+            //     (definition) => new Pickup(definition));
+
 
             builder.RegisterComponentInHierarchy<WorldPickup>()
-                .UnderTransform(context.Scope.transform);
+                .UnderTransform(context.Scope.transform)
+                .AsImplementedInterfaces();
         }
     }
 }
