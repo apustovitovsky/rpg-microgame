@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace RPG.Gameplay
 {
-    public sealed class PickupService : IPickupService
+    public sealed class PickupCollectionService : IPickupCollectionService
     {
         private readonly HashSet<IPickupInstance> _inProgress = new();
 
         public bool TryCollect(IPickupInstance pickup, IPickupCollector collector)
         {
-            if (pickup == null || collector == null || pickup.IsCollected)
+            if (pickup == null || collector == null)
                 return false;
 
             if (!_inProgress.Add(pickup))

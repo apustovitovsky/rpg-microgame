@@ -5,7 +5,7 @@ namespace RPG.Gameplay
     [CreateAssetMenu(fileName = "HealthPickupDefinition", menuName = "RPG/Gameplay/Pickup/Health Pickup Definition")]
     public sealed class HealthPickupDefinitionSO : PickupDefinitionSO
     {
-        [SerializeField] private int _amount = 10;
+        [SerializeField] private int _amountPerStack = 10;
 
         public override bool ApplyTo(IPickupCollector collector)
         {
@@ -15,7 +15,7 @@ namespace RPG.Gameplay
             if (health.IsFull)
                 return false;
 
-            health.Heal(_amount);
+            health.Heal(_amountPerStack * InitialStackCount);
             return true;
         }
     }

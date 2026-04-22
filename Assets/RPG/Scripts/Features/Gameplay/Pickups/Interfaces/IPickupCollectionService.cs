@@ -1,6 +1,6 @@
 namespace RPG.Gameplay
 {
-    public interface IPickupService
+    public interface IPickupCollectionService
     {
         bool TryCollect(IPickupInstance pickup, IPickupCollector collector);
     }

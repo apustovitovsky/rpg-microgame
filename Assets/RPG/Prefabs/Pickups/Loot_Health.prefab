@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2529580269645609530}
   - component: {fileID: 2529580269645609531}
   - component: {fileID: 5787417297529263727}
-  - component: {fileID: -1116743150247156296}
   m_Layer: 0
   m_Name: Loot_Health
   m_TagString: Untagged
@@ -105,23 +104,6 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
---- !u!114 &-1116743150247156296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2529580269645609534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085daa5bb577344d9b09a56276a6500, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.GroundPickup
-  VerticalBobFrequency: 1
-  BobbingAmount: 1
-  RotatingSpeed: 360
-  PickupSfx: {fileID: 0}
-  PickupVfxPrefab: {fileID: 0}
 --- !u!1 &2732479431358744901
 GameObject:
   m_ObjectHideFlags: 0

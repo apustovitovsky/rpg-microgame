@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace RPG.Gameplay
 {
-    public sealed class GroundPickup : PickupComponent
+    public sealed class PickupPad : WorldPickup
     {
         [Tooltip("Frequency at which the item will move up and down")]
         public float VerticalBobFrequency = 1f;
@@ -34,6 +34,13 @@ namespace RPG.Gameplay
         protected override void OnCollected()
         {
             PlayPickupFeedback();
+            Hide();
+        }
+
+        protected override void OnRespawned()
+        {
+            m_HasPlayedFeedback = false;
+            m_StartPosition = transform.position;
         }
 
         public void PlayPickupFeedback()

@@ -1,32 +1,33 @@
+using UnityEngine;
+
 namespace RPG.Gameplay
 {
     public class PickupInstance : IPickupInstance
     {
         private readonly PickupDefinitionSO _definition;
+        private readonly WorldPickup _worldPickup;
 
-        public PickupInstance(PickupDefinitionSO definition)
+        public PickupInstance(PickupDefinitionSO definition, WorldPickup worldPickup)
         {
             _definition = definition;
+            _worldPickup = worldPickup;
         }
 
         public string DisplayName => _definition != null ? _definition.DisplayName : string.Empty;
-        public bool IsCollected { get; private set; }
+        public WorldPickup WorldPickup => _worldPickup;
 
         public bool TryCollect(IPickupCollector collector)
         {
-            if (IsCollected || _definition == null)
+            if (_definition == null)
                 return false;
 
             if (!_definition.ApplyTo(collector))
                 return false;
 
-            IsCollected = true;
             OnCollected();
             return true;
         }
 
-        protected virtual void OnCollected()
-        {
-        }
+        protected virtual void OnCollected() { }
     }
 }
