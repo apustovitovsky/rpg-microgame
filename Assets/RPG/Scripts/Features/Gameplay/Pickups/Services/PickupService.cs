@@ -5,9 +5,9 @@ namespace RPG.Gameplay
 {
     public sealed class PickupService : IPickupService
     {
-        private readonly HashSet<IPickup> _inProgress = new();
+        private readonly HashSet<IPickupInstance> _inProgress = new();
 
-        public bool TryCollect(IPickup pickup, IPickupCollector collector)
+        public bool TryCollect(IPickupInstance pickup, IPickupCollector collector)
         {
             if (pickup == null || collector == null || pickup.IsCollected)
                 return false;

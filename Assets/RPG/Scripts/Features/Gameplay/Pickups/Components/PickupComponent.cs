@@ -8,13 +8,13 @@ namespace RPG.Gameplay
     public class PickupComponent : MonoBehaviour
     {
         private IPickupService _pickupService;
-        private IPickup _pickup;
+        private IPickupInstance _pickup;
         private Collider _collider;
 
         [Inject]
         public void Construct(
             IPickupService pickupService,
-            IPickup pickup)
+            IPickupInstance pickup)
         {
             _pickupService = pickupService;
             _pickup = pickup;
@@ -43,6 +43,9 @@ namespace RPG.Gameplay
 
         private void OnTriggerEnter(Collider other)
         {
+            if (_pickupService == null || _pickup == null)
+                return;
+
             if (!other.TryGetComponent<IPickupCollector>(out var collector))
                 return;
 

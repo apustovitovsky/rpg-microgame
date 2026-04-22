@@ -1,28 +1,26 @@
 namespace RPG.Gameplay
 {
-    public class HealthPickup : IPickup
+    public class PickupInstance : IPickupInstance
     {
-        private readonly float _amount;
-        public bool IsCollected { get; private set; }
+        private readonly IPickupEffect _effect;
 
-        public HealthPickup(int amount)
+        public PickupInstance(IPickupEffect effect)
         {
-            _amount = amount;
+            _effect = effect;
         }
+
+        public bool IsCollected { get; private set; }
 
         public bool TryCollect(IPickupCollector collector)
         {
-            if (!collector.TryGet<IHealth>(out var health))
+            if (IsCollected || _effect == null)
                 return false;
 
-            if (health.IsFull)
+            if (!_effect.TryApply(collector))
                 return false;
-
-            health.Heal(_amount);
 
             IsCollected = true;
             OnCollected();
-
             return true;
         }
 

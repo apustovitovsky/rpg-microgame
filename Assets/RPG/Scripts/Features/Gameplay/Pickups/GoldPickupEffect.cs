@@ -2,32 +2,24 @@ using UnityEngine;
 
 namespace RPG.Gameplay
 {
-    public class GoldPickup : IPickup
+    public class GoldPickupEffect : IPickupEffect
     {
-        public bool IsCollected { get; private set; }
         private readonly int _amount;
 
 
-        public GoldPickup(int amount)
+        public GoldPickupEffect(int amount)
         {
             _amount = amount;
         }
 
-        public bool TryCollect(IPickupCollector collector)
+        public bool TryApply(IPickupCollector collector)
         {
             if (!collector.TryGet<IInventory>(out var inventory))
                 return false;
 
             inventory.AddGold(_amount);
 
-            IsCollected = true;
-            OnCollected();
-
             return true;
-        }
-
-        protected virtual void OnCollected()
-        {
         }
     }
 }

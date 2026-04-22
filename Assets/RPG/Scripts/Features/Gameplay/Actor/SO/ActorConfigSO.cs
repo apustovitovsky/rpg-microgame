@@ -6,5 +6,6 @@ namespace RPG.Gameplay
     public sealed class ActorConfigSO : ScriptableObject
     {
         [field: SerializeField] public string DisplayName { get; private set; } = "Actor";
+        [field: SerializeField] public PickupDefinitionSO Pickup { get; private set; }
     }
 }

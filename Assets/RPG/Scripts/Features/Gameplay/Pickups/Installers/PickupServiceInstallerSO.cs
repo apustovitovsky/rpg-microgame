@@ -8,6 +8,8 @@ namespace RPG.Gameplay
     [CreateAssetMenu(fileName = "PickupServiceInstaller", menuName = "RPG/Gameplay/Pickup/Pickup Service Installer")]
     public sealed class PickupServiceInstallerSO : InstallerSO
     {
+        [SerializeField] private PickupDefinitionSO _pickupDefinition;
+
         public override void Install(in InstallContext context)
         {
             var builder = context.Builder;
@@ -18,7 +20,7 @@ namespace RPG.Gameplay
             builder.RegisterComponentInHierarchy<GroundPickup>()
 
                 .UnderTransform(context.Scope.transform)
-                .WithParameter<IPickup>(new HealthPickup(10));
+                .WithParameter<IPickupInstance>(_pickupDefinition != null ? _pickupDefinition.CreateInstance() : null);
         }
     }
 }
