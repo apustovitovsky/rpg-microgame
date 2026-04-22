@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3c692eb9843cb4d93cd1e939c6c99b, type: 3}
   m_Name: GoldPickupDefinition
   m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.GoldPickupDefinitionSO
-  <Name>k__BackingField: Gold Pickup
-  _amount: 1
+  <DisplayName>k__BackingField: Gold
+  <InitialStackCount>k__BackingField: 1

@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 2529580269645609530}
   - component: {fileID: 2529580269645609531}
   - component: {fileID: 5787417297529263727}
+  - component: {fileID: -6840639622913153714}
   m_Layer: 0
-  m_Name: Loot_Health
+  m_Name: Pickup_Health
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -104,6 +105,25 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!114 &-6840639622913153714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2529580269645609534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085daa5bb577344d9b09a56276a6500, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.FloatingPickup
+  <Definition>k__BackingField: {fileID: 11400000, guid: 88157b2fa69cbc84baefbb94d887e0ec,
+    type: 2}
+  VerticalBobFrequency: 1
+  BobbingAmount: 1
+  RotatingSpeed: 360
+  PickupSfx: {fileID: 0}
+  PickupVfxPrefab: {fileID: 0}
 --- !u!1 &2732479431358744901
 GameObject:
   m_ObjectHideFlags: 0

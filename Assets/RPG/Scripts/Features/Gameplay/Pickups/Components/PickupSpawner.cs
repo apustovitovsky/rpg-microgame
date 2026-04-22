@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace RPG.Gameplay
 {
+    [DisallowMultipleComponent]
     public sealed class PickupSpawner : MonoBehaviour
     {
         [SerializeField] private WorldPickup _pickup;

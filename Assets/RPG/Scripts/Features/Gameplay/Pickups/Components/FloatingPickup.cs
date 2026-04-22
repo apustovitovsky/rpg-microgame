@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace RPG.Gameplay
 {
-    public sealed class PickupPad : WorldPickup
+    public sealed class FloatingPickup : WorldPickup
     {
         [Tooltip("Frequency at which the item will move up and down")]
         public float VerticalBobFrequency = 1f;

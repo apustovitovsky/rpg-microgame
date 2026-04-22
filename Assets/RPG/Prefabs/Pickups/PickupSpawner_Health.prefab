@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3819875689753535545}
   - component: {fileID: 6733396088102830470}
-  - component: {fileID: 692102069411193612}
+  - component: {fileID: 1983602387967170140}
   m_Layer: 0
-  m_Name: PF_HealthPickup
+  m_Name: PickupSpawner_Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,7 +55,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.75
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &692102069411193612
+--- !u!114 &1983602387967170140
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -64,11 +64,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 777505854490390255}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82591a26dcab42045a6f397004d66b88, type: 3}
+  m_Script: {fileID: 11500000, guid: af1e1bf92a9d491da7019bcf57d23db0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.HealthPickup
-  destroyOnPickup: 1
-  healAmount: 25
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.PickupSpawner
+  _pickup: {fileID: -6840639622913153714, guid: a2f6639d930629c44aea8552fd6b657b,
+    type: 3}
+  _respawns: 1
+  _respawnCooldown: 2
 --- !u!1 &1734914122402039366
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +99,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.65, y: 0.65, z: 0.65}
+  m_LocalScale: {x: 1, y: 0.05, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3819875689753535545}

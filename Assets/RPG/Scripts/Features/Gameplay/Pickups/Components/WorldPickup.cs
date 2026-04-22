@@ -6,6 +6,7 @@ using System;
 namespace RPG.Gameplay
 {
     [RequireComponent(typeof(Collider))]
+    [DisallowMultipleComponent]
     public class WorldPickup : MonoBehaviour
     {
         private IPickupCollectionService _pickupService;
