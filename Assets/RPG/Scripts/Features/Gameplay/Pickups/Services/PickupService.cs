@@ -20,7 +20,7 @@ namespace RPG.Gameplay
                 if (!pickup.TryCollect(collector))
                     return false;
 
-                OnCollected(collector.Name);
+                OnCollected(pickup, collector);
                 return true;
             }
             finally
@@ -29,9 +29,9 @@ namespace RPG.Gameplay
             }
         }
 
-        private void OnCollected(string name)
+        private void OnCollected(IPickupInstance pickup, IPickupCollector collector)
         {
-            Debug.Log("Pickup collected by" + name);
+            Debug.Log($"Pickup '{pickup.DisplayName}' collected by {collector.DisplayName}");
         }
     }
 }

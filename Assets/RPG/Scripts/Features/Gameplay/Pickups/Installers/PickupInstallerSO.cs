@@ -5,8 +5,8 @@ using VContainer.Unity;
 
 namespace RPG.Gameplay
 {
-    [CreateAssetMenu(fileName = "PickupServiceInstaller", menuName = "RPG/Gameplay/Pickup/Pickup Service Installer")]
-    public sealed class PickupServiceInstallerSO : InstallerSO
+    [CreateAssetMenu(fileName = "PickupInstaller", menuName = "RPG/Gameplay/Pickup/Pickup Installer")]
+    public sealed class PickupInstallerSO : InstallerSO
     {
         [SerializeField] private PickupDefinitionSO _pickupDefinition;
 
@@ -17,10 +17,11 @@ namespace RPG.Gameplay
             builder.Register<PickupService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInHierarchy<GroundPickup>()
+            builder.RegisterFactory<PickupDefinitionSO, IPickupInstance>(definition => new PickupInstance(definition));
 
+            builder.RegisterComponentInHierarchy<GroundPickup>()
                 .UnderTransform(context.Scope.transform)
-                .WithParameter<IPickupInstance>(_pickupDefinition != null ? _pickupDefinition.CreateInstance() : null);
+                .WithParameter(_pickupDefinition);
         }
     }
 }

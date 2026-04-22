@@ -7,9 +7,16 @@ namespace RPG.Gameplay
     {
         [SerializeField] private int _amount = 10;
 
-        public override IPickupInstance CreateInstance()
+        public override bool ApplyTo(IPickupCollector collector)
         {
-            return new PickupInstance(new HealthPickupEffect(_amount));
+            if (!collector.TryGet<IHealth>(out var health))
+                return false;
+
+            if (health.IsFull)
+                return false;
+
+            health.Heal(_amount);
+            return true;
         }
     }
 }

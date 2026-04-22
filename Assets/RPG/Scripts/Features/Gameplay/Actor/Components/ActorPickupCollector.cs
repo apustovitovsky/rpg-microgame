@@ -8,8 +8,8 @@ namespace RPG.Gameplay
     {
         private IHealth _actorHealth;
         private IInventory _actorInventory;
-        
-        public string Name => name;
+
+        public string DisplayName => name;
 
         [Inject]
         public void Construct(

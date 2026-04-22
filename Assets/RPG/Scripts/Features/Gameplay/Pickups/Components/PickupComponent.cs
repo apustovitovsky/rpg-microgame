@@ -1,5 +1,6 @@
 using UnityEngine;
 using VContainer;
+using System;
 
 
 namespace RPG.Gameplay
@@ -8,16 +9,20 @@ namespace RPG.Gameplay
     public class PickupComponent : MonoBehaviour
     {
         private IPickupService _pickupService;
+        private Func<PickupDefinitionSO, IPickupInstance> _pickupFactory;
         private IPickupInstance _pickup;
+        private PickupDefinitionSO _pickupDefinition;
         private Collider _collider;
 
         [Inject]
         public void Construct(
             IPickupService pickupService,
-            IPickupInstance pickup)
+            Func<PickupDefinitionSO, IPickupInstance> pickupFactory,
+            PickupDefinitionSO pickupDefinition)
         {
             _pickupService = pickupService;
-            _pickup = pickup;
+            _pickupFactory = pickupFactory;
+            _pickupDefinition = pickupDefinition;
         }
 
         private void Reset()
@@ -33,6 +38,7 @@ namespace RPG.Gameplay
         private void Awake()
         {
             EnsureTrigger();
+            _pickup = _pickupFactory?.Invoke(_pickupDefinition);
         }
 
         private void EnsureTrigger()

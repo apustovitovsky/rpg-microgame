@@ -2,21 +2,22 @@ namespace RPG.Gameplay
 {
     public class PickupInstance : IPickupInstance
     {
-        private readonly IPickupEffect _effect;
+        private readonly PickupDefinitionSO _definition;
 
-        public PickupInstance(IPickupEffect effect)
+        public PickupInstance(PickupDefinitionSO definition)
         {
-            _effect = effect;
+            _definition = definition;
         }
 
+        public string DisplayName => _definition != null ? _definition.DisplayName : string.Empty;
         public bool IsCollected { get; private set; }
 
         public bool TryCollect(IPickupCollector collector)
         {
-            if (IsCollected || _effect == null)
+            if (IsCollected || _definition == null)
                 return false;
 
-            if (!_effect.TryApply(collector))
+            if (!_definition.ApplyTo(collector))
                 return false;
 
             IsCollected = true;

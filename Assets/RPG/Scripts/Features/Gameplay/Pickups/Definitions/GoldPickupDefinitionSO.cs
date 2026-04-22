@@ -7,9 +7,13 @@ namespace RPG.Gameplay
     {
         [SerializeField] private int _amount = 1;
 
-        public override IPickupInstance CreateInstance()
+        public override bool ApplyTo(IPickupCollector collector)
         {
-            return new PickupInstance(new GoldPickupEffect(_amount));
+            if (!collector.TryGet<IInventory>(out var inventory))
+                return false;
+
+            inventory.AddGold(_amount);
+            return true;
         }
     }
 }
