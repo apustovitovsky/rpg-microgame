@@ -1,24 +1,24 @@
+using UnityEngine;
+
 namespace RPG.Gameplay
 {
-    public class HealthPickup : IPickup
+    public class GoldPickup : IPickup
     {
-        private readonly float _amount;
         public bool IsCollected { get; private set; }
+        private readonly int _amount;
 
-        public HealthPickup(int amount)
+
+        public GoldPickup(int amount)
         {
             _amount = amount;
         }
 
         public bool TryCollect(IPickupCollector collector)
         {
-            if (collector.Health == null)
+            if (collector.Inventory == null)
                 return false;
 
-            if (collector.Health.IsFull)
-                return false;
-
-            collector.Health.Heal(_amount);
+            collector.Inventory.AddGold(_amount);
 
             IsCollected = true;
             OnCollected();

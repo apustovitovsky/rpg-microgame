@@ -10,6 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d865ac612a62e7448a5344624bb775d4, type: 3}
-  m_Name: ActorHealthInstaller
+  m_Name: ActorPickupServicesInstaller
   m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.ActorHealthInstallerSO
+  curHealth: 25
   maxHealth: 100
+  curGold: 5
