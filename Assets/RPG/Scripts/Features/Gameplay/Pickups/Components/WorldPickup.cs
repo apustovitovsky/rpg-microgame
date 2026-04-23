@@ -1,84 +1,164 @@
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace RPG.Gameplay
 {
     public sealed class WorldPickup : Pickup
     {
-        [FormerlySerializedAs("VerticalBobFrequency")]
-        [SerializeField, Tooltip("Frequency at which the item will move up and down")]
-        private float _verticalBobFrequency = 1f;
+        [SerializeField] private PickupDefinitionSO _definition;
+        [SerializeField] private Transform _spawnAnchor;
+        [SerializeField] private bool _destroyOnCollect = true;
+        [SerializeField, Min(0f)] private float _autoRespawnCooldown;
 
-        [FormerlySerializedAs("BobbingAmount")]
-        [SerializeField, Tooltip("Distance the item will move up and down")]
-        private float _bobbingAmount = 1f;
+        private GameObject _spawnObject;
+        private CancellationTokenSource _respawnCts;
+        private const string PreviewObjectName = "[Pickup Visual Preview]";
 
-        [FormerlySerializedAs("RotatingSpeed")]
-        [SerializeField, Tooltip("Rotation angle per second")]
-        private float _rotatingSpeed = 360f;
 
-        [FormerlySerializedAs("PickupSfx")]
-        [SerializeField, Tooltip("Sound played on pickup")]
-        private AudioClip _pickupSfx;
-
-        [FormerlySerializedAs("PickupVfxPrefab")]
-        [SerializeField, Tooltip("VFX spawned on pickup")]
-        private GameObject _pickupVfxPrefab;
-
-        [SerializeField, Tooltip("Optional transform used for bobbing/rotation. Defaults to this transform.")]
-        private Transform _visualRoot;
-
-        private Vector3 _startLocalPosition;
-        private bool _hasPlayedFeedback;
-
-        private void OnEnable()
+        private void Start()
         {
-            CacheVisualRootPose();
+            if (_definition != null && _instance == null)
+                Initialize(new PickupInstance(_definition));
         }
 
-        private void Update()
+        public override void Initialize(IPickupInstance instance)
         {
-            var animatedRoot = _visualRoot != null ? _visualRoot : transform;
-            float bobbingAnimationPhase = ((Mathf.Sin(Time.time * _verticalBobFrequency) * 0.5f) + 0.5f) * _bobbingAmount;
+            if (instance == null)
+                throw new ArgumentNullException(nameof(instance));
 
-            animatedRoot.localPosition = _startLocalPosition + Vector3.up * bobbingAnimationPhase;
-            animatedRoot.Rotate(Vector3.up, _rotatingSpeed * Time.deltaTime, Space.Self);
+            _definition = instance.Definition;
+            base.Initialize(instance);
         }
 
-        protected override void OnCollected()
+        protected override void OnRespawn()
         {
-            PlayPickupFeedback();
-            // Hide();
+            RebuildSpawnObject();
         }
 
-        protected override void OnRespawned()
+        private void RebuildSpawnObject()
         {
-            _hasPlayedFeedback = false;
-            CacheVisualRootPose();
-        }
+            DestroySpawnObject();
 
-        public void PlayPickupFeedback()
-        {
-            if (_hasPlayedFeedback)
+            if (_definition == null)
                 return;
 
-            if (_pickupSfx != null)
-            {
-                AudioSource.PlayClipAtPoint(_pickupSfx, transform.position);
-            }
+            var prefabFragment = _definition.GetFragment<PickupVisualFragmentSO>();
 
-            if (_pickupVfxPrefab != null)
-            {
-                Instantiate(_pickupVfxPrefab, transform.position, Quaternion.identity);
-            }
+            if (prefabFragment == null || prefabFragment.Prefab == null)
+                return;
 
-            _hasPlayedFeedback = true;
+            var anchor = _spawnAnchor != null ? _spawnAnchor : transform;
+            _spawnObject = Instantiate(prefabFragment.Prefab, anchor);
+
+            ApplyLocalTransform(prefabFragment);
         }
 
-        private void CacheVisualRootPose()
+        private void ApplyLocalTransform(PickupVisualFragmentSO prefabFragment)
         {
-            var animatedRoot = _visualRoot != null ? _visualRoot : transform;
-            _startLocalPosition = animatedRoot.localPosition;
+            _spawnObject.transform.SetLocalPositionAndRotation(
+                prefabFragment.LocalPosition,
+                Quaternion.Euler(prefabFragment.LocalRotationEuler));
+
+            _spawnObject.transform.localScale = prefabFragment.LocalScale;
         }
+
+        private void DestroySpawnObject()
+        {
+            if (_spawnObject == null)
+                return;
+
+            Destroy(_spawnObject);
+            _spawnObject = null;
+        }
+
+        protected override void OnCollect()
+        {
+            DestroySpawnObject();
+
+            if (_destroyOnCollect)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            if (_autoRespawnCooldown > 0f)
+                ScheduleRespawn();
+        }
+
+        private void ScheduleRespawn()
+        {
+            CancelScheduledRespawn();
+
+            _respawnCts = CancellationTokenSource.CreateLinkedTokenSource(
+                this.GetCancellationTokenOnDestroy());
+
+            RespawnAfterDelay(_respawnCts.Token).Forget();
+        }
+
+        private void CancelScheduledRespawn()
+        {
+            if (_respawnCts == null)
+                return;
+
+            _respawnCts.Cancel();
+            _respawnCts.Dispose();
+            _respawnCts = null;
+        }
+
+        private async UniTaskVoid RespawnAfterDelay(CancellationToken token)
+        {
+            await UniTask.Delay(
+                TimeSpan.FromSeconds(_autoRespawnCooldown),
+                cancellationToken: token);
+
+            _respawnCts = null;
+            Respawn();
+        }
+
+#if UNITY_EDITOR
+        // private void OnValidate()
+        // {
+        //     if (Application.isPlaying)
+        //         return;
+
+        //     if (UnityEditor.EditorUtility.IsPersistent(gameObject))
+        //         return;
+
+        //     RebuildSpawnObjectImmediate();
+        // }
+
+        private void RebuildSpawnObjectImmediate()
+        {
+            DestroySpawnObjectImmediate();
+
+            if (_definition == null)
+                return;
+
+            var prefabFragment = _definition.GetFragment<PickupVisualFragmentSO>();
+            if (prefabFragment == null || prefabFragment.Prefab == null)
+                return;
+
+            var anchor = _spawnAnchor != null ? _spawnAnchor : transform;
+
+            _spawnObject = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(
+                prefabFragment.Prefab,
+                anchor);
+
+            _spawnObject.name = PreviewObjectName;
+
+            ApplyLocalTransform(prefabFragment);
+        }
+
+        private void DestroySpawnObjectImmediate()
+        {
+            if (_spawnObject == null)
+                return;
+
+            DestroyImmediate(_spawnObject);
+            _spawnObject = null;
+        }
+#endif
     }
 }

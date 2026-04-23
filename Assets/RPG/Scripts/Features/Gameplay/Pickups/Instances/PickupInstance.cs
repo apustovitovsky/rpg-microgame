@@ -2,30 +2,30 @@ using UnityEngine;
 
 namespace RPG.Gameplay
 {
-    public class PickupInstance : IPickupInstance
+    public sealed class PickupInstance : IPickupInstance
     {
-        private readonly PickupDefinitionSO _definition;
+        public PickupDefinitionSO Definition { get; }
 
         public PickupInstance(PickupDefinitionSO definition)
         {
-            _definition = definition;
+            Definition = definition;
         }
-
-        public string DisplayName => _definition != null ? _definition.DisplayName : string.Empty;
-
 
         public bool TryCollect(IPickupCollector collector)
         {
-            if (_definition == null)
+            if (Definition == null)
                 return false;
 
-            if (!_definition.ApplyTo(collector))
-                return false;
+            bool anySucceeded = false;
 
-            OnCollected();
-            return true;
+            foreach (var fragment in Definition.GetFragments<PickupEffectFragmentSO>())
+            {
+                if (fragment.TryApply(collector, this))
+                    anySucceeded = true;
+            }
+
+            return anySucceeded;
         }
-
-        protected virtual void OnCollected() { }
     }
 }
+

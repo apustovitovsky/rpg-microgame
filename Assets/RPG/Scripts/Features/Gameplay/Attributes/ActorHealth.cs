@@ -6,7 +6,9 @@ namespace RPG.Gameplay
     {
         public float CurHealth { get; private set; }
         public float MaxHealth { get; }
-        public bool IsFull => CurHealth < MaxHealth;
+
+        // public bool IsFull => CurHealth < MaxHealth;
+        public bool IsFull => false;
 
         public ActorHealth(float curHealth, float maxHealth)
         {

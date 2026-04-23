@@ -2,7 +2,7 @@ namespace RPG.Gameplay
 {
     public interface IPickupInstance
     {
-        string DisplayName { get; }
+        PickupDefinitionSO Definition { get; }
         bool TryCollect(IPickupCollector collector);
     }
 }

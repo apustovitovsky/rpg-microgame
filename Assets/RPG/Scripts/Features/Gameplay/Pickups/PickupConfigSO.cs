@@ -8,6 +8,5 @@ namespace RPG.Gameplay
     public sealed class PickupConfigSO : ScriptableObject
     {
         [field: SerializeField] public Pickup PickupPrefab { get; private set; }
-
     }
 }

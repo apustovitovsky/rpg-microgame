@@ -8,12 +8,10 @@ namespace RPG.Gameplay
     [DisallowMultipleComponent]
     public class Pickup : MonoBehaviour
     {
-        private IPickupCollectionService _pickupService;
-        private IPickupInstance _instance;
-        private Collider _collider;
-        public bool IsAvailable { get; private set; }
         public bool IsCollected { get; private set; }
-        public event Action<Pickup> Collected;
+        protected IPickupInstance _instance;
+        private IPickupCollectionService _pickupService;
+        private Collider _collider;
 
         [Inject]
         public void Construct(IPickupCollectionService pickupService)
@@ -21,26 +19,16 @@ namespace RPG.Gameplay
             _pickupService = pickupService;
         }
 
-        public void Initialize(PickupDefinitionSO definition)
+        public virtual void Initialize(IPickupInstance instance)
         {
-            _instance = new PickupInstance(definition);
-            IsAvailable = true;
-        }
-
-        private void Reset()
-        {
-            EnsureTrigger();
-        }
-
-        private void OnValidate()
-        {
-            EnsureTrigger();
+            _instance = instance ?? throw new ArgumentNullException(nameof(instance));
+            IsCollected = true;
+            Respawn();
         }
 
         private void Awake()
         {
             EnsureTrigger();
-
         }
 
         private void EnsureTrigger()
@@ -51,36 +39,41 @@ namespace RPG.Gameplay
 
         public void Respawn()
         {
-            IsAvailable = true;
+            if (_instance == null)
+                return;
+
             IsCollected = false;
-            OnRespawned();
+            OnRespawn();
         }
+
+        protected virtual void OnRespawn() { }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!IsAvailable || _pickupService == null || _instance == null)
+            if (IsCollected || _pickupService == null || _instance == null)
                 return;
 
             var collector = other.GetComponent<IPickupCollector>() ?? other.GetComponentInParent<IPickupCollector>();
             if (collector == null)
                 return;
-
+                
             if (_pickupService.TryCollect(_instance, collector))
             {
-                IsAvailable = false;
                 IsCollected = true;
-                OnCollected();
-                Collected?.Invoke(this);
+                OnCollect();
             }
         }
 
-        protected virtual void OnCollected()
+        protected virtual void OnCollect() { }
+
+        private void Reset()
         {
-            Destroy(gameObject);
+            EnsureTrigger();
         }
 
-        protected virtual void OnRespawned()
+        private void OnValidate()
         {
+            EnsureTrigger();
         }
     }
 }

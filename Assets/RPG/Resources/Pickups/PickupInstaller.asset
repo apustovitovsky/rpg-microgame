@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f3c692eb9843cb4d93cd1e939c6c99b, type: 3}
-  m_Name: GoldPickupDefinition
-  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.GoldPickupDefinitionSO
-  <DisplayName>k__BackingField: Gold
-  <InitialStackCount>k__BackingField: 1
+  m_Script: {fileID: 11500000, guid: aa304ed0b2e59e245a44f07a7c868766, type: 3}
+  m_Name: PickupInstaller
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.WorldPickupInstallerSO
+  _pickupConfig: {fileID: 11400000, guid: f17fed64c38cacc469bc640f074ed1c9, type: 2}

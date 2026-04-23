@@ -9,6 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa304ed0b2e59e245a44f07a7c868766, type: 3}
-  m_Name: WorldPickupInstaller
-  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.WorldPickupInstallerSO
+  m_Script: {fileID: 11500000, guid: 4ae17b058e78a114cb0d809da21f2965, type: 3}
+  m_Name: PickupAddHealthFragment
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.HealthPickupFragmentSO
+  <HealAmount>k__BackingField: 15

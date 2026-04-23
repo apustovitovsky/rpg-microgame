@@ -18,7 +18,8 @@ namespace RPG.Gameplay
         public Pickup Create(PickupDefinitionSO definition, Vector3 position)
         {
             var pickup = _container.Instantiate(_prefab, position, Quaternion.identity);
-            pickup.Initialize(definition);
+            pickup.Initialize(new PickupInstance(definition));
+
             return pickup;
         }
     }

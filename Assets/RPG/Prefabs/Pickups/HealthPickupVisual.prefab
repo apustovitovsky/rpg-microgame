@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5787417297529263727}
   - component: {fileID: -6840639622913153714}
   m_Layer: 0
-  m_Name: Pickup_Health
+  m_Name: HealthPickupVisual
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -117,13 +117,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9085daa5bb577344d9b09a56276a6500, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.WorldPickup
-  <Definition>k__BackingField: {fileID: 11400000, guid: 88157b2fa69cbc84baefbb94d887e0ec,
-    type: 2}
-  VerticalBobFrequency: 1
-  BobbingAmount: 1
-  RotatingSpeed: 360
-  PickupSfx: {fileID: 0}
-  PickupVfxPrefab: {fileID: 0}
+  _verticalBobFrequency: 1
+  _bobbingAmount: 0
+  _rotatingSpeed: 360
+  _pickupSfx: {fileID: 0}
+  _pickupVfxPrefab: {fileID: 0}
+  _visualRoot: {fileID: 0}
 --- !u!1 &2732479431358744901
 GameObject:
   m_ObjectHideFlags: 0
