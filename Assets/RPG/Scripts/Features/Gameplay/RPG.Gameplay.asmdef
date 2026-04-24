@@ -6,9 +6,9 @@
         "VContainer",
         "Unity.Cinemachine",
         "Unity.InputSystem",
+        "RPG.InputActions",
         "RPG.Core",
-        "RPG.Factories",
-        "RPG.InputActions"
+        "RPG.Factories"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

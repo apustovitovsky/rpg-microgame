@@ -1,3 +1,5 @@
+using VContainer.Unity;
+
 namespace RPG.Core
 {
     public interface IInstaller

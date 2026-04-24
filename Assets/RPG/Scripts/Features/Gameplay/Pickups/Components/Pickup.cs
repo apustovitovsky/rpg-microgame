@@ -10,11 +10,11 @@ namespace RPG.Gameplay
     {
         public bool IsCollected { get; private set; }
         protected IPickupInstance _instance;
-        private IPickupCollectionService _pickupService;
+        private IPickupInteractionService _pickupService;
         private Collider _collider;
 
         [Inject]
-        public void Construct(IPickupCollectionService pickupService)
+        public void Construct(IPickupInteractionService pickupService)
         {
             _pickupService = pickupService;
         }
@@ -56,7 +56,7 @@ namespace RPG.Gameplay
             var collector = other.GetComponent<IPickupCollector>() ?? other.GetComponentInParent<IPickupCollector>();
             if (collector == null)
                 return;
-                
+
             if (_pickupService.TryCollect(_instance, collector))
             {
                 IsCollected = true;

@@ -2,6 +2,7 @@
     "name": "RPG.Core",
     "rootNamespace": "RPG.Core",
     "references": [
+        "RPG.InputActions",
         "UniTask",
         "VContainer"
     ],

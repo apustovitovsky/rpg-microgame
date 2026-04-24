@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: RPG.Core::RPG.Core.ModularScope
   parentReference:
     TypeName: 
-  autoRun: 1
+  autoRun: 0
   autoInjectGameObjects: []
   _installers:
   - {fileID: 11400000, guid: 9e1fd5fa2c6b419469f691a27127a10d, type: 2}

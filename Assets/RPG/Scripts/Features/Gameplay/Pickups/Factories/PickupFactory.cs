@@ -6,8 +6,8 @@ namespace RPG.Gameplay
 {
     public sealed class PickupFactory : IPickupFactory
     {
-        readonly IObjectResolver _container;
-        readonly Pickup _prefab;
+        private readonly IObjectResolver _container;
+        private readonly Pickup _prefab;
 
         public PickupFactory(IObjectResolver container, Pickup prefab)
         {
@@ -17,6 +17,7 @@ namespace RPG.Gameplay
 
         public Pickup Create(PickupDefinitionSO definition, Vector3 position)
         {
+
             var pickup = _container.Instantiate(_prefab, position, Quaternion.identity);
             pickup.Initialize(new PickupInstance(definition));
 

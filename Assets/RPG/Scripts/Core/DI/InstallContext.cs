@@ -8,7 +8,9 @@ namespace RPG.Core
         public LifetimeScope Scope { get; }
         public IContainerBuilder Builder { get; }
 
-        public InstallContext(LifetimeScope scope, IContainerBuilder builder)
+        public InstallContext(
+            LifetimeScope scope,
+            IContainerBuilder builder)
         {
             Scope = scope;
             Builder = builder;

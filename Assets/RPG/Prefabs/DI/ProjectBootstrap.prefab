@@ -50,3 +50,4 @@ MonoBehaviour:
   autoInjectGameObjects: []
   _installers:
   - {fileID: 11400000, guid: 4ebba9be2ae54ac4d8b09e700ef9ed12, type: 2}
+  - {fileID: 11400000, guid: a6c2f03a11f554a408d3ad425ee55073, type: 2}

@@ -1,3 +1,4 @@
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -17,11 +18,16 @@ namespace RPG.Gameplay
             _cameraService = cameraService;
         }
 
-        public void Possess(LifetimeScope actor)
+        public void Possess(GameObject actor)
         {
             Unpossess();
 
-            _currentActorHandler = actor.Container.Resolve<IActorInputHandler>();
+            if (!actor.TryGetComponent<LifetimeScope>(out var actorScope))
+            {
+                throw new UnityException($"Actor '{actor.name}' is missing a {nameof(LifetimeScope)}.");
+            }
+
+            _currentActorHandler = actorScope.Container.Resolve<IActorInputHandler>();
 
             _gameplayInput.SetHandler(_currentActorHandler);
             _cameraService.SetHandler(_currentActorHandler);

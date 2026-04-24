@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPG.Gameplay
 {
-    public sealed class PickupCollectionService : IPickupCollectionService
+    public sealed class PickupInteractionService : IPickupInteractionService
     {
         private readonly HashSet<IPickupInstance> _inProgress = new();
 
@@ -17,7 +17,6 @@ namespace RPG.Gameplay
 
             try
             {
-
                 if (!pickup.TryCollect(collector))
                     return false;
 
@@ -32,7 +31,7 @@ namespace RPG.Gameplay
 
         private void OnCollected(IPickupInstance pickup, IPickupCollector collector)
         {
-            Debug.Log($"Pickup '{pickup.Definition.DisplayName}' collected by {collector.DisplayName}");
+            // Debug.Log($"Pickup '{pickup.Definition.DisplayName}' collected by {collector.DisplayName}");
         }
     }
 }

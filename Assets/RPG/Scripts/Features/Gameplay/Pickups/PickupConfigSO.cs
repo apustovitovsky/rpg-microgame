@@ -1,6 +1,5 @@
-using Unity.Cinemachine;
 using UnityEngine;
-using VContainer.Unity;
+
 
 namespace RPG.Gameplay
 {
@@ -8,5 +7,6 @@ namespace RPG.Gameplay
     public sealed class PickupConfigSO : ScriptableObject
     {
         [field: SerializeField] public Pickup PickupPrefab { get; private set; }
+        [field: SerializeField] public PickupDefinitionSO PickupDefinition { get; private set; }
     }
 }

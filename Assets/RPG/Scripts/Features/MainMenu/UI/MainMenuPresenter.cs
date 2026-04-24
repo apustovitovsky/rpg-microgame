@@ -1,5 +1,4 @@
 using RPG.Core;
-using UnityEngine;
 using VContainer.Unity;
 
 namespace RPG.MainMenu
@@ -7,12 +6,12 @@ namespace RPG.MainMenu
     public class MainMenuPresenter : IStartable
     {
         private readonly MainMenuView _view;
-        private readonly ISceneCoordinator _sceneCoordinator;
+        private readonly ISessionNavigator _sceneNavigator;
 
-        public MainMenuPresenter(MainMenuView view, ISceneCoordinator coordinator)
+        public MainMenuPresenter(MainMenuView view, ISessionNavigator navigator)
         {
             _view = view;
-            _sceneCoordinator = coordinator;
+            _sceneNavigator = navigator;
         }
 
         public void Start()
@@ -25,17 +24,17 @@ namespace RPG.MainMenu
 
         private void OnBeginPlayRPGClicked()
         {
-            _sceneCoordinator.LoadRPGScene();
+            _sceneNavigator.LoadRPGScene();
         }
 
         private void OnBeginPlayFPSClicked()
         {
-            _sceneCoordinator.LoadFPSScene();
+            _sceneNavigator.LoadFPSScene();
         }
 
         private void OnBeginPlaySyntyClicked()
         {
-            _sceneCoordinator.LoadSyntyScene();
+            _sceneNavigator.LoadSyntyScene();
         }
 
         private void OnExitGameClicked()

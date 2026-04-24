@@ -16,15 +16,12 @@ namespace RPG.Gameplay
 
             builder.RegisterInstance(_gameplayConfig);
 
-            builder.Register<InputSystem_Actions>(Lifetime.Singleton);
 
-            builder.RegisterEntryPoint<GameplaySceneInitiator>();
+            Debug.Log("GameplayInstallerSO.Install");
+            builder.Register<GameplaySessionStarter>(Lifetime.Singleton);
 
             builder.Register<ActorFactory>(Lifetime.Singleton)
                 .As<IActorFactory>();
-
-            builder.Register<ActorSpawnService>(Lifetime.Singleton)
-                .As<IActorSpawnService>();
 
             builder.Register<PossessionService>(Lifetime.Singleton)
                 .As<IPossessionService>();

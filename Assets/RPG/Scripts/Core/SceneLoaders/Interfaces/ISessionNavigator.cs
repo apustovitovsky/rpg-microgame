@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 
 namespace RPG.Core
 {
-    public interface ISceneCoordinator
+    public interface ISessionNavigator
     {
         UniTask LoadMainMenuScene();
         UniTask LoadRPGScene();

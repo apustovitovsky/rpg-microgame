@@ -15,21 +15,15 @@ namespace RPG.Core
 
             builder.RegisterInstance(_projectConfig);
 
-            builder.Register<SceneLoadingService>(Lifetime.Singleton)
-                .As<ISceneLoadingService>();
-
-            builder.RegisterEntryPoint<SceneCoordinator>()
-                .As<ISceneCoordinator>();
-
             builder.Register<GameTimeService>(Lifetime.Singleton)
                 .As<ITimeProvider>();
+
+            builder.Register<InputSystem_Actions>(Lifetime.Singleton);
 
             builder.RegisterComponentInNewPrefab(_projectConfig.LoadingScreenView, Lifetime.Singleton)
                 .DontDestroyOnLoad();
 
             builder.Register<LoadingScreenPresenter>(Lifetime.Singleton);
-
-            builder.Register<SceneReadinessChannel>(Lifetime.Singleton);
 
             builder.RegisterBuildCallback(container =>
             {

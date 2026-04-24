@@ -5,7 +5,7 @@ using VContainer.Unity;
 
 namespace RPG.MainMenu
 {
-    [CreateAssetMenu(fileName = "MainMenuInstaller", menuName = "RPG/MainMenu/Installers/MainMenu Installer")]
+    [CreateAssetMenu(fileName = "MainMenuInstaller", menuName = "RPG/MainMenu/Installers/MainMenuInstaller")]
     public sealed class MainMenuInstallerSO : InstallerSO
     {
         [SerializeField] private MainMenuConfigSO _mainMenuConfig;
@@ -16,7 +16,7 @@ namespace RPG.MainMenu
 
             builder.RegisterInstance(_mainMenuConfig);
 
-            builder.RegisterEntryPoint<MainMenuSceneInitiator>(Lifetime.Scoped);
+            builder.RegisterEntryPoint<MainMenuSessionStarter>(Lifetime.Scoped);
 
             builder.RegisterComponentInNewPrefab(_mainMenuConfig.MainMenuView, Lifetime.Scoped);
             builder.RegisterEntryPoint<MainMenuPresenter>(Lifetime.Scoped);
