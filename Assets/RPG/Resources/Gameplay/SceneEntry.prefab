@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5614576174119783040}
-  - component: {fileID: 5007797569855159471}
+  - component: {fileID: 4699016843249294496}
   m_Layer: 0
-  m_Name: MainMenuBootstrap
+  m_Name: SceneEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,10 +30,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8003098717943186699}
+  - {fileID: 1355096735333217646}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5007797569855159471
+--- !u!114 &4699016843249294496
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,15 +43,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6254e1b78beb5f149871422d8c9ad252, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: RPG.Core::RPG.Core.ModularScope
   parentReference:
     TypeName: 
   autoRun: 0
   autoInjectGameObjects: []
-  _installers:
-  - {fileID: 11400000, guid: 9e1fd5fa2c6b419469f691a27127a10d, type: 2}
---- !u!1001 &5921169907738096467
+  _installers: []
+--- !u!1001 &3455045984516997942
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -67,7 +66,7 @@ PrefabInstance:
     - target: {fileID: 4412559280559191640, guid: 46dd0a950dd001b429943a53059ef717,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.37449
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4412559280559191640, guid: 46dd0a950dd001b429943a53059ef717,
         type: 3}
@@ -77,7 +76,7 @@ PrefabInstance:
     - target: {fileID: 4412559280559191640, guid: 46dd0a950dd001b429943a53059ef717,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.84004
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4412559280559191640, guid: 46dd0a950dd001b429943a53059ef717,
         type: 3}
@@ -119,9 +118,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46dd0a950dd001b429943a53059ef717, type: 3}
---- !u!4 &8003098717943186699 stripped
+--- !u!4 &1355096735333217646 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4412559280559191640, guid: 46dd0a950dd001b429943a53059ef717,
     type: 3}
-  m_PrefabInstance: {fileID: 5921169907738096467}
+  m_PrefabInstance: {fileID: 3455045984516997942}
   m_PrefabAsset: {fileID: 0}

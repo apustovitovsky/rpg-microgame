@@ -10,26 +10,26 @@ namespace RPG.Core
     {
         private readonly SceneNavigationConfigSO _sceneNavigationConfig;
         private readonly LoadingScreenPresenter _loadingScreenPresenter;
-        private readonly SceneStackLoader _sceneStackLoadingService;
+        private readonly SceneStackLoader _sceneStackLoader;
 
         public SceneNavigator(
             SceneNavigationConfigSO sceneNavigationConfig,
             LoadingScreenPresenter loadingScreenPresenter,
-            SceneStackLoader sceneStackLoadingService)
+            SceneStackLoader sceneStackLoader)
         {
             _sceneNavigationConfig = sceneNavigationConfig;
             _loadingScreenPresenter = loadingScreenPresenter;
-            _sceneStackLoadingService = sceneStackLoadingService;
+            _sceneStackLoader = sceneStackLoader;
         }
 
-        private async UniTask<bool> LoadScene(SceneStackSO request, bool showLoadingScreen = false)
+        private async UniTask<bool> LoadScene(ExperienceDefinitionSO request, bool showLoadingScreen = false)
         {
             if (showLoadingScreen)
                 _loadingScreenPresenter.ShowLoadingScreen();
 
             try
             {
-                return await _sceneStackLoadingService.LoadStackAsync(request, CancellationToken.None);
+                return await _sceneStackLoader.LoadExperienceAsync(request, CancellationToken.None);
             }
             finally
             {
@@ -40,27 +40,27 @@ namespace RPG.Core
 
         public async UniTask LoadMainMenuScene()
         {
-            await LoadScene(_sceneNavigationConfig.MainMenuSceneStack, showLoadingScreen: true);
+            await LoadScene(_sceneNavigationConfig.MainMenuExperience, showLoadingScreen: true);
         }
 
         public async UniTask LoadRPGScene()
         {
-            await LoadScene(_sceneNavigationConfig.RPGSceneStack, showLoadingScreen: true);
+            await LoadScene(_sceneNavigationConfig.RpgExperience, showLoadingScreen: true);
         }
 
         public async UniTask LoadFPSScene()
         {
-            await LoadScene(_sceneNavigationConfig.FPSSceneStack);
+            await LoadScene(_sceneNavigationConfig.FpsExperience);
         }
 
         public async UniTask LoadSyntyScene()
         {
-            await LoadScene(_sceneNavigationConfig.SyntySceneStack);
+            await LoadScene(_sceneNavigationConfig.SyntyExperience);
         }
 
         public async UniTask StartAsync(CancellationToken cancellation = default)
         {
-            await LoadScene(_sceneNavigationConfig.StartupSceneStack);
+            await LoadScene(_sceneNavigationConfig.StartupExperience);
         }
     }
 }

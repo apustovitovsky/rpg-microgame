@@ -25,21 +25,26 @@ The project already leans on:
 `VContainer` is not incidental in this project. The architecture should be chosen and evolved using VContainer best practices as a primary constraint, not as an afterthought layered on top of ad hoc Unity code.
 `UniTask` is also a core architectural choice. Treat it as the default async abstraction for gameplay and runtime flow.
 
-VContainer-oriented architectural rules:
+## VContainer Guidelines
 
 - treat each `LifetimeScope` as a composition root and keep registrations centralized there
 - prefer plain C# services, controllers, and presenters registered through VContainer over `MonoBehaviour` orchestration
 - prefer `RegisterEntryPoint` for startup flow and loop-driven app logic instead of putting control flow into random scene behaviours
+- default to `Lifetime.Singleton` for registrations; use `Lifetime.Scoped` only when a dependency truly needs scope-local state or a scope-local lifetime
+- default `RegisterEntryPoint` registrations to `Lifetime.Singleton` unless there is a clear, intentional reason to run them separately per child scope
 - prefer constructor injection for normal C# classes
+- prefer constructor injection for services
 - use method injection with `[Inject]` for `MonoBehaviour` when Unity owns object creation
 - use `RegisterComponentInHierarchy` for scene-owned components and `RegisterComponent` for explicitly provided existing instances
 - prefer interface-based registrations and consumption at feature boundaries
 - keep scene and feature composition explicit through parent-child `LifetimeScope` relationships
 - avoid service locator style code, scattered `Resolve` calls, and hidden container access in gameplay logic
+- avoid direct container resolution in domain/gameplay code unless there is a very strong integration reason
 - when instantiating runtime objects, prefer VContainer-friendly creation/injection paths over manual wiring
 - design features so that installers define wiring, services define behavior, and `MonoBehaviour` classes act mainly as views, adapters, or scene hooks
+- prefer entry-point-driven flow over `MonoBehaviour.Start` as the home for application orchestration
 
-UniTask-oriented architectural rules:
+## UniTask Guidelines
 
 - prefer `UniTask` and `UniTask<T>` over `Task`, `ValueTask`, or coroutines for gameplay/runtime async flows
 - propagate `CancellationToken` through async call chains and pass it as the last parameter
@@ -104,7 +109,6 @@ Unless the task explicitly asks for tests, focus on implementation and manual ve
 Follow the existing RPG C# style:
 
 - keep classes small and single-purpose
-- prefer constructor injection for services
 - depend on interfaces at feature boundaries
 - use `sealed` for concrete service classes when extension is not intended
 - keep `MonoBehaviour` classes thin; move reusable logic into plain C# services where practical
@@ -112,8 +116,6 @@ Follow the existing RPG C# style:
 - preserve current namespace style such as `RPG.Core` and `RPG.Gameplay`
 - use clear, descriptive names over abbreviations
 - avoid introducing reflection-heavy or magic auto-wiring patterns when explicit installers already solve the problem
-- avoid direct container resolution in domain/gameplay code unless there is a very strong integration reason
-- prefer entry-point-driven flow over `MonoBehaviour.Start` as the home for application orchestration
 - prefer `UniTask` return types for project async APIs
 - thread cancellation tokens through async methods instead of hiding cancellation internally
 - avoid mixing coroutines and `Task`-based flows into gameplay code when `UniTask` can express the same behavior more clearly

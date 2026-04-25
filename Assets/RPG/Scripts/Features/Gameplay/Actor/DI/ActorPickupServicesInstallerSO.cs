@@ -28,7 +28,7 @@ namespace RPG.Gameplay
                 .WithParameter(curGold)
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInHierarchy<ActorPickupCollector>()
+            builder.RegisterComponentInHierarchy<PickupCollector>()
                 .UnderTransform(scope.transform);
         }
     }

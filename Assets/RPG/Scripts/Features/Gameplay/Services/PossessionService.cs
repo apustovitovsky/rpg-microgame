@@ -27,6 +27,19 @@ namespace RPG.Gameplay
                 throw new UnityException($"Actor '{actor.name}' is missing a {nameof(LifetimeScope)}.");
             }
 
+            if (actorScope.Container == null)
+            {
+                if (!actorScope.autoRun)
+                {
+                    actorScope.Build();
+                }
+                else
+                {
+                    throw new UnityException(
+                        $"Actor '{actor.name}' scope container is not ready yet. Possession must happen after the actor scope is built.");
+                }
+            }
+
             _currentActorHandler = actorScope.Container.Resolve<IActorInputHandler>();
 
             _gameplayInput.SetHandler(_currentActorHandler);

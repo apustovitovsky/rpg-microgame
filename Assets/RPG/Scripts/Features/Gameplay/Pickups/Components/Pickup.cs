@@ -70,7 +70,7 @@ namespace RPG.Gameplay
             if (IsCollected || _handler == null || _instance == null)
                 return;
 
-            var collector = other.GetComponent<IPickupTarget>() ?? other.GetComponentInParent<IPickupTarget>();
+            var collector = other.GetComponent<IPickupTarget>() ?? other.GetComponentInChildren<IPickupTarget>();
             if (collector == null)
                 return;
 

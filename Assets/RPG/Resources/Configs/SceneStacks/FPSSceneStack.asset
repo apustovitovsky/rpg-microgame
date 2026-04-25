@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71c46c8d3b7f4d15a1e2c96bf0d3c4ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d13f1e6fd007c541b411a52f8d4f9d2, type: 3}
   m_Name: FPSSceneStack
-  m_EditorClassIdentifier: RPG.Core::RPG.Core.SceneStackSO
-  _rootScenePath: FPS/Scenes/MainScene
+  m_EditorClassIdentifier: RPG.Core::RPG.Core.ExperienceDefinitionSO
+  _rootScene:
+    _scenePath: FPS/Scenes/MainScene
+    _setActive: 0
+    _installers: []
   _additiveScenes: []

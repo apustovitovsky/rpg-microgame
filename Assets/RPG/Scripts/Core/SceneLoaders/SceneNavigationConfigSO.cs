@@ -7,10 +7,10 @@ namespace RPG.Core
         menuName = "RPG/Core/Scene Loading/Scene Navigation Config")]
     public sealed class SceneNavigationConfigSO : ScriptableObject
     {
-        [field: SerializeField] public SceneStackSO StartupSceneStack { get; private set; }
-        [field: SerializeField] public SceneStackSO MainMenuSceneStack { get; private set; }
-        [field: SerializeField] public SceneStackSO RPGSceneStack { get; private set; }
-        [field: SerializeField] public SceneStackSO FPSSceneStack { get; private set; }
-        [field: SerializeField] public SceneStackSO SyntySceneStack { get; private set; }
+        [field: SerializeField] public ExperienceDefinitionSO StartupExperience { get; private set; }
+        [field: SerializeField] public ExperienceDefinitionSO MainMenuExperience { get; private set; }
+        [field: SerializeField] public ExperienceDefinitionSO RpgExperience { get; private set; }
+        [field: SerializeField] public ExperienceDefinitionSO FpsExperience { get; private set; }
+        [field: SerializeField] public ExperienceDefinitionSO SyntyExperience { get; private set; }
     }
 }

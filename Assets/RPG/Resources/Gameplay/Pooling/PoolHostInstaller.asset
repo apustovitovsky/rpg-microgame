@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f6efc9b1509d114192d45390ea916fb, type: 3}
   m_Name: PoolHostInstaller
   m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.PoolHostInstallerSO
+  _poolHostPrefab: {fileID: 2776234489717645918, guid: 1cd47a60d4102134e96e8979394a595f,
+    type: 3}

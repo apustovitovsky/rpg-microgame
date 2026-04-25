@@ -8,11 +8,11 @@ namespace RPG.Gameplay
     [CreateAssetMenu(fileName = "PoolHostInstaller", menuName = "RPG/Gameplay/Pooling/PoolHostInstaller")]
     public class PoolHostInstallerSO : InstallerSO
     {
-        // [SerializeField] private ScenePoolHost _poolHost;
+        [SerializeField] private ScenePoolHost _poolHostPrefab;
 
         public override void Install(IContainerBuilder builder)
         {
-            builder.RegisterComponentInHierarchy<ScenePoolHost>();
+            builder.RegisterComponentInNewPrefab(_poolHostPrefab, Lifetime.Singleton);
 
             builder.Register<PickupPool>(Lifetime.Singleton);
 

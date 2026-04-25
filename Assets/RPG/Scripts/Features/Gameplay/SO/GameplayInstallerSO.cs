@@ -14,9 +14,7 @@ namespace RPG.Gameplay
         {
             builder.RegisterInstance(_gameplayConfig);
 
-
-            Debug.Log("GameplayInstallerSO.Install");
-            builder.Register<GameplaySessionStarter>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<GameplaySessionStarter>(Lifetime.Singleton);
 
             builder.Register<ActorFactory>(Lifetime.Singleton)
                 .As<IActorFactory>();

@@ -26,7 +26,6 @@ namespace RPG.Gameplay
             //     var position = new Vector3(offset2D.x, 0f, offset2D.y);
             //     _pickupPool.Get(_pickupDefinition, position, Quaternion.identity);
             // }
-
         }
     }
 }
