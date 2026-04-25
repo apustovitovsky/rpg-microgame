@@ -19,10 +19,8 @@ namespace RPG.Gameplay
 
             builder.RegisterComponentInHierarchy<PickupPad>();
 
-            builder.Register<PickupInteractionService>(Lifetime.Singleton)
+            builder.Register<PickupInteractionHandler>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
-
-            builder.Register<PickupPool>(Lifetime.Scoped);
 
             builder.RegisterEntryPoint<PickupEntryPoint>();
         }

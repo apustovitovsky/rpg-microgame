@@ -4,7 +4,7 @@ using VContainer;
 namespace RPG.Gameplay
 {
     [DisallowMultipleComponent]
-    public sealed class ActorPickupCollector : MonoBehaviour, IPickupCollector
+    public sealed class ActorPickupCollector : MonoBehaviour, IPickupTarget
     {
         private IHealth _actorHealth;
         private IInventory _actorInventory;

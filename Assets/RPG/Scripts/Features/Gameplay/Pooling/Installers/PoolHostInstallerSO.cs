@@ -16,8 +16,7 @@ namespace RPG.Gameplay
 
             builder.RegisterComponentInHierarchy<ScenePoolHost>();
 
-            // builder.RegisterInstance<IPickupPoolRoots>(_poolHost.Pickups);
-            // builder.RegisterInstance<IActorPoolRoots>(_poolHost.Actors);
+            builder.Register<PickupPool>(Lifetime.Singleton);
 
             builder.Register<IPickupPoolRoots>(
                 resolver => resolver.Resolve<ScenePoolHost>().Pickups,
@@ -27,7 +26,7 @@ namespace RPG.Gameplay
                 resolver => resolver.Resolve<ScenePoolHost>().Actors,
                 Lifetime.Scoped);
 
-            
+
         }
     }
 }

@@ -11,7 +11,7 @@ namespace RPG.Gameplay
         public event Action<Pickup> Collected;
 
         public bool IsCollected { get; private set; }
-        protected IPickupInstance _instance;
+        protected PickupInstance _instance;
         private IPickupInteractionHandler _handler;
         private Collider _collider;
         private Action<Pickup> _release;
@@ -23,7 +23,7 @@ namespace RPG.Gameplay
                 ?? throw new ArgumentNullException(nameof(handler));
         }
 
-        public void SetInstance(IPickupInstance instance)
+        public void SetInstance(PickupInstance instance)
         {
             _instance = instance
                 ?? throw new ArgumentNullException(nameof(instance));
@@ -70,7 +70,7 @@ namespace RPG.Gameplay
             if (IsCollected || _handler == null || _instance == null)
                 return;
 
-            var collector = other.GetComponent<IPickupCollector>() ?? other.GetComponentInParent<IPickupCollector>();
+            var collector = other.GetComponent<IPickupTarget>() ?? other.GetComponentInParent<IPickupTarget>();
             if (collector == null)
                 return;
 

@@ -1,8 +1,6 @@
-using UnityEngine;
-
 namespace RPG.Gameplay
 {
-    public sealed class PickupInstance : IPickupInstance
+    public sealed class PickupInstance : IPickup
     {
         public PickupDefinitionSO Definition { get; }
 
@@ -11,7 +9,7 @@ namespace RPG.Gameplay
             Definition = definition;
         }
 
-        public bool TryCollect(IPickupCollector collector)
+        public bool TryApplyTo(IPickupTarget target)
         {
             if (Definition == null)
                 return false;
@@ -20,7 +18,7 @@ namespace RPG.Gameplay
 
             foreach (var fragment in Definition.GetFragments<PickupEffectFragmentSO>())
             {
-                if (fragment.TryApply(collector, this))
+                if (fragment.TryApply(target, this))
                     anySucceeded = true;
             }
 
