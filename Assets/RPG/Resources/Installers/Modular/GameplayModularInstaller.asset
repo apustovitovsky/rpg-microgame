@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: GameplayModularInstaller
   m_EditorClassIdentifier: RPG.Core::RPG.Core.ModularInstallerSO
   _installers:
-  - {fileID: 11400000, guid: 4d2d8a64527c7764da43891b5677264f, type: 2}
   - {fileID: 11400000, guid: 65ebcb7f73cddca48baf851b747f129b, type: 2}
+  - {fileID: 11400000, guid: 4d2d8a64527c7764da43891b5677264f, type: 2}
+  - {fileID: 11400000, guid: 747c9cda3a62cc947bf2e871d8b6f347, type: 2}

@@ -58,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 4510568093118981031}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.58057, y: -0.76, z: 4.8395}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 483ee12bad1a9b648a761ab53ab44d23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.WorldPickup
-  _definition: {fileID: 11400000, guid: 971ea2499da23c14ca8e5cf0c8b76eab, type: 2}
+  _definition: {fileID: 0}
   _spawnAnchor: {fileID: 8741802348807800752}
-  _destroyOnCollect: 0
-  _autoRespawnCooldown: 2
+  _releaseOnCollect: 1
+  _autoRespawnCooldown: 0

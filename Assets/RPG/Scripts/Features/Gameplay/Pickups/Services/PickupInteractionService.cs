@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPG.Gameplay
 {
-    public sealed class PickupInteractionService : IPickupInteractionService
+    public sealed class PickupInteractionService : IPickupInteractionHandler
     {
         private readonly HashSet<IPickupInstance> _inProgress = new();
 

@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.PickupConfigSO
   <PickupPrefab>k__BackingField: {fileID: 1144327375940659907, guid: 5c96ec436edd1a244bf00ec737418f72,
     type: 3}
+  <PickupDefinition>k__BackingField: {fileID: 11400000, guid: 971ea2499da23c14ca8e5cf0c8b76eab,
+    type: 2}

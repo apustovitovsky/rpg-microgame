@@ -19,7 +19,7 @@ namespace RPG.Gameplay
         {
 
             var pickup = _container.Instantiate(_prefab, position, Quaternion.identity);
-            pickup.Initialize(new PickupInstance(definition));
+            pickup.SetInstance(new PickupInstance(definition));
 
             return pickup;
         }

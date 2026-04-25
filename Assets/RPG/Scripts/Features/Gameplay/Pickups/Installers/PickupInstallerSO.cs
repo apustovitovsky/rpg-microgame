@@ -1,7 +1,5 @@
-using System.Threading.Tasks;
 using RPG.Core;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 
@@ -16,16 +14,15 @@ namespace RPG.Gameplay
         {
             var builder = context.Builder;
 
-            builder.RegisterInstance(_pickupConfig.PickupPrefab);
+            builder.RegisterInstance(_pickupConfig.PickupPrefab).As<Pickup>();
+            builder.RegisterInstance(_pickupConfig.PickupDefinition);
 
             builder.Register<PickupInteractionService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<PickupFactory>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
+            builder.Register<PickupPool>(Lifetime.Scoped);
 
-            builder.RegisterEntryPoint<PickupEntryPoint>(Lifetime.Singleton)
-                .WithParameter(_pickupConfig.PickupDefinition);
+            builder.RegisterEntryPoint<PickupEntryPoint>();
         }
     }
 }

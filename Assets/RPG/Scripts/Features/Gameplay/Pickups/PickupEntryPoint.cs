@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -5,19 +6,27 @@ namespace RPG.Gameplay
 {
     public class PickupEntryPoint : IStartable
     {
-        private readonly PickupDefinitionSO _pickupDefinition;
-        private readonly IPickupFactory _pickupFactory;
+        private const int PickupCount = 10;
+        private const float SpawnRadius = 15f;
 
-        public PickupEntryPoint(IPickupFactory pickupFactory, PickupDefinitionSO pickupDefinition)
+        private readonly PickupDefinitionSO _pickupDefinition;
+        private readonly PickupPool _pickupPool;
+
+        public PickupEntryPoint(PickupPool pickupPool, PickupDefinitionSO pickupDefinition)
         {
-            _pickupFactory = pickupFactory;
+            _pickupPool = pickupPool;
             _pickupDefinition = pickupDefinition;
         }
 
         public void Start()
         {
-            Debug.Log($"Spawning {_pickupDefinition.DisplayName}");
-            _pickupFactory.Create(_pickupDefinition, Vector3.zero);
+            for (int i = 0; i < PickupCount; i++)
+            {
+                var offset2D = UnityEngine.Random.insideUnitCircle * SpawnRadius;
+                var position = new Vector3(offset2D.x, 0f, offset2D.y);
+                _pickupPool.Get(_pickupDefinition, position, Quaternion.identity);
+            }
+
         }
     }
 }

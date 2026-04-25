@@ -7,29 +7,17 @@ namespace RPG.Gameplay
 {
     public sealed class WorldPickup : Pickup
     {
-        [SerializeField] private PickupDefinitionSO _definition;
         [SerializeField] private Transform _spawnAnchor;
-        [SerializeField] private bool _destroyOnCollect = true;
         [SerializeField, Min(0f)] private float _autoRespawnCooldown;
 
         private GameObject _spawnObject;
         private CancellationTokenSource _respawnCts;
-        private const string PreviewObjectName = "[Pickup Visual Preview]";
 
-
-        private void Start()
+        public override void PrepareForRelease()
         {
-            if (_definition != null && _instance == null)
-                Initialize(new PickupInstance(_definition));
-        }
-
-        public override void Initialize(IPickupInstance instance)
-        {
-            if (instance == null)
-                throw new ArgumentNullException(nameof(instance));
-
-            _definition = instance.Definition;
-            base.Initialize(instance);
+            CancelScheduledRespawn();
+            DestroySpawnObject();
+            base.PrepareForRelease();
         }
 
         protected override void OnRespawn()
@@ -41,10 +29,15 @@ namespace RPG.Gameplay
         {
             DestroySpawnObject();
 
-            if (_definition == null)
+            if (_instance == null)
                 return;
 
-            var prefabFragment = _definition.GetFragment<PickupVisualFragmentSO>();
+            var definition = _instance.Definition;
+
+            if (definition == null)
+                return;
+
+            var prefabFragment = definition.GetFragment<PickupVisualFragmentSO>();
 
             if (prefabFragment == null || prefabFragment.Prefab == null)
                 return;
@@ -77,14 +70,13 @@ namespace RPG.Gameplay
         {
             DestroySpawnObject();
 
-            if (_destroyOnCollect)
+            if (_autoRespawnCooldown > 0f)
             {
-                Destroy(gameObject);
+                ScheduleRespawn();
                 return;
             }
 
-            if (_autoRespawnCooldown > 0f)
-                ScheduleRespawn();
+            base.OnCollect();
         }
 
         private void ScheduleRespawn()
@@ -116,49 +108,6 @@ namespace RPG.Gameplay
             _respawnCts = null;
             Respawn();
         }
-
-#if UNITY_EDITOR
-        // private void OnValidate()
-        // {
-        //     if (Application.isPlaying)
-        //         return;
-
-        //     if (UnityEditor.EditorUtility.IsPersistent(gameObject))
-        //         return;
-
-        //     RebuildSpawnObjectImmediate();
-        // }
-
-        private void RebuildSpawnObjectImmediate()
-        {
-            DestroySpawnObjectImmediate();
-
-            if (_definition == null)
-                return;
-
-            var prefabFragment = _definition.GetFragment<PickupVisualFragmentSO>();
-            if (prefabFragment == null || prefabFragment.Prefab == null)
-                return;
-
-            var anchor = _spawnAnchor != null ? _spawnAnchor : transform;
-
-            _spawnObject = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(
-                prefabFragment.Prefab,
-                anchor);
-
-            _spawnObject.name = PreviewObjectName;
-
-            ApplyLocalTransform(prefabFragment);
-        }
-
-        private void DestroySpawnObjectImmediate()
-        {
-            if (_spawnObject == null)
-                return;
-
-            DestroyImmediate(_spawnObject);
-            _spawnObject = null;
-        }
-#endif
     }
 }
+

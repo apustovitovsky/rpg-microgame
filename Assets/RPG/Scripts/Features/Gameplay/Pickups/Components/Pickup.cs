@@ -10,20 +10,34 @@ namespace RPG.Gameplay
     {
         public bool IsCollected { get; private set; }
         protected IPickupInstance _instance;
-        private IPickupInteractionService _pickupService;
+        private IPickupInteractionHandler _handler;
         private Collider _collider;
+        private Action<Pickup> _release;
 
         [Inject]
-        public void Construct(IPickupInteractionService pickupService)
+        public void Construct(IPickupInteractionHandler handler)
         {
-            _pickupService = pickupService;
+            _handler = handler;
         }
 
-        public virtual void Initialize(IPickupInstance instance)
+        public void SetInstance(IPickupInstance instance)
         {
-            _instance = instance ?? throw new ArgumentNullException(nameof(instance));
+            _instance = instance
+                ?? throw new ArgumentNullException(nameof(instance));
+
             IsCollected = true;
             Respawn();
+        }
+
+        public void SetRelease(Action<Pickup> release)
+        {
+            _release = release;
+        }
+
+        public virtual void PrepareForRelease()
+        {
+            IsCollected = true;
+            _instance = null;
         }
 
         private void Awake()
@@ -50,21 +64,31 @@ namespace RPG.Gameplay
 
         private void OnTriggerEnter(Collider other)
         {
-            if (IsCollected || _pickupService == null || _instance == null)
+            if (IsCollected || _handler == null || _instance == null)
                 return;
 
             var collector = other.GetComponent<IPickupCollector>() ?? other.GetComponentInParent<IPickupCollector>();
             if (collector == null)
                 return;
 
-            if (_pickupService.TryCollect(_instance, collector))
+            if (_handler.TryCollect(_instance, collector))
             {
                 IsCollected = true;
                 OnCollect();
             }
         }
 
-        protected virtual void OnCollect() { }
+        protected virtual void OnCollect()
+        {
+            if (_release != null)
+            {
+                _release(this);
+                return;
+            }
+
+            Destroy(gameObject);
+            return;
+        }
 
         private void Reset()
         {
