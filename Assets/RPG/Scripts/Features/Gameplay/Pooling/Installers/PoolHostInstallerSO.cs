@@ -10,10 +10,8 @@ namespace RPG.Gameplay
     {
         // [SerializeField] private ScenePoolHost _poolHost;
 
-        public override void Install(in InstallContext context)
+        public override void Install(IContainerBuilder builder)
         {
-            var builder = context.Builder;
-
             builder.RegisterComponentInHierarchy<ScenePoolHost>();
 
             builder.Register<PickupPool>(Lifetime.Singleton);
@@ -25,8 +23,6 @@ namespace RPG.Gameplay
             builder.Register<IActorPoolRoots>(
                 resolver => resolver.Resolve<ScenePoolHost>().Actors,
                 Lifetime.Scoped);
-
-
         }
     }
 }

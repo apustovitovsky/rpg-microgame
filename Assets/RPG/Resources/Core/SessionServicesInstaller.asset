@@ -10,5 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 925d0502ff4ddbd429f38c0f47edf75c, type: 3}
-  m_Name: SessionManagementInstaller
+  m_Name: SessionServicesInstaller
   m_EditorClassIdentifier: RPG.Core::RPG.Core.RPG.Core.SessionManagementInstallerSO
+  _sceneNavigationConfig: {fileID: 11400000, guid: 0cbca51f0ea24ef1a054dd93ea68ca12,
+    type: 2}

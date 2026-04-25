@@ -6,14 +6,12 @@ using VContainer.Unity;
 namespace RPG.Gameplay
 {
     [CreateAssetMenu(fileName = "CharacterControllerInstaller", menuName = "RPG/Gameplay/Installers/Character Controller Installer")]
-    public class CharacterControllerInstallerSO : InstallerSO
+    public class CharacterControllerInstallerSO : ScopeInstallerSO
     {
-        public override void Install(in InstallContext context)
+        public override void Install(LifetimeScope scope, IContainerBuilder builder)
         {
-            var builder = context.Builder;
-
             builder.RegisterComponentInHierarchy<CharacterController>()
-                .UnderTransform(context.Scope.transform);
+                .UnderTransform(scope.transform);
         }
     }
 }

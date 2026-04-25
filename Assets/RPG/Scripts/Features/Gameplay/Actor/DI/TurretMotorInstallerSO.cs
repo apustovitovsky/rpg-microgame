@@ -8,10 +8,8 @@ namespace RPG.Gameplay
     [CreateAssetMenu(fileName = "TurretMotorInstaller", menuName = "RPG/Gameplay/Installers/Turret Motor Installer")]
     public class TurretMotorInstallerSO : InstallerSO
     {
-        public override void Install(in InstallContext context)
+        public override void Install(IContainerBuilder builder)
         {
-            var builder = context.Builder;
-
             builder.RegisterEntryPoint<TurretMotor>()
                 .As<IActorInputHandler>();
         }

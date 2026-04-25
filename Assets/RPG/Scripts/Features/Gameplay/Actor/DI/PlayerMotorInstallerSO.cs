@@ -8,10 +8,8 @@ namespace RPG.Gameplay
     [CreateAssetMenu(fileName = "PlayerMotorInstaller", menuName = "RPG/Gameplay/Installers/Player Motor Installer")]
     public class PlayerMotorInstallerSO : InstallerSO
     {
-        public override void Install(in InstallContext context)
+        public override void Install(IContainerBuilder builder)
         {
-            var builder = context.Builder;
-
             builder.RegisterEntryPoint<PlayerMotor>()
                 .As<IActorInputHandler>();
         }

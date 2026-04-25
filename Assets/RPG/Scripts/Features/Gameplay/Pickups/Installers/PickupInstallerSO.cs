@@ -10,14 +10,10 @@ namespace RPG.Gameplay
     {
         [SerializeField] private PickupConfigSO _pickupConfig;
 
-        public override void Install(in InstallContext context)
+        public override void Install(IContainerBuilder builder)
         {
-            var builder = context.Builder;
-
             builder.RegisterInstance(_pickupConfig.PickupPrefab).As<Pickup>();
             builder.RegisterInstance(_pickupConfig.PickupDefinition);
-
-            builder.RegisterComponentInHierarchy<PickupPad>();
 
             builder.Register<PickupInteractionHandler>(Lifetime.Singleton)
                 .AsImplementedInterfaces();

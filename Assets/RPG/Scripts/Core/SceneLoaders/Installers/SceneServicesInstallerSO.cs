@@ -8,9 +8,11 @@ namespace RPG.Core
     [CreateAssetMenu(fileName = "SceneServicesInstaller", menuName = "RPG/Core/SceneServicesInstaller")]
     public class SceneServicesInstallerSO : InstallerSO
     {
-        public override void Install(in InstallContext context)
+        [SerializeField] private SceneNavigationConfigSO _sceneNavigationConfig;
+
+        public override void Install(IContainerBuilder builder)
         {
-            var builder = context.Builder;
+            builder.RegisterInstance(_sceneNavigationConfig);
 
             builder.RegisterEntryPoint<SceneNavigator>()
                 .As<ISessionNavigator>();

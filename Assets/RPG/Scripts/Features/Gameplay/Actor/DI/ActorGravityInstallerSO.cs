@@ -9,10 +9,8 @@ namespace RPG.Gameplay
     {
         [SerializeField] private float gravityForce = -9.81f;
 
-        public override void Install(in InstallContext context)
+        public override void Install(IContainerBuilder builder)
         {
-            var builder = context.Builder;
-
             builder.Register<ActorGravityService>(Lifetime.Scoped)
                 .WithParameter(gravityForce)
                 .AsImplementedInterfaces();

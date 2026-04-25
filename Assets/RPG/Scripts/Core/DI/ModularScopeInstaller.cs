@@ -1,15 +1,16 @@
+using RPG.Core;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
 namespace RPG.Core
 {
-    public sealed class ModularScope : LifetimeScope
+    public sealed class ModularScopeInstaller : ScopeInstallerSO
     {
         [SerializeField] private InstallerSO[] _installers;
         [SerializeField] private ScopeInstallerSO[] _scopeInstallers;
 
-        protected override void Configure(IContainerBuilder builder)
+        public override void Install(LifetimeScope scope, IContainerBuilder builder)
         {
             if (_installers != null)
             {
@@ -30,7 +31,7 @@ namespace RPG.Core
                 if (installer == null)
                     continue;
 
-                installer.Install(this, builder);
+                installer.Install(scope, builder);
             }
         }
     }

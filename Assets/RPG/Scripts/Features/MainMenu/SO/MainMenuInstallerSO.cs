@@ -10,10 +10,8 @@ namespace RPG.MainMenu
     {
         [SerializeField] private MainMenuConfigSO _mainMenuConfig;
 
-        public override void Install(in InstallContext context)
+        public override void Install(IContainerBuilder builder)
         {
-            var builder = context.Builder;
-
             builder.RegisterInstance(_mainMenuConfig);
 
             builder.RegisterEntryPoint<MainMenuSessionStarter>(Lifetime.Scoped);

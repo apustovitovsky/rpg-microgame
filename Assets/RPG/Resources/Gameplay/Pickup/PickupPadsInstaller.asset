@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cd85960feecb154c93d57e2f7284f82, type: 3}
-  m_Name: MainMenuInstaller
-  m_EditorClassIdentifier: RPG.MainMenu::RPG.MainMenu.MainMenuInstallerSO
-  _mainMenuConfig: {fileID: 11400000, guid: 25cf0d420c9e8524f80f8733638e7381, type: 2}
+  m_Script: {fileID: 11500000, guid: 89aa6b47ca1cd0b4ab9e32bebaf81d7d, type: 3}
+  m_Name: PickupPadsInstaller
+  m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.PickupPadsInstallerSO
+  _pickupConfig: {fileID: 0}

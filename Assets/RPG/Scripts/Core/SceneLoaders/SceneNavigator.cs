@@ -8,16 +8,16 @@ namespace RPG.Core
 {
     public sealed class SceneNavigator : ISessionNavigator, IAsyncStartable
     {
-        private readonly ProjectConfigSO _projectConfig;
+        private readonly SceneNavigationConfigSO _sceneNavigationConfig;
         private readonly LoadingScreenPresenter _loadingScreenPresenter;
         private readonly SceneStackLoader _sceneStackLoadingService;
 
         public SceneNavigator(
-            ProjectConfigSO projectConfig,
+            SceneNavigationConfigSO sceneNavigationConfig,
             LoadingScreenPresenter loadingScreenPresenter,
             SceneStackLoader sceneStackLoadingService)
         {
-            _projectConfig = projectConfig;
+            _sceneNavigationConfig = sceneNavigationConfig;
             _loadingScreenPresenter = loadingScreenPresenter;
             _sceneStackLoadingService = sceneStackLoadingService;
         }
@@ -40,27 +40,27 @@ namespace RPG.Core
 
         public async UniTask LoadMainMenuScene()
         {
-            await LoadScene(_projectConfig.MainMenuSceneStack, showLoadingScreen: true);
+            await LoadScene(_sceneNavigationConfig.MainMenuSceneStack, showLoadingScreen: true);
         }
 
         public async UniTask LoadRPGScene()
         {
-            await LoadScene(_projectConfig.RPGSceneStack, showLoadingScreen: true);
+            await LoadScene(_sceneNavigationConfig.RPGSceneStack, showLoadingScreen: true);
         }
 
         public async UniTask LoadFPSScene()
         {
-            await LoadScene(_projectConfig.FPSSceneStack);
+            await LoadScene(_sceneNavigationConfig.FPSSceneStack);
         }
 
         public async UniTask LoadSyntyScene()
         {
-            await LoadScene(_projectConfig.SyntySceneStack);
+            await LoadScene(_sceneNavigationConfig.SyntySceneStack);
         }
 
         public async UniTask StartAsync(CancellationToken cancellation = default)
         {
-            await LoadScene(_projectConfig.StartupSceneStack);
+            await LoadScene(_sceneNavigationConfig.StartupSceneStack);
         }
     }
 }

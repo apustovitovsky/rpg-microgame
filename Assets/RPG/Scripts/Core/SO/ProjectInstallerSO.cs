@@ -9,10 +9,8 @@ namespace RPG.Core
     {
         [SerializeField] private ProjectConfigSO _projectConfig;
 
-        public override void Install(in InstallContext context)
+        public override void Install(IContainerBuilder builder)
         {
-            var builder = context.Builder;
-
             builder.RegisterInstance(_projectConfig);
 
             builder.Register<GameTimeService>(Lifetime.Singleton)

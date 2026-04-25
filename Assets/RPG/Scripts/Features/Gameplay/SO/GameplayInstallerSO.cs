@@ -10,10 +10,8 @@ namespace RPG.Gameplay
     {
         [SerializeField] private GameplayConfigSO _gameplayConfig;
 
-        public override void Install(in InstallContext context)
+        public override void Install(IContainerBuilder builder)
         {
-            var builder = context.Builder;
-
             builder.RegisterInstance(_gameplayConfig);
 
 

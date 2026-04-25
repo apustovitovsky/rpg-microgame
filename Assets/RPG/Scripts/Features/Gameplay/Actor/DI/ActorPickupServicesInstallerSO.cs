@@ -6,7 +6,7 @@ using VContainer.Unity;
 namespace RPG.Gameplay
 {
     [CreateAssetMenu(fileName = "ActorPickupServicesInstaller", menuName = "RPG/Gameplay/Pickup/Actor Pickup Services Installer")]
-    public sealed class ActorPickupServicesInstallerSO : InstallerSO
+    public sealed class ActorPickupServicesInstallerSO : ScopeInstallerSO
     {
         [Header("Parameters")]
 
@@ -17,10 +17,8 @@ namespace RPG.Gameplay
         [Tooltip("Amount of actor gold")]
         [SerializeField] private int curGold = 5;
 
-        public override void Install(in InstallContext context)
+        public override void Install(LifetimeScope scope, IContainerBuilder builder)
         {
-            var builder = context.Builder;
-
             builder.Register<ActorHealth>(Lifetime.Scoped)
                 .WithParameter(nameof(curHealth), curHealth)
                 .WithParameter(nameof(maxHealth), maxHealth)
@@ -31,7 +29,7 @@ namespace RPG.Gameplay
                 .AsImplementedInterfaces();
 
             builder.RegisterComponentInHierarchy<ActorPickupCollector>()
-                .UnderTransform(context.Scope.transform);
+                .UnderTransform(scope.transform);
         }
     }
 }
