@@ -8,18 +8,21 @@ namespace RPG.Core
 {
     public sealed class SceneNavigator : ISessionNavigator, IAsyncStartable
     {
+        private readonly ProjectConfigSO _projectConfig;
         private readonly LoadingScreenPresenter _loadingScreenPresenter;
         private readonly SceneStackLoader _sceneStackLoadingService;
 
         public SceneNavigator(
+            ProjectConfigSO projectConfig,
             LoadingScreenPresenter loadingScreenPresenter,
             SceneStackLoader sceneStackLoadingService)
         {
+            _projectConfig = projectConfig;
             _loadingScreenPresenter = loadingScreenPresenter;
             _sceneStackLoadingService = sceneStackLoadingService;
         }
 
-        private async UniTask<bool> LoadScene(SceneStackLoadRequest request, bool showLoadingScreen = false)
+        private async UniTask<bool> LoadScene(SceneStackSO request, bool showLoadingScreen = false)
         {
             if (showLoadingScreen)
                 _loadingScreenPresenter.ShowLoadingScreen();
@@ -37,35 +40,27 @@ namespace RPG.Core
 
         public async UniTask LoadMainMenuScene()
         {
-            var request = new SceneStackLoadRequest("RPG/Scenes/MainMenuScene");
-            await LoadScene(request, showLoadingScreen: true);
+            await LoadScene(_projectConfig.MainMenuSceneStack, showLoadingScreen: true);
         }
 
         public async UniTask LoadRPGScene()
         {
-            var request = new SceneStackLoadRequest(
-                rootScenePath: "RPG/Scenes/GameplayScene",
-                additiveScenes: new[]
-                {
-                    new SceneStackLoadRequest.AdditiveSceneRequest("RPG/Scenes/WorldScene", setActive: true)
-                });
-
-            await LoadScene(request, showLoadingScreen: true);
+            await LoadScene(_projectConfig.RPGSceneStack, showLoadingScreen: true);
         }
 
         public async UniTask LoadFPSScene()
         {
-            await LoadScene(new SceneStackLoadRequest("FPS/Scenes/MainScene"));
+            await LoadScene(_projectConfig.FPSSceneStack);
         }
 
         public async UniTask LoadSyntyScene()
         {
-            await LoadScene(new SceneStackLoadRequest("Synty/AnimationBaseLocomotion/Samples/Scenes/Demo_01"));
+            await LoadScene(_projectConfig.SyntySceneStack);
         }
 
         public async UniTask StartAsync(CancellationToken cancellation = default)
         {
-            await LoadRPGScene();
+            await LoadScene(_projectConfig.StartupSceneStack);
         }
     }
 }

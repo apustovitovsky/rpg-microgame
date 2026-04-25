@@ -17,9 +17,15 @@ namespace RPG.Core
         }
 
         public async UniTask<bool> LoadStackAsync(
-            SceneStackLoadRequest request,
+            SceneStackSO request,
             CancellationToken ct)
         {
+            if (request == null)
+            {
+                Debug.LogError("Scene stack request asset is null.");
+                return false;
+            }
+
             if (string.IsNullOrWhiteSpace(request.RootScenePath))
             {
                 Debug.LogError("Root scene name is null or empty.");
@@ -50,9 +56,13 @@ namespace RPG.Core
 
                 using (LifetimeScope.EnqueueParent(rootScope))
                 {
-                    for (var i = 0; i < request.AdditiveScenes.Length; i++)
+                    var additiveScenes = request.AdditiveScenes;
+                    if (additiveScenes == null)
+                        return true;
+
+                    for (var i = 0; i < additiveScenes.Length; i++)
                     {
-                        var additiveRequest = request.AdditiveScenes[i];
+                        var additiveRequest = additiveScenes[i];
 
                         if (string.IsNullOrWhiteSpace(additiveRequest.ScenePath))
                         {
