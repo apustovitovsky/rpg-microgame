@@ -8,6 +8,8 @@ namespace RPG.Gameplay
     [DisallowMultipleComponent]
     public class Pickup : MonoBehaviour
     {
+        public event Action<Pickup> Collected;
+
         public bool IsCollected { get; private set; }
         protected IPickupInstance _instance;
         private IPickupInteractionHandler _handler;
@@ -17,7 +19,8 @@ namespace RPG.Gameplay
         [Inject]
         public void Construct(IPickupInteractionHandler handler)
         {
-            _handler = handler;
+            _handler = handler
+                ?? throw new ArgumentNullException(nameof(handler));
         }
 
         public void SetInstance(IPickupInstance instance)
@@ -27,6 +30,15 @@ namespace RPG.Gameplay
 
             IsCollected = true;
             Respawn();
+        }
+
+        public void Respawn()
+        {
+            if (_instance == null)
+                return;
+
+            IsCollected = false;
+            OnRespawn();
         }
 
         public void SetRelease(Action<Pickup> release)
@@ -51,15 +63,6 @@ namespace RPG.Gameplay
             if (_collider != null) _collider.isTrigger = true;
         }
 
-        public void Respawn()
-        {
-            if (_instance == null)
-                return;
-
-            IsCollected = false;
-            OnRespawn();
-        }
-
         protected virtual void OnRespawn() { }
 
         private void OnTriggerEnter(Collider other)
@@ -74,6 +77,7 @@ namespace RPG.Gameplay
             if (_handler.TryCollect(_instance, collector))
             {
                 IsCollected = true;
+                Collected?.Invoke(this);
                 OnCollect();
             }
         }

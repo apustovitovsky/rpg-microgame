@@ -1,24 +1,13 @@
-using System;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace RPG.Gameplay
 {
     public sealed class WorldPickup : Pickup
     {
-        [SerializeField] private Transform _spawnAnchor;
-        [SerializeField, Min(0f)] private float _autoRespawnCooldown;
+        [SerializeField] private Transform _visualAnchor;
 
         private GameObject _spawnObject;
-        private CancellationTokenSource _respawnCts;
-
-        public override void PrepareForRelease()
-        {
-            CancelScheduledRespawn();
-            DestroySpawnObject();
-            base.PrepareForRelease();
-        }
+        private GameObject _spawnPrefab;
 
         protected override void OnRespawn()
         {
@@ -27,26 +16,38 @@ namespace RPG.Gameplay
 
         private void RebuildSpawnObject()
         {
-            DestroySpawnObject();
-
             if (_instance == null)
+            {
+                DestroySpawnObject();
                 return;
+            }
 
             var definition = _instance.Definition;
-
             if (definition == null)
+            {
+                DestroySpawnObject();
                 return;
+            }
 
-            var prefabFragment = definition.GetFragment<PickupVisualFragmentSO>();
-
-            if (prefabFragment == null || prefabFragment.Prefab == null)
+            var fragment = definition.GetFragment<PickupVisualFragmentSO>();
+            if (fragment == null || fragment.Prefab == null)
+            {
+                DestroySpawnObject();
                 return;
+            }
 
-            var anchor = _spawnAnchor != null ? _spawnAnchor : transform;
-            _spawnObject = Instantiate(prefabFragment.Prefab, anchor);
+            if (_spawnObject == null || _spawnPrefab != fragment.Prefab)
+            {
+                var anchor = _visualAnchor != null ? _visualAnchor : transform;
 
-            ApplyLocalTransform(prefabFragment);
+                DestroySpawnObject();
+                _spawnObject = Instantiate(fragment.Prefab, anchor);
+                _spawnPrefab = fragment.Prefab;
+            }
+
+            ApplyLocalTransform(fragment);
         }
+
 
         private void ApplyLocalTransform(PickupVisualFragmentSO prefabFragment)
         {
@@ -59,54 +60,11 @@ namespace RPG.Gameplay
 
         private void DestroySpawnObject()
         {
-            if (_spawnObject == null)
-                return;
+            if (_spawnObject != null)
+                Destroy(_spawnObject);
 
-            Destroy(_spawnObject);
             _spawnObject = null;
-        }
-
-        protected override void OnCollect()
-        {
-            DestroySpawnObject();
-
-            if (_autoRespawnCooldown > 0f)
-            {
-                ScheduleRespawn();
-                return;
-            }
-
-            base.OnCollect();
-        }
-
-        private void ScheduleRespawn()
-        {
-            CancelScheduledRespawn();
-
-            _respawnCts = CancellationTokenSource.CreateLinkedTokenSource(
-                this.GetCancellationTokenOnDestroy());
-
-            RespawnAfterDelay(_respawnCts.Token).Forget();
-        }
-
-        private void CancelScheduledRespawn()
-        {
-            if (_respawnCts == null)
-                return;
-
-            _respawnCts.Cancel();
-            _respawnCts.Dispose();
-            _respawnCts = null;
-        }
-
-        private async UniTaskVoid RespawnAfterDelay(CancellationToken token)
-        {
-            await UniTask.Delay(
-                TimeSpan.FromSeconds(_autoRespawnCooldown),
-                cancellationToken: token);
-
-            _respawnCts = null;
-            Respawn();
+            _spawnPrefab = null;
         }
     }
 }

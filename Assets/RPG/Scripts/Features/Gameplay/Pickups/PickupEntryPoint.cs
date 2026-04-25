@@ -20,12 +20,12 @@ namespace RPG.Gameplay
 
         public void Start()
         {
-            for (int i = 0; i < PickupCount; i++)
-            {
-                var offset2D = UnityEngine.Random.insideUnitCircle * SpawnRadius;
-                var position = new Vector3(offset2D.x, 0f, offset2D.y);
-                _pickupPool.Get(_pickupDefinition, position, Quaternion.identity);
-            }
+            // for (int i = 0; i < PickupCount; i++)
+            // {
+            //     var offset2D = UnityEngine.Random.insideUnitCircle * SpawnRadius;
+            //     var position = new Vector3(offset2D.x, 0f, offset2D.y);
+            //     _pickupPool.Get(_pickupDefinition, position, Quaternion.identity);
+            // }
 
         }
     }

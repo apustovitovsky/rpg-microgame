@@ -17,6 +17,8 @@ namespace RPG.Gameplay
             builder.RegisterInstance(_pickupConfig.PickupPrefab).As<Pickup>();
             builder.RegisterInstance(_pickupConfig.PickupDefinition);
 
+            builder.RegisterComponentInHierarchy<PickupPad>();
+
             builder.Register<PickupInteractionService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
