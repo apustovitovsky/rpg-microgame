@@ -40,11 +40,12 @@ namespace RPG.Gameplay
                 }
             }
 
+            var runtimeRefs = actorScope.Container.Resolve<ActorRuntimeRefs>();
             _currentActorHandler = actorScope.Container.Resolve<IActorInputHandler>();
 
             _gameplayInput.SetHandler(_currentActorHandler);
             _cameraService.SetHandler(_currentActorHandler);
-            _cameraService.SetTarget(actor.transform);
+            _cameraService.SetTarget(actor.transform, runtimeRefs.CameraPivot != null ? runtimeRefs.CameraPivot : actor.transform);
         }
 
         public void Unpossess()

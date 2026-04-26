@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0431369916b1f2b41ad3063e336675e0, type: 3}
   m_Name: CameraSettings
   m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.CameraSettingsSO
-  <CameraPrefab>k__BackingField: {fileID: 0}
+  <CameraPrefab>k__BackingField: {fileID: 7986154206471890355, guid: 0a8ad7a3038dadf4b986b455166a6212,
+    type: 3}
