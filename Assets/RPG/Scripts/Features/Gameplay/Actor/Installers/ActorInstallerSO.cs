@@ -8,22 +8,22 @@ namespace RPG.Gameplay
     [CreateAssetMenu(fileName = "ActorInstaller", menuName = "RPG/Gameplay/Actor/Actor Installer")]
     public class ActorInstallerSO : ScopeInstallerSO
     {
-        [SerializeField] private ActorConfigSO _actorConfig;
 
         public override void Install(LifetimeScope scope, IContainerBuilder builder)
         {
-            builder.RegisterInstance(_actorConfig);
 
             builder.RegisterComponentInHierarchy<ActorRuntimeRefs>()
                 .UnderTransform(scope.transform);
 
-            builder.Register<ActorTargetable>(Lifetime.Scoped)
-                .As<IActorTargetable>();
+            builder.Register<ActorTargetable>(Lifetime.Singleton)
+                .WithParameter(scope.gameObject.name)
+                .As<ITargetable>();
 
             builder.RegisterBuildCallback(container =>
             {
+                scope.name = container.Resolve<IActorNamingService>().Generate();
                 var runtimeRefs = container.Resolve<ActorRuntimeRefs>();
-                var targetable = container.Resolve<IActorTargetable>();
+                var targetable = container.Resolve<ITargetable>();
 
                 if (runtimeRefs.Hitboxes == null)
                     return;

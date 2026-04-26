@@ -7,9 +7,9 @@ namespace RPG.Gameplay
     {
         private readonly ITargetDetectionService _targetDetectionService;
 
-        public IActorTargetable CurrentTarget { get; private set; }
+        public ITargetable CurrentTarget { get; private set; }
 
-        public event Action<IActorTargetable> TargetChanged;
+        public event Action<ITargetable> TargetChanged;
 
         public TargetingService(ITargetDetectionService targetDetectionService)
         {
@@ -22,6 +22,7 @@ namespace RPG.Gameplay
             for (var i = 0; i < candidates.Count; i++)
             {
                 var candidate = candidates[i];
+                Debug.Log($"Target acquired from view: {candidate.DisplayName}");
                 if (!TrySetTarget(candidate))
                     continue;
 
@@ -31,7 +32,7 @@ namespace RPG.Gameplay
             return false;
         }
 
-        public bool TrySetTarget(IActorTargetable target)
+        public bool TrySetTarget(ITargetable target)
         {
             if (!IsValid(target))
                 return false;
@@ -45,7 +46,7 @@ namespace RPG.Gameplay
             return true;
         }
 
-        public bool IsValid(IActorTargetable target)
+        public bool IsValid(ITargetable target)
         {
             return target != null && target.IsTargetable;
         }

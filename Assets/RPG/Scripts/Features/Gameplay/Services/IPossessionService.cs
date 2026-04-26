@@ -1,10 +1,11 @@
 using UnityEngine;
+using VContainer.Unity;
 
 namespace RPG.Gameplay
 {
     public interface IPossessionService
     {
-        void Possess(GameObject actor);
+        void Possess(LifetimeScope actor);
         void Unpossess();
     }
 }

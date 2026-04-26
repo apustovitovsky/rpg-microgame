@@ -4,6 +4,6 @@ namespace RPG.Gameplay
 {
     public interface ITargetDetectionService
     {
-        IReadOnlyList<IActorTargetable> GetCandidates();
+        IReadOnlyList<ITargetable> GetCandidates();
     }
 }

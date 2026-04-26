@@ -1,13 +1,14 @@
 using UnityEngine;
+using VContainer;
 
 namespace RPG.Gameplay
 {
 
     public sealed class ActorHitbox : MonoBehaviour
     {
-        public IActorTargetable Targetable { get; private set; }
+        public ITargetable Targetable { get; private set; }
 
-        public void Initialize(IActorTargetable targetable)
+        public void Initialize(ITargetable targetable)
         {
             Targetable = targetable;
         }

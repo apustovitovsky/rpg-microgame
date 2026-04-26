@@ -12,5 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0431369916b1f2b41ad3063e336675e0, type: 3}
   m_Name: CameraSettings
   m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.CameraSettingsSO
-  <CameraPrefab>k__BackingField: {fileID: 7986154206471890355, guid: 0a8ad7a3038dadf4b986b455166a6212,
+  <CameraPrefab>k__BackingField: {fileID: -7562823273488733038, guid: 0a8ad7a3038dadf4b986b455166a6212,
     type: 3}
+  <HorizontalLookSensitivity>k__BackingField: 90
+  <VerticalLookSensitivity>k__BackingField: 30
+  <MinPitch>k__BackingField: -35
+  <MaxPitch>k__BackingField: 60
+  <MinFieldOfView>k__BackingField: 40
+  <MaxFieldOfView>k__BackingField: 65

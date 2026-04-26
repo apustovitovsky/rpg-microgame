@@ -8,5 +8,6 @@ namespace RPG.Gameplay
     public sealed class TargetingSettingsSO : ScriptableObject
     {
         [field: SerializeField] public float MaxDistance { get; private set; } = 25f;
+        [field: SerializeField] public LayerMask TargetingMask { get; private set; }
     }
 }

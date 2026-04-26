@@ -4,9 +4,9 @@ namespace RPG.Gameplay
 {
     public sealed class NullTargetDetectionService : ITargetDetectionService
     {
-        private static readonly IReadOnlyList<IActorTargetable> EmptyCandidates = new List<IActorTargetable>(0);
+        private static readonly IReadOnlyList<ITargetable> EmptyCandidates = new List<ITargetable>(0);
 
-        public IReadOnlyList<IActorTargetable> GetCandidates()
+        public IReadOnlyList<ITargetable> GetCandidates()
         {
             return EmptyCandidates;
         }

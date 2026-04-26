@@ -4,7 +4,7 @@ namespace RPG.Gameplay
 
     public sealed class ColliderTargetResolver
     {
-        public bool TryResolve(RaycastHit hit, out IActorTargetable targetable)
+        public bool TryResolve(RaycastHit hit, out ITargetable targetable)
         {
             if (hit.collider.TryGetComponent<ActorHitbox>(out var hitbox) &&
                 hitbox.Targetable != null &&

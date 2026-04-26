@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: TargetingSettings
   m_EditorClassIdentifier: RPG.Gameplay::RPG.Gameplay.TargetingSettingsSO
   <MaxDistance>k__BackingField: 25
+  <TargetingMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 8

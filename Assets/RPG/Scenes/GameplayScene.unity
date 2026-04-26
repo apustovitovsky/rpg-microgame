@@ -177,6 +177,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneBootstrap
       objectReference: {fileID: 0}
+    - target: {fileID: 4699016843249294496, guid: b90a8f39ee810ea4f95670c1ef16dabc,
+        type: 3}
+      propertyPath: _installers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699016843249294496, guid: b90a8f39ee810ea4f95670c1ef16dabc,
+        type: 3}
+      propertyPath: '_installers.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 6a27c6d6919d3484f8e947bc60b66879,
+        type: 2}
+    - target: {fileID: 4699016843249294496, guid: b90a8f39ee810ea4f95670c1ef16dabc,
+        type: 3}
+      propertyPath: _scopeInstallers.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5614576174119783040, guid: b90a8f39ee810ea4f95670c1ef16dabc,
         type: 3}
       propertyPath: m_LocalPosition.x

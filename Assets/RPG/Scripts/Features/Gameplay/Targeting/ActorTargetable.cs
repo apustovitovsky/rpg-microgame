@@ -1,21 +1,21 @@
-using System;
 using UnityEngine;
+using VContainer.Unity;
 
 namespace RPG.Gameplay
 {
-    public sealed class ActorTargetable : IActorTargetable
+    public sealed class ActorTargetable : ITargetable
     {
-        public ActorId ActorId { get; }
         public string DisplayName { get; }
         public Transform AimPoint { get; }
         public Transform UiAnchor { get; }
         public bool IsTargetable => true;
 
 
-        public ActorTargetable(ActorConfigSO actorConfig, ActorRuntimeRefs runtimeRefs)
+        public ActorTargetable(
+            LifetimeScope scope,
+            ActorRuntimeRefs runtimeRefs)
         {
-            ActorId = new ActorId(Guid.NewGuid());
-            DisplayName = actorConfig.DisplayName;
+            DisplayName = scope.name;
             AimPoint = runtimeRefs.AimPoint;
             UiAnchor = runtimeRefs.UiAnchor;
         }

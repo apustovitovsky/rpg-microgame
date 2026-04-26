@@ -4,12 +4,12 @@ namespace RPG.Gameplay
 {
     public interface ITargetingService
     {
-        IActorTargetable CurrentTarget { get; }
-        event Action<IActorTargetable> TargetChanged;
+        ITargetable CurrentTarget { get; }
+        event Action<ITargetable> TargetChanged;
 
         bool TryAcquireFromView();
-        bool TrySetTarget(IActorTargetable target);
-        bool IsValid(IActorTargetable target);
+        bool TrySetTarget(ITargetable target);
+        bool IsValid(ITargetable target);
         void ClearTarget();
     }
 }

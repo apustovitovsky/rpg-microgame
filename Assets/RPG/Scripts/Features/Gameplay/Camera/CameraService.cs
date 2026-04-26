@@ -24,8 +24,7 @@ namespace RPG.Gameplay
             _virtualCamera.Follow = cameraPivot;
             _virtualCamera.LookAt = cameraPivot;
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            SetCursorLocked(true);
         }
 
         public void RemoveTarget()
@@ -35,8 +34,7 @@ namespace RPG.Gameplay
             _virtualCamera.Follow = null;
             _virtualCamera.LookAt = null;
 
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            SetCursorLocked(false);
         }
 
         public void HandleZoom(float value)
@@ -48,6 +46,13 @@ namespace RPG.Gameplay
                 _virtualCamera.Lens.FieldOfView + value,
                 _settings.MinFieldOfView,
                 _settings.MaxFieldOfView);
+        }
+
+
+        public void SetCursorLocked(bool isLocked)
+        {
+            Cursor.lockState = isLocked ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.visible = !isLocked;
         }
 
         public void Dispose()

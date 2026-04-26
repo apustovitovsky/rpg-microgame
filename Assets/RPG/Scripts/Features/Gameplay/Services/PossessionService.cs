@@ -21,35 +21,17 @@ namespace RPG.Gameplay
             _cameraService = cameraService;
         }
 
-        public void Possess(GameObject actor)
+        public void Possess(LifetimeScope actorScope)
         {
             Unpossess();
 
-            if (!actor.TryGetComponent<LifetimeScope>(out var actorScope))
-            {
-                throw new UnityException($"Actor '{actor.name}' is missing a {nameof(LifetimeScope)}.");
-            }
-
-            if (actorScope.Container == null)
-            {
-                if (!actorScope.autoRun)
-                {
-                    actorScope.Build();
-                }
-                else
-                {
-                    throw new UnityException(
-                        $"Actor '{actor.name}' scope container is not ready yet. Possession must happen after the actor scope is built.");
-                }
-            }
-
             var runtimeRefs = actorScope.Container.Resolve<ActorRuntimeRefs>();
             _currentActorHandler = actorScope.Container.Resolve<IActorInputHandler>();
-            var cameraPivot = runtimeRefs.CameraPivot != null ? runtimeRefs.CameraPivot : actor.transform;
+            var cameraPivot = runtimeRefs.CameraPivot != null ? runtimeRefs.CameraPivot : actorScope.transform;
 
             _gameplayInput.SetHandler(_currentActorHandler);
             _playerLookService.SetHandler(_currentActorHandler);
-            _playerLookService.SetTarget(actor.transform, cameraPivot);
+            _playerLookService.SetTarget(actorScope.transform, cameraPivot);
             _cameraService.SetTarget(cameraPivot);
         }
 
