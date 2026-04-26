@@ -19,8 +19,12 @@ namespace RPG.Gameplay
                 return;
 
             if (_targetingService.TryAcquireFromView())
+            {
+                // Debug.Log("TargetingController: target acquired from input.");
                 return;
+            }
 
+            // Debug.Log("TargetingController: no target found, clearing current target.");
             _targetingService.ClearTarget();
         }
     }

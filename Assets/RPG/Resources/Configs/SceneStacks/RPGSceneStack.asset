@@ -15,9 +15,9 @@ MonoBehaviour:
   _rootScene:
     _scenePath: RPG/Scenes/GameplayScene
     _setActive: 0
-    _installers:
-    - {fileID: 11400000, guid: 812ce7dc4c5ac9048ad207f135566e87, type: 2}
+    _installers: []
   _additiveScenes:
   - _scenePath: RPG/Scenes/WorldScene
     _setActive: 1
-    _installers: []
+    _installers:
+    - {fileID: 11400000, guid: 812ce7dc4c5ac9048ad207f135566e87, type: 2}

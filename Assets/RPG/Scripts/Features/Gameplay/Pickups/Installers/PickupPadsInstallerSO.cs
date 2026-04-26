@@ -10,12 +10,9 @@ namespace RPG.Gameplay
         menuName = "RPG/Gameplay/Pickup/Pickup Pads Installer")]
     public sealed class PickupPadsInstallerSO : ScopeInstallerSO
     {
-        [SerializeField] private PickupConfigSO _pickupConfig;
-
         public override void Install(LifetimeScope scope, IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<PickupPad>();
-                // .UnderTransform(scope.transform);
         }
     }
 }

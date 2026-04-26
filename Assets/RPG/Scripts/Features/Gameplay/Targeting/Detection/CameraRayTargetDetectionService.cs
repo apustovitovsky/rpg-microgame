@@ -28,12 +28,6 @@ namespace RPG.Gameplay
             if (_camera == null)
                 return Array.Empty<ITargetable>();
 
-            Debug.DrawRay(
-                _camera.transform.position,
-                _camera.transform.forward * _settings.MaxDistance,
-                Color.red,
-                1f);
-
             var ray = new Ray(_camera.transform.position, _camera.transform.forward);
             if (!Physics.Raycast(ray, out var hit, _settings.MaxDistance))
                 return Array.Empty<ITargetable>();

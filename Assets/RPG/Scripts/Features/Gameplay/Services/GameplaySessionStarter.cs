@@ -23,7 +23,7 @@ namespace RPG.Gameplay
 
         public async UniTask StartAsync(CancellationToken cancellation = default)
         {
-            _actorFactory.Create(_gameplayConfig.PlayerPrefab, Vector3.zero + Vector3.right * 10f);
+            _actorFactory.Create(_gameplayConfig.PlayerPrefab, Vector3.zero + Vector3.right * 5f);
             var player = _actorFactory.Create(_gameplayConfig.PlayerPrefab, Vector3.zero);
             _possessionService.Possess(player);
 

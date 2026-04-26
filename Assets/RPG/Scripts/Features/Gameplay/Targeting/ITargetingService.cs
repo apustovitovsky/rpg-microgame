@@ -10,6 +10,7 @@ namespace RPG.Gameplay
         bool TryAcquireFromView();
         bool TrySetTarget(ITargetable target);
         bool IsValid(ITargetable target);
+        bool ValidateCurrentTarget();
         void ClearTarget();
     }
 }
