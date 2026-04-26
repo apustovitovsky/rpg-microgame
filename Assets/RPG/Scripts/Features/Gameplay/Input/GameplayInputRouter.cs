@@ -9,6 +9,7 @@ namespace RPG.Gameplay
         private readonly InputSystem_Actions _input;
         private readonly TargetingController _targetingController;
         private IActorInputHandler _playerHandler;
+        private IPlayerLookInputHandler _lookHandler;
         private ICameraInputHandler _cameraHandler;
 
         public GameplayInputRouter(
@@ -27,6 +28,11 @@ namespace RPG.Gameplay
             _playerHandler = handler;
         }
 
+        public void SetHandler(IPlayerLookInputHandler handler)
+        {
+            _lookHandler = handler;
+        }
+
         public void SetHandler(ICameraInputHandler handler)
         {
             _cameraHandler = handler;
@@ -35,6 +41,11 @@ namespace RPG.Gameplay
         public void RemoveHandler(IActorInputHandler handler)
         {
             if (_playerHandler == handler) _playerHandler = null;
+        }
+
+        public void RemoveHandler(IPlayerLookInputHandler handler)
+        {
+            if (_lookHandler == handler) _lookHandler = null;
         }
 
         public void RemoveHandler(ICameraInputHandler handler)
@@ -61,7 +72,7 @@ namespace RPG.Gameplay
 
         public void OnLook(InputAction.CallbackContext context)
         {
-            _cameraHandler?.HandleLook(context.ReadValue<Vector2>());
+            _lookHandler?.HandleLook(context.ReadValue<Vector2>());
         }
 
         public void OnZoom(InputAction.CallbackContext context)
@@ -88,6 +99,7 @@ namespace RPG.Gameplay
             _input.Player.SetCallbacks(null);
             _input.Disable();
             _playerHandler = null;
+            _lookHandler = null;
             _cameraHandler = null;
         }
     }

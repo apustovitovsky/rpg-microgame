@@ -7,14 +7,17 @@ namespace RPG.Gameplay
     public sealed class PossessionService : IPossessionService
     {
         private readonly IGameplayInputRouter _gameplayInput;
+        private readonly IPlayerLookService _playerLookService;
         private readonly ICameraService _cameraService;
         private IActorInputHandler _currentActorHandler;
 
         public PossessionService(
             IGameplayInputRouter gameplayInput,
+            IPlayerLookService playerLookService,
             ICameraService cameraService)
         {
             _gameplayInput = gameplayInput;
+            _playerLookService = playerLookService;
             _cameraService = cameraService;
         }
 
@@ -42,10 +45,12 @@ namespace RPG.Gameplay
 
             var runtimeRefs = actorScope.Container.Resolve<ActorRuntimeRefs>();
             _currentActorHandler = actorScope.Container.Resolve<IActorInputHandler>();
+            var cameraPivot = runtimeRefs.CameraPivot != null ? runtimeRefs.CameraPivot : actor.transform;
 
             _gameplayInput.SetHandler(_currentActorHandler);
-            _cameraService.SetHandler(_currentActorHandler);
-            _cameraService.SetTarget(actor.transform, runtimeRefs.CameraPivot != null ? runtimeRefs.CameraPivot : actor.transform);
+            _playerLookService.SetHandler(_currentActorHandler);
+            _playerLookService.SetTarget(actor.transform, cameraPivot);
+            _cameraService.SetTarget(cameraPivot);
         }
 
         public void Unpossess()
@@ -53,7 +58,8 @@ namespace RPG.Gameplay
             if (_currentActorHandler == null) return;
 
             _gameplayInput.RemoveHandler(_currentActorHandler);
-            _cameraService.RemoveHandler(_currentActorHandler);
+            _playerLookService.RemoveHandler(_currentActorHandler);
+            _playerLookService.RemoveTarget();
             _cameraService.RemoveTarget();
 
             _currentActorHandler = null;
