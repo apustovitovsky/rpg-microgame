@@ -1,3 +1,4 @@
+using RPG.Core.VContainer;
 using UnityEngine;
 
 namespace RPG.Core
@@ -7,6 +8,7 @@ namespace RPG.Core
         menuName = "RPG/Core/Scene Loading/Scene Navigation Config")]
     public sealed class SceneNavigationConfigSO : ScriptableObject
     {
+        [field: SerializeField] public SceneCatalogSO SceneCatalog { get; private set; }
         [field: SerializeField] public ExperienceDefinitionSO StartupExperience { get; private set; }
         [field: SerializeField] public ExperienceDefinitionSO MainMenuExperience { get; private set; }
         [field: SerializeField] public ExperienceDefinitionSO RpgExperience { get; private set; }

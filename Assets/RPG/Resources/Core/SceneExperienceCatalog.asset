@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbd7e5a8f2c3490db2abfb6150f3d8c4, type: 3}
   m_Name: SceneExperienceCatalog
   m_EditorClassIdentifier: RPG.Core::RPG.Core.SceneNavigationConfigSO
+  <SceneCatalog>k__BackingField: {fileID: 11400000, guid: 41c1b8797bf5aad42bf9fb662b6eac37,
+    type: 2}
   <StartupExperience>k__BackingField: {fileID: 11400000, guid: d1d26adb49f04298a7762d9b15d79bd9,
     type: 2}
   <MainMenuExperience>k__BackingField: {fileID: 11400000, guid: 2bc6a62b290446d4bf1ef04b09ea95d2,

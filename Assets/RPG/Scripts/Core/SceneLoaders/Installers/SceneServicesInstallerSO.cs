@@ -1,4 +1,5 @@
 
+using RPG.Core.VContainer;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -18,6 +19,9 @@ namespace RPG.Core
                 .As<ISessionNavigator>();
 
             builder.Register<SceneStackLoader>(Lifetime.Singleton);
+            builder.Register<SceneScopeLoadingService>(Lifetime.Singleton);
+
+
         }
     }
 }

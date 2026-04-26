@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5ba04daa0954a743a734dc714eec32a, type: 3}
+  m_Name: WorldSceneDefinition
+  m_EditorClassIdentifier: RPG.Core::RPG.Core.VContainer.SceneDefinitionSO
+  <ScenePath>k__BackingField: RPG/Scenes/WorldScene
+  <LifetimeScope>k__BackingField: {fileID: 6792738532428579616, guid: 30f3f084590898944a1361dc8e3716b5,
+    type: 3}
+  <ExtraInstallers>k__BackingField:
+  - {fileID: 11400000, guid: 812ce7dc4c5ac9048ad207f135566e87, type: 2}
