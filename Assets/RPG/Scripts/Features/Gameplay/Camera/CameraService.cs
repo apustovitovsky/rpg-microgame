@@ -5,14 +5,16 @@ using VContainer.Unity;
 
 namespace RPG.Gameplay
 {
-    public sealed class CinemachineCameraService : ICameraService, ICameraInputHandler, ITickable, IDisposable
+    public sealed class CameraService : ICameraService, ICameraInputHandler, ITickable, IDisposable
     {
-        private readonly CinemachineCamera _camera;
+        private readonly CinemachineCamera _mainCamera;
         private IActorInputHandler _playerInputHandler;
 
-        public CinemachineCameraService(CinemachineCamera camera)
+        public Transform CurrentTarget => _mainCamera != null ? _mainCamera.Follow : null;
+
+        public CameraService(CinemachineCamera camera)
         {
-            _camera = camera;
+            _mainCamera = camera;
         }
 
         public void SetHandler(IActorInputHandler handler)
@@ -27,36 +29,37 @@ namespace RPG.Gameplay
 
         public void SetTarget(Transform target)
         {
-            if (_camera == null) return;
+            if (_mainCamera == null) return;
 
-            _camera.Follow = target;
-            _camera.LookAt = target;
+            _mainCamera.Follow = target;
+            _mainCamera.LookAt = target;
         }
 
         public void RemoveTarget()
         {
-            if (_camera == null) return;
+            if (_mainCamera == null) return;
 
-            _camera.Follow = null;
-            _camera.LookAt = null;
+            _mainCamera.Follow = null;
+            _mainCamera.LookAt = null;
         }
 
         public void HandleLook(Vector2 value)
         {
-            _camera.transform.Rotate(Vector3.up, value.x);
-            _camera.transform.Rotate(Vector3.right, value.y);
+            Debug.Log($"HandleLook: {value}"); // Works
+            _mainCamera.transform.Rotate(Vector3.up, value.x);
+            _mainCamera.transform.Rotate(Vector3.right, value.y);
         }
 
         public void HandleZoom(float value)
         {
-            _camera.Lens.FieldOfView += value;
+            _mainCamera.Lens.FieldOfView += value;
         }
 
         public void Tick()
         {
-            if (_camera == null) return;
+            if (_mainCamera == null) return;
 
-            Vector3 camForward = _camera.transform.forward;
+            Vector3 camForward = _mainCamera.transform.forward;
 
             if (camForward.sqrMagnitude > 0.001f)
             {

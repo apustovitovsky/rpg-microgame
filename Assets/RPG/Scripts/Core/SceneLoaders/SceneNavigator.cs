@@ -60,7 +60,7 @@ namespace RPG.Core
 
         public async UniTask StartAsync(CancellationToken cancellation = default)
         {
-            await LoadScene(_sceneNavigationConfig.StartupExperience);
+            await LoadScene(_sceneNavigationConfig.RpgExperience, showLoadingScreen: true);
         }
     }
 }

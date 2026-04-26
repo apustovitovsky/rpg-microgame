@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbd7e5a8f2c3490db2abfb6150f3d8c4, type: 3}
-  m_Name: SceneNavigationConfig
+  m_Name: SceneExperienceCatalog
   m_EditorClassIdentifier: RPG.Core::RPG.Core.SceneNavigationConfigSO
   <StartupExperience>k__BackingField: {fileID: 11400000, guid: d1d26adb49f04298a7762d9b15d79bd9,
     type: 2}

@@ -24,12 +24,6 @@ namespace RPG.Gameplay
 
             builder.Register<GameplayInputRouter>(Lifetime.Singleton)
                 .As<IGameplayInputRouter>();
-
-            builder.RegisterComponentInNewPrefab(_gameplayConfig.VirtualCamera, Lifetime.Singleton);
-
-            builder.Register<CinemachineCameraService>(Lifetime.Singleton)
-                .AsImplementedInterfaces()
-                .AsSelf();
         }
     }
 }

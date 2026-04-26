@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7765383341521309175}
   - component: {fileID: 2105582549746879709}
   m_Layer: 0
-  m_Name: VirtualCamera
+  m_Name: VCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -177,7 +177,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4220199508976054022}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89875cdc57c54474a8a74efd9b2a3b5d, type: 3}
   m_Name: 
@@ -191,7 +191,7 @@ MonoBehaviour:
       Owner: {fileID: 690882330213862602}
       Enabled: 1
       Input:
-        InputAction: {fileID: -5630151704836100654, guid: ce36e9ea3ec21e94baea8d9bb10b2d45, type: 3}
+        InputAction: {fileID: 0}
         Gain: 25
         CancelDeltaTime: 0
       InputValue: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
       Owner: {fileID: 690882330213862602}
       Enabled: 1
       Input:
-        InputAction: {fileID: -5630151704836100654, guid: ce36e9ea3ec21e94baea8d9bb10b2d45, type: 3}
+        InputAction: {fileID: 0}
         Gain: -25
         CancelDeltaTime: 0
       InputValue: 0
