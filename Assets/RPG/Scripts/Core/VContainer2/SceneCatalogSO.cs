@@ -9,37 +9,37 @@ namespace RPG.Core.VContainer
         menuName = "RPG/Core/Scene Loading/Scene Catalog")]
     public sealed class SceneCatalogSO : ScriptableObject
     {
-        [SerializeField] private SceneCatalogEntry[] _sceneDefinitions;
+        [field: SerializeField] public SceneCatalogEntry[] Entries { get; private set; }
 
-        public SceneDefinitionSO[] Get(string name)
+        public SceneCatalogEntry Get(string name)
         {
-            if (TryGet(name, out var definitions))
-                return definitions;
+            if (TryGet(name, out var entry))
+                return entry;
 
             throw new InvalidOperationException(
-                $"Scene definition with name '{name}' was not found in catalog.");
+                $"Scene stack with name '{name}' was not found in catalog.");
         }
 
-        public bool TryGet(string name, out SceneDefinitionSO[] definitions)
+        public bool TryGet(string name, out SceneCatalogEntry entry)
         {
-            definitions = null;
+            entry = null;
 
             if (string.IsNullOrWhiteSpace(name))
                 return false;
 
-            if (_sceneDefinitions == null)
+            if (Entries == null)
                 return false;
 
-            foreach (var entry in _sceneDefinitions)
+            foreach (var candidate in Entries)
             {
-                if (entry == null)
+                if (candidate == null)
                     continue;
 
-                if (!string.Equals(entry.DisplayName, name, StringComparison.Ordinal))
+                if (!string.Equals(candidate.DisplayName, name, StringComparison.Ordinal))
                     continue;
 
-                definitions = entry.SceneDefinitions;
-                return definitions != null;
+                entry = candidate;
+                return true;
             }
 
             return false;
@@ -53,14 +53,14 @@ namespace RPG.Core.VContainer
 
         private void ValidateDuplicateDisplayNames()
         {
-            if (_sceneDefinitions == null)
+            if (Entries == null)
                 return;
 
             var usedNames = new HashSet<string>(StringComparer.Ordinal);
 
-            for (var i = 0; i < _sceneDefinitions.Length; i++)
+            for (var i = 0; i < Entries.Length; i++)
             {
-                var entry = _sceneDefinitions[i];
+                var entry = Entries[i];
 
                 if (entry == null)
                     continue;

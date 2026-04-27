@@ -1,5 +1,8 @@
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 using UnityEngine;
-using VContainer.Unity;
 
 namespace RPG.Core.VContainer
 {
@@ -8,10 +11,28 @@ namespace RPG.Core.VContainer
         fileName = "SceneDefinition")]
     public sealed class SceneDefinitionSO : ScriptableObject
     {
-        [field: SerializeField] public string ScenePath { get; private set; }
+#if UNITY_EDITOR
+        [SerializeField] private SceneAsset _scene;
+#endif
 
-        [field: SerializeField] public LifetimeScope LifetimeScope { get; private set; }
-
+        [SerializeField, ReadOnly] private string _scenePath;
         [field: SerializeField] public InstallerSO[] ExtraInstallers { get; private set; }
+
+        public string ScenePath => _scenePath;
+
+        public bool IsValid => !string.IsNullOrWhiteSpace(_scenePath);
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (_scene == null)
+            {
+                _scenePath = string.Empty;
+                return;
+            }
+
+            _scenePath = AssetDatabase.GetAssetPath(_scene);
+        }
+#endif
     }
 }

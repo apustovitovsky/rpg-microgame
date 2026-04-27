@@ -1,6 +1,5 @@
 using UnityEngine;
 using VContainer;
-using VContainer.Unity;
 
 namespace RPG.Core.VContainer
 {
@@ -9,9 +8,10 @@ namespace RPG.Core.VContainer
     menuName = "RPG/Core/Scene Loading/Test Installer")]
     public sealed class TestInstallerSO : InstallerSO
     {
-        public override void Install(IContainerBuilder builder)
+        public override void Install(IContainerBuilder builder, SceneScopeContext context)
         {
-            Debug.Log("TestInstallerSO.Install");
+            var root = context.Root;
+            Debug.Log($"TestInstallerSO.Install() for scene: {context.Definition.ScenePath}. Root: {root.name}.");
         }
     }
 }

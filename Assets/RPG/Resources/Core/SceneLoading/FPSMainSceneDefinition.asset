@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5ba04daa0954a743a734dc714eec32a, type: 3}
-  m_Name: WorldSceneDefinition
+  m_Name: FPSMainSceneDefinition
   m_EditorClassIdentifier: RPG.Core::RPG.Core.VContainer.SceneDefinitionSO
-  <Scene>k__BackingField: {fileID: 11400000, guid: 7c5199dc940677c4bbf03db33f5b78c1,
+  <Scene>k__BackingField: {fileID: 11400000, guid: dc9fb4128c4792e459ee06a1544992a5,
     type: 2}
   <ExtraInstallers>k__BackingField:
   - {fileID: 11400000, guid: 577ccbe37c2482f4f981302253bdb5ee, type: 2}

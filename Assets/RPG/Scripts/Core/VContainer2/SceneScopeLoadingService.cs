@@ -11,7 +11,8 @@ namespace RPG.Core.VContainer
 {
     public sealed class SceneScopeLoadingService
     {
-        private const string SceneRootName = "[SceneRoot]";
+        private const string SceneEntryName = "[SceneEntry]";
+        private const string SceneScopeName = "[SceneScope]";
 
         private readonly LifetimeScope _parentScope;
 
@@ -22,14 +23,28 @@ namespace RPG.Core.VContainer
         }
 
         public async UniTask<IReadOnlyList<LifetimeScope>> LoadSceneStackWithScopesAsync(
-            SceneDefinitionSO[] definitions,
+            SceneCatalogEntry entry,
             CancellationToken ct)
         {
-            if (definitions == null)
-                throw new ArgumentNullException(nameof(definitions));
+            if (entry == null)
+                throw new ArgumentNullException(nameof(entry));
 
-            if (definitions.Length == 0)
-                throw new ArgumentException("Scene stack is empty.", nameof(definitions));
+            var definitions = entry.SceneStack;
+
+            if (definitions == null || definitions.Length == 0)
+            {
+                throw new ArgumentException(
+                    $"Scene stack '{entry.DisplayName}' is empty.",
+                    nameof(entry));
+            }
+
+            var activeSceneIndex = entry.ActiveSceneIndex;
+
+            if (activeSceneIndex < 0 || activeSceneIndex >= definitions.Length)
+            {
+                throw new InvalidOperationException(
+                    $"Scene stack '{entry.DisplayName}' has invalid active scene index '{activeSceneIndex}'.");
+            }
 
             var scopes = new List<LifetimeScope>(definitions.Length);
 
@@ -42,28 +57,37 @@ namespace RPG.Core.VContainer
                 var definition = definitions[i];
 
                 if (definition == null)
-                    throw new ArgumentException($"Scene definition at index {i} is null.", nameof(definitions));
+                {
+                    throw new ArgumentException(
+                        $"Scene stack '{entry.DisplayName}' contains null scene definition at index {i}.",
+                        nameof(entry));
+                }
 
-                if (string.IsNullOrWhiteSpace(definition.ScenePath))
-                    throw new ArgumentException($"Scene name at index {i} is empty.", nameof(definitions));
-
-                if (definition.LifetimeScope == null)
-                    throw new InvalidOperationException(
-                        $"Scene definition '{definition.name}' does not reference a {nameof(LifetimeScope)} prefab.");
+                if (!definition.IsValid)
+                {
+                    throw new ArgumentException(
+                        $"Scene stack '{entry.DisplayName}' contains invalid scene definition at index {i}.",
+                        nameof(entry));
+                }
 
                 var loadMode = i == 0
                     ? LoadSceneMode.Single
                     : LoadSceneMode.Additive;
 
-                var scene = await LoadSceneAsync(definition.ScenePath, loadMode, ct);
+                var scene = await LoadSceneAsync(
+                    definition.ScenePath,
+                    loadMode,
+                    ct);
 
-                var sceneRoot = GetOrCreateSceneRoot(scene);
+                if (i == activeSceneIndex)
+                    SceneManager.SetActiveScene(scene);
+
+                var sceneRoot = CreateSceneRoot(scene);
 
                 var sceneScope = CreateSceneScope(
                     currentParent,
-                    sceneRoot.transform,
-                    definition.LifetimeScope,
-                    definition.ExtraInstallers);
+                    sceneRoot,
+                    definition);
 
                 scopes.Add(sceneScope);
                 currentParent = sceneScope;
@@ -74,107 +98,108 @@ namespace RPG.Core.VContainer
 
         private LifetimeScope CreateSceneScope(
             LifetimeScope parentScope,
-            Transform sceneRoot,
-            LifetimeScope sceneScopePrefab,
-            InstallerSO[] installers)
+            GameObject sceneRoot,
+            SceneDefinitionSO definition)
         {
+            var context = new SceneScopeContext(
+                definition,
+                sceneRoot);
+
             using (LifetimeScope.EnqueueParent(parentScope))
             using (LifetimeScope.Enqueue(builder =>
             {
-                InstallExtraInstallers(builder, installers);
+                builder.RegisterInstance(context);
+                InstallExtraInstallers(
+                    builder,
+                    definition.ExtraInstallers,
+                    context);
             }))
             {
-                var scope = UnityEngine.Object.Instantiate(sceneScopePrefab, sceneRoot);
-                scope.name = sceneScopePrefab.name;
-                return scope;
+                var scopeObject = new GameObject(SceneScopeName);
+                scopeObject.transform.SetParent(sceneRoot.transform, false);
+                scopeObject.transform.SetSiblingIndex(0);
+
+                return scopeObject.AddComponent<LifetimeScope>();
             }
         }
 
         private static void InstallExtraInstallers(
             IContainerBuilder builder,
-            InstallerSO[] installers)
+            InstallerSO[] installers,
+            SceneScopeContext context)
         {
             if (installers == null)
                 return;
 
-            for (var i = 0; i < installers.Length; i++)
+            foreach (var installer in installers)
             {
-                var installer = installers[i];
-
                 if (installer == null)
                     continue;
 
-                installer.Install(builder);
+                installer.Install(builder, context);
             }
         }
 
+        // private static async UniTask<Scene> LoadSceneAsync(
+        //     string scenePath,
+        //     LoadSceneMode loadMode,
+        //     CancellationToken ct)
+        // {
+        //     var operation = SceneManager.LoadSceneAsync(scenePath, loadMode)
+        //         ?? throw new InvalidOperationException($"Failed to start loading scene '{scenePath}'.");
+
+        //     await operation.ToUniTask(cancellationToken: ct);
+
+        //     var scene = SceneManager.GetSceneByPath(scenePath);
+
+        //     if (!scene.IsValid() || !scene.isLoaded)
+        //         throw new InvalidOperationException($"Scene '{scenePath}' was not loaded.");
+
+        //     return scene;
+        // }
+
         private static async UniTask<Scene> LoadSceneAsync(
-            string sceneName,
+            string scenePath,
             LoadSceneMode loadMode,
             CancellationToken ct)
         {
-            var operation = SceneManager.LoadSceneAsync(sceneName, loadMode)
-                ?? throw new InvalidOperationException($"Failed to start loading scene '{sceneName}'.");
+            var beforeHandles = new HashSet<int>();
+
+            for (var i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var loadedScene = SceneManager.GetSceneAt(i);
+                beforeHandles.Add(loadedScene.handle);
+            }
+
+            var operation = SceneManager.LoadSceneAsync(scenePath, loadMode)
+                ?? throw new InvalidOperationException($"Failed to start loading scene '{scenePath}'.");
 
             await operation.ToUniTask(cancellationToken: ct);
 
-            var scene = FindLoadedScene(sceneName);
-
-            if (!scene.IsValid() || !scene.isLoaded)
-                throw new InvalidOperationException($"Scene '{sceneName}' was not loaded.");
-
-            return scene;
-        }
-
-        private static GameObject GetOrCreateSceneRoot(Scene scene)
-        {
-            foreach (var root in scene.GetRootGameObjects())
+            for (var i = 0; i < SceneManager.sceneCount; i++)
             {
-                if (root.name == SceneRootName)
-                    return root;
+                var loadedScene = SceneManager.GetSceneAt(i);
+                if (!beforeHandles.Contains(loadedScene.handle) &&
+                    loadedScene.IsValid() &&
+                    loadedScene.isLoaded &&
+                    loadedScene.path == scenePath)
+                {
+                    return loadedScene;
+                }
             }
 
-            var sceneRoot = new GameObject(SceneRootName);
+            throw new InvalidOperationException(
+                $"Scene '{scenePath}' was loaded, but new scene instance was not found.");
+        }
+
+        private static GameObject CreateSceneRoot(Scene scene)
+        {
+            var sceneRoot = new GameObject(SceneEntryName);
+
             SceneManager.MoveGameObjectToScene(sceneRoot, scene);
             sceneRoot.transform.SetSiblingIndex(0);
 
             return sceneRoot;
-        }
-
-        private static Scene FindLoadedScene(string sceneIdentifier)
-        {
-            var normalizedIdentifier = NormalizeSceneIdentifier(sceneIdentifier);
-
-            for (var i = 0; i < SceneManager.sceneCount; i++)
-            {
-                var scene = SceneManager.GetSceneAt(i);
-                if (!scene.isLoaded)
-                    continue;
-
-                if (string.Equals(scene.name, sceneIdentifier, StringComparison.OrdinalIgnoreCase))
-                    return scene;
-
-                if (string.Equals(NormalizeSceneIdentifier(scene.path), normalizedIdentifier, StringComparison.OrdinalIgnoreCase))
-                    return scene;
-            }
-
-            return default;
-        }
-
-        private static string NormalizeSceneIdentifier(string sceneIdentifier)
-        {
-            if (string.IsNullOrWhiteSpace(sceneIdentifier))
-                return string.Empty;
-
-            var normalized = sceneIdentifier.Replace('\\', '/');
-
-            if (normalized.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase))
-                normalized = normalized["Assets/".Length..];
-
-            if (normalized.EndsWith(".unity", StringComparison.OrdinalIgnoreCase))
-                normalized = normalized[..^".unity".Length];
-
-            return normalized;
         }
     }
 }

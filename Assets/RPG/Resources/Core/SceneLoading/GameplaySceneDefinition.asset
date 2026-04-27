@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ba04daa0954a743a734dc714eec32a, type: 3}
   m_Name: GameplaySceneDefinition
   m_EditorClassIdentifier: RPG.Core::RPG.Core.VContainer.SceneDefinitionSO
-  <ScenePath>k__BackingField: RPG/Scenes/GameplayScene
-  <LifetimeScope>k__BackingField: {fileID: 6792738532428579616, guid: 30f3f084590898944a1361dc8e3716b5,
-    type: 3}
-  <ExtraInstallers>k__BackingField: []
+  <Scene>k__BackingField: {fileID: 11400000, guid: f5a02cda48bdc8945826b52142e59b08,
+    type: 2}
+  <ExtraInstallers>k__BackingField:
+  - {fileID: 11400000, guid: 577ccbe37c2482f4f981302253bdb5ee, type: 2}

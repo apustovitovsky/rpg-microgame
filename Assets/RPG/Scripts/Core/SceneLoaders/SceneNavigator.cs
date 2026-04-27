@@ -70,17 +70,10 @@ namespace RPG.Core
             }
 
             if (_sceneNavigationConfig.SceneCatalog != null &&
-                _sceneNavigationConfig.SceneCatalog.TryGet("RPG", out var definitions) &&
-                definitions != null &&
-                definitions.Length > 0)
+                _sceneNavigationConfig.SceneCatalog.TryGet("RPG", out var entry) &&
+                entry != null)
             {
-                await _sceneScopeLoadingService.LoadSceneStackWithScopesAsync(definitions, cancellation);
-                return;
-            }
-
-            if (_sceneNavigationConfig.StartupExperience != null)
-            {
-                await LoadScene(_sceneNavigationConfig.StartupExperience, showLoadingScreen: true);
+                await _sceneScopeLoadingService.LoadSceneStackWithScopesAsync(entry, cancellation);
                 return;
             }
 

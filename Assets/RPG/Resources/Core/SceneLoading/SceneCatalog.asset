@@ -12,8 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2a5db4456ba4f9499e7bcd03bfad68f, type: 3}
   m_Name: SceneCatalog
   m_EditorClassIdentifier: RPG.Core::RPG.Core.VContainer.SceneCatalogSO
-  _sceneDefinitions:
+  <Entries>k__BackingField:
   - <DisplayName>k__BackingField: RPG
-    <SceneDefinitions>k__BackingField:
-    - {fileID: 11400000, guid: 02c9270617904ab41929ac6022ad8bd4, type: 2}
-    - {fileID: 11400000, guid: 08cf500bd227b5b41b8265f516e934e6, type: 2}
+    <SceneStack>k__BackingField:
+    - {fileID: 11400000, guid: 0459cf61d5995b4479613733958c8c1d, type: 2}
+    - {fileID: 11400000, guid: dee97ad8462e83f4797dc38d8dfd0d10, type: 2}
+    <ActiveScene>k__BackingField: {fileID: 11400000, guid: 7c5199dc940677c4bbf03db33f5b78c1,
+      type: 2}
+  - <DisplayName>k__BackingField: GAS
+    <SceneStack>k__BackingField:
+    - {fileID: 11400000, guid: 0459cf61d5995b4479613733958c8c1d, type: 2}
+    <ActiveScene>k__BackingField: {fileID: 11400000, guid: 7c5199dc940677c4bbf03db33f5b78c1,
+      type: 2}
