@@ -2,7 +2,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using VContainer.Unity;
 
-namespace RPG.Core
+namespace RPG.Game
 {
     public sealed class LoadingScreenPresenter
     {

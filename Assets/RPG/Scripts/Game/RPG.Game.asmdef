@@ -4,7 +4,9 @@
     "references": [
         "RPG.Core",
         "UniTask",
-        "VContainer"
+        "VContainer",
+        "Unity.InputSystem",
+        "RPG.InputActions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

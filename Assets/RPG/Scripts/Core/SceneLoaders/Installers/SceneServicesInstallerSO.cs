@@ -15,8 +15,8 @@ namespace RPG.Core
         {
             builder.RegisterInstance(_sceneNavigationConfig);
 
-            builder.RegisterEntryPoint<SceneNavigator>()
-                .As<ISessionNavigator>();
+            // builder.RegisterEntryPoint<SceneNavigator>()
+            //     .As<ISessionNavigator>();
 
             builder.Register<SceneStackLoader>(Lifetime.Singleton);
             builder.Register<SceneScopeLoadingService>(Lifetime.Singleton);

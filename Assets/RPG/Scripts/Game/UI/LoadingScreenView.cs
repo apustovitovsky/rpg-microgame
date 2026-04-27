@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace RPG.Core
+namespace RPG.Game
 {
     public sealed class LoadingScreenView : MonoBehaviour
     {
