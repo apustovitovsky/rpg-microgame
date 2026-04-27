@@ -1,0 +1,18 @@
+using Etheria.Core.DI;
+using UnityEngine;
+using VContainer;
+using VContainer.Unity;
+
+namespace Etheria.Gameplay
+{
+    [CreateAssetMenu(
+        fileName = "PickupPadsInstaller",
+        menuName = "Etheria/Gameplay/Pickup/Pickup Pads Installer")]
+    public sealed class PickupPadsInstallerSO : InstallerSO
+    {
+        public override void Install(IContainerBuilder builder, GameObject rootObject)
+        {
+            builder.RegisterComponentInHierarchy<PickupPad>();
+        }
+    }
+}

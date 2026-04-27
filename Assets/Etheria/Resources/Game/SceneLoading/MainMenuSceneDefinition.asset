@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5ba04daa0954a743a734dc714eec32a, type: 3}
+  m_Name: MainMenuSceneDefinition
+  m_EditorClassIdentifier: Etheria.Core::Etheria.Core.DI.SceneDefinitionSO
+  <Scene>k__BackingField: {fileID: 11400000, guid: b76ea4f9ca7318e4e97053d75bcecc3e,
+    type: 2}
+  _scenePath: Assets/Etheria/Scenes/MainMenuScene.unity
+  <ExtraInstallers>k__BackingField:
+  - {fileID: 11400000, guid: 9e1fd5fa2c6b419469f691a27127a10d, type: 2}

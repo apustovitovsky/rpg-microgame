@@ -18,16 +18,16 @@ EditorBuildSettings:
     path: Assets/FPS/Scenes/MainScene.unity
     guid: d794a2ef8ba31d847ad3c19d03e2ddb9
   - enabled: 1
-    path: Assets/RPG/Scenes/BootstrapScene.unity
+    path: Assets/Etheria/Scenes/BootstrapScene.unity
     guid: 00764b2a3d336ff49b6963a7fe2e7dee
   - enabled: 1
-    path: Assets/RPG/Scenes/MainMenuScene.unity
+    path: Assets/Etheria/Scenes/MainMenuScene.unity
     guid: b76ea4f9ca7318e4e97053d75bcecc3e
   - enabled: 1
-    path: Assets/RPG/Scenes/GameplayScene.unity
+    path: Assets/Etheria/Scenes/GameplayScene.unity
     guid: b15f6ab997cc5a24694e0b835c9201e8
   - enabled: 1
-    path: Assets/RPG/Scenes/WorldScene.unity
+    path: Assets/Etheria/Scenes/WorldScene.unity
     guid: fde5ce2fd00e69147b6bc232ddf4d0f6
   - enabled: 1
     path: Assets/Synty/AnimationBaseLocomotion/Samples/Scenes/Demo_01.unity

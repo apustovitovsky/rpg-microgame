@@ -1,0 +1,21 @@
+{
+    "name": "Etheria.Game",
+    "rootNamespace": "Etheria.Game",
+    "references": [
+        "Etheria.Core",
+        "Etheria.UI",
+        "UniTask",
+        "VContainer",
+        "Unity.InputSystem",
+        "Etheria.InputActions"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

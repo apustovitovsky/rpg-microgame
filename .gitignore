@@ -1,9 +1,9 @@
 # This .gitignore file should be placed at the root of your Unity project directory
 
-# Only track RPG, GAS, FPS inside Assets
+# Only track Etheria, GAS, FPS inside Assets
 /[Aa]ssets/*
-!/[Aa]ssets/RPG
-!/[Aa]ssets/RPG.meta
+!/[Aa]ssets/Etheria
+!/[Aa]ssets/Etheria.meta
 !/[Aa]ssets/GAS
 !/[Aa]ssets/GAS.meta
 !/[Aa]ssets/FPS
