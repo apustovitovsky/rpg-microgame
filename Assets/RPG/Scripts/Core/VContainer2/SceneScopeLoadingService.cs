@@ -140,24 +140,6 @@ namespace RPG.Core.VContainer
             }
         }
 
-        // private static async UniTask<Scene> LoadSceneAsync(
-        //     string scenePath,
-        //     LoadSceneMode loadMode,
-        //     CancellationToken ct)
-        // {
-        //     var operation = SceneManager.LoadSceneAsync(scenePath, loadMode)
-        //         ?? throw new InvalidOperationException($"Failed to start loading scene '{scenePath}'.");
-
-        //     await operation.ToUniTask(cancellationToken: ct);
-
-        //     var scene = SceneManager.GetSceneByPath(scenePath);
-
-        //     if (!scene.IsValid() || !scene.isLoaded)
-        //         throw new InvalidOperationException($"Scene '{scenePath}' was not loaded.");
-
-        //     return scene;
-        // }
-
         private static async UniTask<Scene> LoadSceneAsync(
             string scenePath,
             LoadSceneMode loadMode,
