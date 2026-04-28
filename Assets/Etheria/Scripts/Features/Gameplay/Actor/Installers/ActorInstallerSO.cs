@@ -1,9 +1,11 @@
+
 using Etheria.Core.DI;
+using Etheria.Game.Common;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(fileName = "ActorInstaller", menuName = "Etheria/Gameplay/Actor/Actor Installer")]
     public class ActorInstallerSO : ScopeInstallerSO
@@ -20,7 +22,7 @@ namespace Etheria.Gameplay
 
             builder.RegisterBuildCallback(container =>
             {
-                rootObject.name = container.Resolve<IActorNamingService>().Generate();
+                rootObject.name = container.Resolve<INameGenerator>().Generate();
                 var runtimeRefs = container.Resolve<ActorRuntimeRefs>();
                 var targetable = container.Resolve<ITargetable>();
 
@@ -38,3 +40,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

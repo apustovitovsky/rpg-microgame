@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class HealthPickupVisual : MonoBehaviour
     {
@@ -70,3 +70,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

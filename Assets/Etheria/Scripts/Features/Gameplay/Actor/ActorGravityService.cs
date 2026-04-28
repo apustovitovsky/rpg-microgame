@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class ActorGravityService : IActorGravityService
     {
@@ -35,3 +35,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

@@ -1,4 +1,4 @@
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public interface IHealth
     {

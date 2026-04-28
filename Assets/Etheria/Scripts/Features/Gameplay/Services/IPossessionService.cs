@@ -1,7 +1,7 @@
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public interface IPossessionService
     {
@@ -9,3 +9,4 @@ namespace Etheria.Gameplay
         void Unpossess();
     }
 }
+

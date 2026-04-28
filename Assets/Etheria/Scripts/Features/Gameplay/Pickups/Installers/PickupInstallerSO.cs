@@ -3,7 +3,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(fileName = "PickupInstaller", menuName = "Etheria/Gameplay/Pickup/Pickup Installer")]
     public sealed class PickupInstallerSO : ScopeInstallerSO
@@ -22,3 +22,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class PickupPad : MonoBehaviour
     {
@@ -98,3 +98,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(fileName = "HealthPickupFragment", menuName = "Etheria/Gameplay/Pickup/Fragments/HealthPickupFragment")]
     public sealed class HealthPickupFragmentSO : PickupEffectFragmentSO<IHealth>
@@ -18,4 +18,5 @@ namespace Etheria.Gameplay
         }
     }
 }
+
 

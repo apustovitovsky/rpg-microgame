@@ -2,7 +2,7 @@ using Etheria.Core;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class DroneMotor : IActorInputHandler, ITickable
     {
@@ -72,3 +72,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

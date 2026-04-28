@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class GameplaySessionStarter : IAsyncStartable
     {
@@ -32,3 +32,4 @@ namespace Etheria.Gameplay
 
     }
 }
+

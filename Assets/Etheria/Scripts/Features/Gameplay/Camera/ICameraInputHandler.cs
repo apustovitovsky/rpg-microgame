@@ -1,9 +1,10 @@
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public interface ICameraInputHandler
     {
         void HandleZoom(float value);
     }
 }
+

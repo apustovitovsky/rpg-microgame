@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public interface IPlayerLookService
     {
@@ -12,3 +12,4 @@ namespace Etheria.Gameplay
         void RemoveTarget();
     }
 }
+

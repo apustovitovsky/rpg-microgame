@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class TargetingService : ITargetingService
     {
@@ -121,3 +121,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

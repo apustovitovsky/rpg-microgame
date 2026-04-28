@@ -1,10 +1,10 @@
-﻿using System.Threading;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Etheria.Core.DI;
 using Etheria.Game;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class EtheriaNavigator : IAsyncStartable
     {
@@ -28,4 +28,5 @@ namespace Etheria.Gameplay
         }
     }
 }
+
 

@@ -1,4 +1,4 @@
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public abstract class PickupEffectFragmentSO : PickupFragmentSO
     {
@@ -22,5 +22,6 @@ namespace Etheria.Gameplay
         protected abstract bool TryApply(TService service, PickupInstance instance);
     }
 }
+
 
 

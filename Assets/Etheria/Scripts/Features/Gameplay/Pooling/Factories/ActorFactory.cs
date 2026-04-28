@@ -1,4 +1,4 @@
-namespace Etheria.Gameplay.Pooling
+namespace Etheria.Features.Gameplay.Pooling
 {
     using UnityEngine;
     using VContainer;

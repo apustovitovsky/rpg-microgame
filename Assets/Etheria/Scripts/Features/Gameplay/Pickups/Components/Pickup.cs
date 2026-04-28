@@ -2,7 +2,7 @@ using UnityEngine;
 using VContainer;
 using System;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [RequireComponent(typeof(Collider))]
     [DisallowMultipleComponent]
@@ -105,3 +105,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

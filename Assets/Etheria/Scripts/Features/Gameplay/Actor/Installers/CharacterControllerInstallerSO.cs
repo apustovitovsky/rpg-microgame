@@ -3,7 +3,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(fileName = "CharacterControllerInstaller", menuName = "Etheria/Gameplay/Installers/Character Controller Installer")]
     public class CharacterControllerInstallerSO : ScopeInstallerSO
@@ -15,3 +15,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

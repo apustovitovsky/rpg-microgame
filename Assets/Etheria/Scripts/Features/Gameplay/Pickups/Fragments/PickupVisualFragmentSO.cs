@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(fileName = "PickupVisualFragment", menuName = "Etheria/Gameplay/Pickup/Fragments/PickupVisualFragment")]
     public class PickupVisualFragmentSO : PickupFragmentSO
@@ -20,3 +20,4 @@ namespace Etheria.Gameplay
         [field: SerializeField] public Vector3 LocalScale { get; private set; } = Vector3.one;
     }
 }
+

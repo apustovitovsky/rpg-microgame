@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public interface ICameraService
     {
@@ -9,3 +9,4 @@ namespace Etheria.Gameplay
         void RemoveTarget();
     }
 }
+

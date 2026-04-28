@@ -3,7 +3,7 @@ using UnityEngine.Pool;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class PickupPool
     {
@@ -55,3 +55,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

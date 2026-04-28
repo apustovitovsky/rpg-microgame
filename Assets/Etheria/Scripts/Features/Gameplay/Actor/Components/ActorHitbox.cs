@@ -1,7 +1,7 @@
 using UnityEngine;
 using VContainer;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
 
     public sealed class ActorHitbox : MonoBehaviour
@@ -14,4 +14,5 @@ namespace Etheria.Gameplay
         }
     }
 }
+
 

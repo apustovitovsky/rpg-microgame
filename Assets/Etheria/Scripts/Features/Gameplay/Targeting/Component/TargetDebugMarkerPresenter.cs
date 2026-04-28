@@ -1,7 +1,7 @@
 using System;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class TargetDebugMarkerPresenter : IStartable, IDisposable
     {
@@ -39,3 +39,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

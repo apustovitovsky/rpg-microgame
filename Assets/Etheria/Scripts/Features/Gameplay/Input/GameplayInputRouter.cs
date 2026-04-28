@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class GameplayInputRouter : IGameplayInputRouter, InputSystem_Actions.IPlayerActions, IDisposable
     {
@@ -104,3 +104,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

@@ -1,4 +1,4 @@
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class PickupInstance : IPickup
     {
@@ -26,4 +26,5 @@ namespace Etheria.Gameplay
         }
     }
 }
+
 

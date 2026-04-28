@@ -3,7 +3,7 @@ using UnityEngine.Pool;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Core
+namespace Etheria.Features.Gameplay.Pooling
 {
     public sealed class Actor : MonoBehaviour
     {
@@ -64,3 +64,4 @@ namespace Etheria.Core
         }
     }
 }
+

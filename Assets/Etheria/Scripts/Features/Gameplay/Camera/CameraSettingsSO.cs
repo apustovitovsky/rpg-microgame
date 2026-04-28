@@ -1,7 +1,7 @@
 using Unity.Cinemachine;
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(
         fileName = "CameraSettings",
@@ -17,3 +17,4 @@ namespace Etheria.Gameplay
         [field: SerializeField] public float MaxFieldOfView { get; private set; } = 65f;
     }
 }
+

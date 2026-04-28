@@ -1,7 +1,7 @@
 using UnityEngine;
 using VContainer;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [DisallowMultipleComponent]
     public sealed class PickupCollector : MonoBehaviour, IPickupTarget
@@ -39,3 +39,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

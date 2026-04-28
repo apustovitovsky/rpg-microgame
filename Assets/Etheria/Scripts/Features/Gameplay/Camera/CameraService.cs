@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Unity.Cinemachine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class CameraService : ICameraService, ICameraInputHandler, IDisposable
     {
@@ -60,3 +60,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

@@ -3,7 +3,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(
         fileName = "TargetSystemInstaller",
@@ -34,3 +34,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

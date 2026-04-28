@@ -3,7 +3,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(fileName = "PlayerMotorInstaller", menuName = "Etheria/Gameplay/Installers/Player Motor Installer")]
     public class PlayerMotorInstallerSO : ScopeInstallerSO
@@ -15,3 +15,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

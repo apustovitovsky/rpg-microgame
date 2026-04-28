@@ -1,4 +1,4 @@
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public interface IGameplayInputRouter
     {
@@ -10,3 +10,4 @@ namespace Etheria.Gameplay
         void RemoveHandler(ICameraInputHandler handler);
     }
 }
+

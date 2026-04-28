@@ -1,7 +1,7 @@
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class ActorTargetable : ITargetable
     {
@@ -21,3 +21,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

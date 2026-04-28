@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class PlayerLookService : IPlayerLookService, IPlayerLookInputHandler, ITickable, IDisposable
     {
@@ -119,3 +119,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

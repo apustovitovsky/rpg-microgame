@@ -2,7 +2,7 @@
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(fileName = "GameplayConfig", menuName = "Etheria/Gameplay/Gameplay Config")]
     public sealed class GameplayConfigSO : ScriptableObject
@@ -12,3 +12,4 @@ namespace Etheria.Gameplay
         [field: SerializeField] public LifetimeScope TurretPrefab { get; private set; }
     }
 }
+

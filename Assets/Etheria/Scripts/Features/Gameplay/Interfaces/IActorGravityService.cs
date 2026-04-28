@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public interface IActorGravityService
     {
@@ -8,3 +8,4 @@ namespace Etheria.Gameplay
         Vector3 GetGravityStep(CharacterController controller, float deltaTime);
     }
 }
+

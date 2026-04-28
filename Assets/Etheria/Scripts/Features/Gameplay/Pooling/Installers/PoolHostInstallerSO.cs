@@ -3,7 +3,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(fileName = "PoolHostInstaller", menuName = "Etheria/Gameplay/Pooling/PoolHostInstaller")]
     public class PoolHostInstallerSO : ScopeInstallerSO
@@ -26,3 +26,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public class PickupEntryPoint : IStartable
     {
@@ -29,3 +29,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

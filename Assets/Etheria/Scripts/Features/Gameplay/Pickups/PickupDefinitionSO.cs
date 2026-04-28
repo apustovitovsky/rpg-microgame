@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(fileName = "PickupDefinition", menuName = "Etheria/Gameplay/Pickup/Pickup Definition")]
     public sealed class PickupDefinitionSO : ScriptableObject
@@ -30,3 +30,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

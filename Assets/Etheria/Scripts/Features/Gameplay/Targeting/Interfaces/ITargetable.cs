@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public interface ITargetable
     {
@@ -10,3 +10,4 @@ namespace Etheria.Gameplay
         bool IsTargetable { get; }
     }
 }
+

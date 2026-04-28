@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(fileName = "GoldPickupFragment", menuName = "Etheria/Gameplay/Pickup/Fragments/GoldPickupFragment")]
     public sealed class GoldPickupFragmentSO : PickupEffectFragmentSO<IInventory>
@@ -15,3 +15,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

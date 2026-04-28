@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [DisallowMultipleComponent]
     public sealed class ActorRuntimeRefs : MonoBehaviour
@@ -51,3 +51,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

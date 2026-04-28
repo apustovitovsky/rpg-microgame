@@ -3,7 +3,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(
         fileName = "CameraSystemInstaller",
@@ -37,3 +37,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

@@ -1,6 +1,6 @@
 using System;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public readonly struct ActorId : IEquatable<ActorId>
     {

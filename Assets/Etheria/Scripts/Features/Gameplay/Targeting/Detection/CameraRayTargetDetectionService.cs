@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class CameraRayTargetDetectionService : ITargetDetectionService
     {
@@ -39,3 +39,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

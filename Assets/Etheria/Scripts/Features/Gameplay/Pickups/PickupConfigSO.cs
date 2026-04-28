@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(fileName = "PickupConfig", menuName = "Etheria/Gameplay/Pickups/Pickup Config")]
     public sealed class PickupConfigSO : ScriptableObject

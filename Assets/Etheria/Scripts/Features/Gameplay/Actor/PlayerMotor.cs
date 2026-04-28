@@ -2,7 +2,7 @@ using Etheria.Core;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class PlayerMotor : IActorInputHandler, ITickable
     {
@@ -84,3 +84,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

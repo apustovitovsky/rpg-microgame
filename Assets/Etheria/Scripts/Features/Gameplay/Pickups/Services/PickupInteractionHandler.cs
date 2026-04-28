@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class PickupInteractionHandler : IPickupInteractionHandler
     {
@@ -29,3 +29,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+

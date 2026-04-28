@@ -1,8 +1,9 @@
 using Etheria.Core.DI;
+using Etheria.Features.Actor;
 using UnityEngine;
 using VContainer;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [CreateAssetMenu(
         fileName = "ActorNamingInstaller",
@@ -11,8 +12,9 @@ namespace Etheria.Gameplay
     {
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
-            builder.Register<ActorNamingService>(Lifetime.Singleton)
-                .As<IActorNamingService>();
+            builder.Register<ActorNameGenerator>(Lifetime.Singleton)
+                .As<INameGenerator>();
         }
     }
 }
+

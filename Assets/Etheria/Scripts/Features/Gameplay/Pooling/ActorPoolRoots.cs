@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     [Serializable]
     public sealed class ActorPoolRoots : IActorPoolRoots

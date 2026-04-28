@@ -1,9 +1,10 @@
 using UnityEngine;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public interface IPlayerLookInputHandler
     {
         void HandleLook(Vector2 value);
     }
 }
+

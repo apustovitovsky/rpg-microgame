@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Etheria.Gameplay
+namespace Etheria.Features.Gameplay
 {
     public sealed class TargetingController
     {
@@ -29,3 +29,4 @@ namespace Etheria.Gameplay
         }
     }
 }
+
