@@ -1,0 +1,10 @@
+
+
+namespace Etheria.Features.Collectables
+{
+    public interface IPickupTarget
+    {
+        bool TryGet<T>(out T service) where T : class;
+    }
+}
+
