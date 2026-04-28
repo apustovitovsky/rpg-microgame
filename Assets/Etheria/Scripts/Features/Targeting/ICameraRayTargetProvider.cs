@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Game.Camera
+namespace Etheria.Features.Targeting
 {
     public interface ICameraRayProvider
     {

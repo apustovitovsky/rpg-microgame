@@ -6,7 +6,6 @@ namespace Etheria.Features.Targeting
     {
         [SerializeField] private Vector3 _offset = new(0f, 0.5f, 0f);
         [SerializeField] private GameObject _visual;
-
         [SerializeField] private float _verticalBobFrequency = 1f;
         [SerializeField] private float _bobbingAmount = 0.25f;
         [SerializeField] private float _rotatingSpeed = 360f;

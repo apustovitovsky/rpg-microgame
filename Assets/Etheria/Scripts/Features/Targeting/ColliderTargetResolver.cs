@@ -1,8 +1,9 @@
+using Etheria.Features.Actor;
+using UnityEngine;
+
+
 namespace Etheria.Features.Targeting
 {
-    using Etheria.Features.Actor;
-
-    using UnityEngine;
 
     public sealed class ColliderTargetResolver
     {

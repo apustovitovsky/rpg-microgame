@@ -18,9 +18,6 @@ namespace Etheria.Game.Camera
                 .UnderTransform(rootObject.transform)
                 .As<IGameCameraProvider>();
 
-            builder.Register<CameraRayProvider>(Lifetime.Singleton)
-                .As<ICameraRayProvider>();
-
             builder.RegisterBuildCallback(container =>
             {
                 container.Resolve<IGameCameraProvider>();

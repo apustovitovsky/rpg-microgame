@@ -8,7 +8,7 @@ namespace Etheria.Features.Targeting
     [CreateAssetMenu(
         fileName = "TargetSystemInstaller",
         menuName = "Etheria/Gameplay/Targeting/Target System Installer")]
-    public class TargetSystemInstallerSO : ScopeInstallerSO
+    public class TargetingFeatureInstallerSO : ScopeInstallerSO
     {
         [SerializeField] private TargetingSettingsSO _targetingSettings;
 
@@ -19,6 +19,10 @@ namespace Etheria.Features.Targeting
             builder.Register<ColliderTargetResolver>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<TargetingTracker>(Lifetime.Singleton);
+
+
+            builder.Register<CameraRayProvider>(Lifetime.Singleton)
+                .As<ICameraRayProvider>();
 
             builder.Register<CameraRayTargetDetectionService>(Lifetime.Singleton)
                 .As<ITargetDetectionService>();
