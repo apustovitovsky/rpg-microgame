@@ -1,4 +1,5 @@
-using Etheria.Core;
+
+using Etheria.Game;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -7,7 +8,7 @@ namespace Etheria.Features.Actor
     public sealed class PlayerMotor : IActorInputHandler, ITickable
     {
         private readonly CharacterController _controller;
-        private readonly ITimeProvider _gameTime;
+        private readonly IGameTimeProvider _gameTime;
         private readonly IActorGravityService _gravityService;
 
         private const float MoveSpeed = 5f;
@@ -20,7 +21,7 @@ namespace Etheria.Features.Actor
 
         public PlayerMotor(
             CharacterController controller,
-            ITimeProvider gameTime,
+            IGameTimeProvider gameTime,
             IActorGravityService gravityService)
         {
             _controller = controller;

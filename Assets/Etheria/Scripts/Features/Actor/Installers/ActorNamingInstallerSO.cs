@@ -1,5 +1,5 @@
 using Etheria.Core.DI;
-using Etheria.Features.Actor;
+using Etheria.Game.Common;
 using UnityEngine;
 using VContainer;
 

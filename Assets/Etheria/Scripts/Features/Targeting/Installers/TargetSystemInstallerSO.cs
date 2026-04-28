@@ -15,7 +15,6 @@ namespace Etheria.Features.Targeting
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
             builder.RegisterInstance(_targetingSettings);
-            builder.RegisterComponentInHierarchy<UnityEngine.Camera>();
 
             builder.Register<ColliderTargetResolver>(Lifetime.Singleton);
 

@@ -1,4 +1,5 @@
-using Etheria.Core;
+
+using Etheria.Game;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -7,14 +8,14 @@ namespace Etheria.Features.Actor
     public sealed class TurretMotor : IActorInputHandler, ITickable
     {
         private readonly CharacterController _controller;
-        private readonly ITimeProvider _gameTime;
+        private readonly IGameTimeProvider _gameTime;
         private readonly IActorGravityService _gravityService;
         private Vector3 _faceDirection = Vector3.forward;
         private bool _isFirePressed;
 
         public TurretMotor(
             CharacterController controller,
-            ITimeProvider gameTime,
+            IGameTimeProvider gameTime,
             IActorGravityService gravityService)
         {
             _controller = controller;

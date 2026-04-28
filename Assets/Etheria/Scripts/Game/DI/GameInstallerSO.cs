@@ -17,6 +17,9 @@ namespace Etheria.Game.DI
         {
             builder.Register<InputSystem_Actions>(Lifetime.Singleton);
 
+            builder.Register<GameTimeProvider>(Lifetime.Singleton)
+                .As<IGameTimeProvider>();
+
             builder.Register<SceneStackLoadingService>(Lifetime.Singleton)
                 .As<ISceneStackLoadingService>();
 

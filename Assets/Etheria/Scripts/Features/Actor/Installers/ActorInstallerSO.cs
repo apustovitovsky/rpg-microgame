@@ -1,4 +1,3 @@
-
 using Etheria.Core.DI;
 using Etheria.Features.Targeting;
 using Etheria.Game.Common;
@@ -8,7 +7,9 @@ using VContainer.Unity;
 
 namespace Etheria.Features.Actor
 {
-    [CreateAssetMenu(fileName = "ActorInstaller", menuName = "Etheria/Gameplay/Actor/Actor Installer")]
+    [CreateAssetMenu(
+        fileName = "ActorInstaller",
+        menuName = "Etheria/Gameplay/Actor/Actor Installer")]
     public class ActorInstallerSO : ScopeInstallerSO
     {
         public override void Install(IContainerBuilder builder, GameObject rootObject)

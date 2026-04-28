@@ -1,4 +1,4 @@
-using Etheria.Core;
+using Etheria.Game;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -7,14 +7,14 @@ namespace Etheria.Features.Actor
     public sealed class DroneMotor : IActorInputHandler, ITickable
     {
         private readonly CharacterController _controller;
-        private readonly ITimeProvider _gameTime;
+        private readonly IGameTimeProvider _gameTime;
         private const float MoveSpeed = 5f;
         private Vector2 _moveDirection;
         private Vector3 _faceDirection = Vector3.forward;
         private bool _isJumpPressed;
         private bool _isFirePressed;
 
-        public DroneMotor(CharacterController controller, ITimeProvider gameTime)
+        public DroneMotor(CharacterController controller, IGameTimeProvider gameTime)
         {
             _controller = controller;
             _gameTime = gameTime;

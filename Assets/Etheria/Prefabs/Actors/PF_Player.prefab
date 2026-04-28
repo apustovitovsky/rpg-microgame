@@ -376,9 +376,12 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  _installers: []
-  _scopeInstallers:
-  - {fileID: 11400000, guid: ca97a025ed6de154c9c7f7259c8c3510, type: 2}
+  _ScopeInstallers:
+  - {fileID: 11400000, guid: 17835e6fc6fdb7948aa9835b3ad976f8, type: 2}
+  - {fileID: 11400000, guid: c4854b99734951442af433a700dd9ce4, type: 2}
+  - {fileID: 11400000, guid: 601bcf6ade226c641981b136355188e4, type: 2}
+  - {fileID: 11400000, guid: ed6492e59d97a024797cbdf4245ae271, type: 2}
+  - {fileID: 11400000, guid: c5d4d03d2b09d2047a7df7af9dad7e30, type: 2}
 --- !u!114 &7846602193108847942
 MonoBehaviour:
   m_ObjectHideFlags: 0

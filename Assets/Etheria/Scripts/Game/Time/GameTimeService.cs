@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Etheria.Game
 {
-    public sealed class GameTimeService : ITimeProvider
+    public sealed class GameTimeProvider : IGameTimeProvider
     {
         public float DeltaTime => Time.deltaTime;
     }

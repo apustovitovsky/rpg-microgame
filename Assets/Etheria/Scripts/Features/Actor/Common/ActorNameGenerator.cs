@@ -1,10 +1,7 @@
+using Etheria.Game.Common;
+
 namespace Etheria.Features.Actor
 {
-    public interface INameGenerator
-    {
-        string Generate(string prefix = "");
-    }
-
     public sealed class ActorNameGenerator : INameGenerator
     {
         private int _counter;
