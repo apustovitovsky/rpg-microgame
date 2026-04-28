@@ -20,7 +20,9 @@ namespace Etheria.Features.Targeting
 
             builder.RegisterEntryPoint<TargetingTracker>(Lifetime.Singleton);
 
-
+            builder.Register<FirstValidTargetSelector>(Lifetime.Singleton)
+                .As<ITargetSelector>();
+                
             builder.Register<CameraRayProvider>(Lifetime.Singleton)
                 .As<ICameraRayProvider>();
 

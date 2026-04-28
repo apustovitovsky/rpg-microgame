@@ -6,7 +6,7 @@ namespace Etheria.Features.Actor
     {
         private int _counter;
 
-        public string Generate(string prefix = "")
+        public string Generate(string prefix = "Actor")
         {
             _counter++;
 

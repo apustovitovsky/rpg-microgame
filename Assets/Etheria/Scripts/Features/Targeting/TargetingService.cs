@@ -7,6 +7,7 @@ namespace Etheria.Features.Targeting
     public sealed class TargetingService : ITargetingService
     {
         private readonly ITargetDetectionService _targetDetectionService;
+        private readonly ITargetSelector _targetSelector;
         private readonly ICameraTransformProvider _cameraProvider;
         private readonly TargetingSettingsSO _targetingSettings;
 
@@ -14,17 +15,14 @@ namespace Etheria.Features.Targeting
 
         public event Action<ITargetable> TargetChanged;
 
-        public TargetingService(ITargetDetectionService targetDetectionService)
-        {
-            _targetDetectionService = targetDetectionService;
-        }
-
         public TargetingService(
             ITargetDetectionService targetDetectionService,
+            ITargetSelector targetSelector,
             ICameraTransformProvider camera,
             TargetingSettingsSO settings)
         {
             _targetDetectionService = targetDetectionService;
+            _targetSelector = targetSelector;
             _cameraProvider = camera;
             _targetingSettings = settings;
         }
@@ -32,17 +30,15 @@ namespace Etheria.Features.Targeting
         public bool TryAcquireFromView()
         {
             var candidates = _targetDetectionService.GetCandidates();
-            for (var i = 0; i < candidates.Count; i++)
+            for (var candidateIndex = 0; candidateIndex < candidates.Count; candidateIndex++)
             {
-                var candidate = candidates[i];
-                // Debug.Log($"Target acquired from view: {candidate.DisplayName}");
-                if (!TrySetTarget(candidate))
-                    continue;
-
-                return true;
+                Debug.LogWarning($"TargetingService: candidate {candidateIndex}: {candidates[candidateIndex].DisplayName}");
             }
-            // Debug.Log("Failed to acquire target from view");
-            return false;
+            var selectedTarget = _targetSelector.SelectTarget(candidates, this);
+            if (selectedTarget == null)
+                return false;
+
+            return TrySetTarget(selectedTarget);
         }
 
         public bool TrySetTarget(ITargetable target)
