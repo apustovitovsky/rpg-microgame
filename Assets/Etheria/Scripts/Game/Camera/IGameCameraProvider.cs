@@ -2,9 +2,10 @@ using UnityEngine;
 
 namespace Etheria.Game.Camera
 {
-    public interface IGameCameraProvider
+    public interface ICameraTransformProvider
     {
-        UnityEngine.Camera Camera { get; }
         Transform Transform { get; }
+        Vector3 Forward { get; }
+        Vector3 Position { get; }
     }
 }

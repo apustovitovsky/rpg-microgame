@@ -7,8 +7,8 @@ namespace Etheria.Features.Targeting
     public sealed class TargetingService : ITargetingService
     {
         private readonly ITargetDetectionService _targetDetectionService;
-        private readonly IGameCameraProvider _camera;
-        private readonly TargetingSettingsSO _settings;
+        private readonly ICameraTransformProvider _cameraProvider;
+        private readonly TargetingSettingsSO _targetingSettings;
 
         public ITargetable CurrentTarget { get; private set; }
 
@@ -21,12 +21,12 @@ namespace Etheria.Features.Targeting
 
         public TargetingService(
             ITargetDetectionService targetDetectionService,
-            IGameCameraProvider camera,
+            ICameraTransformProvider camera,
             TargetingSettingsSO settings)
         {
             _targetDetectionService = targetDetectionService;
-            _camera = camera;
-            _settings = settings;
+            _cameraProvider = camera;
+            _targetingSettings = settings;
         }
 
         public bool TryAcquireFromView()
@@ -68,24 +68,21 @@ namespace Etheria.Features.Targeting
             if (target == null || !target.IsTargetable || target.AimPoint == null)
                 return false;
 
-            if (_camera == null)
-                return false;
-
-            var origin = _camera.Transform.position;
+            var origin = _cameraProvider.Position;
             var toTarget = target.AimPoint.position - origin;
 
             var sqrDistance = toTarget.sqrMagnitude;
-            if (sqrDistance > _settings.MaxDistance * _settings.MaxDistance)
+            if (sqrDistance > _targetingSettings.MaxDistance * _targetingSettings.MaxDistance)
                 return false;
 
-            var angle = Vector3.Angle(_camera.Transform.forward, toTarget);
-            if (angle > _settings.MaxViewAngle)
+            var angle = Vector3.Angle(_cameraProvider.Forward, toTarget);
+            if (angle > _targetingSettings.MaxViewAngle)
                 return false;
 
             var distance = Mathf.Sqrt(sqrDistance);
             var direction = toTarget / distance;
 
-            if (Physics.Raycast(origin, direction, out var _, distance, _settings.ObstructionMask))
+            if (Physics.Raycast(origin, direction, out var _, distance, _targetingSettings.ObstructionMask))
             {
                 return false;
             }

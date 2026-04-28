@@ -5,11 +5,15 @@ namespace Etheria.Game.Camera
 {
     [RequireComponent(typeof(UnityEngine.Camera))]
     [DisallowMultipleComponent]
-    public sealed class GameCameraRig : MonoBehaviour, IGameCameraProvider
+    public sealed class GameCameraRig : MonoBehaviour, ICameraTransformProvider
     {
         [SerializeField, ReadOnly] private UnityEngine.Camera _camera;
 
-        public UnityEngine.Camera Camera
+        public Transform Transform => Camera.transform;
+        public Vector3 Position => Transform.position;
+        public Vector3 Forward => Transform.forward;
+
+        private UnityEngine.Camera Camera
         {
             get
             {
@@ -20,24 +24,24 @@ namespace Etheria.Game.Camera
             }
         }
 
-        public Transform Transform => transform;
-
         private void Awake()
         {
-            AssignCamera();
+            CacheCamera();
         }
 
+#if UNITY_EDITOR
         private void Reset()
         {
-            AssignCamera();
+            CacheCamera();
         }
 
         private void OnValidate()
         {
-            AssignCamera();
+            CacheCamera();
         }
+#endif
 
-        private void AssignCamera()
+        private void CacheCamera()
         {
             _camera = GetComponent<UnityEngine.Camera>();
         }

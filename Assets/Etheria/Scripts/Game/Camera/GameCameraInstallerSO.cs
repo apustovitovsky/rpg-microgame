@@ -16,11 +16,11 @@ namespace Etheria.Game.Camera
         {
             builder.RegisterComponentInNewPrefab(_mainCamera, Lifetime.Singleton)
                 .UnderTransform(rootObject.transform)
-                .As<IGameCameraProvider>();
+                .As<ICameraTransformProvider>();
 
             builder.RegisterBuildCallback(container =>
             {
-                container.Resolve<IGameCameraProvider>();
+                container.Resolve<ICameraTransformProvider>();
             });
         }
     }

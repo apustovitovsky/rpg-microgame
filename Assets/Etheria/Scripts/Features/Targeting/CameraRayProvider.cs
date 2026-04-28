@@ -5,17 +5,16 @@ namespace Etheria.Features.Targeting
 {
     public sealed class CameraRayProvider : ICameraRayProvider
     {
-        private readonly IGameCameraProvider _cameraProvider;
+        private readonly ICameraTransformProvider _cameraProvider;
 
-        public CameraRayProvider(IGameCameraProvider cameraProvider)
+        public CameraRayProvider(ICameraTransformProvider cameraProvider)
         {
             _cameraProvider = cameraProvider;
         }
 
         public Ray GetForwardRay()
         {
-            var transform = _cameraProvider.Transform;
-            return new Ray(transform.position, transform.forward);
+            return new Ray(_cameraProvider.Position, _cameraProvider.Forward);
         }
     }
 }
