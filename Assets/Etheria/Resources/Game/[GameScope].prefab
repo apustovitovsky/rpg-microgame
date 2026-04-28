@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3293873095293215504}
-  - component: {fileID: 490197701299461670}
+  - component: {fileID: -5566340394364098662}
   m_Layer: 0
   m_Name: '[GameScope]'
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &490197701299461670
+--- !u!114 &-5566340394364098662
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,12 +41,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 260139022673506481}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60e548f894bb8a94793ea2295e6a0ae5, type: 3}
+  m_Script: {fileID: 11500000, guid: 6254e1b78beb5f149871422d8c9ad252, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.GameScope
+  m_EditorClassIdentifier: Etheria.Core::Etheria.Core.DI.ModularScope
   parentReference:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  _sceneCatalog: {fileID: 0}
-  _gameConfig: {fileID: 11400000, guid: 9d860d5bc5844654ba63cca9116b789c, type: 2}
+  _ScopeInstallers:
+  - {fileID: 11400000, guid: 2d6fadabd06110a4dae9613c00629226, type: 2}
+  - {fileID: 11400000, guid: 2d835003b3a5c7144896ca779d2e3366, type: 2}
+  - {fileID: 11400000, guid: ce63815572f7b4646ada5c5aad733613, type: 2}

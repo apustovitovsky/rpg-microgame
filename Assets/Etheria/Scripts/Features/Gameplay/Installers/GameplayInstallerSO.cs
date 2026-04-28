@@ -8,7 +8,7 @@ namespace Etheria.Gameplay
     [CreateAssetMenu(
         fileName = "GameplayInstaller",
         menuName = "Etheria/Gameplay/Installers/Gameplay Installer")]
-    public class GameplayInstallerSO : InstallerSO
+    public class GameplayInstallerSO : ScopeInstallerSO
     {
         [SerializeField] private GameplayConfigSO _gameplayConfig;
 

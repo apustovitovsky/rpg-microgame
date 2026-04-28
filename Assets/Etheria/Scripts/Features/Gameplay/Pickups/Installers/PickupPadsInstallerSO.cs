@@ -8,7 +8,7 @@ namespace Etheria.Gameplay
     [CreateAssetMenu(
         fileName = "PickupPadsInstaller",
         menuName = "Etheria/Gameplay/Pickup/Pickup Pads Installer")]
-    public sealed class PickupPadsInstallerSO : InstallerSO
+    public sealed class PickupPadsInstallerSO : ScopeInstallerSO
     {
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {

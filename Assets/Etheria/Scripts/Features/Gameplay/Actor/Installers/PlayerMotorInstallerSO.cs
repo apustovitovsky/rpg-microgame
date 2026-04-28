@@ -6,7 +6,7 @@ using VContainer.Unity;
 namespace Etheria.Gameplay
 {
     [CreateAssetMenu(fileName = "PlayerMotorInstaller", menuName = "Etheria/Gameplay/Installers/Player Motor Installer")]
-    public class PlayerMotorInstallerSO : InstallerSO
+    public class PlayerMotorInstallerSO : ScopeInstallerSO
     {
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {

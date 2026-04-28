@@ -5,7 +5,7 @@ using VContainer;
 namespace Etheria.Gameplay
 {
     [CreateAssetMenu(fileName = "ActorGravityInstaller", menuName = "Etheria/Gameplay/Installers/Actor Gravity Installer")]
-    public class ActorGravityInstallerSO : InstallerSO
+    public class ActorGravityInstallerSO : ScopeInstallerSO
     {
         [SerializeField] private float gravityForce = -9.81f;
 

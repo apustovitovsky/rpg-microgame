@@ -6,7 +6,7 @@ using VContainer.Unity;
 namespace Etheria.Gameplay
 {
     [CreateAssetMenu(fileName = "DroneMotorInstaller", menuName = "Etheria/Gameplay/Installers/Drone Motor Installer")]
-    public class DroneMotorInstallerSO : InstallerSO
+    public class DroneMotorInstallerSO : ScopeInstallerSO
     {
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {

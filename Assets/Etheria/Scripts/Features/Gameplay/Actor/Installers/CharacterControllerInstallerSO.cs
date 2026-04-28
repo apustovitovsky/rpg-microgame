@@ -6,7 +6,7 @@ using VContainer.Unity;
 namespace Etheria.Gameplay
 {
     [CreateAssetMenu(fileName = "CharacterControllerInstaller", menuName = "Etheria/Gameplay/Installers/Character Controller Installer")]
-    public class CharacterControllerInstallerSO : InstallerSO
+    public class CharacterControllerInstallerSO : ScopeInstallerSO
     {
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {

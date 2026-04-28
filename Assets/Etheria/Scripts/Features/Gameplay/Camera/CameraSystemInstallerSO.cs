@@ -8,7 +8,7 @@ namespace Etheria.Gameplay
     [CreateAssetMenu(
         fileName = "CameraSystemInstaller",
         menuName = "Etheria/Gameplay/Camera/Camera System Installer")]
-    public class CameraSystemInstallerSO : InstallerSO
+    public class CameraSystemInstallerSO : ScopeInstallerSO
     {
         [SerializeField] private CameraSettingsSO _cameraSettings;
 

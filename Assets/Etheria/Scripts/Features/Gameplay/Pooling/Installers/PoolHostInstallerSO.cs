@@ -6,7 +6,7 @@ using VContainer.Unity;
 namespace Etheria.Gameplay
 {
     [CreateAssetMenu(fileName = "PoolHostInstaller", menuName = "Etheria/Gameplay/Pooling/PoolHostInstaller")]
-    public class PoolHostInstallerSO : InstallerSO
+    public class PoolHostInstallerSO : ScopeInstallerSO
     {
         [SerializeField] private ScenePoolHost _poolHostPrefab;
 

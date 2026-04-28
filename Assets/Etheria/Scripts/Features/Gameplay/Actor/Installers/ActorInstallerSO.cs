@@ -6,7 +6,7 @@ using VContainer.Unity;
 namespace Etheria.Gameplay
 {
     [CreateAssetMenu(fileName = "ActorInstaller", menuName = "Etheria/Gameplay/Actor/Actor Installer")]
-    public class ActorInstallerSO : InstallerSO
+    public class ActorInstallerSO : ScopeInstallerSO
     {
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {

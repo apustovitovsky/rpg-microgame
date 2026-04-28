@@ -5,37 +5,37 @@ namespace Etheria.MainMenu
 {
     public class MainMenuPresenter : IStartable
     {
-        private readonly MainMenuView _view;
-        private readonly ISessionNavigator _sceneNavigator;
+        // private readonly MainMenuView _view;
+        // private readonly ISessionNavigator _sceneNavigator;
 
-        public MainMenuPresenter(MainMenuView view, ISessionNavigator navigator)
-        {
-            _view = view;
-            _sceneNavigator = navigator;
-        }
+        // public MainMenuPresenter(MainMenuView view, ISessionNavigator navigator)
+        // {
+        //     _view = view;
+        //     // _sceneNavigator = navigator;
+        // }
 
         public void Start()
         {
-            _view.BeginPlayRPGButton.onClick.AddListener(OnBeginPlayRPGClicked);
-            _view.BeginPlayFPSButton.onClick.AddListener(OnBeginPlayFPSClicked);
-            _view.ExitGameButton.onClick.AddListener(OnExitGameClicked);
-            _view.BeginPlaySyntyButton.onClick.AddListener(OnBeginPlaySyntyClicked);
+            // _view.BeginPlayRPGButton.onClick.AddListener(OnBeginPlayRPGClicked);
+            // _view.BeginPlayFPSButton.onClick.AddListener(OnBeginPlayFPSClicked);
+            // _view.ExitGameButton.onClick.AddListener(OnExitGameClicked);
+            // _view.BeginPlaySyntyButton.onClick.AddListener(OnBeginPlaySyntyClicked);
         }
 
-        private void OnBeginPlayRPGClicked()
-        {
-            _sceneNavigator.LoadRPGScene();
-        }
+        // private void OnBeginPlayRPGClicked()
+        // {
+        //     _sceneNavigator.LoadRPGScene();
+        // }
 
-        private void OnBeginPlayFPSClicked()
-        {
-            _sceneNavigator.LoadFPSScene();
-        }
+        // private void OnBeginPlayFPSClicked()
+        // {
+        //     _sceneNavigator.LoadFPSScene();
+        // }
 
-        private void OnBeginPlaySyntyClicked()
-        {
-            _sceneNavigator.LoadSyntyScene();
-        }
+        // private void OnBeginPlaySyntyClicked()
+        // {
+        //     _sceneNavigator.LoadSyntyScene();
+        // }
 
         private void OnExitGameClicked()
         {

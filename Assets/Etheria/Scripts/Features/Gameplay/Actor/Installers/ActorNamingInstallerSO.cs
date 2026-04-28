@@ -7,7 +7,7 @@ namespace Etheria.Gameplay
     [CreateAssetMenu(
         fileName = "ActorNamingInstaller",
         menuName = "Etheria/Gameplay/Actor/Actor Naming Installer")]
-    public sealed class ActorNamingInstallerSO : InstallerSO
+    public sealed class ActorNamingInstallerSO : ScopeInstallerSO
     {
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {

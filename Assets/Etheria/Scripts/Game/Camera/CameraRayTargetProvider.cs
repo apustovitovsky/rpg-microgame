@@ -2,16 +2,11 @@ using UnityEngine;
 
 namespace Etheria.Game.Camera
 {
-    public interface ICameraRayTargetProvider
+    public sealed class CameraRayTargetProvider : ICameraRayTargetProvider
     {
-        Ray GetRay();
-    }
+        private readonly IGameCameraProvider _cameraProvider;
 
-    public sealed class CameraRayTargetProvider
-    {
-        private readonly IMainCameraProvider _cameraProvider;
-
-        public CameraRayTargetProvider(IMainCameraProvider cameraProvider)
+        public CameraRayTargetProvider(IGameCameraProvider cameraProvider)
         {
             _cameraProvider = cameraProvider;
         }

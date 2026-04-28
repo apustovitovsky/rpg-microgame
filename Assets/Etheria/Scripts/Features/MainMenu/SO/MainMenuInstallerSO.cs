@@ -6,7 +6,7 @@ using VContainer.Unity;
 namespace Etheria.MainMenu
 {
     [CreateAssetMenu(fileName = "MainMenuInstaller", menuName = "Etheria/MainMenu/Installers/MainMenuInstaller")]
-    public sealed class MainMenuInstallerSO : InstallerSO
+    public sealed class MainMenuInstallerSO : ScopeInstallerSO
     {
         [SerializeField] private MainMenuConfigSO _mainMenuConfig;
 

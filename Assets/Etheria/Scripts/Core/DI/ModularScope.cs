@@ -1,44 +1,25 @@
-// using UnityEngine;
-// using VContainer;
-// using VContainer.Unity;
+using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
-// namespace Etheria.Core.DI
-// {
-//     public sealed class ModularScope : LifetimeScope
-//     {
-//         [SerializeField] private InstallerSO[] _installers;
-//         [SerializeField] private ScopeInstallerSO[] _scopeInstallers;
+namespace Etheria.Core.DI
+{
+    public sealed class ModularScope : LifetimeScope
+    {
+        [SerializeField] private ScopeInstallerSO[] _ScopeInstallers;
 
-//         protected override void Configure(IContainerBuilder builder)
-//         {
-//             var context = new SceneScopeContext(
-//                 definition: null,
-//                 root: gameObject,
-//                 scope: this);
+        protected override void Configure(IContainerBuilder builder)
+        {
+            if (_ScopeInstallers != null)
+            {
+                foreach (var installer in _ScopeInstallers)
+                {
+                    if (installer == null)
+                        continue;
 
-//             builder.RegisterInstance(context);
-
-//             if (_installers != null)
-//             {
-//                 foreach (var installer in _installers)
-//                 {
-//                     if (installer == null)
-//                         continue;
-
-//                     installer.Install(builder, context);
-//                 }
-//             }
-
-//             if (_scopeInstallers == null)
-//                 return;
-
-//             foreach (var installer in _scopeInstallers)
-//             {
-//                 if (installer == null)
-//                     continue;
-
-//                 installer.Install(this, builder);
-//             }
-//         }
-//     }
-// }
+                    installer.Install(builder, gameObject);
+                }
+            }
+        }
+    }
+}

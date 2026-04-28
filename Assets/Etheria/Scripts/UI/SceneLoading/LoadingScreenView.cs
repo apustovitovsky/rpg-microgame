@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Etheria.Game
+namespace Etheria.UI
 {
     [RequireComponent(typeof(CanvasGroup))]
     public sealed class LoadingScreenView : MonoBehaviour
