@@ -1,4 +1,5 @@
 using System;
+using Etheria.Game.Camera;
 using UnityEngine;
 
 namespace Etheria.Features.Targeting
@@ -6,7 +7,7 @@ namespace Etheria.Features.Targeting
     public sealed class TargetingService : ITargetingService
     {
         private readonly ITargetDetectionService _targetDetectionService;
-        private readonly UnityEngine.Camera _camera;
+        private readonly IGameCameraProvider _camera;
         private readonly TargetingSettingsSO _settings;
 
         public ITargetable CurrentTarget { get; private set; }
@@ -20,7 +21,7 @@ namespace Etheria.Features.Targeting
 
         public TargetingService(
             ITargetDetectionService targetDetectionService,
-            UnityEngine.Camera camera,
+            IGameCameraProvider camera,
             TargetingSettingsSO settings)
         {
             _targetDetectionService = targetDetectionService;
@@ -70,14 +71,14 @@ namespace Etheria.Features.Targeting
             if (_camera == null)
                 return false;
 
-            var origin = _camera.transform.position;
+            var origin = _camera.Transform.position;
             var toTarget = target.AimPoint.position - origin;
 
             var sqrDistance = toTarget.sqrMagnitude;
             if (sqrDistance > _settings.MaxDistance * _settings.MaxDistance)
                 return false;
 
-            var angle = Vector3.Angle(_camera.transform.forward, toTarget);
+            var angle = Vector3.Angle(_camera.Transform.forward, toTarget);
             if (angle > _settings.MaxViewAngle)
                 return false;
 

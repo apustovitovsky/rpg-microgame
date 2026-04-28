@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Etheria.Game.Camera
 {
-    public interface ICameraRayTargetProvider
+    public interface ICameraRayProvider
     {
-        Ray GetRay();
+        Ray GetForwardRay();
     }
 }

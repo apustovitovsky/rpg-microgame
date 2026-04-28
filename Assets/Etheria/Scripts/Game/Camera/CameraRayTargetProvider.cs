@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Etheria.Game.Camera
 {
-    public sealed class CameraRayTargetProvider : ICameraRayTargetProvider
+    public sealed class CameraRayTargetProvider : ICameraRayProvider
     {
         private readonly IGameCameraProvider _cameraProvider;
 
@@ -11,7 +11,7 @@ namespace Etheria.Game.Camera
             _cameraProvider = cameraProvider;
         }
 
-        public Ray GetRay()
+        public Ray GetForwardRay()
         {
             var transform = _cameraProvider.Transform;
             return new Ray(transform.position, transform.forward);

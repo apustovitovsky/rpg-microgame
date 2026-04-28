@@ -19,7 +19,7 @@ namespace Etheria.Game.Camera
                 .As<IGameCameraProvider>();
 
             builder.Register<CameraRayTargetProvider>(Lifetime.Singleton)
-                .As<ICameraRayTargetProvider>();
+                .As<ICameraRayProvider>();
 
             builder.RegisterBuildCallback(container =>
             {
