@@ -1,4 +1,4 @@
-using Etheria.Core;
+using Etheria.Core.Helpers;
 using UnityEngine;
 
 namespace Etheria.Game.Camera

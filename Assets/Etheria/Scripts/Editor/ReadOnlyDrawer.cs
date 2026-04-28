@@ -1,7 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using Etheria.Core;
+using Etheria.Core.Helpers;
 
 namespace Etheria.Editor
 {
