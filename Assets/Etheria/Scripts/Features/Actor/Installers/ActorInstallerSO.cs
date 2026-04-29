@@ -1,5 +1,6 @@
 using Etheria.Core.DI;
 using Etheria.Features.Targeting;
+using Etheria.Game.Actor;
 using Etheria.Game.Common;
 using Etheria.Game.Targeting;
 using UnityEngine;
@@ -15,13 +16,15 @@ namespace Etheria.Features.Actor
     {
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
-
             builder.RegisterComponentInHierarchy<ActorRuntimeRefs>()
                 .UnderTransform(rootObject.transform);
 
             builder.Register<ActorTargetable>(Lifetime.Singleton)
                 .WithParameter(rootObject.name)
                 .As<ITargetable>();
+
+            builder.Register<ControllableActor>(Lifetime.Singleton)
+                .As<IControllableActor>();
 
             builder.RegisterBuildCallback(container =>
             {
@@ -43,4 +46,3 @@ namespace Etheria.Features.Actor
         }
     }
 }
-

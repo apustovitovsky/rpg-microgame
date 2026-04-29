@@ -1,7 +1,5 @@
-using Etheria.Features.Actor;
-
+using Etheria.Game.Actor;
 using Etheria.Game.Player;
-using Etheria.Game.Targeting;
 using VContainer;
 using VContainer.Unity;
 
@@ -9,7 +7,6 @@ namespace Etheria.Features.Player
 {
     public sealed class PlayerController : IPlayerController
     {
-        private IActorInputHandler _currentActorHandler;
         private readonly IPlayerAvatarProvider _controlledActorProvider;
 
         public PlayerController(
@@ -22,29 +19,18 @@ namespace Etheria.Features.Player
         {
             Unpossess();
 
-            var runtimeRefs = actorScope.Container.Resolve<ActorRuntimeRefs>();
-            _currentActorHandler = actorScope.Container.Resolve<IActorInputHandler>();
-            var facingHandler = actorScope.Container.Resolve<IActorFacingHandler>();
-            var targetable = actorScope.Container.Resolve<ITargetable>();
-            var handlers = new PlayerAvatarHandlers(_currentActorHandler, facingHandler);
-
-            var cameraPivot = runtimeRefs.CameraPivot != null ? runtimeRefs.CameraPivot : actorScope.transform;
-
-
+            var controllableActor = actorScope.Container.Resolve<IControllableActor>();
             var context = new PlayerAvatarContext(
-                actorScope.transform,
-                cameraPivot,
-                handlers,
-                targetable);
+                controllableActor.Root,
+                controllableActor.CameraPivot,
+                controllableActor.Handlers,
+                controllableActor.Targetable);
 
             _controlledActorProvider.Set(context);
         }
 
         public void Unpossess()
         {
-            if (_currentActorHandler == null) return;
-
-            _currentActorHandler = null;
             _controlledActorProvider.Clear();
         }
     }
