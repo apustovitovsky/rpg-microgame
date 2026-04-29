@@ -24,9 +24,9 @@ namespace Etheria.Features.Camera
             builder.Register<PlayerLookService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.RegisterEntryPoint<CameraService>(Lifetime.Singleton)
+            builder.RegisterEntryPoint<CameraFollowService>(Lifetime.Singleton)
                 .As<ICameraInputHandler>()
-                .As<ICameraService>();
+                .As<ICameraFollowService>();
 
             builder.RegisterBuildCallback(container =>
             {
@@ -40,4 +40,3 @@ namespace Etheria.Features.Camera
         }
     }
 }
-

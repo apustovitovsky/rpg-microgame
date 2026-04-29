@@ -5,25 +5,25 @@ using Etheria.Game.Camera;
 
 namespace Etheria.Features.Camera
 {
-    public sealed class CameraService : ICameraService, ICameraInputHandler, IDisposable
+    public sealed class CameraFollowService : ICameraFollowService, ICameraInputHandler, IDisposable
     {
         private readonly CinemachineCamera _virtualCamera;
         private readonly CameraSettingsSO _settings;
 
-        public Transform CurrentTarget => _virtualCamera != null ? _virtualCamera.Follow : null;
+        public Transform CurrentFollowTarget => _virtualCamera != null ? _virtualCamera.Follow : null;
 
-        public CameraService(CinemachineCamera camera, CameraSettingsSO settings)
+        public CameraFollowService(CinemachineCamera camera, CameraSettingsSO settings)
         {
             _virtualCamera = camera;
             _settings = settings;
         }
 
-        public void SetTarget(Transform cameraPivot)
+        public void SetTarget(Transform target)
         {
             if (_virtualCamera == null) return;
 
-            _virtualCamera.Follow = cameraPivot;
-            _virtualCamera.LookAt = cameraPivot;
+            _virtualCamera.Follow = target;
+            _virtualCamera.LookAt = target;
 
             SetCursorLocked(true);
         }
