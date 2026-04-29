@@ -6,26 +6,26 @@ namespace Etheria.Features.Targeting
 {
     public sealed class TargetDebugMarkerPresenter : IStartable, IDisposable
     {
-        private readonly ITargetingService _targetingService;
+        private readonly ITargetingEvents _targetingEvents;
         private readonly TargetDebugMarker _targetDebugMarker;
 
         public TargetDebugMarkerPresenter(
-            ITargetingService targetingService,
+            ITargetingEvents targetingEvents,
             TargetDebugMarker targetDebugMarker)
         {
-            _targetingService = targetingService;
+            _targetingEvents = targetingEvents;
             _targetDebugMarker = targetDebugMarker;
         }
 
         public void Start()
         {
-            _targetingService.TargetChanged += OnTargetChanged;
-            OnTargetChanged(_targetingService.CurrentTarget);
+            _targetingEvents.TargetChanged += OnTargetChanged;
+            OnTargetChanged(_targetingEvents.CurrentTarget);
         }
 
         public void Dispose()
         {
-            _targetingService.TargetChanged -= OnTargetChanged;
+            _targetingEvents.TargetChanged -= OnTargetChanged;
         }
 
         private void OnTargetChanged(ITargetable target)

@@ -14,7 +14,14 @@ namespace Etheria.Features.Targeting
 
         public void Tick()
         {
-            _targetingService.ValidateCurrentTarget();
+            var currentTarget = _targetingService.CurrentTarget;
+            if (currentTarget == null)
+                return;
+
+            if (_targetingService.IsValid(currentTarget))
+                return;
+
+            _targetingService.ClearTarget();
         }
     }
 }

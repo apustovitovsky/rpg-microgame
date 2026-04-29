@@ -3,11 +3,6 @@ using UnityEngine;
 
 namespace Etheria.Features.Targeting
 {
-    public interface ITargetCandidateEvaluator
-    {
-        float Evaluate(TargetCandidate candidate, ITargetable currentTarget);
-    }
-
     public sealed class TargetCandidateEvaluator : ITargetCandidateEvaluator
     {
         private readonly TargetingSettingsSO _settings;

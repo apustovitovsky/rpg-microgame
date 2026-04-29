@@ -1,14 +1,10 @@
 using Etheria.Features.Actor;
 using Etheria.Game.Camera;
+using Etheria.Game.Targeting;
 using UnityEngine;
 
 namespace Etheria.Features.Targeting
 {
-    public interface ITargetCandidateResolver
-    {
-        bool TryResolve(RaycastHit hit, out TargetCandidate candidate);
-    }
-
     public sealed class TargetCandidateResolver : ITargetCandidateResolver
     {
         private readonly ICameraTransformProvider _camera;
@@ -25,13 +21,17 @@ namespace Etheria.Features.Targeting
             if (!hit.collider.TryGetComponent<ActorHitbox>(out var hitbox))
                 return false;
 
-            var targetable = hitbox.Targetable;
+            return TryResolve(hitbox.Targetable, out candidate);
+        }
+
+        public bool TryResolve(ITargetable targetable, out TargetCandidate candidate)
+        {
+            candidate = default;
 
             if (targetable == null || !targetable.IsTargetable)
                 return false;
 
             var aimPoint = targetable.AimPoint;
-
             if (aimPoint == null)
                 return false;
 

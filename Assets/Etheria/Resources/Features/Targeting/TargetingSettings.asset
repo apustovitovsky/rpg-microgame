@@ -13,19 +13,16 @@ MonoBehaviour:
   m_Name: TargetingSettings
   m_EditorClassIdentifier: Etheria.Features.Targeting::Etheria.Features.Targeting.TargetingSettingsSO
   <MaxDistance>k__BackingField: 25
-  <MaxViewAngle>k__BackingField: 30
   <TargetingMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 8
-  <ObstructionMask>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 1
   <VisibilityMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 1
   <MaxTargetCandidates>k__BackingField: 16
-  <Radius>k__BackingField: 2.5
+  <Radius>k__BackingField: 4
   <MaxAngle>k__BackingField: 30
   <AngleWeight>k__BackingField: 1
-  <DistanceWeight>k__BackingField: 0.35
+  <DistanceWeight>k__BackingField: 0.5
   <CurrentTargetBonus>k__BackingField: 0.5
+  <TargetSwitchThreshold>k__BackingField: 0.15

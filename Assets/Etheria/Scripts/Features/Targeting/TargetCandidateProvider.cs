@@ -44,6 +44,8 @@ namespace Etheria.Features.Targeting
             if (hitCount <= 0)
                 return 0;
 
+            Array.Sort(_hits, 0, hitCount, RaycastHitDistanceComparer.Instance);
+
             var resultCount = 0;
 
             for (var i = 0; i < hitCount; i++)

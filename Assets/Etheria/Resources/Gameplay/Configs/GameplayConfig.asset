@@ -18,3 +18,5 @@ MonoBehaviour:
     type: 3}
   <TurretPrefab>k__BackingField: {fileID: -5166056413676136848, guid: dc6ea8f474f3e0444903ab18b1c0f4f7,
     type: 3}
+  <AdditionalPlayersCount>k__BackingField: 15
+  <AdditionalPlayersSpawnRadius>k__BackingField: 15

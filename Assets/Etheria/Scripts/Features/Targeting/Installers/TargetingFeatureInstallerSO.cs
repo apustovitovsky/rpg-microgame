@@ -1,5 +1,4 @@
 using Etheria.Core.DI;
-using Etheria.Game.Player;
 using Etheria.Game.Targeting;
 using UnityEngine;
 using VContainer;
@@ -18,6 +17,13 @@ namespace Etheria.Features.Targeting
         {
             builder.RegisterInstance(_targetingSettings);
 
+            builder.Register<TargetingService>(Lifetime.Singleton)
+                .As<ITargetingService>();
+
+            builder.Register<TargetSelectionState>(Lifetime.Singleton)
+                .As<ITargetSelectionState>()
+                .As<ITargetingEvents>();
+
             builder.RegisterEntryPoint<TargetingTracker>(Lifetime.Singleton);
 
             builder.Register<ControlledTargetProvider>(Lifetime.Singleton)
@@ -25,9 +31,6 @@ namespace Etheria.Features.Targeting
 
             builder.Register<ViewRayProvider>(Lifetime.Singleton)
                 .As<IViewRayProvider>();
-
-            builder.Register<TargetingService>(Lifetime.Singleton)
-                .As<ITargetingService>();
 
             builder.Register<SphereCastTargetHitProvider>(Lifetime.Singleton)
                 .As<ITargetHitProvider>();
@@ -50,8 +53,20 @@ namespace Etheria.Features.Targeting
             builder.Register<TargetCandidateSelector>(Lifetime.Singleton)
                 .As<ITargetCandidateSelector>();
 
+            builder.Register<TargetAcquisitionService>(Lifetime.Singleton)
+                .As<ITargetAcquisitionService>();
+
+            builder.Register<TargetCycleService>(Lifetime.Singleton)
+                .As<ITargetCycleService>();
+
             builder.Register<TargetCandidateProvider>(Lifetime.Singleton)
                 .As<ITargetCandidateProvider>();
+
+            builder.Register<TargetCandidateSnapshotProvider>(Lifetime.Singleton)
+                .As<ITargetCandidateSnapshotProvider>();
+
+            builder.Register<TargetValidator>(Lifetime.Singleton)
+                .As<ITargetValidator>();
 
             builder.RegisterEntryPoint<TargetDebugMarkerPresenter>(Lifetime.Singleton);
             builder.RegisterComponentInHierarchy<TargetDebugMarker>();
