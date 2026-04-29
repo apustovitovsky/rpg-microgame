@@ -7,7 +7,6 @@ namespace Etheria.Game.Player
         void HandleMove(Vector2 vector);
         void HandleJump(bool isPressed);
         void HandleFire(bool isPressed);
-        void HandleFace(Vector3 vector);
     }
 }
 

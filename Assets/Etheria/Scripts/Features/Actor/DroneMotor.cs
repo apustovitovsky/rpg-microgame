@@ -5,7 +5,7 @@ using VContainer.Unity;
 
 namespace Etheria.Features.Actor
 {
-    public sealed class DroneMotor : IActorInputHandler, ITickable
+    public sealed class DroneMotor : IActorInputHandler, IActorFacingHandler, ITickable
     {
         private readonly CharacterController _controller;
         private readonly IGameTimeProvider _gameTime;

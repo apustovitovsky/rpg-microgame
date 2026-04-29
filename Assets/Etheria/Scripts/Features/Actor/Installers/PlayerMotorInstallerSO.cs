@@ -12,8 +12,8 @@ namespace Etheria.Features.Actor
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
             builder.RegisterEntryPoint<PlayerMotor>()
-                .As<IActorInputHandler>();
+                .As<IActorInputHandler>()
+                .As<IActorFacingHandler>();
         }
     }
 }
-

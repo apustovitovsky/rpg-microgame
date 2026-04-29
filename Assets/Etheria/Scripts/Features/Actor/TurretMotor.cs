@@ -6,7 +6,7 @@ using VContainer.Unity;
 
 namespace Etheria.Features.Actor
 {
-    public sealed class TurretMotor : IActorInputHandler, ITickable
+    public sealed class TurretMotor : IActorInputHandler, IActorFacingHandler, ITickable
     {
         private readonly CharacterController _controller;
         private readonly IGameTimeProvider _gameTime;

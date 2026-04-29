@@ -6,7 +6,7 @@ using VContainer.Unity;
 
 namespace Etheria.Features.Actor
 {
-    public sealed class PlayerMotor : IActorInputHandler, ITickable
+    public sealed class PlayerMotor : IActorInputHandler, IActorFacingHandler, ITickable
     {
         private readonly CharacterController _controller;
         private readonly IGameTimeProvider _gameTime;
@@ -35,6 +35,7 @@ namespace Etheria.Features.Actor
             if (_controller == null) return;
 
             RotateToFaceDirection();
+
 
             Vector3 forward = Vector3.ProjectOnPlane(_faceDirection, Vector3.up);
             if (forward.sqrMagnitude < 0.001f)

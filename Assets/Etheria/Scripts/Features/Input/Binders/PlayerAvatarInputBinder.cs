@@ -9,6 +9,7 @@ namespace Etheria.Features.Input
     {
         private readonly IPlayerAvatarProvider _playerAvatarProvider;
         private readonly IGameInputRouter _gameInputRouter;
+        private IActorInputHandler _currentHandler;
 
         public PlayerAvatarInputBinder(
             IPlayerAvatarProvider playerAvatarProvider,
@@ -31,15 +32,18 @@ namespace Etheria.Features.Input
 
         private void OnPlayerAvatarChanged(PlayerAvatarContext? context)
         {
-            if (context.HasValue)
+            if (_currentHandler != null)
             {
-                _gameInputRouter.SetHandler(context.Value.InputHandler);
-                return;
+                _gameInputRouter.RemoveHandler(_currentHandler);
+                _currentHandler = null;
             }
 
-            var currentHandler = _playerAvatarProvider.Current?.InputHandler;
-            if (currentHandler != null)
-                _gameInputRouter.RemoveHandler(currentHandler);
+            if (context.HasValue)
+            {
+                _currentHandler = context.Value.Handlers.Input;
+                _gameInputRouter.SetHandler(_currentHandler);
+                return;
+            }
         }
     }
 }

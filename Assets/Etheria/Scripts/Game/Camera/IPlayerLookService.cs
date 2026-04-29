@@ -11,6 +11,6 @@ namespace Etheria.Game.Camera
         Vector3 Forward { get; }
         void SetTarget(Transform actorRoot, Transform cameraPivot);
         void RemoveTarget();
+        void SetYawFromWorldDirection(Vector3 direction);
     }
 }
-

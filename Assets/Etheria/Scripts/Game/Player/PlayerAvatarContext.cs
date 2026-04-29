@@ -8,24 +8,24 @@ namespace Etheria.Game.Player
         public PlayerAvatarContext(
             Transform root,
             Transform cameraPivot,
-            IActorInputHandler inputHandler,
+            PlayerAvatarHandlers handlers,
             ITargetable targetable)
         {
             Root = root;
             CameraPivot = cameraPivot;
-            InputHandler = inputHandler;
+            Handlers = handlers;
             Targetable = targetable;
         }
 
         public Transform Root { get; }
         public Transform CameraPivot { get; }
-        public IActorInputHandler InputHandler { get; }
+        public PlayerAvatarHandlers Handlers { get; }
         public ITargetable Targetable { get; }
 
         public bool IsValid =>
             Root != null &&
             CameraPivot != null &&
-            InputHandler != null &&
+            Handlers.IsValid &&
             Targetable != null;
     }
 }

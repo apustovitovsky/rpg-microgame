@@ -24,16 +24,17 @@ namespace Etheria.Features.Player
 
             var runtimeRefs = actorScope.Container.Resolve<ActorRuntimeRefs>();
             _currentActorHandler = actorScope.Container.Resolve<IActorInputHandler>();
+            var facingHandler = actorScope.Container.Resolve<IActorFacingHandler>();
+            var targetable = actorScope.Container.Resolve<ITargetable>();
+            var handlers = new PlayerAvatarHandlers(_currentActorHandler, facingHandler);
 
             var cameraPivot = runtimeRefs.CameraPivot != null ? runtimeRefs.CameraPivot : actorScope.transform;
-
-            var targetable = actorScope.Container.Resolve<ITargetable>();
 
 
             var context = new PlayerAvatarContext(
                 actorScope.transform,
                 cameraPivot,
-                _currentActorHandler,
+                handlers,
                 targetable);
 
             _controlledActorProvider.Set(context);
@@ -48,4 +49,3 @@ namespace Etheria.Features.Player
         }
     }
 }
-

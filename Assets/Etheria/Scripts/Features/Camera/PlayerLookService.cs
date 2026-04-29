@@ -1,4 +1,5 @@
 using Etheria.Game.Camera;
+using Etheria.Game.Targeting;
 using UnityEngine;
 
 namespace Etheria.Features.Camera
@@ -6,6 +7,7 @@ namespace Etheria.Features.Camera
     public sealed class PlayerLookService : IPlayerLookService, IPlayerLookInputHandler
     {
         private readonly CameraSettingsSO _cameraSettings;
+        private readonly ITargetingService _targetingService;
         private Transform _actorRoot;
         private Transform _cameraPivot;
         private float _pitch;
@@ -15,9 +17,12 @@ namespace Etheria.Features.Camera
 
         public Vector3 Forward => _cameraPivot != null ? _cameraPivot.forward : Vector3.forward;
 
-        public PlayerLookService(CameraSettingsSO cameraSettings)
+        public PlayerLookService(
+            CameraSettingsSO cameraSettings,
+            ITargetingService targetingService)
         {
             _cameraSettings = cameraSettings;
+            _targetingService = targetingService;
         }
 
         public void SetTarget(Transform actorRoot, Transform cameraPivot)
@@ -47,12 +52,29 @@ namespace Etheria.Features.Camera
             _pitch = 0f;
         }
 
+        public void SetYawFromWorldDirection(Vector3 direction)
+        {
+            if (_actorRoot == null)
+                return;
+
+            var horizontalDirection = Vector3.ProjectOnPlane(direction, Vector3.up);
+            if (horizontalDirection.sqrMagnitude <= 0.001f)
+                return;
+
+            _yaw = NormalizeAngle(
+                Quaternion.LookRotation(horizontalDirection.normalized, Vector3.up).eulerAngles.y);
+        }
+
         public void HandleLook(Vector2 value)
         {
             if (_cameraPivot == null || _cameraSettings == null)
                 return;
 
-            _yaw += value.x * _cameraSettings.HorizontalLookSensitivity;
+            if (_targetingService.CurrentTarget == null)
+            {
+                _yaw += value.x * _cameraSettings.HorizontalLookSensitivity;
+            }
+
             _pitch = Mathf.Clamp(
                 _pitch + value.y * _cameraSettings.VerticalLookSensitivity,
                 _cameraSettings.MinPitch,
