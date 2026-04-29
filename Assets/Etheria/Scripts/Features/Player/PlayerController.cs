@@ -1,28 +1,34 @@
 using Etheria.Features.Actor;
 using Etheria.Features.Camera;
 using Etheria.Features.Input;
-using UnityEngine;
+using Etheria.Game.Player;
+using Etheria.Game.Targeting;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Features
+namespace Etheria.Features.Player
 {
-    public sealed class PossessionService : IPossessionService
+    public sealed class PlayerController : IPlayerController
     {
         private readonly IGameplayInputRouter _gameplayInput;
         private readonly IPlayerLookService _playerLookService;
         private readonly ICameraService _cameraService;
         private IActorInputHandler _currentActorHandler;
+        private readonly IControlledTargetProvider _controlledTarget;
 
-        public PossessionService(
+        public PlayerController(
             IGameplayInputRouter gameplayInput,
             IPlayerLookService playerLookService,
-            ICameraService cameraService)
+            ICameraService cameraService,
+            IControlledTargetProvider controlledTarget)
         {
             _gameplayInput = gameplayInput;
             _playerLookService = playerLookService;
             _cameraService = cameraService;
+            _controlledTarget = controlledTarget;
         }
+
+
 
         public void Possess(LifetimeScope actorScope)
         {
@@ -30,6 +36,7 @@ namespace Etheria.Features
 
             var runtimeRefs = actorScope.Container.Resolve<ActorRuntimeRefs>();
             _currentActorHandler = actorScope.Container.Resolve<IActorInputHandler>();
+            _controlledTarget.SetTarget(actorScope.Container.Resolve<ITargetable>());
             var cameraPivot = runtimeRefs.CameraPivot != null ? runtimeRefs.CameraPivot : actorScope.transform;
 
             _gameplayInput.SetHandler(_currentActorHandler);
@@ -46,6 +53,7 @@ namespace Etheria.Features
             _playerLookService.RemoveHandler(_currentActorHandler);
             _playerLookService.RemoveTarget();
             _cameraService.RemoveTarget();
+            _controlledTarget.ClearTarget();
 
             _currentActorHandler = null;
         }

@@ -1,4 +1,5 @@
 
+using Etheria.Game.Targeting;
 using UnityEngine.InputSystem;
 
 namespace Etheria.Features.Targeting

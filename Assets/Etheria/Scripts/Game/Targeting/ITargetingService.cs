@@ -1,6 +1,6 @@
 using System;
 
-namespace Etheria.Features.Targeting
+namespace Etheria.Game.Targeting
 {
     public interface ITargetingService
     {

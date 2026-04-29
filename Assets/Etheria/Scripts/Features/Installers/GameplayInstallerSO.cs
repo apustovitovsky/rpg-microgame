@@ -1,7 +1,7 @@
 using Etheria.Core.DI;
 using Etheria.Features.Actor;
-using Etheria.Features.Camera;
 using Etheria.Features.Input;
+using Etheria.Game.Player;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -23,9 +23,6 @@ namespace Etheria.Features
 
             builder.Register<ActorFactory>(Lifetime.Singleton)
                 .As<IActorFactory>();
-
-            builder.Register<PossessionService>(Lifetime.Singleton)
-                .As<IPossessionService>();
 
             builder.Register<GameplayInputRouter>(Lifetime.Singleton)
                 .As<IGameplayInputRouter>();

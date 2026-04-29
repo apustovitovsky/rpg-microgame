@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Etheria.Features.Camera;
-using Etheria.Game.Camera;
+using Etheria.Game.Player;
+using Etheria.Game.Targeting;
 using UnityEngine;
 
 namespace Etheria.Features.Targeting
@@ -9,18 +9,18 @@ namespace Etheria.Features.Targeting
     public sealed class CameraRayTargetDetectionService : ITargetDetectionService
     {
         private readonly IViewRayProvider _viewRayProvider;
+        private readonly IControlledTargetProvider _selfProvider;
         private readonly ColliderTargetResolver _targetResolver;
         private readonly TargetingSettingsSO _settings;
-        private readonly IPlayerLookService _playerLookService;
 
         public CameraRayTargetDetectionService(
             IViewRayProvider viewRayProvider,
-            IPlayerLookService playerLookService,
+            IControlledTargetProvider selfProvider,
             ColliderTargetResolver targetResolver,
             TargetingSettingsSO settings)
         {
             _viewRayProvider = viewRayProvider;
-            _playerLookService = playerLookService;
+            _selfProvider = selfProvider;
             _targetResolver = targetResolver;
             _settings = settings;
         }
@@ -48,10 +48,7 @@ namespace Etheria.Features.Targeting
                 if (!_targetResolver.TryResolve(hit, out var targetable))
                     continue;
 
-                var selfActorRoot = _playerLookService.CurrentActorRoot;
-                if (selfActorRoot != null &&
-                    targetable.AimPoint != null &&
-                    targetable.AimPoint.IsChildOf(selfActorRoot))
+                if (ReferenceEquals(targetable, _selfProvider.ControlledTarget))
                 {
                     continue;
                 }

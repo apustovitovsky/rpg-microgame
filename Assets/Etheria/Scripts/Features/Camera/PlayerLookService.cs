@@ -13,7 +13,6 @@ namespace Etheria.Features.Camera
         private float _pitch;
         private float _yaw;
 
-        public Transform CurrentActorRoot => _actorRoot;
         public Transform CurrentPivot => _cameraPivot;
 
         public Vector3 Forward => _cameraPivot != null ? _cameraPivot.forward : Vector3.forward;

@@ -1,4 +1,5 @@
 using Etheria.Features.Targeting;
+using Etheria.Game.Targeting;
 using UnityEngine;
 using VContainer;
 

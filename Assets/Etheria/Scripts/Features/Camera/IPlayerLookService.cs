@@ -4,7 +4,6 @@ namespace Etheria.Features.Camera
 {
     public interface IPlayerLookService
     {
-        Transform CurrentActorRoot { get; }
         Transform CurrentPivot { get; }
         Vector3 Forward { get; }
         void SetHandler(IActorInputHandler handler);

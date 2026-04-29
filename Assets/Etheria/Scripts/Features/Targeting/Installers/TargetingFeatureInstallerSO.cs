@@ -1,4 +1,6 @@
 using Etheria.Core.DI;
+using Etheria.Game.Player;
+using Etheria.Game.Targeting;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -22,6 +24,9 @@ namespace Etheria.Features.Targeting
 
             builder.Register<FirstValidTargetSelector>(Lifetime.Singleton)
                 .As<ITargetSelector>();
+
+            builder.Register<ControlledTargetProvider>(Lifetime.Singleton)
+                .As<IControlledTargetProvider>();
 
             builder.Register<ViewRayProvider>(Lifetime.Singleton)
                 .As<IViewRayProvider>();

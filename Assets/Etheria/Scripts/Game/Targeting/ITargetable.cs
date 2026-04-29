@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Features.Targeting
+namespace Etheria.Game.Targeting
 {
     public interface ITargetable
     {

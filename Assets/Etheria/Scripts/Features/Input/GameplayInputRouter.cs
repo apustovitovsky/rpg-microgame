@@ -1,6 +1,7 @@
 using System;
 using Etheria.Features.Camera;
 using Etheria.Features.Targeting;
+using Etheria.Game.Targeting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,17 +10,17 @@ namespace Etheria.Features.Input
     public sealed class GameplayInputRouter : IGameplayInputRouter, InputSystem_Actions.IPlayerActions, IDisposable
     {
         private readonly InputSystem_Actions _input;
-        private readonly TargetingController _targetingController;
+        private readonly ITargetingService _targetingService;
         private IActorInputHandler _playerHandler;
         private IPlayerLookInputHandler _lookHandler;
         private ICameraInputHandler _cameraHandler;
 
         public GameplayInputRouter(
             InputSystem_Actions input,
-            TargetingController targetingController)
+            ITargetingService targetingService)
         {
             _input = input;
-            _targetingController = targetingController;
+            _targetingService = targetingService;
 
             _input.Enable();
             _input.Player.SetCallbacks(this);
@@ -84,7 +85,13 @@ namespace Etheria.Features.Input
 
         public void OnAim(InputAction.CallbackContext context)
         {
-            _targetingController.HandleAim(context);
+            if (!context.performed)
+                return;
+
+            if (_targetingService.TryAcquireFromView())
+                return;
+
+            _targetingService.ClearTarget();
         }
 
         public void OnAttack(InputAction.CallbackContext context) { }
@@ -106,4 +113,3 @@ namespace Etheria.Features.Input
         }
     }
 }
-

@@ -1,9 +1,8 @@
-using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Features
+namespace Etheria.Game.Player
 {
-    public interface IPossessionService
+    public interface IPlayerController
     {
         void Possess(LifetimeScope actor);
         void Unpossess();

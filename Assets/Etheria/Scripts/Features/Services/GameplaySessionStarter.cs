@@ -1,7 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Etheria.Features.Actor;
-using Etheria.Features.Camera;
+using Etheria.Game.Player;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -11,12 +11,12 @@ namespace Etheria.Features
     {
         private readonly GameplayConfigSO _gameplayConfig;
         private readonly IActorFactory _actorFactory;
-        private readonly IPossessionService _possessionService;
+        private readonly IPlayerController _possessionService;
 
         public GameplaySessionStarter(
             GameplayConfigSO gameplayConfig,
             IActorFactory actorFactory,
-            IPossessionService possessionService)
+            IPlayerController possessionService)
         {
             _gameplayConfig = gameplayConfig;
             _actorFactory = actorFactory;

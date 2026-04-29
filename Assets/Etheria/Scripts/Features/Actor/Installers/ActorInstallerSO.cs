@@ -1,6 +1,7 @@
 using Etheria.Core.DI;
 using Etheria.Features.Targeting;
 using Etheria.Game.Common;
+using Etheria.Game.Targeting;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
