@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Etheria.Features.Targeting
 {
-    public interface ICameraRayProvider
+    public interface IViewRayProvider
     {
-        Ray GetForwardRay();
+        Ray GetRay();
     }
 }

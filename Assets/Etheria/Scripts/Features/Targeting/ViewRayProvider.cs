@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace Etheria.Features.Targeting
 {
-    public sealed class CameraRayProvider : ICameraRayProvider
+    public sealed class ViewRayProvider : IViewRayProvider
     {
         private readonly ICameraTransformProvider _cameraProvider;
 
-        public CameraRayProvider(ICameraTransformProvider cameraProvider)
+        public ViewRayProvider(ICameraTransformProvider cameraProvider)
         {
             _cameraProvider = cameraProvider;
         }
 
-        public Ray GetForwardRay()
+        public Ray GetRay()
         {
             return new Ray(_cameraProvider.Position, _cameraProvider.Forward);
         }

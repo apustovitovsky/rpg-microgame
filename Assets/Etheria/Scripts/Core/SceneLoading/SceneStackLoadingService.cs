@@ -84,7 +84,7 @@ namespace Etheria.Core.DI
 
                 var sceneRoot = CreateSceneRoot(scene);
 
-                var sceneScope = CreateSceneScope(
+                var sceneScope = CreateSceneScopeDebug(
                     currentParent,
                     sceneRoot,
                     definition);
@@ -108,7 +108,7 @@ namespace Etheria.Core.DI
             using (LifetimeScope.EnqueueParent(parentScope))
             using (LifetimeScope.Enqueue(builder =>
             {
-                InstallSceneInstallers(
+                InstallScopeInstallers(
                     builder,
                     definition.ScopeInstallers,
                     sceneRoot);
@@ -118,7 +118,52 @@ namespace Etheria.Core.DI
             }
         }
 
-        private static void InstallSceneInstallers(
+        private LifetimeScope CreateSceneScopeDebug(
+            LifetimeScope parentScope,
+            GameObject sceneRoot,
+            SceneDefinitionSO definition)
+        {
+            var scopeObject = new GameObject(SceneScopeName);
+            scopeObject.transform.SetParent(sceneRoot.transform, false);
+            scopeObject.transform.SetSiblingIndex(0);
+
+            try
+            {
+                using (LifetimeScope.EnqueueParent(parentScope))
+                using (LifetimeScope.Enqueue(builder =>
+                {
+                    builder.RegisterEntryPointExceptionHandler(ex =>
+                    {
+                        Debug.LogError(
+                            $"[VContainer EntryPoint Error] Scope='{scopeObject.name}', SceneDefinition='{definition.name}'\n{ex.Message}");
+
+                        Debug.LogException(ex);
+                    });
+
+                    InstallScopeInstallers(
+                        builder,
+                        definition.ScopeInstallers,
+                        sceneRoot);
+                }))
+                {
+                    return scopeObject.AddComponent<LifetimeScope>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(
+                    $"[VContainer Build Error] Failed to create scene scope.\n" +
+                    $"SceneDefinition: {definition.name}\n" +
+                    $"ScenePath: {definition.ScenePath}\n" +
+                    $"ScopeObject: {scopeObject.name}\n" +
+                    $"Error: {ex.Message}");
+
+                Debug.LogException(ex);
+                throw;
+            }
+        }
+
+        private static void InstallScopeInstallers(
             IContainerBuilder builder,
             ScopeInstallerSO[] installers,
             GameObject sceneRoot)

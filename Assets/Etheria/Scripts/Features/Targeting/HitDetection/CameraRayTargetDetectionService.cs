@@ -8,20 +8,18 @@ namespace Etheria.Features.Targeting
 {
     public sealed class CameraRayTargetDetectionService : ITargetDetectionService
     {
-        private readonly ICameraRayProvider _cameraRayProvider;
+        private readonly IViewRayProvider _viewRayProvider;
         private readonly ColliderTargetResolver _targetResolver;
         private readonly TargetingSettingsSO _settings;
         private readonly IPlayerLookService _playerLookService;
 
-
-
         public CameraRayTargetDetectionService(
-            ICameraRayProvider cameraRayProvider,
+            IViewRayProvider viewRayProvider,
             IPlayerLookService playerLookService,
             ColliderTargetResolver targetResolver,
             TargetingSettingsSO settings)
         {
-            _cameraRayProvider = cameraRayProvider;
+            _viewRayProvider = viewRayProvider;
             _playerLookService = playerLookService;
             _targetResolver = targetResolver;
             _settings = settings;
@@ -29,7 +27,7 @@ namespace Etheria.Features.Targeting
 
         public IReadOnlyList<ITargetable> GetCandidates()
         {
-            var ray = _cameraRayProvider.GetForwardRay();
+            var ray = _viewRayProvider.GetRay();
 
             var hits = Physics.SphereCastAll(
                 ray,

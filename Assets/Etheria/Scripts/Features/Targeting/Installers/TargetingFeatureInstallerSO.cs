@@ -22,9 +22,9 @@ namespace Etheria.Features.Targeting
 
             builder.Register<FirstValidTargetSelector>(Lifetime.Singleton)
                 .As<ITargetSelector>();
-                
-            builder.Register<CameraRayProvider>(Lifetime.Singleton)
-                .As<ICameraRayProvider>();
+
+            builder.Register<ViewRayProvider>(Lifetime.Singleton)
+                .As<IViewRayProvider>();
 
             builder.Register<CameraRayTargetDetectionService>(Lifetime.Singleton)
                 .As<ITargetDetectionService>();

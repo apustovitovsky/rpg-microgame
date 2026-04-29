@@ -1,0 +1,55 @@
+using Etheria.Features.Actor;
+using Etheria.Game.Camera;
+using UnityEngine;
+
+namespace Etheria.Features.Targeting
+{
+    public interface ITargetCandidateResolver
+    {
+        bool TryResolve(RaycastHit hit, out TargetCandidate candidate);
+    }
+
+    public sealed class TargetCandidateResolver : ITargetCandidateResolver
+    {
+        private readonly ICameraTransformProvider _camera;
+
+        public TargetCandidateResolver(ICameraTransformProvider camera)
+        {
+            _camera = camera;
+        }
+
+        public bool TryResolve(RaycastHit hit, out TargetCandidate candidate)
+        {
+            candidate = default;
+
+            if (!hit.collider.TryGetComponent<ActorHitbox>(out var hitbox))
+                return false;
+
+            var targetable = hitbox.Targetable;
+
+            if (targetable == null || !targetable.IsTargetable)
+                return false;
+
+            var aimPoint = targetable.AimPoint;
+
+            if (aimPoint == null)
+                return false;
+
+            var toTarget = aimPoint.position - _camera.Position;
+            var distance = toTarget.magnitude;
+
+            if (distance <= 0.001f)
+                return false;
+
+            var angle = Vector3.Angle(_camera.Forward, toTarget / distance);
+
+            candidate = new TargetCandidate(
+                targetable,
+                aimPoint.position,
+                distance,
+                angle);
+
+            return true;
+        }
+    }
+}
