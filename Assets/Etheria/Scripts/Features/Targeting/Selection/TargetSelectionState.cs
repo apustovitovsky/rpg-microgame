@@ -10,28 +10,30 @@ namespace Etheria.Features.Targeting
 
         public event Action<ITargetable> TargetChanged;
 
-        public bool TrySet(ITargetable target)
+        public TargetSelectionResult Set(ITargetable target)
         {
             if (target == null)
-                return false;
+                return TargetSelectionResult.None;
 
             if (ReferenceEquals(CurrentTarget, target))
-                return true;
+                return new TargetSelectionResult(TargetSelectionStatus.AlreadySelected, target);
 
             CurrentTarget = target;
             Debug.Log($"Target acquired: {CurrentTarget.DisplayName}");
             TargetChanged?.Invoke(CurrentTarget);
-            return true;
+            return new TargetSelectionResult(TargetSelectionStatus.Selected, CurrentTarget);
         }
 
-        public void Clear()
+        public TargetSelectionResult Clear()
         {
             if (CurrentTarget == null)
-                return;
+                return TargetSelectionResult.None;
 
+            var previousTarget = CurrentTarget;
             Debug.Log($"TargetingService: clearing target '{CurrentTarget.DisplayName}'.");
             CurrentTarget = null;
             TargetChanged?.Invoke(null);
+            return new TargetSelectionResult(TargetSelectionStatus.Cleared, previousTarget);
         }
     }
 }

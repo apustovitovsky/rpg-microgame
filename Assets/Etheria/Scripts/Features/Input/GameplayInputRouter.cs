@@ -89,10 +89,7 @@ namespace Etheria.Features.Input
             if (!context.performed)
                 return;
 
-            if (_targetingService.TryAcquireFromView())
-                return;
-
-            _targetingService.ClearTarget();
+            _targetingService.TryAcquireFromView();
         }
 
         public void OnAttack(InputAction.CallbackContext context) { }

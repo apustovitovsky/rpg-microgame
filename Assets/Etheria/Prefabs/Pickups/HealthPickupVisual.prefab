@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2529580269645609531}
   - component: {fileID: 5787417297529263727}
   - component: {fileID: -6840639622913153714}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: HealthPickupVisual
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
@@ -5049,7 +5049,7 @@ GameObject:
   - component: {fileID: 5273192283078582351}
   - component: {fileID: 5273192283075682415}
   - component: {fileID: 5273192283076813487}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Mesh_Health_Pickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5139,7 +5139,7 @@ GameObject:
   - component: {fileID: 4167577566495089647}
   - component: {fileID: 226937047203380684}
   - component: {fileID: 5009822203717650370}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: VFX_Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10007,7 +10007,7 @@ GameObject:
   - component: {fileID: 7425888928072409488}
   - component: {fileID: 8350384110336657106}
   - component: {fileID: 3772261186783397292}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: VFX_HealthGlow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

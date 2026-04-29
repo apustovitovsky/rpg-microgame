@@ -6,16 +6,16 @@ namespace Etheria.Features.Targeting
     {
         private readonly ITargetCandidateResolver _candidateResolver;
         private readonly ITargetLineOfSightChecker _lineOfSightChecker;
-        private readonly TargetingSettingsSO _settings;
+        private readonly ITargetEligibilityService _eligibilityService;
 
         public TargetValidator(
             ITargetCandidateResolver candidateResolver,
             ITargetLineOfSightChecker lineOfSightChecker,
-            TargetingSettingsSO settings)
+            ITargetEligibilityService eligibilityService)
         {
             _candidateResolver = candidateResolver;
             _lineOfSightChecker = lineOfSightChecker;
-            _settings = settings;
+            _eligibilityService = eligibilityService;
         }
 
         public bool IsValid(ITargetable target)
@@ -23,10 +23,7 @@ namespace Etheria.Features.Targeting
             if (!_candidateResolver.TryResolve(target, out var candidate))
                 return false;
 
-            if (candidate.Distance > _settings.MaxDistance)
-                return false;
-
-            if (candidate.Angle > _settings.MaxAngle)
+            if (!_eligibilityService.IsEligible(candidate))
                 return false;
 
             return _lineOfSightChecker.HasLineOfSight(candidate);

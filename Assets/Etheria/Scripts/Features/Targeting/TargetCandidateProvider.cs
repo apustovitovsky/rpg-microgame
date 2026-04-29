@@ -9,13 +9,11 @@ namespace Etheria.Features.Targeting
         int GetCandidates(TargetCandidate[] buffer);
     }
 
-
     public sealed class TargetCandidateProvider : ITargetCandidateProvider
     {
         private readonly ITargetHitProvider _physicsQuery;
         private readonly ITargetCandidateResolver _resolver;
         private readonly ITargetCandidateFilter _filter;
-        private readonly ITargetLineOfSightChecker _visibilityChecker;
 
         private readonly RaycastHit[] _hits;
 
@@ -23,15 +21,13 @@ namespace Etheria.Features.Targeting
             ITargetHitProvider physicsQuery,
             ITargetCandidateResolver resolver,
             ITargetCandidateFilter filter,
-            TargetingSettingsSO settings,
-            ITargetLineOfSightChecker visibilityChecker)
+            TargetingSettingsSO settings)
         {
             _physicsQuery = physicsQuery;
             _resolver = resolver;
             _filter = filter;
-            _visibilityChecker = visibilityChecker;
 
-            _hits = new RaycastHit[settings.MaxTargetCandidates];
+            _hits = new RaycastHit[Mathf.Max(settings.MaxHitResults, settings.MaxTargetCandidates)];
         }
 
         public int GetCandidates(TargetCandidate[] buffer)
@@ -56,9 +52,6 @@ namespace Etheria.Features.Targeting
                     continue;
 
                 if (!_filter.IsAllowed(candidate))
-                    continue;
-
-                if (!_visibilityChecker.HasLineOfSight(candidate))
                     continue;
 
                 if (Contains(buffer, resultCount, candidate.Targetable))

@@ -7,25 +7,22 @@ namespace Etheria.Features.Targeting
         bool IsAllowed(TargetCandidate candidate);
     }
 
-    public sealed class ViewConeTargetCandidateFilter : ITargetCandidateFilter
+    public sealed class TargetCandidateFilter : ITargetCandidateFilter
     {
-        private readonly TargetingSettingsSO _settings;
+        private readonly ITargetEligibilityService _eligibilityService;
         private readonly IPlayerAvatarProvider _playerAvatarProvider;
 
-        public ViewConeTargetCandidateFilter(
-            TargetingSettingsSO settings,
+        public TargetCandidateFilter(
+            ITargetEligibilityService eligibilityService,
             IPlayerAvatarProvider playerAvatarProvider)
         {
-            _settings = settings;
+            _eligibilityService = eligibilityService;
             _playerAvatarProvider = playerAvatarProvider;
         }
 
         public bool IsAllowed(TargetCandidate candidate)
         {
-            if (candidate.Targetable == null)
-                return false;
-
-            if (!candidate.Targetable.IsTargetable)
+            if (!_eligibilityService.IsEligible(candidate))
                 return false;
 
             var currentAvatar = _playerAvatarProvider.Current;
@@ -34,12 +31,6 @@ namespace Etheria.Features.Targeting
             {
                 return false;
             }
-
-            if (candidate.Distance > _settings.MaxDistance)
-                return false;
-
-            if (candidate.Angle > _settings.MaxAngle)
-                return false;
 
             return true;
         }

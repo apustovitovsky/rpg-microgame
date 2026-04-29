@@ -9,6 +9,7 @@ namespace Etheria.Features.Targeting
     {
         private readonly ITargetingService _targetingService;
         private readonly IPlayerAvatarProvider _playerAvatarProvider;
+        private ITargetable _currentAvatarTargetable;
 
         public TargetingTracker(
             ITargetingService targetingService,
@@ -20,6 +21,7 @@ namespace Etheria.Features.Targeting
 
         public void Start()
         {
+            _currentAvatarTargetable = _playerAvatarProvider.Current?.Targetable;
             _playerAvatarProvider.Changed += OnPlayerAvatarChanged;
         }
 
@@ -42,6 +44,11 @@ namespace Etheria.Features.Targeting
 
         private void OnPlayerAvatarChanged(PlayerAvatarContext? avatar)
         {
+            var nextTargetable = avatar?.Targetable;
+            if (ReferenceEquals(_currentAvatarTargetable, nextTargetable))
+                return;
+
+            _currentAvatarTargetable = nextTargetable;
             _targetingService.ClearTarget();
         }
     }

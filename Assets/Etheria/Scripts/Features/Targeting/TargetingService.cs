@@ -1,4 +1,3 @@
-using System;
 using Etheria.Game.Targeting;
 
 
@@ -24,7 +23,6 @@ namespace Etheria.Features.Targeting
             _targetValidator = targetValidator;
             _targetSelectionState = targetSelectionState;
         }
-
 
         public bool TryAcquireFromView()
         {
@@ -56,7 +54,9 @@ namespace Etheria.Features.Targeting
             if (!IsValid(target))
                 return false;
 
-            return _targetSelectionState.TrySet(target);
+            var result = _targetSelectionState.Set(target);
+            return result.Status == TargetSelectionStatus.Selected ||
+                   result.Status == TargetSelectionStatus.AlreadySelected;
         }
 
         public bool IsValid(ITargetable target)

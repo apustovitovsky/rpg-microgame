@@ -4,7 +4,8 @@ namespace Etheria.Features.Targeting
 {
     public interface ITargetSelectionState : ITargetingEvents
     {
-        bool TrySet(ITargetable target);
-        void Clear();
+        TargetSelectionResult Set(ITargetable target);
+        TargetSelectionResult Clear();
     }
 }
+

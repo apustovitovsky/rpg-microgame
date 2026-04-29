@@ -7,21 +7,35 @@ namespace Etheria.Features.Targeting
     {
         private readonly ITargetCandidateSnapshotProvider _snapshotProvider;
         private readonly ITargetCandidateSelector _candidateSelector;
+        private readonly ITargetCandidateValidityFilter _validityFilter;
+
 
         public TargetAcquisitionService(
             ITargetCandidateSnapshotProvider snapshotProvider,
-            ITargetCandidateSelector candidateSelector)
+            ITargetCandidateSelector candidateSelector,
+            ITargetCandidateValidityFilter validityFilter)
         {
             _snapshotProvider = snapshotProvider;
             _candidateSelector = candidateSelector;
+            _validityFilter = validityFilter;
         }
+
+
 
         public TargetAcquireResult Acquire(ITargetable currentTarget)
         {
             var snapshot = _snapshotProvider.Capture();
+            var candidates = snapshot.Candidates;
+            var count = snapshot.Count;
+
+            var validCount = _validityFilter.FilterInPlace(candidates, count);
+
+            if (validCount <= 0)
+                return TargetAcquireResult.None;
+
             if (!_candidateSelector.TrySelectBest(
-                    snapshot.Candidates,
-                    snapshot.Count,
+                    candidates,
+                    validCount,
                     currentTarget,
                     out var bestCandidate))
             {
@@ -34,5 +48,6 @@ namespace Etheria.Features.Targeting
 
             return new TargetAcquireResult(status, bestCandidate.Targetable);
         }
+
     }
 }

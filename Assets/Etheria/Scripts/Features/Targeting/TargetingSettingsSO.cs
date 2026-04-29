@@ -10,6 +10,7 @@ namespace Etheria.Features.Targeting
         [field: SerializeField] public float MaxDistance { get; private set; } = 25f;
         [field: SerializeField] public LayerMask TargetingMask { get; private set; }
         [field: SerializeField] public LayerMask VisibilityMask { get; private set; }
+        [field: SerializeField] public int MaxHitResults { get; private set; } = 64;
         [field: SerializeField] public int MaxTargetCandidates { get; private set; } = 16;
         [field: SerializeField] public float Radius { get; private set; } = 2.5f;
         [field: SerializeField] public float MaxAngle { get; private set; } = 30f;

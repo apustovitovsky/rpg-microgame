@@ -35,8 +35,14 @@ namespace Etheria.Features.Targeting
             builder.Register<TargetCandidateResolver>(Lifetime.Singleton)
                 .As<ITargetCandidateResolver>();
 
-            builder.Register<ViewConeTargetCandidateFilter>(Lifetime.Singleton)
+            builder.Register<TargetCandidateFilter>(Lifetime.Singleton)
                 .As<ITargetCandidateFilter>();
+
+            builder.Register<TargetCandidateValidityFilter>(Lifetime.Singleton)
+                .As<ITargetCandidateValidityFilter>();
+
+            builder.Register<TargetEligibilityService>(Lifetime.Singleton)
+                .As<ITargetEligibilityService>();
 
             builder.Register<TargetLineOfSightChecker>(Lifetime.Singleton)
                 .As<ITargetLineOfSightChecker>();

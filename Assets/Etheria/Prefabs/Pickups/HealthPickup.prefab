@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8741802348807800752}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 5059842599163696493}
   - component: {fileID: 6801709726347188933}
   - component: {fileID: 1144327375940659907}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: HealthPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}

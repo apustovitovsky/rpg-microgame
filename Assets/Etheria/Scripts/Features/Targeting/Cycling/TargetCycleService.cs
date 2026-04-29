@@ -11,16 +11,20 @@ namespace Etheria.Features.Targeting
         private readonly ITargetCandidateSnapshotProvider _snapshotProvider;
         private readonly ITargetCandidateSelector _candidateSelector;
         private readonly ICameraTransformProvider _cameraProvider;
+        private readonly ITargetCandidateValidityFilter _validityFilter;
 
         public TargetCycleService(
             ITargetCandidateSnapshotProvider snapshotProvider,
             ITargetCandidateSelector candidateSelector,
-            ICameraTransformProvider cameraProvider)
+            ICameraTransformProvider cameraProvider,
+            ITargetCandidateValidityFilter validityFilter)
         {
             _snapshotProvider = snapshotProvider;
             _candidateSelector = candidateSelector;
             _cameraProvider = cameraProvider;
+            _validityFilter = validityFilter;
         }
+
 
 
         public TargetCycleResult Cycle(ITargetable currentTarget, int direction)
@@ -32,21 +36,23 @@ namespace Etheria.Features.Targeting
             var candidates = snapshot.Candidates;
             var count = snapshot.Count;
 
-            if (count <= 0)
+            var validCount = _validityFilter.FilterInPlace(candidates, count);
+
+            if (validCount <= 0)
                 return TargetCycleResult.None;
 
             if (currentTarget == null)
             {
-                if (!_candidateSelector.TrySelectBest(candidates, count, null, out var bestCandidate))
+                if (!_candidateSelector.TrySelectBest(candidates, validCount, null, out var bestCandidate))
                     return TargetCycleResult.None;
 
                 return new TargetCycleResult(TargetCycleStatus.Selected, bestCandidate.Targetable);
             }
 
-            Array.Sort(candidates, 0, count, Comparer<TargetCandidate>.Create(CompareCandidatesForCycle));
+            Array.Sort(candidates, 0, validCount, Comparer<TargetCandidate>.Create(CompareCandidatesForCycle));
 
             var currentIndex = -1;
-            for (var i = 0; i < count; i++)
+            for (var i = 0; i < validCount; i++)
             {
                 if (!ReferenceEquals(candidates[i].Targetable, currentTarget))
                     continue;
@@ -57,7 +63,7 @@ namespace Etheria.Features.Targeting
 
             if (currentIndex < 0)
             {
-                if (!_candidateSelector.TrySelectBest(candidates, count, null, out var bestCandidate))
+                if (!_candidateSelector.TrySelectBest(candidates, validCount, null, out var bestCandidate))
                     return TargetCycleResult.None;
 
                 return new TargetCycleResult(TargetCycleStatus.Selected, bestCandidate.Targetable);
@@ -66,9 +72,10 @@ namespace Etheria.Features.Targeting
             var nextIndex = currentIndex + (direction > 0 ? 1 : -1);
 
             if (nextIndex < 0)
-                nextIndex = count - 1;
-            else if (nextIndex >= count)
+                nextIndex = validCount - 1;
+            else if (nextIndex >= validCount)
                 nextIndex = 0;
+
 
             return new TargetCycleResult(TargetCycleStatus.Selected, candidates[nextIndex].Targetable);
         }
