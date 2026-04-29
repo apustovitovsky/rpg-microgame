@@ -8,6 +8,7 @@ namespace Etheria.Game.Targeting
         event Action<ITargetable> TargetChanged;
 
         bool TryAcquireFromView();
+        bool TryCycleTarget(int direction);
         bool TrySetTarget(ITargetable target);
         bool IsValid(ITargetable target);
         bool ValidateCurrentTarget();

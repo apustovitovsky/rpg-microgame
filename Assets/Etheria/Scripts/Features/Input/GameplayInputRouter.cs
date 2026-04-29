@@ -97,8 +97,22 @@ namespace Etheria.Features.Input
         public void OnAttack(InputAction.CallbackContext context) { }
         public void OnInteract(InputAction.CallbackContext context) { }
         public void OnCrouch(InputAction.CallbackContext context) { }
-        public void OnPrevious(InputAction.CallbackContext context) { }
-        public void OnNext(InputAction.CallbackContext context) { }
+        public void OnPrevious(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+
+            _targetingService.TryCycleTarget(-1);
+        }
+
+        public void OnNext(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+
+            _targetingService.TryCycleTarget(1);
+        }
+
         public void OnSprint(InputAction.CallbackContext context) { }
         public void OnReload(InputAction.CallbackContext context) { }
         public void OnNextWeapon(InputAction.CallbackContext context) { }

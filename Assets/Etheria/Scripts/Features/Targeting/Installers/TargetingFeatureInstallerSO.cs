@@ -18,12 +18,7 @@ namespace Etheria.Features.Targeting
         {
             builder.RegisterInstance(_targetingSettings);
 
-            builder.Register<ColliderTargetResolver>(Lifetime.Singleton);
-
             builder.RegisterEntryPoint<TargetingTracker>(Lifetime.Singleton);
-
-            builder.Register<FirstValidTargetSelector>(Lifetime.Singleton)
-                .As<ITargetSelector>();
 
             builder.Register<ControlledTargetProvider>(Lifetime.Singleton)
                 .As<IControlledTargetProvider>();
@@ -31,13 +26,32 @@ namespace Etheria.Features.Targeting
             builder.Register<ViewRayProvider>(Lifetime.Singleton)
                 .As<IViewRayProvider>();
 
-            builder.Register<CameraRayTargetDetectionService>(Lifetime.Singleton)
-                .As<ITargetDetectionService>();
-
             builder.Register<TargetingService>(Lifetime.Singleton)
                 .As<ITargetingService>();
 
-            builder.Register<TargetingController>(Lifetime.Singleton);
+            builder.Register<SphereCastTargetHitProvider>(Lifetime.Singleton)
+                .As<ITargetHitProvider>();
+
+            builder.Register<TargetCandidateResolver>(Lifetime.Singleton)
+                .As<ITargetCandidateResolver>();
+
+            builder.Register<ViewConeTargetCandidateFilter>(Lifetime.Singleton)
+                .As<ITargetCandidateFilter>();
+
+            builder.Register<TargetLineOfSightChecker>(Lifetime.Singleton)
+                .As<ITargetLineOfSightChecker>();
+
+            builder.Register<TargetCandidateEvaluator>(Lifetime.Singleton)
+                .As<ITargetCandidateEvaluator>();
+
+            builder.Register<TargetCandidateComparer>(Lifetime.Singleton)
+                .As<ITargetCandidateComparer>();
+
+            builder.Register<TargetCandidateSelector>(Lifetime.Singleton)
+                .As<ITargetCandidateSelector>();
+
+            builder.Register<TargetCandidateProvider>(Lifetime.Singleton)
+                .As<ITargetCandidateProvider>();
 
             builder.RegisterEntryPoint<TargetDebugMarkerPresenter>(Lifetime.Singleton);
             builder.RegisterComponentInHierarchy<TargetDebugMarker>();

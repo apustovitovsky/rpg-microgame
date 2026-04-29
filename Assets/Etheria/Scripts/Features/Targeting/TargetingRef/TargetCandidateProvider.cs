@@ -6,10 +6,9 @@ namespace Etheria.Features.Targeting
 {
     public interface ITargetCandidateProvider
     {
-        int GetCandidates(
-            TargetCandidate[] buffer,
-            ITargetable ignoredTarget = null);
+        int GetCandidates(TargetCandidate[] buffer);
     }
+
 
     public sealed class TargetCandidateProvider : ITargetCandidateProvider
     {
@@ -35,9 +34,7 @@ namespace Etheria.Features.Targeting
             _hits = new RaycastHit[settings.MaxTargetCandidates];
         }
 
-        public int GetCandidates(
-            TargetCandidate[] buffer,
-            ITargetable ignoredTarget = null)
+        public int GetCandidates(TargetCandidate[] buffer)
         {
             if (buffer == null || buffer.Length == 0)
                 return 0;
@@ -56,7 +53,7 @@ namespace Etheria.Features.Targeting
                 if (!_resolver.TryResolve(hit, out var candidate))
                     continue;
 
-                if (!_filter.IsAllowed(candidate, ignoredTarget))
+                if (!_filter.IsAllowed(candidate))
                     continue;
 
                 if (!_visibilityChecker.HasLineOfSight(candidate))
