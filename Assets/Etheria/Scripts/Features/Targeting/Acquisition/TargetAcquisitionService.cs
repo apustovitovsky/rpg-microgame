@@ -1,3 +1,4 @@
+using System;
 using Etheria.Game.Targeting;
 
 namespace Etheria.Features.Targeting
@@ -15,10 +16,8 @@ namespace Etheria.Features.Targeting
             _candidateSelector = candidateSelector;
         }
 
-        public bool TryAcquire(ITargetable currentTarget, out ITargetable target)
+        public TargetAcquireResult Acquire(ITargetable currentTarget)
         {
-            target = null;
-
             var snapshot = _snapshotProvider.Capture();
             if (!_candidateSelector.TrySelectBest(
                     snapshot.Candidates,
@@ -26,12 +25,14 @@ namespace Etheria.Features.Targeting
                     currentTarget,
                     out var bestCandidate))
             {
-                return false;
+                return TargetAcquireResult.None;
             }
 
-            target = bestCandidate.Targetable;
-            return true;
-        }
+            var status = ReferenceEquals(bestCandidate.Targetable, currentTarget)
+                ? TargetAcquireStatus.CurrentTarget
+                : TargetAcquireStatus.NewTarget;
 
+            return new TargetAcquireResult(status, bestCandidate.Targetable);
+        }
     }
 }

@@ -1,4 +1,4 @@
-using Etheria.Game.Targeting;
+using Etheria.Game.Player;
 
 namespace Etheria.Features.Targeting
 {
@@ -10,14 +10,14 @@ namespace Etheria.Features.Targeting
     public sealed class ViewConeTargetCandidateFilter : ITargetCandidateFilter
     {
         private readonly TargetingSettingsSO _settings;
-        private readonly IControlledTargetProvider _controlledTargetProvider;
+        private readonly IPlayerAvatarProvider _playerAvatarProvider;
 
         public ViewConeTargetCandidateFilter(
             TargetingSettingsSO settings,
-            IControlledTargetProvider controlledTargetProvider)
+            IPlayerAvatarProvider playerAvatarProvider)
         {
             _settings = settings;
-            _controlledTargetProvider = controlledTargetProvider;
+            _playerAvatarProvider = playerAvatarProvider;
         }
 
         public bool IsAllowed(TargetCandidate candidate)
@@ -28,8 +28,12 @@ namespace Etheria.Features.Targeting
             if (!candidate.Targetable.IsTargetable)
                 return false;
 
-            if (ReferenceEquals(candidate.Targetable, _controlledTargetProvider.ControlledTarget))
+            var currentAvatar = _playerAvatarProvider.Current;
+            if (currentAvatar.HasValue &&
+                ReferenceEquals(candidate.Targetable, currentAvatar.Value.Targetable))
+            {
                 return false;
+            }
 
             if (candidate.Distance > _settings.MaxDistance)
                 return false;

@@ -26,11 +26,6 @@ namespace Etheria.Features.Targeting
 
             builder.RegisterEntryPoint<TargetingTracker>(Lifetime.Singleton);
 
-            builder.Register<ControlledTargetProvider>(Lifetime.Singleton)
-                .As<IControlledTargetProvider>();
-
-            builder.RegisterEntryPoint<ControlledTargetBinder>(Lifetime.Singleton);
-
             builder.Register<ViewRayProvider>(Lifetime.Singleton)
                 .As<IViewRayProvider>();
 

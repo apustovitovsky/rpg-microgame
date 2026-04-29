@@ -1,4 +1,5 @@
 using System;
+using Etheria.Game.Player;
 using Etheria.Game.Targeting;
 using VContainer.Unity;
 
@@ -7,24 +8,24 @@ namespace Etheria.Features.Targeting
     public sealed class TargetingTracker : IStartable, ITickable, IDisposable
     {
         private readonly ITargetingService _targetingService;
-        private readonly IControlledTargetProvider _controlledTargetProvider;
+        private readonly IPlayerAvatarProvider _playerAvatarProvider;
 
         public TargetingTracker(
             ITargetingService targetingService,
-            IControlledTargetProvider controlledTargetProvider)
+            IPlayerAvatarProvider playerAvatarProvider)
         {
             _targetingService = targetingService;
-            _controlledTargetProvider = controlledTargetProvider;
+            _playerAvatarProvider = playerAvatarProvider;
         }
 
         public void Start()
         {
-            _controlledTargetProvider.ControlledTargetChanged += OnControlledTargetChanged;
+            _playerAvatarProvider.Changed += OnPlayerAvatarChanged;
         }
 
         public void Dispose()
         {
-            _controlledTargetProvider.ControlledTargetChanged -= OnControlledTargetChanged;
+            _playerAvatarProvider.Changed -= OnPlayerAvatarChanged;
         }
 
         public void Tick()
@@ -39,11 +40,8 @@ namespace Etheria.Features.Targeting
             _targetingService.ClearTarget();
         }
 
-        private void OnControlledTargetChanged(ITargetable controlledTarget)
+        private void OnPlayerAvatarChanged(PlayerAvatarContext? avatar)
         {
-            if (controlledTarget != null)
-                return;
-
             _targetingService.ClearTarget();
         }
     }

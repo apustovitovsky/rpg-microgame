@@ -28,24 +28,27 @@ namespace Etheria.Features.Targeting
 
         public bool TryAcquireFromView()
         {
-            if (!_targetAcquisitionService.TryAcquire(CurrentTarget, out var target))
+            var result = _targetAcquisitionService.Acquire(CurrentTarget);
+
+            if (result.Status == TargetAcquireStatus.None)
                 return false;
 
-            if (ReferenceEquals(CurrentTarget, target))
+            if (result.Status == TargetAcquireStatus.CurrentTarget)
             {
                 ClearTarget();
                 return true;
             }
 
-            return TrySetTarget(target);
+            return TrySetTarget(result.Target);
         }
 
         public bool TryCycleTarget(int direction)
         {
-            if (!_targetCycleService.TryCycle(CurrentTarget, direction, out var target))
+            var result = _targetCycleService.Cycle(CurrentTarget, direction);
+            if (result.Status == TargetCycleStatus.None)
                 return false;
 
-            return TrySetTarget(target);
+            return TrySetTarget(result.Target);
         }
 
         public bool TrySetTarget(ITargetable target)

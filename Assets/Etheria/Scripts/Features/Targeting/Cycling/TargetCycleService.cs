@@ -23,27 +23,24 @@ namespace Etheria.Features.Targeting
         }
 
 
-        public bool TryCycle(ITargetable currentTarget, int direction, out ITargetable target)
+        public TargetCycleResult Cycle(ITargetable currentTarget, int direction)
         {
-            target = null;
-
             if (direction == 0)
-                return false;
+                return TargetCycleResult.None;
 
             var snapshot = _snapshotProvider.Capture();
             var candidates = snapshot.Candidates;
             var count = snapshot.Count;
 
             if (count <= 0)
-                return false;
+                return TargetCycleResult.None;
 
             if (currentTarget == null)
             {
                 if (!_candidateSelector.TrySelectBest(candidates, count, null, out var bestCandidate))
-                    return false;
+                    return TargetCycleResult.None;
 
-                target = bestCandidate.Targetable;
-                return true;
+                return new TargetCycleResult(TargetCycleStatus.Selected, bestCandidate.Targetable);
             }
 
             Array.Sort(candidates, 0, count, Comparer<TargetCandidate>.Create(CompareCandidatesForCycle));
@@ -61,10 +58,9 @@ namespace Etheria.Features.Targeting
             if (currentIndex < 0)
             {
                 if (!_candidateSelector.TrySelectBest(candidates, count, null, out var bestCandidate))
-                    return false;
+                    return TargetCycleResult.None;
 
-                target = bestCandidate.Targetable;
-                return true;
+                return new TargetCycleResult(TargetCycleStatus.Selected, bestCandidate.Targetable);
             }
 
             var nextIndex = currentIndex + (direction > 0 ? 1 : -1);
@@ -74,9 +70,9 @@ namespace Etheria.Features.Targeting
             else if (nextIndex >= count)
                 nextIndex = 0;
 
-            target = candidates[nextIndex].Targetable;
-            return true;
+            return new TargetCycleResult(TargetCycleStatus.Selected, candidates[nextIndex].Targetable);
         }
+
 
         private int CompareCandidatesForCycle(TargetCandidate left, TargetCandidate right)
         {
