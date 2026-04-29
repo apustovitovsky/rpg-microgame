@@ -14,9 +14,10 @@ namespace Etheria.Features.Actor
 
         private const float MoveSpeed = 5f;
         private const float JumpHeight = 1.5f;
+        private const float JumpBufferDuration = 0.15f;
 
         private bool _isFirePressed;
-        private bool _isJumpRequested;
+        private float _jumpRequestTimeRemaining;
         private Vector3 _faceDirection = Vector3.forward;
         private Vector2 _moveDirection;
 
@@ -34,8 +35,10 @@ namespace Etheria.Features.Actor
         {
             if (_controller == null) return;
 
-            RotateToFaceDirection();
+            if (_jumpRequestTimeRemaining > 0f)
+                _jumpRequestTimeRemaining -= _gameTime.DeltaTime;
 
+            RotateToFaceDirection();
 
             Vector3 forward = Vector3.ProjectOnPlane(_faceDirection, Vector3.up);
             if (forward.sqrMagnitude < 0.001f)
@@ -48,15 +51,16 @@ namespace Etheria.Features.Actor
             if (move.sqrMagnitude > 1f)
                 move.Normalize();
 
-            _controller.Move(_gameTime.DeltaTime * MoveSpeed * move);
-
-            if (_isJumpRequested)
+            if (_jumpRequestTimeRemaining > 0f &&
+                _gravityService.TryJump(_controller, JumpHeight))
             {
-                _gravityService.TryJump(_controller, JumpHeight);
-                _isJumpRequested = false;
+                _jumpRequestTimeRemaining = 0f;
             }
 
-            _controller.Move(_gravityService.GetGravityStep(_controller, _gameTime.DeltaTime));
+            Vector3 horizontalStep = _gameTime.DeltaTime * MoveSpeed * move;
+            Vector3 gravityStep = _gravityService.GetGravityStep(_controller, _gameTime.DeltaTime);
+
+            _controller.Move(horizontalStep + gravityStep);
         }
 
         public void HandleFire(bool isPressed)
@@ -68,7 +72,8 @@ namespace Etheria.Features.Actor
 
         public void HandleJump(bool isPressed)
         {
-            if (isPressed) _isJumpRequested = true;
+            if (isPressed)
+                _jumpRequestTimeRemaining = JumpBufferDuration;
         }
 
         public void HandleMove(Vector2 vector) => _moveDirection = vector;
@@ -87,4 +92,3 @@ namespace Etheria.Features.Actor
         }
     }
 }
-
