@@ -1,10 +1,9 @@
-using Etheria.Features.Camera;
 using Etheria.Game.Camera;
 using Etheria.Game.Player;
 
-namespace Etheria.Features.Input
+namespace Etheria.Game.Input
 {
-    public interface IGameplayInputRouter
+    public interface IGameInputRouter
     {
         void SetHandler(IActorInputHandler handler);
         void RemoveHandler(IActorInputHandler handler);

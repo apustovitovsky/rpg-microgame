@@ -1,6 +1,6 @@
 using Etheria.Core.DI;
-using Etheria.Features.Input;
 using Etheria.Game.Camera;
+using Etheria.Game.Input;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -21,9 +21,8 @@ namespace Etheria.Features.Camera
 
             builder.RegisterEntryPoint<PlayerAvatarCameraBinder>(Lifetime.Singleton);
 
-            builder.RegisterEntryPoint<PlayerLookService>(Lifetime.Singleton)
-                .As<IPlayerLookService>()
-                .As<IPlayerLookInputHandler>();
+            builder.Register<PlayerLookService>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
 
             builder.RegisterEntryPoint<CameraService>(Lifetime.Singleton)
                 .As<ICameraInputHandler>()
@@ -33,7 +32,7 @@ namespace Etheria.Features.Camera
             {
                 var lookService = container.Resolve<IPlayerLookInputHandler>();
                 var cameraService = container.Resolve<ICameraInputHandler>();
-                var inputService = container.Resolve<IGameplayInputRouter>();
+                var inputService = container.Resolve<IGameInputRouter>();
 
                 inputService.SetHandler(lookService);
                 inputService.SetHandler(cameraService);

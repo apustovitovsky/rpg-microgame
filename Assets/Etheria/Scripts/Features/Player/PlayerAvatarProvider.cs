@@ -3,7 +3,7 @@ using Etheria.Game.Player;
 
 namespace Etheria.Features.Player
 {
-    public sealed class ControlledActorProvider : IPlayerAvatarProvider
+    public sealed class PlayerAvatarProvider : IPlayerAvatarProvider
     {
         public PlayerAvatarContext? Current { get; private set; }
 

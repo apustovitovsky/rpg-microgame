@@ -8,7 +8,7 @@ namespace Etheria.Features.Targeting
 {
     [CreateAssetMenu(
         fileName = "TargetSystemInstaller",
-        menuName = "Etheria/Gameplay/Targeting/Target System Installer")]
+        menuName = "Etheria/Features/Targeting/Target Feature Installer")]
     public class TargetingFeatureInstallerSO : ScopeInstallerSO
     {
         [SerializeField] private TargetingSettingsSO _targetingSettings;

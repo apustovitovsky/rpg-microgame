@@ -1,6 +1,6 @@
 using System;
-using Etheria.Features.Camera;
 using Etheria.Game.Camera;
+using Etheria.Game.Input;
 using Etheria.Game.Player;
 using Etheria.Game.Targeting;
 using UnityEngine;
@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace Etheria.Features.Input
 {
-    public sealed class GameplayInputRouter : IGameplayInputRouter, InputSystem_Actions.IPlayerActions, IDisposable
+    public sealed class GameInputRouter : IGameInputRouter, InputSystem_Actions.IPlayerActions, IDisposable
     {
         private readonly InputSystem_Actions _input;
         private readonly ITargetingService _targetingService;
@@ -16,7 +16,7 @@ namespace Etheria.Features.Input
         private IPlayerLookInputHandler _lookHandler;
         private ICameraInputHandler _cameraHandler;
 
-        public GameplayInputRouter(
+        public GameInputRouter(
             InputSystem_Actions input,
             ITargetingService targetingService)
         {

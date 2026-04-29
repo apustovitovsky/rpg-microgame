@@ -1,21 +1,21 @@
 using System;
+using Etheria.Game.Input;
 using Etheria.Game.Player;
-using Etheria.Game.Targeting;
 using VContainer.Unity;
 
-namespace Etheria.Features.Targeting
+namespace Etheria.Features.Input
 {
-    public sealed class ControlledTargetBinder : IStartable, IDisposable
+    public sealed class PlayerAvatarInputBinder : IStartable, IDisposable
     {
         private readonly IPlayerAvatarProvider _playerAvatarProvider;
-        private readonly IControlledTargetProvider _controlledTargetProvider;
+        private readonly IGameInputRouter _gameInputRouter;
 
-        public ControlledTargetBinder(
+        public PlayerAvatarInputBinder(
             IPlayerAvatarProvider playerAvatarProvider,
-            IControlledTargetProvider controlledTargetProvider)
+            IGameInputRouter gameInputRouter)
         {
             _playerAvatarProvider = playerAvatarProvider;
-            _controlledTargetProvider = controlledTargetProvider;
+            _gameInputRouter = gameInputRouter;
         }
 
         public void Start()
@@ -33,11 +33,13 @@ namespace Etheria.Features.Targeting
         {
             if (context.HasValue)
             {
-                _controlledTargetProvider.SetTarget(context.Value.Targetable);
+                _gameInputRouter.SetHandler(context.Value.InputHandler);
                 return;
             }
 
-            _controlledTargetProvider.ClearTarget();
+            var currentHandler = _playerAvatarProvider.Current?.InputHandler;
+            if (currentHandler != null)
+                _gameInputRouter.RemoveHandler(currentHandler);
         }
     }
 }

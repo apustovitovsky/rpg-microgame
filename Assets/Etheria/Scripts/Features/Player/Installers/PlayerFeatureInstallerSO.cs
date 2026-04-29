@@ -1,6 +1,7 @@
 using Etheria.Core.DI;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 
 namespace Etheria.Features.Player
@@ -15,8 +16,10 @@ namespace Etheria.Features.Player
             builder.Register<PlayerController>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<ControlledActorProvider>(Lifetime.Singleton)
+            builder.Register<PlayerAvatarProvider>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
+
+            builder.RegisterEntryPoint<PlayerAvatarFacingDriver>(Lifetime.Singleton);
         }
     }
 }

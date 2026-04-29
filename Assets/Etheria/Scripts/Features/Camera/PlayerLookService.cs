@@ -1,15 +1,11 @@
-using System;
 using Etheria.Game.Camera;
-using Etheria.Game.Player;
 using UnityEngine;
-using VContainer.Unity;
 
 namespace Etheria.Features.Camera
 {
-    public sealed class PlayerLookService : IPlayerLookService, IPlayerLookInputHandler, ITickable, IDisposable
+    public sealed class PlayerLookService : IPlayerLookService, IPlayerLookInputHandler
     {
         private readonly CameraSettingsSO _cameraSettings;
-        private IActorInputHandler _actorInputHandler;
         private Transform _actorRoot;
         private Transform _cameraPivot;
         private float _pitch;
@@ -22,17 +18,6 @@ namespace Etheria.Features.Camera
         public PlayerLookService(CameraSettingsSO cameraSettings)
         {
             _cameraSettings = cameraSettings;
-        }
-
-        public void SetHandler(IActorInputHandler handler)
-        {
-            _actorInputHandler = handler;
-        }
-
-        public void RemoveHandler(IActorInputHandler handler)
-        {
-            if (_actorInputHandler == handler)
-                _actorInputHandler = null;
         }
 
         public void SetTarget(Transform actorRoot, Transform cameraPivot)
@@ -49,7 +34,7 @@ namespace Etheria.Features.Camera
             }
 
             _yaw = _actorRoot != null ? NormalizeAngle(_actorRoot.eulerAngles.y) : 0f;
-            Vector3 localEulerAngles = _cameraPivot.localEulerAngles;
+            var localEulerAngles = _cameraPivot.localEulerAngles;
             _pitch = NormalizeAngle(localEulerAngles.x);
             ApplyLookRotation();
         }
@@ -74,24 +59,6 @@ namespace Etheria.Features.Camera
                 _cameraSettings.MaxPitch);
 
             ApplyLookRotation();
-        }
-
-        public void Tick()
-        {
-            if (_cameraPivot == null || _actorInputHandler == null)
-                return;
-
-            Vector3 forward = _cameraPivot.forward;
-            if (forward.sqrMagnitude <= 0.001f)
-                return;
-
-            _actorInputHandler.HandleFace(forward);
-        }
-
-        public void Dispose()
-        {
-            RemoveTarget();
-            _actorInputHandler = null;
         }
 
         private void ApplyLookRotation()
@@ -121,4 +88,3 @@ namespace Etheria.Features.Camera
         }
     }
 }
-
