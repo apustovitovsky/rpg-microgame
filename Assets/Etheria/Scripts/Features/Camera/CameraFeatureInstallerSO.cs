@@ -1,5 +1,6 @@
 using Etheria.Core.DI;
 using Etheria.Features.Input;
+using Etheria.Game.Camera;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -8,8 +9,8 @@ namespace Etheria.Features.Camera
 {
     [CreateAssetMenu(
         fileName = "CameraSystemInstaller",
-        menuName = "Etheria/Gameplay/Camera/Camera System Installer")]
-    public class CameraSystemInstallerSO : ScopeInstallerSO
+        menuName = "Etheria/Features/Camera/Camera System Installer")]
+    public class CameraFeatureInstallerSO : ScopeInstallerSO
     {
         [SerializeField] private CameraSettingsSO _cameraSettings;
 
@@ -17,6 +18,8 @@ namespace Etheria.Features.Camera
         {
             builder.RegisterInstance(_cameraSettings);
             builder.RegisterComponentInNewPrefab(_cameraSettings.CameraPrefab, Lifetime.Singleton);
+
+            builder.RegisterEntryPoint<PlayerAvatarCameraBinder>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<PlayerLookService>(Lifetime.Singleton)
                 .As<IPlayerLookService>()

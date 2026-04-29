@@ -14,6 +14,9 @@ namespace Etheria.Features.Player
         {
             builder.Register<PlayerController>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
+
+            builder.Register<ControlledActorProvider>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
         }
     }
 }

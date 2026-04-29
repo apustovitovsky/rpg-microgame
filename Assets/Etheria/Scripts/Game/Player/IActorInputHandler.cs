@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Features
+namespace Etheria.Game.Player
 {
     public interface IActorInputHandler
     {

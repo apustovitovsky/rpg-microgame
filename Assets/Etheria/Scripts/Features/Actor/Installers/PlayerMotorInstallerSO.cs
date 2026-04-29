@@ -1,4 +1,5 @@
 using Etheria.Core.DI;
+using Etheria.Game.Player;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;

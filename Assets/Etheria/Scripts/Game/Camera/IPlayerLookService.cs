@@ -1,6 +1,7 @@
+using Etheria.Game.Player;
 using UnityEngine;
 
-namespace Etheria.Features.Camera
+namespace Etheria.Game.Camera
 {
     public interface IPlayerLookService
     {

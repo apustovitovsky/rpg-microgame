@@ -1,6 +1,7 @@
 using Etheria.Features.Actor;
 using Etheria.Features.Camera;
 using Etheria.Features.Input;
+using Etheria.Game.Camera;
 using Etheria.Game.Player;
 using Etheria.Game.Targeting;
 using VContainer;
@@ -12,20 +13,17 @@ namespace Etheria.Features.Player
     {
         private readonly IGameplayInputRouter _gameplayInput;
         private readonly IPlayerLookService _playerLookService;
-        private readonly ICameraService _cameraService;
         private IActorInputHandler _currentActorHandler;
-        private readonly IControlledTargetProvider _controlledTarget;
+        private readonly IPlayerAvatarProvider _controlledActorProvider;
 
         public PlayerController(
             IGameplayInputRouter gameplayInput,
             IPlayerLookService playerLookService,
-            ICameraService cameraService,
-            IControlledTargetProvider controlledTarget)
+            IPlayerAvatarProvider controlledActorProvider)
         {
             _gameplayInput = gameplayInput;
             _playerLookService = playerLookService;
-            _cameraService = cameraService;
-            _controlledTarget = controlledTarget;
+            _controlledActorProvider = controlledActorProvider;
         }
 
 
@@ -36,13 +34,23 @@ namespace Etheria.Features.Player
 
             var runtimeRefs = actorScope.Container.Resolve<ActorRuntimeRefs>();
             _currentActorHandler = actorScope.Container.Resolve<IActorInputHandler>();
-            _controlledTarget.SetTarget(actorScope.Container.Resolve<ITargetable>());
+
             var cameraPivot = runtimeRefs.CameraPivot != null ? runtimeRefs.CameraPivot : actorScope.transform;
+
+            var targetable = actorScope.Container.Resolve<ITargetable>();
+
+
+            var context = new PlayerAvatarContext(
+                actorScope.transform,
+                cameraPivot,
+                _currentActorHandler,
+                targetable);
+
+            _controlledActorProvider.Set(context);
 
             _gameplayInput.SetHandler(_currentActorHandler);
             _playerLookService.SetHandler(_currentActorHandler);
             _playerLookService.SetTarget(actorScope.transform, cameraPivot);
-            _cameraService.SetTarget(cameraPivot);
         }
 
         public void Unpossess()
@@ -52,10 +60,9 @@ namespace Etheria.Features.Player
             _gameplayInput.RemoveHandler(_currentActorHandler);
             _playerLookService.RemoveHandler(_currentActorHandler);
             _playerLookService.RemoveTarget();
-            _cameraService.RemoveTarget();
-            _controlledTarget.ClearTarget();
 
             _currentActorHandler = null;
+            _controlledActorProvider.Clear();
         }
     }
 }

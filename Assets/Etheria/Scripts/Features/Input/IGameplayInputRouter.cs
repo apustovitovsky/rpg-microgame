@@ -1,4 +1,6 @@
 using Etheria.Features.Camera;
+using Etheria.Game.Camera;
+using Etheria.Game.Player;
 
 namespace Etheria.Features.Input
 {

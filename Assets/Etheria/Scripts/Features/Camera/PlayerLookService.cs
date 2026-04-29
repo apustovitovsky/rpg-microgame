@@ -1,4 +1,6 @@
 using System;
+using Etheria.Game.Camera;
+using Etheria.Game.Player;
 using UnityEngine;
 using VContainer.Unity;
 

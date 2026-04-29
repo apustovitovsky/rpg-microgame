@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Unity.Cinemachine;
+using Etheria.Game.Camera;
 
 namespace Etheria.Features.Camera
 {

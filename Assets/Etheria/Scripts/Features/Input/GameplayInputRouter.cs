@@ -1,6 +1,7 @@
 using System;
 using Etheria.Features.Camera;
-using Etheria.Features.Targeting;
+using Etheria.Game.Camera;
+using Etheria.Game.Player;
 using Etheria.Game.Targeting;
 using UnityEngine;
 using UnityEngine.InputSystem;
