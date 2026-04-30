@@ -72,13 +72,13 @@ namespace Etheria.Features.Camera
 
             if (_targetingService.CurrentTarget == null)
             {
-                _yaw += value.x * _cameraSettings.HorizontalLookSensitivity;
+                // _yaw += value.x * _cameraSettings.HorizontalLookSensitivity;
             }
 
-            _pitch = Mathf.Clamp(
-                _pitch + value.y * _cameraSettings.VerticalLookSensitivity,
-                _cameraSettings.MinPitch,
-                _cameraSettings.MaxPitch);
+            // _pitch = Mathf.Clamp(
+                // _pitch + value.y * _cameraSettings.VerticalLookSensitivity,
+                // _cameraSettings.MinPitch,
+                // _cameraSettings.MaxPitch);
 
             ApplyLookRotation();
         }
@@ -107,6 +107,14 @@ namespace Etheria.Features.Camera
                 angle += 360f;
 
             return angle;
+        }
+
+        private static Vector3 GetFlatDirection(Vector3 direction, Vector3 fallback)
+        {
+            var flatDirection = Vector3.ProjectOnPlane(direction, Vector3.up);
+            return flatDirection.sqrMagnitude > 0.001f
+                ? flatDirection.normalized
+                : fallback;
         }
     }
 }

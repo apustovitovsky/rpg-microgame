@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07a9454a188ab1e499c4db8f91ae839c, type: 3}
   m_Name: GameplayConfig
   m_EditorClassIdentifier: Etheria.Gameplay::Etheria.Gameplay.GameplayConfigSO
-  <PlayerAvatarPrefab>k__BackingField: {fileID: -5166056413676136848, guid: dc6ea8f474f3e0444903ab18b1c0f4f7,
+  <PlayerAvatarPrefab>k__BackingField: {fileID: 8845867123207212297, guid: 61b8bfc8b36048843a337d1ad2f5b48c,
     type: 3}
-  <AdditionalPlayersCount>k__BackingField: 15
+  <AdditionalPlayersCount>k__BackingField: 10
   <AdditionalPlayersSpawnRadius>k__BackingField: 15

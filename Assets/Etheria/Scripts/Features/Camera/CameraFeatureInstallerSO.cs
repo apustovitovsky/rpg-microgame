@@ -16,27 +16,27 @@ namespace Etheria.Features.Camera
 
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
-            builder.RegisterInstance(_cameraSettings);
+            // builder.RegisterInstance(_cameraSettings);
             builder.RegisterComponentInNewPrefab(_cameraSettings.CameraPrefab, Lifetime.Singleton);
 
-            builder.RegisterEntryPoint<PlayerAvatarCameraBinder>(Lifetime.Singleton);
+            // builder.RegisterEntryPoint<PlayerAvatarCameraBinder>(Lifetime.Singleton);
 
-            builder.Register<PlayerLookService>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
+            // builder.Register<PlayerLookService>(Lifetime.Singleton)
+            //     .AsImplementedInterfaces();
 
-            builder.RegisterEntryPoint<CameraFollowService>(Lifetime.Singleton)
-                .As<ICameraInputHandler>()
-                .As<ICameraFollowService>();
+            // builder.RegisterEntryPoint<CameraFollowService>(Lifetime.Singleton)
+            //     .As<ICameraInputHandler>()
+            //     .As<ICameraFollowService>();
 
-            builder.RegisterBuildCallback(container =>
-            {
-                var lookService = container.Resolve<IPlayerLookInputHandler>();
-                var cameraService = container.Resolve<ICameraInputHandler>();
-                var inputService = container.Resolve<IGameInputRouter>();
+            // builder.RegisterBuildCallback(container =>
+            // {
+            //     var lookService = container.Resolve<IPlayerLookInputHandler>();
+            //     var cameraService = container.Resolve<ICameraInputHandler>();
+            //     var inputService = container.Resolve<IPlayerInputRouter>();
 
-                inputService.SetHandler(lookService);
-                inputService.SetHandler(cameraService);
-            });
+            //     // inputService.SetHandler(lookService);
+            //     // inputService.SetHandler(cameraService);
+            // });
         }
     }
 }

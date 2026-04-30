@@ -2,10 +2,10 @@ using Etheria.Core.Helpers;
 using Etheria.Game.Actor;
 using UnityEngine;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features
 {
     [DisallowMultipleComponent]
-    public sealed class ActorRuntimeRefs : MonoBehaviour,
+    public sealed class SyntyActorRuntimeRefs : MonoBehaviour,
         IAimPointProvider,
         IUiAnchorProvider,
         ICameraPivotProvider
@@ -19,7 +19,6 @@ namespace Etheria.Features.Actor
         [field: SerializeField, ReadOnly] public Transform CameraRoot { get; private set; }
         [field: SerializeField, ReadOnly] public Transform CameraPivot { get; private set; }
         [field: SerializeField, ReadOnly] public Transform UiAnchor { get; private set; }
-        [field: SerializeField, ReadOnly] public ActorHitbox[] Hitboxes { get; private set; }
 
         private void Reset()
         {
@@ -29,8 +28,6 @@ namespace Etheria.Features.Actor
         private void OnValidate()
         {
             AutoAssignIfMissing();
-
-            Hitboxes = GetComponentsInChildren<ActorHitbox>(true);
         }
 
         private void AutoAssignIfMissing()

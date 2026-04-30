@@ -43,10 +43,10 @@ namespace Etheria.Features.Camera
             if (_virtualCamera == null || _settings == null)
                 return;
 
-            _virtualCamera.Lens.FieldOfView = Mathf.Clamp(
-                _virtualCamera.Lens.FieldOfView + value,
-                _settings.MinFieldOfView,
-                _settings.MaxFieldOfView);
+            // _virtualCamera.Lens.FieldOfView = Mathf.Clamp(
+            //     _virtualCamera.Lens.FieldOfView + value,
+            // _settings.MinFieldOfView,
+            // _settings.MaxFieldOfView);
         }
 
 

@@ -1,16 +1,25 @@
-using Etheria.Game.Camera;
-using Etheria.Game.Player;
+using System;
 
-namespace Etheria.Game.Input
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+namespace Etheria.Features.Input
 {
     public interface IGameInputRouter
     {
-        void SetHandler(IActorInputHandler handler);
-        void RemoveHandler(IActorInputHandler handler);
-        void SetHandler(IPlayerLookInputHandler handler);
-        void RemoveHandler(IPlayerLookInputHandler handler);
-        void SetHandler(ICameraInputHandler handler);
-        void RemoveHandler(ICameraInputHandler handler);
+        Vector2 MouseDelta { get; }
+        Vector2 MoveComposite { get; }
+        float MovementInputDuration { get; set; }
+        bool MovementInputDetected { get; }
+
+        public Action OnAimActivated { get; set; }
+        public Action OnAimDeactivated { get; set; }
+        public Action OnCrouchActivated { get; set; }
+        public Action OnCrouchDeactivated { get; set; }
+        public Action OnJumpPerformed { get; set; }
+        public Action OnLockOnToggled { get; set; }
+        public Action OnSprintActivated { get; set; }
+        public Action OnSprintDeactivated { get; set; }
+        public Action OnWalkToggled { get; set; }
     }
 }
-

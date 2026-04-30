@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: ActorFeatureInstaller
   m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Actor.ActorFeatureInstallerSO
   _featureSettings: {fileID: 11400000, guid: 9e0fb4ac50fa3614da7b0a1c881aab78, type: 2}
+  _syntyLookSettings: {fileID: 11400000, guid: b4e6db44f5e1f984aa897ebc9e15643d, type: 2}

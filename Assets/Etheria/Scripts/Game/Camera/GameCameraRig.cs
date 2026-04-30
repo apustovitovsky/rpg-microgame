@@ -12,6 +12,8 @@ namespace Etheria.Game.Camera
         public Transform Transform => Camera.transform;
         public Vector3 Position => Transform.position;
         public Vector3 Forward => Transform.forward;
+        public Vector3 Right => Transform.right;
+        public Vector3 EulerAngles => Transform.eulerAngles;
 
         private UnityEngine.Camera Camera
         {

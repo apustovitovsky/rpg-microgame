@@ -20,6 +20,8 @@ namespace Etheria.Features.Player
                 .AsImplementedInterfaces();
 
             builder.RegisterEntryPoint<PlayerAvatarFacingDriver>(Lifetime.Singleton);
+
+            builder.Register<PlayerInputState>(Lifetime.Singleton);
         }
     }
 }

@@ -2,6 +2,8 @@
     "name": "Etheria.Features.Actor",
     "rootNamespace": "Etheria.Features.Actor",
     "references": [
+        "UniTask",
+        "Unity.Cinemachine",
         "VContainer",
         "Etheria.Core",
         "Etheria.Game",

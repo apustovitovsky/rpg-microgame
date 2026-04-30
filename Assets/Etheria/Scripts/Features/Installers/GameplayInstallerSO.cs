@@ -15,8 +15,6 @@ namespace Etheria.Features
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
             builder.RegisterInstance(_gameplayConfig);
-
-            builder.RegisterEntryPoint<GameplaySessionStarter>(Lifetime.Singleton);
         }
     }
 }

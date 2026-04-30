@@ -21,7 +21,7 @@ namespace Etheria.Game.DI
 
         public UniTask StartAsync(CancellationToken cancellation = default)
         {
-            if (_sceneCatalog.TryGet("World", out var entry) && entry != null)
+            if (_sceneCatalog.TryGet("SyntyWorld", out var entry) && entry != null)
             {
                 return _gameNavigator.LoadScene(entry, showLoading: true, cancellation);
             }
