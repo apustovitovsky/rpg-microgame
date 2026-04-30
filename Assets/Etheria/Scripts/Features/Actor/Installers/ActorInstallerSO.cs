@@ -17,18 +17,22 @@ namespace Etheria.Features.Actor
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
             builder.RegisterComponentInHierarchy<ActorRuntimeRefs>()
-                .UnderTransform(rootObject.transform);
+                .UnderTransform(rootObject.transform)
+                .AsSelf()
+                .AsImplementedInterfaces();
+
+            builder.Register<ActorInfo>(Lifetime.Singleton)
+                .As<IPlayerAvatarInfo>();
 
             builder.Register<ActorTargetable>(Lifetime.Singleton)
-                .WithParameter(rootObject.name)
-                .As<ITargetable>();
+                .AsImplementedInterfaces();
 
-            builder.Register<ControllableActor>(Lifetime.Singleton)
-                .As<IControllableActor>();
+            builder.Register<PlayerAvatar>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
 
             builder.RegisterBuildCallback(container =>
             {
-                rootObject.name = container.Resolve<INameGenerator>().Generate();
+                rootObject.name = container.Resolve<IPlayerAvatarInfo>().DisplayName;
                 var runtimeRefs = container.Resolve<ActorRuntimeRefs>();
                 var targetable = container.Resolve<ITargetable>();
 

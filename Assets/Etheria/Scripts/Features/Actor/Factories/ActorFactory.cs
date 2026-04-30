@@ -1,4 +1,5 @@
 
+using Etheria.Game.Actor;
 using Etheria.Game.Pooling;
 using UnityEngine;
 using VContainer.Unity;

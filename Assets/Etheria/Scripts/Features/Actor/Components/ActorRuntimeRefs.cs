@@ -1,18 +1,23 @@
+using Etheria.Core.Helpers;
+using Etheria.Game.Actor;
 using UnityEngine;
 
 namespace Etheria.Features.Actor
 {
     [DisallowMultipleComponent]
-    public sealed class ActorRuntimeRefs : MonoBehaviour
+    public sealed class ActorRuntimeRefs : MonoBehaviour,
+        IAimPointProvider,
+        IUiAnchorProvider,
+        ICameraPivotProvider
     {
         private const string DefaultAimPointName = "AimPoint";
         private const string DefaultCameraPivotName = "CameraPivot";
         private const string DefaultUiAnchorName = "UIAnchor";
 
-        [field: SerializeField] public Transform AimPoint { get; private set; }
-        [field: SerializeField] public Transform CameraPivot { get; private set; }
-        [field: SerializeField] public Transform UiAnchor { get; private set; }
-        [field: SerializeField] public ActorHitbox[] Hitboxes { get; private set; }
+        [field: SerializeField, ReadOnly] public Transform AimPoint { get; private set; }
+        [field: SerializeField, ReadOnly] public Transform CameraPivot { get; private set; }
+        [field: SerializeField, ReadOnly] public Transform UiAnchor { get; private set; }
+        [field: SerializeField, ReadOnly] public ActorHitbox[] Hitboxes { get; private set; }
 
         private void Reset()
         {

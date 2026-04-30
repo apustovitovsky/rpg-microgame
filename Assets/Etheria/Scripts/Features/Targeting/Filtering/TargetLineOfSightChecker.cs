@@ -1,5 +1,6 @@
-using Etheria.Features.Actor;
+
 using Etheria.Game.Camera;
+using Etheria.Game.Targeting;
 using UnityEngine;
 
 namespace Etheria.Features.Targeting
@@ -47,7 +48,7 @@ namespace Etheria.Features.Targeting
                 return true;
             }
 
-            return hit.collider.TryGetComponent<ActorHitbox>(out var hitbox)
+            return hit.collider.TryGetComponent<ITargetableProvider>(out var hitbox)
                 && ReferenceEquals(hitbox.Targetable, candidate.Targetable);
         }
     }

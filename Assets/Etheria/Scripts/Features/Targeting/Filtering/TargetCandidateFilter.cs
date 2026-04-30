@@ -1,3 +1,4 @@
+using Etheria.Game.Actor;
 using Etheria.Game.Player;
 
 namespace Etheria.Features.Targeting
@@ -26,8 +27,8 @@ namespace Etheria.Features.Targeting
                 return false;
 
             var currentAvatar = _playerAvatarProvider.Current;
-            if (currentAvatar.HasValue &&
-                ReferenceEquals(candidate.Targetable, currentAvatar.Value.Targetable))
+            if (currentAvatar != null &&
+                candidate.Targetable.Id == currentAvatar.Info.Id)
             {
                 return false;
             }

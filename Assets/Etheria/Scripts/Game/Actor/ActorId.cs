@@ -11,9 +11,34 @@ namespace Etheria.Game.Actor
             Value = value;
         }
 
-        public bool Equals(ActorId other) => Value.Equals(other.Value);
-        public override bool Equals(object obj) => obj is ActorId other && Equals(other);
-        public override int GetHashCode() => Value.GetHashCode();
-        public override string ToString() => Value.ToString();
+        public bool Equals(ActorId other)
+        {
+            return Value.Equals(other.Value);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ActorId other && Equals(other);
+        }
+        
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+
+        public static bool operator ==(ActorId left, ActorId right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ActorId left, ActorId right)
+        {
+            return !left.Equals(right);
+        }
     }
 }

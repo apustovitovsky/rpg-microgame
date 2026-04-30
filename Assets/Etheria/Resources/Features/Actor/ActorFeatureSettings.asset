@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b326e8e65fdc4334a8add881ca9d91e5, type: 3}
-  m_Name: ActorNamingInstaller
-  m_EditorClassIdentifier: Etheria.Gameplay::Etheria.Gameplay.ActorNamingInstallerSO
+  m_Script: {fileID: 11500000, guid: 32d6489b81e4d234993ee8fa193e4aa9, type: 3}
+  m_Name: ActorFeatureSettings
+  m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Actor.ActorFeatureSettingsSO

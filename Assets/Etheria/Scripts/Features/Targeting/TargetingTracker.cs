@@ -1,4 +1,5 @@
 using System;
+using Etheria.Game.Actor;
 using Etheria.Game.Player;
 using Etheria.Game.Targeting;
 using VContainer.Unity;
@@ -9,7 +10,7 @@ namespace Etheria.Features.Targeting
     {
         private readonly ITargetingService _targetingService;
         private readonly IPlayerAvatarProvider _playerAvatarProvider;
-        private ITargetable _currentAvatarTargetable;
+        private Guid? _currentAvatarId;
 
         public TargetingTracker(
             ITargetingService targetingService,
@@ -21,7 +22,7 @@ namespace Etheria.Features.Targeting
 
         public void Start()
         {
-            _currentAvatarTargetable = _playerAvatarProvider.Current?.Targetable;
+            _currentAvatarId = _playerAvatarProvider.Current?.Info.Id;
             _playerAvatarProvider.Changed += OnPlayerAvatarChanged;
         }
 
@@ -42,13 +43,13 @@ namespace Etheria.Features.Targeting
             _targetingService.ClearTarget();
         }
 
-        private void OnPlayerAvatarChanged(PlayerAvatarContext? avatar)
+        private void OnPlayerAvatarChanged(IPlayerAvatar avatar)
         {
-            var nextTargetable = avatar?.Targetable;
-            if (ReferenceEquals(_currentAvatarTargetable, nextTargetable))
+            var nextAvatarId = avatar?.Info.Id;
+            if (_currentAvatarId == nextAvatarId)
                 return;
 
-            _currentAvatarTargetable = nextTargetable;
+            _currentAvatarId = nextAvatarId;
             _targetingService.ClearTarget();
         }
     }

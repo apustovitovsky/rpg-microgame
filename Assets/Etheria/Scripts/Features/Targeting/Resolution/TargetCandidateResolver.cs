@@ -1,4 +1,3 @@
-using Etheria.Features.Actor;
 using Etheria.Game.Camera;
 using Etheria.Game.Targeting;
 using UnityEngine;
@@ -18,7 +17,7 @@ namespace Etheria.Features.Targeting
         {
             candidate = default;
 
-            if (!hit.collider.TryGetComponent<ActorHitbox>(out var hitbox))
+            if (!hit.collider.TryGetComponent<ITargetableProvider>(out var hitbox))
                 return false;
 
             return TryResolve(hitbox.Targetable, out candidate);

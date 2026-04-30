@@ -2,7 +2,7 @@ using Etheria.Game.Common;
 
 namespace Etheria.Features.Actor
 {
-    public sealed class ActorNameGenerator : INameGenerator
+    public sealed class ActorNameGenerator : IPrefixedStringGenerator
     {
         private int _counter;
 

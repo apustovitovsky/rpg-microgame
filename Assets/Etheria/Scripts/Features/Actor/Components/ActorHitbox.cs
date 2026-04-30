@@ -1,12 +1,9 @@
-using Etheria.Features.Targeting;
 using Etheria.Game.Targeting;
 using UnityEngine;
-using VContainer;
 
 namespace Etheria.Features.Actor
 {
-
-    public sealed class ActorHitbox : MonoBehaviour
+    public sealed class ActorHitbox : MonoBehaviour, ITargetableProvider
     {
         public ITargetable Targetable { get; private set; }
 
@@ -16,5 +13,3 @@ namespace Etheria.Features.Actor
         }
     }
 }
-
-

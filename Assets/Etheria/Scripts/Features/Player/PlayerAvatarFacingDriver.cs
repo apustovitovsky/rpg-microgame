@@ -1,6 +1,7 @@
 using Etheria.Game.Targeting;
 using UnityEngine;
 using Etheria.Game.Camera;
+using Etheria.Game.Actor;
 using Etheria.Game.Player;
 using VContainer.Unity;
 
@@ -25,21 +26,21 @@ namespace Etheria.Features.Player
         public void Tick()
         {
             var avatar = _playerAvatarProvider.Current;
-            if (!avatar.HasValue)
+            if (avatar == null)
                 return;
 
             var currentTarget = _targetingService.CurrentTarget;
-            var facing = GetFacing(avatar.Value, currentTarget);
+            var facing = GetFacing(avatar, currentTarget);
             if (facing.sqrMagnitude <= 0.001f)
                 return;
 
             if (currentTarget != null)
                 _playerLookService.SetYawFromWorldDirection(facing);
 
-            avatar.Value.Handlers.Facing.HandleFace(facing);
+            avatar.FacingHandler.HandleFace(facing);
         }
 
-        private Vector3 GetFacing(PlayerAvatarContext avatar, ITargetable currentTarget)
+        private Vector3 GetFacing(IPlayerAvatar avatar, ITargetable currentTarget)
         {
             if (currentTarget?.AimPoint != null)
             {

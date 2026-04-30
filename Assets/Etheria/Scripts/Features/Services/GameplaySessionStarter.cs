@@ -1,6 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Etheria.Features.Actor;
+using Etheria.Game.Actor;
 using Etheria.Game.Player;
 using UnityEngine;
 using VContainer.Unity;
@@ -25,13 +25,13 @@ namespace Etheria.Features
 
         public async UniTask StartAsync(CancellationToken cancellation = default)
         {
-            var player = _actorFactory.Create(_gameplayConfig.PlayerPrefab, Vector3.zero);
+            var player = _actorFactory.Create(_gameplayConfig.PlayerAvatarPrefab, Vector3.zero);
             _possessionService.Possess(player);
 
             for (var i = 0; i < _gameplayConfig.AdditionalPlayersCount; i++)
             {
                 var spawnPosition = GetRandomSpawnPosition(_gameplayConfig.AdditionalPlayersSpawnRadius);
-                _actorFactory.Create(_gameplayConfig.PlayerPrefab, spawnPosition);
+                _actorFactory.Create(_gameplayConfig.PlayerAvatarPrefab, spawnPosition);
             }
 
             await UniTask.CompletedTask;

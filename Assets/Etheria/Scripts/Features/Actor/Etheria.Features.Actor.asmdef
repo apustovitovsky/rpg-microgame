@@ -1,0 +1,19 @@
+{
+    "name": "Etheria.Features.Actor",
+    "rootNamespace": "Etheria.Features.Actor",
+    "references": [
+        "VContainer",
+        "Etheria.Core",
+        "Etheria.Game",
+        "Etheria.Features"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

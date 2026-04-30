@@ -1,12 +1,15 @@
+using System;
+using Etheria.Game.Actor;
+using Etheria.Game.Common;
 using UnityEngine;
 
 namespace Etheria.Game.Targeting
 {
-    public interface ITargetable
+    public interface ITargetable : IIdentifiable<Guid>
     {
-        public string DisplayName { get; }
-        public Transform AimPoint { get; }
-        public Transform UiAnchor { get; }
+        Transform Root { get; }
+        Transform AimPoint { get; }
+        Transform UiAnchor { get; }
         bool IsTargetable { get; }
     }
 }

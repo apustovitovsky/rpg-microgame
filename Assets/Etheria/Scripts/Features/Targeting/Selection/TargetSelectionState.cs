@@ -19,7 +19,7 @@ namespace Etheria.Features.Targeting
                 return new TargetSelectionResult(TargetSelectionStatus.AlreadySelected, target);
 
             CurrentTarget = target;
-            Debug.Log($"Target acquired: {CurrentTarget.DisplayName}");
+            Debug.Log($"Target acquired: {CurrentTarget.Id}");
             TargetChanged?.Invoke(CurrentTarget);
             return new TargetSelectionResult(TargetSelectionStatus.Selected, CurrentTarget);
         }
@@ -30,7 +30,7 @@ namespace Etheria.Features.Targeting
                 return TargetSelectionResult.None;
 
             var previousTarget = CurrentTarget;
-            Debug.Log($"TargetingService: clearing target '{CurrentTarget.DisplayName}'.");
+            Debug.Log($"TargetingService: clearing target '{CurrentTarget.Id}'.");
             CurrentTarget = null;
             TargetChanged?.Invoke(null);
             return new TargetSelectionResult(TargetSelectionStatus.Cleared, previousTarget);

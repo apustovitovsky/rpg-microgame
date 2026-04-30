@@ -1,6 +1,6 @@
 namespace Etheria.Game.Common
 {
-    public interface INameGenerator
+    public interface IPrefixedStringGenerator
     {
         string Generate(string prefix = "");
     }

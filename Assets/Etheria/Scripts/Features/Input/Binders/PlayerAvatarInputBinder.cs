@@ -1,4 +1,5 @@
 using System;
+using Etheria.Game.Actor;
 using Etheria.Game.Input;
 using Etheria.Game.Player;
 using VContainer.Unity;
@@ -30,7 +31,7 @@ namespace Etheria.Features.Input
             _playerAvatarProvider.Changed -= OnPlayerAvatarChanged;
         }
 
-        private void OnPlayerAvatarChanged(PlayerAvatarContext? context)
+        private void OnPlayerAvatarChanged(IPlayerAvatar avatar)
         {
             if (_currentHandler != null)
             {
@@ -38,9 +39,9 @@ namespace Etheria.Features.Input
                 _currentHandler = null;
             }
 
-            if (context.HasValue)
+            if (avatar != null)
             {
-                _currentHandler = context.Value.Handlers.Input;
+                _currentHandler = avatar.InputHandler;
                 _gameInputRouter.SetHandler(_currentHandler);
                 return;
             }

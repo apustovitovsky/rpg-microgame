@@ -19,14 +19,8 @@ namespace Etheria.Features.Player
         {
             Unpossess();
 
-            var controllableActor = actorScope.Container.Resolve<IControllableActor>();
-            var context = new PlayerAvatarContext(
-                controllableActor.Root,
-                controllableActor.CameraPivot,
-                controllableActor.Handlers,
-                controllableActor.Targetable);
-
-            _controlledActorProvider.Set(context);
+            var controllableActor = actorScope.Container.Resolve<IPlayerAvatar>();
+            _controlledActorProvider.Set(controllableActor);
         }
 
         public void Unpossess()

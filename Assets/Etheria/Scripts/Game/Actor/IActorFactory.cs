@@ -1,7 +1,7 @@
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Game.Actor
 {
     public interface IActorFactory
     {

@@ -1,7 +1,4 @@
 using Etheria.Core.DI;
-using Etheria.Features.Actor;
-
-
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -20,9 +17,6 @@ namespace Etheria.Features
             builder.RegisterInstance(_gameplayConfig);
 
             builder.RegisterEntryPoint<GameplaySessionStarter>(Lifetime.Singleton);
-
-            builder.Register<ActorFactory>(Lifetime.Singleton)
-                .As<IActorFactory>();
         }
     }
 }

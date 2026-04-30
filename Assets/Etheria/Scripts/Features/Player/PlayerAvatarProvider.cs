@@ -1,17 +1,18 @@
 using System;
+using Etheria.Game.Actor;
 using Etheria.Game.Player;
 
 namespace Etheria.Features.Player
 {
     public sealed class PlayerAvatarProvider : IPlayerAvatarProvider
     {
-        public PlayerAvatarContext? Current { get; private set; }
+        public IPlayerAvatar Current { get; private set; }
 
-        public event Action<PlayerAvatarContext?> Changed;
+        public event Action<IPlayerAvatar> Changed;
 
-        public void Set(PlayerAvatarContext context)
+        public void Set(IPlayerAvatar avatar)
         {
-            Current = context;
+            Current = avatar;
             Changed?.Invoke(Current);
         }
 

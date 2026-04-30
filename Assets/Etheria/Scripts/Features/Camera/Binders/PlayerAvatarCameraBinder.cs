@@ -1,4 +1,5 @@
 using System;
+using Etheria.Game.Actor;
 using Etheria.Game.Camera;
 using Etheria.Game.Player;
 using VContainer.Unity;
@@ -32,12 +33,10 @@ namespace Etheria.Features.Camera
             _playerAvatarProvider.Changed -= OnPlayerAvatarChanged;
         }
 
-        private void OnPlayerAvatarChanged(PlayerAvatarContext? context)
+        private void OnPlayerAvatarChanged(IPlayerAvatar avatar)
         {
-            if (context.HasValue)
+            if (avatar != null)
             {
-                var avatar = context.Value;
-
                 _playerLookService.SetTarget(avatar.Root, avatar.CameraPivot);
                 _cameraFollowService.SetTarget(avatar.CameraPivot);
                 return;
