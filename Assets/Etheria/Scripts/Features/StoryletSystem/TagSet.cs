@@ -19,8 +19,9 @@ namespace Etheria.Features.StoryletSystem
             _bits3 = bits3;
         }
 
-        public static TagSet FromIndex(int index)
+        public static TagSet FromId(TagId tagId)
         {
+            var index = tagId.Value;
             var wordIndex = index >> 6;
             var bit = 1UL << (index & 63);
 
@@ -30,7 +31,7 @@ namespace Etheria.Features.StoryletSystem
                 1 => new TagSet(0, bit),
                 2 => new TagSet(0, 0, bit),
                 3 => new TagSet(0, 0, 0, bit),
-                _ => throw new System.ArgumentOutOfRangeException(nameof(index))
+                _ => throw new System.ArgumentOutOfRangeException(nameof(tagId))
             };
         }
 
