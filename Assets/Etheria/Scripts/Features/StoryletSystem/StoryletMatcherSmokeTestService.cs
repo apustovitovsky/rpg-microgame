@@ -178,6 +178,10 @@ namespace Etheria.Features.StoryletSystem
                             new[]
                             {
                                 AttributeRequirement.Min(WealthAttributeId, 0f)
+                            },
+                            new[]
+                            {
+                                new AttributePreference(WealthAttributeId, 1f, 20f, 100f)
                             }),
                         new("role.bodyguard", QueryWithAllOf(WarriorTag))
                     }),

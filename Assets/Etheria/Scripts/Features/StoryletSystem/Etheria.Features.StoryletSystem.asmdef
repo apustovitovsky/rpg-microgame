@@ -2,6 +2,7 @@
     "name": "Etheria.Features.StoryletSystem",
     "rootNamespace": "Etheria.Features.StoryletSystem",
     "references": [
+        "Unity.Mathematics",
         "VContainer",
         "Etheria.Core",
         "Etheria.Game",

@@ -6,19 +6,25 @@ namespace Etheria.Features.StoryletSystem
         public Role(
             string id,
             TagQuery query,
-            AttributeRequirement[] attributeRequirements = null)
+            AttributeRequirement[] attributeRequirements = null,
+            AttributePreference[] attributePreferences = null)
         {
             Id = id;
             Query = query;
             AttributeRequirements = attributeRequirements ?? EmptyAttributeRequirements;
+            AttributePreferences = attributePreferences ?? EmptyAttributePreferences;
         }
 
         public string Id { get; }
         public TagQuery Query { get; }
         public AttributeRequirement[] AttributeRequirements { get; }
+        public AttributePreference[] AttributePreferences { get; }
 
         private static AttributeRequirement[] EmptyAttributeRequirements { get; } =
             Array.Empty<AttributeRequirement>();
+
+        private static AttributePreference[] EmptyAttributePreferences { get; } =
+            Array.Empty<AttributePreference>();
     }
 
 
