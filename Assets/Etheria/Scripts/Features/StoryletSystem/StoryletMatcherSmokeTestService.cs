@@ -7,6 +7,8 @@ namespace Etheria.Features.StoryletSystem
 {
     public sealed class StoryletMatcherSmokeTestService : IStartable
     {
+        private static readonly AttributeId WealthAttributeId = new(0);
+
         private static readonly TagSet WarriorTag = TagSet.FromId(new TagId(0));
         private static readonly TagSet BanditTag = TagSet.FromId(new TagId(1));
         private static readonly TagSet PriestTag = TagSet.FromId(new TagId(2));
@@ -52,7 +54,8 @@ namespace Etheria.Features.StoryletSystem
 
             foreach (var entity in entities)
             {
-                builder.AppendLine($"  - {entity.Id,-24} [{DescribeTags(entity.Tags)}]");
+                builder.AppendLine(
+                    $"  - {entity.Id,-24} [{DescribeTags(entity.Tags)}] [{DescribeAttributes(entity.Attributes)}]");
             }
 
             builder.AppendLine();
@@ -118,13 +121,22 @@ namespace Etheria.Features.StoryletSystem
             {
                 new("entity.city_guard", WarriorTag | UrbanTag),
                 new("entity.temple_guard", WarriorTag | PriestTag | UrbanTag),
-                new("entity.hedge_knight", WarriorTag | NobleTag | RuralTag),
+                new(
+                    "entity.hedge_knight",
+                    WarriorTag | NobleTag | RuralTag,
+                    BuildAttributes((WealthAttributeId, 35f))),
                 new("entity.mercenary", WarriorTag | MercenaryTag | ScoutTag),
                 new("entity.outlaw_scout", BanditTag | ScoutTag | OutlawTag | RuralTag),
                 new("entity.bandit_raider", BanditTag | OutlawTag | RuralTag),
-                new("entity.smuggler", BanditTag | UrbanTag | ScoutTag),
+                new(
+                    "entity.smuggler",
+                    BanditTag | UrbanTag | ScoutTag,
+                    BuildAttributes((WealthAttributeId, 15f))),
                 new("entity.village_priest", PriestTag | RuralTag),
-                new("entity.court_mage", ArcaneTag | NobleTag | UrbanTag),
+                new(
+                    "entity.court_mage",
+                    ArcaneTag | NobleTag | UrbanTag,
+                    BuildAttributes((WealthAttributeId, 90f))),
                 new("entity.wandering_mystic", ArcaneTag | PriestTag | RuralTag)
             };
         }
@@ -160,7 +172,13 @@ namespace Etheria.Features.StoryletSystem
                     1.3f,
                     new List<Role>
                     {
-                        new("role.noble", QueryWithAllOf(NobleTag)),
+                        new(
+                            "role.noble",
+                            QueryWithAllOf(NobleTag),
+                            new[]
+                            {
+                                AttributeRequirement.Min(WealthAttributeId, 0f)
+                            }),
                         new("role.bodyguard", QueryWithAllOf(WarriorTag))
                     }),
                 new(
@@ -218,6 +236,42 @@ namespace Etheria.Features.StoryletSystem
             AppendTagName(names, tags, ArcaneTag, "Arcane");
             AppendTagName(names, tags, MercenaryTag, "Mercenary");
             return names.Count == 0 ? "None" : string.Join(", ", names);
+        }
+
+        private static string DescribeAttributes(AttributeSet attributes)
+        {
+            var parts = new List<string>();
+
+            if (attributes.TryGet(WealthAttributeId, out var wealth))
+            {
+                parts.Add($"Wealth={wealth:0.##}");
+            }
+
+            return parts.Count == 0 ? "No attributes" : string.Join(", ", parts);
+        }
+
+        private static AttributeSet BuildAttributes(params (AttributeId Id, float Value)[] pairs)
+        {
+            var maxIndex = -1;
+
+            foreach (var pair in pairs)
+            {
+                if (pair.Id.Value > maxIndex)
+                {
+                    maxIndex = pair.Id.Value;
+                }
+            }
+
+            var values = maxIndex >= 0
+                ? new float[maxIndex + 1]
+                : System.Array.Empty<float>();
+
+            foreach (var pair in pairs)
+            {
+                values[pair.Id.Value] = pair.Value;
+            }
+
+            return new AttributeSet(values);
         }
 
         private static void AppendTagName(
