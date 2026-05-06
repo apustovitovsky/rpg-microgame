@@ -1,0 +1,20 @@
+{
+    "name": "Etheria.Features.Camera",
+    "rootNamespace": "Etheria.Features.Camera",
+    "references": [
+        "VContainer",
+        "Unity.Cinemachine",
+        "Etheria.Core",
+        "Etheria.Game",
+        "Etheria.Features"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

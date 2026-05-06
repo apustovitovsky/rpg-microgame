@@ -1,0 +1,16 @@
+{
+    "name": "Etheria.Editor",
+    "rootNamespace": "Etheria.Editor",
+    "references": [
+        "Etheria.Core"
+    ],
+    "includePlatforms": ["Editor"],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

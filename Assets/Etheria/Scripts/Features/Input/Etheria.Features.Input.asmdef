@@ -1,0 +1,20 @@
+{
+    "name": "Etheria.Input",
+    "rootNamespace": "Etheria.Input",
+    "references": [
+        "VContainer",
+        "Unity.InputSystem",
+        "Etheria.InputActions",
+        "Etheria.Core",
+        "Etheria.Game"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

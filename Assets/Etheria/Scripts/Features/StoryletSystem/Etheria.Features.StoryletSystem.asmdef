@@ -1,0 +1,19 @@
+{
+    "name": "Etheria.Features.StoryletSystem",
+    "rootNamespace": "Etheria.Features.StoryletSystem",
+    "references": [
+        "VContainer",
+        "Etheria.Core",
+        "Etheria.Game",
+        "Etheria.Features"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,22 @@
+{
+    "name": "Etheria.Features",
+    "rootNamespace": "Etheria.Features",
+    "references": [
+        "UniTask",
+        "VContainer",
+        "Unity.Cinemachine",
+        "Unity.InputSystem",
+        "Etheria.InputActions",
+        "Etheria.Core",
+        "Etheria.Game"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
