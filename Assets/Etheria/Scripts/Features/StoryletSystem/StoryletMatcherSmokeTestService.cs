@@ -9,22 +9,22 @@ namespace Etheria.Features.StoryletSystem
     {
         private static readonly AttributeId WealthAttributeId = new(0);
 
-        private static readonly TagSet WarriorTag = TagSet.FromId(new TagId(0));
-        private static readonly TagSet BanditTag = TagSet.FromId(new TagId(1));
-        private static readonly TagSet PriestTag = TagSet.FromId(new TagId(2));
-        private static readonly TagSet ScoutTag = TagSet.FromId(new TagId(3));
-        private static readonly TagSet NobleTag = TagSet.FromId(new TagId(4));
-        private static readonly TagSet OutlawTag = TagSet.FromId(new TagId(5));
-        private static readonly TagSet RuralTag = TagSet.FromId(new TagId(6));
-        private static readonly TagSet UrbanTag = TagSet.FromId(new TagId(7));
-        private static readonly TagSet ArcaneTag = TagSet.FromId(new TagId(8));
-        private static readonly TagSet MercenaryTag = TagSet.FromId(new TagId(9));
+        private static readonly TagSet WarriorTag = TagSet.FromIndex(0);
+        private static readonly TagSet BanditTag = TagSet.FromIndex(1);
+        private static readonly TagSet PriestTag = TagSet.FromIndex(2);
+        private static readonly TagSet ScoutTag = TagSet.FromIndex(3);
+        private static readonly TagSet NobleTag = TagSet.FromIndex(4);
+        private static readonly TagSet OutlawTag = TagSet.FromIndex(5);
+        private static readonly TagSet RuralTag = TagSet.FromIndex(6);
+        private static readonly TagSet UrbanTag = TagSet.FromIndex(7);
+        private static readonly TagSet ArcaneTag = TagSet.FromIndex(8);
+        private static readonly TagSet MercenaryTag = TagSet.FromIndex(9);
 
-        private static readonly TagSet SwornAllyRelationTag = TagSet.FromId(new TagId(100));
-        private static readonly TagSet VassalRelationTag = TagSet.FromId(new TagId(101));
-        private static readonly TagSet TrustRelationTag = TagSet.FromId(new TagId(102));
-        private static readonly TagSet CovenantRelationTag = TagSet.FromId(new TagId(103));
-        private static readonly TagSet EnemyRelationTag = TagSet.FromId(new TagId(104));
+        private static readonly TagSet SwornAllyRelationTag = TagSet.FromIndex(100);
+        private static readonly TagSet VassalRelationTag = TagSet.FromIndex(101);
+        private static readonly TagSet TrustRelationTag = TagSet.FromIndex(102);
+        private static readonly TagSet CovenantRelationTag = TagSet.FromIndex(103);
+        private static readonly TagSet EnemyRelationTag = TagSet.FromIndex(104);
 
         private readonly GreedyStoryletMatcher _matcher;
 
