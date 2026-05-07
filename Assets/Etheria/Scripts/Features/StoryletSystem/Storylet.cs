@@ -5,18 +5,26 @@ namespace Etheria.Features.StoryletSystem
 {
     public sealed class Storylet
     {
-        public string Id { get; }
+        public StoryletId Id { get; }
+        public string Key { get; }
         public float Priority { get; }
         public IReadOnlyList<Role> Roles { get; }
 
         public Storylet(
-            string id,
+            StoryletId id,
+            string key,
             float priority,
             IReadOnlyList<Role> roles)
         {
             Id = id;
+            Key = key;
             Priority = priority;
             Roles = roles ?? throw new ArgumentNullException(nameof(roles));
+        }
+
+        public override string ToString()
+        {
+            return Key;
         }
     }
 

@@ -42,6 +42,12 @@ namespace Etheria.Features.StoryletSystem
             RelationIndex relationIndex)
         {
             var context = new StoryletMatchingContext(storylets, entities, relationIndex);
+
+            if (!context.ValidateEntities(entities, out _))
+            {
+                return new StoryletMatchResult();
+            }
+
             var freeEntities = new HashSet<Entity>(entities);
             var remainingStorylets = new HashSet<Storylet>(storylets);
 
@@ -136,7 +142,7 @@ namespace Etheria.Features.StoryletSystem
                 fitScore += _entityRoleFitEvaluator.Evaluate(roleAssignment.Entity, roleAssignment.Role);
             }
 
-                return
+            return
                 1000f
                 - roleScarcityCost * 100f
                 - entityOpportunityCost * 10f
@@ -198,8 +204,8 @@ namespace Etheria.Features.StoryletSystem
                 return error;
             }
 
-            var roleIds = string.Join(", ", storylet.Roles.Select(role => role.Id));
-            return $"No feasible relation-aware assignment remained for roles [{roleIds}].";
+            var roleKeys = string.Join(", ", storylet.Roles.Select(role => role.Key));
+            return $"No feasible relation-aware assignment remained for roles [{roleKeys}].";
         }
     }
 }

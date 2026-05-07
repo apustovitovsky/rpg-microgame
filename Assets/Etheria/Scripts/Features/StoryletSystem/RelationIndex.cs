@@ -5,7 +5,7 @@ namespace Etheria.Features.StoryletSystem
 {
     public sealed class RelationIndex
     {
-        private readonly Dictionary<(string From, string To), TagSet> _relations = new();
+        private readonly Dictionary<(EntityId From, EntityId To), TagSet> _relations = new();
 
         public RelationIndex(IReadOnlyList<EntityRelation> relations = null)
         {
@@ -33,18 +33,8 @@ namespace Etheria.Features.StoryletSystem
             _relations.Add(key, relation.Tags);
         }
 
-        public TagSet GetRelationTags(string fromEntityId, string toEntityId)
+        public TagSet GetRelationTags(EntityId fromEntityId, EntityId toEntityId)
         {
-            if (fromEntityId == null)
-            {
-                throw new ArgumentNullException(nameof(fromEntityId));
-            }
-
-            if (toEntityId == null)
-            {
-                throw new ArgumentNullException(nameof(toEntityId));
-            }
-
             return _relations.TryGetValue((fromEntityId, toEntityId), out var tags)
                 ? tags
                 : TagSet.Empty;

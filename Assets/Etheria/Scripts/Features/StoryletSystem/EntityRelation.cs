@@ -4,15 +4,15 @@ namespace Etheria.Features.StoryletSystem
 {
     public readonly struct EntityRelation
     {
-        public EntityRelation(string fromEntityId, string toEntityId, TagSet tags)
+        public EntityRelation(EntityId fromEntityId, EntityId toEntityId, TagSet tags)
         {
-            FromEntityId = fromEntityId ?? throw new ArgumentNullException(nameof(fromEntityId));
-            ToEntityId = toEntityId ?? throw new ArgumentNullException(nameof(toEntityId));
+            FromEntityId = fromEntityId;
+            ToEntityId = toEntityId;
             Tags = tags;
         }
 
-        public string FromEntityId { get; }
-        public string ToEntityId { get; }
+        public EntityId FromEntityId { get; }
+        public EntityId ToEntityId { get; }
         public TagSet Tags { get; }
     }
 }

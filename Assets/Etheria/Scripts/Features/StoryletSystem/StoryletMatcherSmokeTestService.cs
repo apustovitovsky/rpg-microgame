@@ -9,6 +9,37 @@ namespace Etheria.Features.StoryletSystem
     {
         private static readonly AttributeId WealthAttributeId = new(0);
 
+        private static readonly StoryletId SwornEscortStoryletId = new(0);
+        private static readonly StoryletId SecretAudienceStoryletId = new(1);
+        private static readonly StoryletId MutualRitualStoryletId = new(2);
+        private static readonly StoryletId GuardedSermonStoryletId = new(3);
+        private static readonly StoryletId CityPatrolStoryletId = new(4);
+        private static readonly StoryletId ContrabandDropStoryletId = new(5);
+
+        private static readonly RoleId NobleRoleId = new(0);
+        private static readonly RoleId KnightRoleId = new(1);
+        private static readonly RoleId PatronRoleId = new(2);
+        private static readonly RoleId EnvoyRoleId = new(3);
+        private static readonly RoleId RitualistRoleId = new(4);
+        private static readonly RoleId WitnessRoleId = new(5);
+        private static readonly RoleId PriestRoleId = new(6);
+        private static readonly RoleId GuardRoleId = new(7);
+        private static readonly RoleId PatrolGuardRoleId = new(8);
+        private static readonly RoleId SmugglerRoleId = new(9);
+        private static readonly RoleId LookoutRoleId = new(10);
+        private static readonly RoleId RunnerRoleId = new(11);
+
+        private static readonly EntityId NoblePatronEntityId = new(0);
+        private static readonly EntityId SwornKnightEntityId = new(1);
+        private static readonly EntityId RivalMercenaryEntityId = new(2);
+        private static readonly EntityId CityGuardEntityId = new(3);
+        private static readonly EntityId ScoutEnvoyEntityId = new(4);
+        private static readonly EntityId SmugglerEntityId = new(5);
+        private static readonly EntityId CourtPriestEntityId = new(6);
+        private static readonly EntityId RitualAcolyteEntityId = new(7);
+        private static readonly EntityId RitualMageEntityId = new(8);
+        private static readonly EntityId OutlawScoutEntityId = new(9);
+
         private static readonly TagSet WarriorTag = TagSet.FromIndex(0);
         private static readonly TagSet BanditTag = TagSet.FromIndex(1);
         private static readonly TagSet PriestTag = TagSet.FromIndex(2);
@@ -64,7 +95,7 @@ namespace Etheria.Features.StoryletSystem
             foreach (var entity in entities)
             {
                 builder.AppendLine(
-                    $"  - {entity.Id,-24} [{DescribeTags(entity.Tags)}] [{DescribeAttributes(entity.Attributes)}]");
+                    $"  - {entity.Key,-24} [{DescribeTags(entity.Tags)}] [{DescribeAttributes(entity.Attributes)}]");
             }
 
             builder.AppendLine();
@@ -73,11 +104,11 @@ namespace Etheria.Features.StoryletSystem
             foreach (var storylet in storylets)
             {
                 builder.AppendLine();
-                builder.AppendLine($"  {storylet.Id}  (priority {storylet.Priority:0.##})");
+                builder.AppendLine($"  {storylet.Key}  (priority {storylet.Priority:0.##})");
 
                 foreach (var role in storylet.Roles)
                 {
-                    builder.Append($"    {role.Id,-20} <- ");
+                    builder.Append($"    {role.Key,-20} <- ");
 
                     var foundAnyEntity = false;
 
@@ -93,7 +124,7 @@ namespace Etheria.Features.StoryletSystem
                             builder.Append(", ");
                         }
 
-                        builder.Append(entity.Id);
+                        builder.Append(entity.Key);
                         foundAnyEntity = true;
                     }
 
@@ -112,7 +143,7 @@ namespace Etheria.Features.StoryletSystem
             foreach (var relation in relations)
             {
                 builder.AppendLine(
-                    $"  - {relation.FromEntityId,-24} -> {relation.ToEntityId,-24} [{DescribeRelationTags(relation.Tags)}]");
+                    $"  - {DescribeEntityId(relation.FromEntityId),-24} -> {DescribeEntityId(relation.ToEntityId),-24} [{DescribeRelationTags(relation.Tags)}]");
             }
 
             builder.AppendLine();
@@ -122,11 +153,11 @@ namespace Etheria.Features.StoryletSystem
             foreach (var matchedStorylet in result.Matches)
             {
                 builder.AppendLine();
-                builder.AppendLine($"  {matchedStorylet.Storylet.Id}");
+                builder.AppendLine($"  {matchedStorylet.Storylet.Key}");
 
                 foreach (var assignment in matchedStorylet.Assignment)
                 {
-                    builder.AppendLine($"    {assignment.Role.Id,-20} -> {assignment.Entity.Id}");
+                    builder.AppendLine($"    {assignment.Role.Key,-20} -> {assignment.Entity.Key}");
                 }
             }
 
@@ -136,7 +167,7 @@ namespace Etheria.Features.StoryletSystem
             foreach (var unmatchedStorylet in result.UnmatchedStorylets)
             {
                 builder.AppendLine(
-                    $"  {unmatchedStorylet.Storylet.Id}  [reason: {unmatchedStorylet.Reason}]");
+                    $"  {unmatchedStorylet.Storylet.Key}  [reason: {unmatchedStorylet.Reason}]");
             }
 
             return builder.ToString();
@@ -146,16 +177,16 @@ namespace Etheria.Features.StoryletSystem
         {
             return new List<Entity>
             {
-                new("entity.noble_patron", NobleTag | UrbanTag, BuildAttributes((WealthAttributeId, 90f))),
-                new("entity.sworn_knight", WarriorTag | UrbanTag),
-                new("entity.rival_mercenary", WarriorTag | MercenaryTag | ScoutTag),
-                new("entity.city_guard", WarriorTag | UrbanTag),
-                new("entity.scout_envoy", ScoutTag | UrbanTag),
-                new("entity.smuggler", BanditTag | ScoutTag | UrbanTag, BuildAttributes((WealthAttributeId, 15f))),
-                new("entity.court_priest", PriestTag | UrbanTag),
-                new("entity.ritual_acolyte", PriestTag | RuralTag),
-                new("entity.ritual_mage", ArcaneTag | UrbanTag),
-                new("entity.outlaw_scout", BanditTag | ScoutTag | OutlawTag | RuralTag)
+                new(NoblePatronEntityId, "entity.noble_patron", NobleTag | UrbanTag, BuildAttributes((WealthAttributeId, 90f))),
+                new(SwornKnightEntityId, "entity.sworn_knight", WarriorTag | UrbanTag),
+                new(RivalMercenaryEntityId, "entity.rival_mercenary", WarriorTag | MercenaryTag | ScoutTag),
+                new(CityGuardEntityId, "entity.city_guard", WarriorTag | UrbanTag),
+                new(ScoutEnvoyEntityId, "entity.scout_envoy", ScoutTag | UrbanTag),
+                new(SmugglerEntityId, "entity.smuggler", BanditTag | ScoutTag | UrbanTag, BuildAttributes((WealthAttributeId, 15f))),
+                new(CourtPriestEntityId, "entity.court_priest", PriestTag | UrbanTag),
+                new(RitualAcolyteEntityId, "entity.ritual_acolyte", PriestTag | RuralTag),
+                new(RitualMageEntityId, "entity.ritual_mage", ArcaneTag | UrbanTag),
+                new(OutlawScoutEntityId, "entity.outlaw_scout", BanditTag | ScoutTag | OutlawTag | RuralTag)
             };
         }
 
@@ -164,11 +195,13 @@ namespace Etheria.Features.StoryletSystem
             return new List<Storylet>
             {
                 new(
+                    SwornEscortStoryletId,
                     "storylet.sworn_escort",
                     1.35f,
                     new List<Role>
                     {
                         new(
+                            NobleRoleId,
                             "role.noble",
                             QueryWithAllOf(NobleTag),
                             new[]
@@ -180,91 +213,101 @@ namespace Etheria.Features.StoryletSystem
                                 new AttributePreference(WealthAttributeId, 1f, 20f, 100f)
                             }),
                         new(
+                            KnightRoleId,
                             "role.knight",
                             QueryWithAllOf(WarriorTag),
                             relationRequirements: new[]
                             {
                                 new RelationRequirement(
-                                    "role.noble",
+                                    NobleRoleId,
                                     new TagQuery(TagSet.Empty, SwornAllyRelationTag | VassalRelationTag, TagSet.Empty),
                                     RelationDirection.FromSelfToTarget)
                             })
                     }),
                 new(
+                    SecretAudienceStoryletId,
                     "storylet.secret_audience",
                     1.28f,
                     new List<Role>
                     {
-                        new("role.patron", QueryWithAllOf(NobleTag)),
+                        new(PatronRoleId, "role.patron", QueryWithAllOf(NobleTag)),
                         new(
+                            EnvoyRoleId,
                             "role.envoy",
                             QueryWithAllOf(ScoutTag),
                             relationRequirements: new[]
                             {
                                 new RelationRequirement(
-                                    "role.patron",
+                                    PatronRoleId,
                                     new TagQuery(TagSet.Empty, TrustRelationTag, TagSet.Empty),
                                     RelationDirection.FromTargetToSelf)
                             })
                     }),
                 new(
+                    MutualRitualStoryletId,
                     "storylet.mutual_ritual",
                     1.3f,
                     new List<Role>
                     {
                         new(
+                            RitualistRoleId,
                             "role.ritualist",
                             QueryWithAllOf(ArcaneTag),
                             relationRequirements: new[]
                             {
                                 new RelationRequirement(
-                                    "role.witness",
+                                    WitnessRoleId,
                                     new TagQuery(TagSet.Empty, CovenantRelationTag, TagSet.Empty),
                                     RelationDirection.BothDirections)
                             }),
-                        new("role.witness", QueryWithAllOf(PriestTag))
+                        new(WitnessRoleId, "role.witness", QueryWithAllOf(PriestTag))
                     }),
                 new(
+                    GuardedSermonStoryletId,
                     "storylet.guarded_sermon",
                     1.22f,
                     new List<Role>
                     {
                         new(
+                            PriestRoleId,
                             "role.priest",
                             QueryWithAllOf(PriestTag),
                             relationRequirements: new[]
                             {
                                 new RelationRequirement(
-                                    "role.guard",
+                                    GuardRoleId,
                                     new TagQuery(TagSet.Empty, TagSet.Empty, EnemyRelationTag),
                                     RelationDirection.AnyDirection)
                             }),
-                        new("role.guard", QueryWithAllOf(WarriorTag))
+                        new(GuardRoleId, "role.guard", QueryWithAllOf(WarriorTag))
                     }),
                 new(
+                    CityPatrolStoryletId,
                     "storylet.city_patrol",
                     1.15f,
                     new List<Role>
                     {
-                        new("role.guard", QueryWithAllOf(WarriorTag | UrbanTag))
+                        new(PatrolGuardRoleId, "role.guard", QueryWithAllOf(WarriorTag | UrbanTag))
                     }),
                 new(
+                    ContrabandDropStoryletId,
                     "storylet.contraband_drop",
                     1.1f,
                     new List<Role>
                     {
-                        new("role.smuggler", QueryWithAllOf(BanditTag | UrbanTag)),
+                        new(SmugglerRoleId, "role.smuggler", QueryWithAllOf(BanditTag | UrbanTag)),
                         new(
+                            LookoutRoleId,
                             "role.lookout",
                             QueryWithAllOf(ScoutTag),
                             relationRequirements: new[]
                             {
                                 new RelationRequirement(
-                                    "role.smuggler",
+                                    SmugglerRoleId,
                                     new TagQuery(TagSet.Empty, TrustRelationTag, EnemyRelationTag),
                                     RelationDirection.AnyDirection)
                             }),
-                        new("role.runner", QueryWithAllOf(ScoutTag))
+                        new(RunnerRoleId, "role.runner", QueryWithAllOf(ScoutTag))
                     })
             };
         }
@@ -273,15 +316,33 @@ namespace Etheria.Features.StoryletSystem
         {
             return new List<EntityRelation>
             {
-                new("entity.sworn_knight", "entity.noble_patron", VassalRelationTag),
-                new("entity.noble_patron", "entity.sworn_knight", SwornAllyRelationTag),
-                new("entity.noble_patron", "entity.scout_envoy", TrustRelationTag),
-                new("entity.ritual_mage", "entity.ritual_acolyte", CovenantRelationTag),
-                new("entity.ritual_acolyte", "entity.ritual_mage", CovenantRelationTag),
-                new("entity.rival_mercenary", "entity.court_priest", EnemyRelationTag),
-                new("entity.court_priest", "entity.rival_mercenary", EnemyRelationTag),
-                new("entity.smuggler", "entity.outlaw_scout", TrustRelationTag),
-                new("entity.outlaw_scout", "entity.smuggler", TrustRelationTag)
+                new(SwornKnightEntityId, NoblePatronEntityId, VassalRelationTag),
+                new(NoblePatronEntityId, SwornKnightEntityId, SwornAllyRelationTag),
+                new(NoblePatronEntityId, ScoutEnvoyEntityId, TrustRelationTag),
+                new(RitualMageEntityId, RitualAcolyteEntityId, CovenantRelationTag),
+                new(RitualAcolyteEntityId, RitualMageEntityId, CovenantRelationTag),
+                new(RivalMercenaryEntityId, CourtPriestEntityId, EnemyRelationTag),
+                new(CourtPriestEntityId, RivalMercenaryEntityId, EnemyRelationTag),
+                new(SmugglerEntityId, OutlawScoutEntityId, TrustRelationTag),
+                new(OutlawScoutEntityId, SmugglerEntityId, TrustRelationTag)
+            };
+        }
+
+        private static string DescribeEntityId(EntityId entityId)
+        {
+            return entityId switch
+            {
+                var id when id == NoblePatronEntityId => "entity.noble_patron",
+                var id when id == SwornKnightEntityId => "entity.sworn_knight",
+                var id when id == RivalMercenaryEntityId => "entity.rival_mercenary",
+                var id when id == CityGuardEntityId => "entity.city_guard",
+                var id when id == ScoutEnvoyEntityId => "entity.scout_envoy",
+                var id when id == SmugglerEntityId => "entity.smuggler",
+                var id when id == CourtPriestEntityId => "entity.court_priest",
+                var id when id == RitualAcolyteEntityId => "entity.ritual_acolyte",
+                var id when id == RitualMageEntityId => "entity.ritual_mage",
+                var id when id == OutlawScoutEntityId => "entity.outlaw_scout",
+                _ => entityId.ToString()
             };
         }
 
@@ -301,27 +362,27 @@ namespace Etheria.Features.StoryletSystem
         private static string DescribeTags(TagSet tags)
         {
             var names = new List<string>();
-            AppendTagName(names, tags, WarriorTag, "Warrior");
-            AppendTagName(names, tags, BanditTag, "Bandit");
-            AppendTagName(names, tags, PriestTag, "Priest");
-            AppendTagName(names, tags, ScoutTag, "Scout");
-            AppendTagName(names, tags, NobleTag, "Noble");
-            AppendTagName(names, tags, OutlawTag, "Outlaw");
-            AppendTagName(names, tags, RuralTag, "Rural");
-            AppendTagName(names, tags, UrbanTag, "Urban");
-            AppendTagName(names, tags, ArcaneTag, "Arcane");
-            AppendTagName(names, tags, MercenaryTag, "Mercenary");
+            AppendTagName(names, tags, WarriorTag, "tag.warrior");
+            AppendTagName(names, tags, BanditTag, "tag.bandit");
+            AppendTagName(names, tags, PriestTag, "tag.priest");
+            AppendTagName(names, tags, ScoutTag, "tag.scout");
+            AppendTagName(names, tags, NobleTag, "tag.noble");
+            AppendTagName(names, tags, OutlawTag, "tag.outlaw");
+            AppendTagName(names, tags, RuralTag, "tag.rural");
+            AppendTagName(names, tags, UrbanTag, "tag.urban");
+            AppendTagName(names, tags, ArcaneTag, "tag.arcane");
+            AppendTagName(names, tags, MercenaryTag, "tag.mercenary");
             return names.Count == 0 ? "None" : string.Join(", ", names);
         }
 
         private static string DescribeRelationTags(TagSet tags)
         {
             var names = new List<string>();
-            AppendTagName(names, tags, SwornAllyRelationTag, "SwornAlly");
-            AppendTagName(names, tags, VassalRelationTag, "Vassal");
-            AppendTagName(names, tags, TrustRelationTag, "Trust");
-            AppendTagName(names, tags, CovenantRelationTag, "Covenant");
-            AppendTagName(names, tags, EnemyRelationTag, "Enemy");
+            AppendTagName(names, tags, SwornAllyRelationTag, "tag.sworn_ally");
+            AppendTagName(names, tags, VassalRelationTag, "tag.vassal");
+            AppendTagName(names, tags, TrustRelationTag, "tag.trust");
+            AppendTagName(names, tags, CovenantRelationTag, "tag.covenant");
+            AppendTagName(names, tags, EnemyRelationTag, "tag.enemy");
             return names.Count == 0 ? "None" : string.Join(", ", names);
         }
 

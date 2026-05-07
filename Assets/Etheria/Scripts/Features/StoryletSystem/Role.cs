@@ -4,20 +4,23 @@ namespace Etheria.Features.StoryletSystem
     public sealed class Role
     {
         public Role(
-            string id,
+            RoleId id,
+            string key,
             TagQuery query,
             AttributeRequirement[] attributeRequirements = null,
             AttributePreference[] attributePreferences = null,
             RelationRequirement[] relationRequirements = null)
         {
             Id = id;
+            Key = key;
             Query = query;
             AttributeRequirements = attributeRequirements ?? EmptyAttributeRequirements;
             AttributePreferences = attributePreferences ?? EmptyAttributePreferences;
             RelationRequirements = relationRequirements ?? EmptyRelationRequirements;
         }
 
-        public string Id { get; }
+        public RoleId Id { get; }
+        public string Key { get; }
         public TagQuery Query { get; }
         public AttributeRequirement[] AttributeRequirements { get; }
         public AttributePreference[] AttributePreferences { get; }
@@ -31,5 +34,10 @@ namespace Etheria.Features.StoryletSystem
 
         private static RelationRequirement[] EmptyRelationRequirements { get; } =
             Array.Empty<RelationRequirement>();
+
+        public override string ToString()
+        {
+            return Key;
+        }
     }
 }

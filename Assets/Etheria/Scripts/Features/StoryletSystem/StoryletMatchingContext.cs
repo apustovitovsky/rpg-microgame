@@ -8,7 +8,7 @@ namespace Etheria.Features.StoryletSystem
     {
         private readonly List<Role> _allRoles = new();
         private readonly Dictionary<Role, List<Entity>> _compatibleEntitiesByRole = new();
-        private readonly Dictionary<Storylet, Dictionary<string, Role>> _rolesByIdByStorylet = new();
+        private readonly Dictionary<Storylet, Dictionary<RoleId, Role>> _rolesByIdByStorylet = new();
 
         public StoryletMatchingContext(
             IReadOnlyList<Storylet> storylets,
@@ -90,26 +90,95 @@ namespace Etheria.Features.StoryletSystem
 
             if (!_rolesByIdByStorylet.TryGetValue(storylet, out var rolesById))
             {
-                error = $"Storylet '{storylet.Id}' has no registered roles.";
+                error = $"Storylet '{storylet.Key}' has no registered roles.";
                 return false;
             }
 
             if (rolesById.Count != storylet.Roles.Count)
             {
-                error = $"Storylet '{storylet.Id}' contains duplicate role ids.";
+                error = $"Storylet '{storylet.Key}' contains duplicate role ids.";
                 return false;
+            }
+
+            var roleKeys = new HashSet<string>(StringComparer.Ordinal);
+
+            foreach (var role in storylet.Roles)
+            {
+                if (role == null)
+                {
+                    continue;
+                }
+
+                if (string.IsNullOrWhiteSpace(role.Key))
+                {
+                    error = $"Storylet '{storylet.Key}' contains role with empty key.";
+                    return false;
+                }
+
+                if (!roleKeys.Add(role.Key))
+                {
+                    error = $"Storylet '{storylet.Key}' contains duplicate role keys.";
+                    return false;
+                }
             }
 
             foreach (var role in storylet.Roles)
             {
+                if (role == null)
+                {
+                    continue;
+                }
+
                 foreach (var requirement in role.RelationRequirements)
                 {
                     if (!rolesById.ContainsKey(requirement.TargetRoleId))
                     {
                         error =
-                            $"Storylet '{storylet.Id}' role '{role.Id}' references missing target role '{requirement.TargetRoleId}'.";
+                            $"Storylet '{storylet.Key}' role '{role.Key}' references missing target role '{requirement.TargetRoleId}'.";
                         return false;
                     }
+                }
+            }
+
+            return true;
+        }
+
+        public bool ValidateEntities(IReadOnlyList<Entity> entities, out string error)
+        {
+            error = null;
+
+            if (entities == null)
+            {
+                error = "Entities collection is null.";
+                return false;
+            }
+
+            var entityIds = new HashSet<EntityId>();
+            var entityKeys = new HashSet<string>(StringComparer.Ordinal);
+
+            foreach (var entity in entities)
+            {
+                if (entity == null)
+                {
+                    continue;
+                }
+
+                if (!entityIds.Add(entity.Id))
+                {
+                    error = $"Duplicate entity runtime id '{entity.Id}'.";
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(entity.Key))
+                {
+                    error = $"Entity '{entity.Id}' has empty key.";
+                    return false;
+                }
+
+                if (!entityKeys.Add(entity.Key))
+                {
+                    error = $"Duplicate entity key '{entity.Key}'.";
+                    return false;
                 }
             }
 
@@ -156,7 +225,7 @@ namespace Etheria.Features.StoryletSystem
             return count;
         }
 
-        public bool TryGetRoleById(Storylet storylet, string roleId, out Role role)
+        public bool TryGetRoleById(Storylet storylet, RoleId roleId, out Role role)
         {
             role = null;
 
@@ -165,18 +234,13 @@ namespace Etheria.Features.StoryletSystem
                 throw new ArgumentNullException(nameof(storylet));
             }
 
-            if (string.IsNullOrWhiteSpace(roleId))
-            {
-                throw new ArgumentException("Role id must be provided.", nameof(roleId));
-            }
-
             return _rolesByIdByStorylet.TryGetValue(storylet, out var rolesById)
                 && rolesById.TryGetValue(roleId, out role);
         }
 
         public bool TryGetAssignedEntity(
             IReadOnlyList<RoleAssignment> assignments,
-            string roleId,
+            RoleId roleId,
             out Entity entity)
         {
             entity = null;
@@ -306,7 +370,7 @@ namespace Etheria.Features.StoryletSystem
 
         private void RegisterStoryletRoles(Storylet storylet)
         {
-            var rolesById = new Dictionary<string, Role>(StringComparer.Ordinal);
+            var rolesById = new Dictionary<RoleId, Role>();
 
             foreach (var role in storylet.Roles.Where(role => role != null))
             {
