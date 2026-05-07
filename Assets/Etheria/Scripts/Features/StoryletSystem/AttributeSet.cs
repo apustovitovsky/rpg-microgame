@@ -1,3 +1,5 @@
+using System;
+
 namespace Etheria.Features.StoryletSystem
 {
     public readonly struct AttributeSet
@@ -34,6 +36,13 @@ namespace Etheria.Features.StoryletSystem
             return TryGet(attributeId, out var value)
                 ? value
                 : defaultValue;
+        }
+
+        public float[] ToArray()
+        {
+            return _values == null
+                ? Array.Empty<float>()
+                : (float[])_values.Clone();
         }
 
         public bool Matches(AttributeRequirement[] requirements)
