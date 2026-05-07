@@ -1,12 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Mathematics;
 
 namespace Etheria.Features.StoryletSystem
 {
     public sealed class GreedyStoryletMatcher
     {
+        private readonly IStoryletAssignmentBuilder _assignmentBuilder;
+        private readonly IEntityRoleFitEvaluator _entityRoleFitEvaluator;
+
+        public GreedyStoryletMatcher(
+            IStoryletAssignmentBuilder assignmentBuilder,
+            IEntityRoleFitEvaluator entityRoleFitEvaluator)
+        {
+            _assignmentBuilder = assignmentBuilder;
+            _entityRoleFitEvaluator = entityRoleFitEvaluator;
+        }
+
         public StoryletMatchResult Match(
             IReadOnlyList<Entity> entities,
             IReadOnlyList<Storylet> storylets)
@@ -28,7 +37,11 @@ namespace Etheria.Features.StoryletSystem
                         continue;
                     }
 
-                    if (!TryAssignStoryletGreedy(context, storylet, freeEntities, out var assignment))
+                    if (!_assignmentBuilder.TryBuildAssignment(
+                        context,
+                        storylet,
+                        freeEntities,
+                        out var assignment))
                     {
                         continue;
                     }
@@ -74,58 +87,6 @@ namespace Etheria.Features.StoryletSystem
             return true;
         }
 
-        private bool TryAssignStoryletGreedy(
-            StoryletMatchingContext context,
-            Storylet storylet,
-            HashSet<Entity> freeEntities,
-            out List<RoleAssignment> assignment)
-        {
-            assignment = new List<RoleAssignment>();
-            var locallyUsedEntities = new HashSet<Entity>();
-
-            var orderedRoles = storylet.Roles
-                .OrderBy(role => context.CountCompatibleEntities(role, freeEntities))
-                .ToList();
-
-            foreach (var role in orderedRoles)
-            {
-                Entity bestEntity = null;
-                float bestCost = float.PositiveInfinity;
-
-                foreach (var entity in context.GetCompatibleEntities(role))
-                {
-                    if (locallyUsedEntities.Contains(entity))
-                    {
-                        continue;
-                    }
-
-                    if (!freeEntities.Contains(entity))
-                    {
-                        continue;
-                    }
-
-                    var cost = EvaluateEntityCost(context, entity, role);
-
-                    if (cost < bestCost)
-                    {
-                        bestCost = cost;
-                        bestEntity = entity;
-                    }
-                }
-
-                if (bestEntity == null)
-                {
-                    assignment = null;
-                    return false;
-                }
-
-                locallyUsedEntities.Add(bestEntity);
-                assignment.Add(new RoleAssignment(role, bestEntity));
-            }
-
-            return true;
-        }
-
         private float EvaluateStoryletCandidate(
             StoryletMatchingContext context,
             Storylet storylet,
@@ -145,7 +106,7 @@ namespace Etheria.Features.StoryletSystem
             foreach (var roleAssignment in assignment)
             {
                 entityOpportunityCost += context.GetEntityVersatility(roleAssignment.Entity);
-                fitScore += GetEntityRoleFit(roleAssignment.Entity, roleAssignment.Role);
+                fitScore += _entityRoleFitEvaluator.Evaluate(roleAssignment.Entity, roleAssignment.Role);
             }
 
             return
@@ -179,7 +140,11 @@ namespace Etheria.Features.StoryletSystem
                     continue;
                 }
 
-                if (TryAssignStoryletGreedy(context, otherStorylet, simulatedFreeEntities, out _))
+                if (_assignmentBuilder.TryBuildAssignment(
+                    context,
+                    otherStorylet,
+                    simulatedFreeEntities,
+                    out _))
                 {
                     feasibleStoryletCountAfterAssignment++;
                 }
@@ -194,50 +159,6 @@ namespace Etheria.Features.StoryletSystem
             return
                 feasibleStoryletCountAfterAssignment * 100f
                 + currentCandidateScore;
-        }
-
-        private float EvaluateEntityCost(
-            StoryletMatchingContext context,
-            Entity entity,
-            Role role)
-        {
-            var versatility = context.GetEntityVersatility(entity);
-            var fit = GetEntityRoleFit(entity, role);
-
-            return
-                versatility * 10f
-                - fit * 1f;
-        }
-
-        private float GetEntityRoleFit(Entity entity, Role role)
-        {
-            if (role.AttributePreferences.Length == 0)
-            {
-                return 1f;
-            }
-
-            var weightedScoreSum = 0f;
-            var absoluteWeightSum = 0f;
-
-            foreach (var attributePreference in role.AttributePreferences)
-            {
-                var value = entity.Attributes.GetOrDefault(attributePreference.AttributeId);
-                var factorScore = math.smoothstep(
-                    attributePreference.Start,
-                    attributePreference.End,
-                    value);
-                weightedScoreSum += factorScore * attributePreference.Weight;
-                absoluteWeightSum += MathF.Abs(attributePreference.Weight);
-            }
-
-            if (absoluteWeightSum <= 0f)
-            {
-                return 1f;
-            }
-
-            var normalizedScore = weightedScoreSum / absoluteWeightSum;
-
-            return 1f + normalizedScore;
         }
     }
 }

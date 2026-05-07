@@ -14,6 +14,8 @@ namespace Etheria.Features.StoryletSystem
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
             builder.RegisterEntryPoint<StoryletMatcherSmokeTestService>(Lifetime.Singleton);
+            builder.Register<IEntityRoleFitEvaluator, AttributePreferenceEntityRoleFitEvaluator>(Lifetime.Singleton);
+            builder.Register<IStoryletAssignmentBuilder, GreedyStoryletAssignmentBuilder>(Lifetime.Singleton);
             builder.Register<GreedyStoryletMatcher>(Lifetime.Singleton);
         }
     }
