@@ -23,12 +23,19 @@ namespace Etheria.Features.StoryletSystem
     public sealed class StoryletMatchResult
     {
         private readonly List<MatchedStorylet> _matches = new();
+        private readonly List<UnmatchedStorylet> _unmatchedStorylets = new();
 
         public IReadOnlyList<MatchedStorylet> Matches => _matches;
+        public IReadOnlyList<UnmatchedStorylet> UnmatchedStorylets => _unmatchedStorylets;
 
         public void Add(Storylet storylet, IReadOnlyList<RoleAssignment> assignment)
         {
             _matches.Add(new MatchedStorylet(storylet, assignment));
+        }
+
+        public void AddUnmatched(Storylet storylet, string reason)
+        {
+            _unmatchedStorylets.Add(new UnmatchedStorylet(storylet, reason));
         }
     }
 
@@ -42,5 +49,17 @@ namespace Etheria.Features.StoryletSystem
 
         public Storylet Storylet { get; }
         public IReadOnlyList<RoleAssignment> Assignment { get; }
+    }
+
+    public sealed class UnmatchedStorylet
+    {
+        public UnmatchedStorylet(Storylet storylet, string reason)
+        {
+            Storylet = storylet ?? throw new ArgumentNullException(nameof(storylet));
+            Reason = reason ?? throw new ArgumentNullException(nameof(reason));
+        }
+
+        public Storylet Storylet { get; }
+        public string Reason { get; }
     }
 }

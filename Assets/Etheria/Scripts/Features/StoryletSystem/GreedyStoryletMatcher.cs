@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Etheria.Features.StoryletSystem
 {
@@ -20,7 +21,27 @@ namespace Etheria.Features.StoryletSystem
             IReadOnlyList<Entity> entities,
             IReadOnlyList<Storylet> storylets)
         {
-            var context = new StoryletMatchingContext(storylets, entities);
+            return Match(entities, storylets, relationIndex: null);
+        }
+
+        public StoryletMatchResult Match(
+            IReadOnlyList<Entity> entities,
+            IReadOnlyList<Storylet> storylets,
+            IReadOnlyList<EntityRelation> relations)
+        {
+            var relationIndex = relations == null
+                ? null
+                : new RelationIndex(relations);
+
+            return Match(entities, storylets, relationIndex);
+        }
+
+        public StoryletMatchResult Match(
+            IReadOnlyList<Entity> entities,
+            IReadOnlyList<Storylet> storylets,
+            RelationIndex relationIndex)
+        {
+            var context = new StoryletMatchingContext(storylets, entities, relationIndex);
             var freeEntities = new HashSet<Entity>(entities);
             var remainingStorylets = new HashSet<Storylet>(storylets);
 
@@ -77,6 +98,11 @@ namespace Etheria.Features.StoryletSystem
                 remainingStorylets.Remove(bestCandidate.Storylet);
             }
 
+            foreach (var storylet in remainingStorylets)
+            {
+                result.AddUnmatched(storylet, DescribeUnmatchedStorylet(context, storylet));
+            }
+
             return result;
         }
 
@@ -84,7 +110,7 @@ namespace Etheria.Features.StoryletSystem
             StoryletMatchingContext context,
             Storylet storylet)
         {
-            return true;
+            return context.ValidateStorylet(storylet, out _);
         }
 
         private float EvaluateStoryletCandidate(
@@ -96,6 +122,7 @@ namespace Etheria.Features.StoryletSystem
             float roleScarcityCost = 0f;
             float entityOpportunityCost = 0f;
             float fitScore = 0f;
+            var relationScore = context.EvaluateAssignmentRelationScore(assignment);
 
             foreach (var role in storylet.Roles)
             {
@@ -109,12 +136,13 @@ namespace Etheria.Features.StoryletSystem
                 fitScore += _entityRoleFitEvaluator.Evaluate(roleAssignment.Entity, roleAssignment.Role);
             }
 
-            return
+                return
                 1000f
                 - roleScarcityCost * 100f
                 - entityOpportunityCost * 10f
                 + storylet.Priority * 1f
-                + fitScore * 0.1f;
+                + fitScore * 0.1f
+                + relationScore * 25f;
         }
 
         private float EvaluateStoryletCandidateWithLookahead(
@@ -159,6 +187,19 @@ namespace Etheria.Features.StoryletSystem
             return
                 feasibleStoryletCountAfterAssignment * 100f
                 + currentCandidateScore;
+        }
+
+        private string DescribeUnmatchedStorylet(
+            StoryletMatchingContext context,
+            Storylet storylet)
+        {
+            if (!context.ValidateStorylet(storylet, out var error))
+            {
+                return error;
+            }
+
+            var roleIds = string.Join(", ", storylet.Roles.Select(role => role.Id));
+            return $"No feasible relation-aware assignment remained for roles [{roleIds}].";
         }
     }
 }

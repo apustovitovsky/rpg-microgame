@@ -20,6 +20,12 @@ namespace Etheria.Features.StoryletSystem
         private static readonly TagSet ArcaneTag = TagSet.FromId(new TagId(8));
         private static readonly TagSet MercenaryTag = TagSet.FromId(new TagId(9));
 
+        private static readonly TagSet SwornAllyRelationTag = TagSet.FromId(new TagId(100));
+        private static readonly TagSet VassalRelationTag = TagSet.FromId(new TagId(101));
+        private static readonly TagSet TrustRelationTag = TagSet.FromId(new TagId(102));
+        private static readonly TagSet CovenantRelationTag = TagSet.FromId(new TagId(103));
+        private static readonly TagSet EnemyRelationTag = TagSet.FromId(new TagId(104));
+
         private readonly GreedyStoryletMatcher _matcher;
 
         public StoryletMatcherSmokeTestService(GreedyStoryletMatcher matcher)
@@ -31,19 +37,22 @@ namespace Etheria.Features.StoryletSystem
         {
             var entities = BuildSampleEntities();
             var storylets = BuildSampleStorylets();
-            return _matcher.Match(entities, storylets);
+            var relations = BuildSampleRelations();
+            return _matcher.Match(entities, storylets, relations);
         }
 
         public void LogSample()
         {
             var entities = BuildSampleEntities();
             var storylets = BuildSampleStorylets();
-            var result = _matcher.Match(entities, storylets);
-            Debug.Log(Describe(entities, storylets, result));
+            var relations = BuildSampleRelations();
+            var result = _matcher.Match(entities, storylets, relations);
+            Debug.Log(Describe(entities, relations, storylets, result));
         }
 
         public string Describe(
             IReadOnlyList<Entity> entities,
+            IReadOnlyList<EntityRelation> relations,
             IReadOnlyList<Storylet> storylets,
             StoryletMatchResult result)
         {
@@ -98,6 +107,15 @@ namespace Etheria.Features.StoryletSystem
             }
 
             builder.AppendLine();
+            builder.AppendLine($"Relations: {relations.Count}");
+
+            foreach (var relation in relations)
+            {
+                builder.AppendLine(
+                    $"  - {relation.FromEntityId,-24} -> {relation.ToEntityId,-24} [{DescribeRelationTags(relation.Tags)}]");
+            }
+
+            builder.AppendLine();
             builder.AppendLine("=== Match Result ===");
             builder.AppendLine($"Matched storylets: {result.Matches.Count}");
 
@@ -112,6 +130,15 @@ namespace Etheria.Features.StoryletSystem
                 }
             }
 
+            builder.AppendLine();
+            builder.AppendLine($"Unmatched storylets: {result.UnmatchedStorylets.Count}");
+
+            foreach (var unmatchedStorylet in result.UnmatchedStorylets)
+            {
+                builder.AppendLine(
+                    $"  {unmatchedStorylet.Storylet.Id}  [reason: {unmatchedStorylet.Reason}]");
+            }
+
             return builder.ToString();
         }
 
@@ -119,25 +146,16 @@ namespace Etheria.Features.StoryletSystem
         {
             return new List<Entity>
             {
+                new("entity.noble_patron", NobleTag | UrbanTag, BuildAttributes((WealthAttributeId, 90f))),
+                new("entity.sworn_knight", WarriorTag | UrbanTag),
+                new("entity.rival_mercenary", WarriorTag | MercenaryTag | ScoutTag),
                 new("entity.city_guard", WarriorTag | UrbanTag),
-                new("entity.temple_guard", WarriorTag | PriestTag | UrbanTag),
-                new(
-                    "entity.hedge_knight",
-                    WarriorTag | NobleTag | RuralTag,
-                    BuildAttributes((WealthAttributeId, 35f))),
-                new("entity.mercenary", WarriorTag | MercenaryTag | ScoutTag),
-                new("entity.outlaw_scout", BanditTag | ScoutTag | OutlawTag | RuralTag),
-                new("entity.bandit_raider", BanditTag | OutlawTag | RuralTag),
-                new(
-                    "entity.smuggler",
-                    BanditTag | UrbanTag | ScoutTag,
-                    BuildAttributes((WealthAttributeId, 15f))),
-                new("entity.village_priest", PriestTag | RuralTag),
-                new(
-                    "entity.court_mage",
-                    ArcaneTag | NobleTag | UrbanTag,
-                    BuildAttributes((WealthAttributeId, 90f))),
-                new("entity.wandering_mystic", ArcaneTag | PriestTag | RuralTag)
+                new("entity.scout_envoy", ScoutTag | UrbanTag),
+                new("entity.smuggler", BanditTag | ScoutTag | UrbanTag, BuildAttributes((WealthAttributeId, 15f))),
+                new("entity.court_priest", PriestTag | UrbanTag),
+                new("entity.ritual_acolyte", PriestTag | RuralTag),
+                new("entity.ritual_mage", ArcaneTag | UrbanTag),
+                new("entity.outlaw_scout", BanditTag | ScoutTag | OutlawTag | RuralTag)
             };
         }
 
@@ -146,30 +164,8 @@ namespace Etheria.Features.StoryletSystem
             return new List<Storylet>
             {
                 new(
-                    "storylet.city_patrol",
-                    1.2f,
-                    new List<Role>
-                    {
-                        new("role.guard", QueryWithAllOf(WarriorTag | UrbanTag))
-                    }),
-                new(
-                    "storylet.farm_raid",
-                    1.1f,
-                    new List<Role>
-                    {
-                        new("role.raider", QueryWithAllOf(BanditTag | RuralTag))
-                    }),
-                new(
-                    "storylet.dark_ritual",
-                    1.5f,
-                    new List<Role>
-                    {
-                        new("role.ritual_leader", QueryWithAllOf(ArcaneTag)),
-                        new("role.ritual_acolyte", QueryWithAllOf(PriestTag))
-                    }),
-                new(
-                    "storylet.noble_escort",
-                    1.3f,
+                    "storylet.sworn_escort",
+                    1.35f,
                     new List<Role>
                     {
                         new(
@@ -177,39 +173,115 @@ namespace Etheria.Features.StoryletSystem
                             QueryWithAllOf(NobleTag),
                             new[]
                             {
-                                AttributeRequirement.Min(WealthAttributeId, 0f)
+                                AttributeRequirement.Min(WealthAttributeId, 20f)
                             },
                             new[]
                             {
                                 new AttributePreference(WealthAttributeId, 1f, 20f, 100f)
                             }),
-                        new("role.bodyguard", QueryWithAllOf(WarriorTag))
+                        new(
+                            "role.knight",
+                            QueryWithAllOf(WarriorTag),
+                            relationRequirements: new[]
+                            {
+                                new RelationRequirement(
+                                    "role.noble",
+                                    new TagQuery(TagSet.Empty, SwornAllyRelationTag | VassalRelationTag, TagSet.Empty),
+                                    RelationDirection.FromSelfToTarget)
+                            })
                     }),
                 new(
-                    "storylet.smuggling_run",
-                    1.25f,
+                    "storylet.secret_audience",
+                    1.28f,
                     new List<Role>
                     {
-                        new("role.smuggler", QueryWithAllOf(BanditTag | UrbanTag)),
-                        new("role.lookout", QueryWithAllOf(ScoutTag))
+                        new("role.patron", QueryWithAllOf(NobleTag)),
+                        new(
+                            "role.envoy",
+                            QueryWithAllOf(ScoutTag),
+                            relationRequirements: new[]
+                            {
+                                new RelationRequirement(
+                                    "role.patron",
+                                    new TagQuery(TagSet.Empty, TrustRelationTag, TagSet.Empty),
+                                    RelationDirection.FromTargetToSelf)
+                            })
                     }),
                 new(
-                    "storylet.border_skirmish",
-                    1.4f,
+                    "storylet.mutual_ritual",
+                    1.3f,
                     new List<Role>
                     {
-                        new("role.frontliner", QueryWithAllOf(WarriorTag)),
-                        new("role.flanker", QueryWithAllOf(ScoutTag)),
-                        new("role.chaplain", QueryWithAllOf(PriestTag))
+                        new(
+                            "role.ritualist",
+                            QueryWithAllOf(ArcaneTag),
+                            relationRequirements: new[]
+                            {
+                                new RelationRequirement(
+                                    "role.witness",
+                                    new TagQuery(TagSet.Empty, CovenantRelationTag, TagSet.Empty),
+                                    RelationDirection.BothDirections)
+                            }),
+                        new("role.witness", QueryWithAllOf(PriestTag))
                     }),
                 new(
-                    "storylet.heresy_inquiry",
+                    "storylet.guarded_sermon",
+                    1.22f,
+                    new List<Role>
+                    {
+                        new(
+                            "role.priest",
+                            QueryWithAllOf(PriestTag),
+                            relationRequirements: new[]
+                            {
+                                new RelationRequirement(
+                                    "role.guard",
+                                    new TagQuery(TagSet.Empty, TagSet.Empty, EnemyRelationTag),
+                                    RelationDirection.AnyDirection)
+                            }),
+                        new("role.guard", QueryWithAllOf(WarriorTag))
+                    }),
+                new(
+                    "storylet.city_patrol",
                     1.15f,
                     new List<Role>
                     {
-                        new("role.inquisitor", QueryWithAllOf(PriestTag, ArcaneTag | UrbanTag)),
-                        new("role.witness", QueryWithAnyOf(RuralTag | UrbanTag))
+                        new("role.guard", QueryWithAllOf(WarriorTag | UrbanTag))
+                    }),
+                new(
+                    "storylet.contraband_drop",
+                    1.1f,
+                    new List<Role>
+                    {
+                        new("role.smuggler", QueryWithAllOf(BanditTag | UrbanTag)),
+                        new(
+                            "role.lookout",
+                            QueryWithAllOf(ScoutTag),
+                            relationRequirements: new[]
+                            {
+                                new RelationRequirement(
+                                    "role.smuggler",
+                                    new TagQuery(TagSet.Empty, TrustRelationTag, EnemyRelationTag),
+                                    RelationDirection.AnyDirection)
+                            }),
+                        new("role.runner", QueryWithAllOf(ScoutTag))
                     })
+            };
+        }
+
+        private static List<EntityRelation> BuildSampleRelations()
+        {
+            return new List<EntityRelation>
+            {
+                new("entity.sworn_knight", "entity.noble_patron", VassalRelationTag),
+                new("entity.noble_patron", "entity.sworn_knight", SwornAllyRelationTag),
+                new("entity.noble_patron", "entity.scout_envoy", TrustRelationTag),
+                new("entity.ritual_mage", "entity.ritual_acolyte", CovenantRelationTag),
+                new("entity.ritual_acolyte", "entity.ritual_mage", CovenantRelationTag),
+                new("entity.rival_mercenary", "entity.court_priest", EnemyRelationTag),
+                new("entity.court_priest", "entity.rival_mercenary", EnemyRelationTag),
+                new("entity.smuggler", "entity.outlaw_scout", TrustRelationTag),
+                new("entity.outlaw_scout", "entity.smuggler", TrustRelationTag)
             };
         }
 
@@ -239,6 +311,17 @@ namespace Etheria.Features.StoryletSystem
             AppendTagName(names, tags, UrbanTag, "Urban");
             AppendTagName(names, tags, ArcaneTag, "Arcane");
             AppendTagName(names, tags, MercenaryTag, "Mercenary");
+            return names.Count == 0 ? "None" : string.Join(", ", names);
+        }
+
+        private static string DescribeRelationTags(TagSet tags)
+        {
+            var names = new List<string>();
+            AppendTagName(names, tags, SwornAllyRelationTag, "SwornAlly");
+            AppendTagName(names, tags, VassalRelationTag, "Vassal");
+            AppendTagName(names, tags, TrustRelationTag, "Trust");
+            AppendTagName(names, tags, CovenantRelationTag, "Covenant");
+            AppendTagName(names, tags, EnemyRelationTag, "Enemy");
             return names.Count == 0 ? "None" : string.Join(", ", names);
         }
 

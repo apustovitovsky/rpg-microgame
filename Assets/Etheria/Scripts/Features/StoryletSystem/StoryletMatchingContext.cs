@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Etheria.Features.StoryletSystem
 {
@@ -7,10 +8,12 @@ namespace Etheria.Features.StoryletSystem
     {
         private readonly List<Role> _allRoles = new();
         private readonly Dictionary<Role, List<Entity>> _compatibleEntitiesByRole = new();
+        private readonly Dictionary<Storylet, Dictionary<string, Role>> _rolesByIdByStorylet = new();
 
         public StoryletMatchingContext(
             IReadOnlyList<Storylet> storylets,
-            IReadOnlyList<Entity> entities)
+            IReadOnlyList<Entity> entities,
+            RelationIndex relationIndex = null)
         {
             if (storylets == null)
             {
@@ -22,12 +25,16 @@ namespace Etheria.Features.StoryletSystem
                 throw new ArgumentNullException(nameof(entities));
             }
 
+            RelationIndex = relationIndex ?? new RelationIndex();
+
             foreach (var storylet in storylets)
             {
                 if (storylet == null)
                 {
                     continue;
                 }
+
+                RegisterStoryletRoles(storylet);
 
                 foreach (var role in storylet.Roles)
                 {
@@ -54,6 +61,7 @@ namespace Etheria.Features.StoryletSystem
         }
 
         public IReadOnlyList<Role> AllRoles => _allRoles;
+        public RelationIndex RelationIndex { get; }
 
         public float GetEntityVersatility(Entity entity)
         {
@@ -68,6 +76,44 @@ namespace Etheria.Features.StoryletSystem
             }
 
             return count;
+        }
+
+        public bool ValidateStorylet(Storylet storylet, out string error)
+        {
+            error = null;
+
+            if (storylet == null)
+            {
+                error = "Storylet is null.";
+                return false;
+            }
+
+            if (!_rolesByIdByStorylet.TryGetValue(storylet, out var rolesById))
+            {
+                error = $"Storylet '{storylet.Id}' has no registered roles.";
+                return false;
+            }
+
+            if (rolesById.Count != storylet.Roles.Count)
+            {
+                error = $"Storylet '{storylet.Id}' contains duplicate role ids.";
+                return false;
+            }
+
+            foreach (var role in storylet.Roles)
+            {
+                foreach (var requirement in role.RelationRequirements)
+                {
+                    if (!rolesById.ContainsKey(requirement.TargetRoleId))
+                    {
+                        error =
+                            $"Storylet '{storylet.Id}' role '{role.Id}' references missing target role '{requirement.TargetRoleId}'.";
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         public IReadOnlyList<Entity> GetCompatibleEntities(Role role)
@@ -108,6 +154,169 @@ namespace Etheria.Features.StoryletSystem
             }
 
             return count;
+        }
+
+        public bool TryGetRoleById(Storylet storylet, string roleId, out Role role)
+        {
+            role = null;
+
+            if (storylet == null)
+            {
+                throw new ArgumentNullException(nameof(storylet));
+            }
+
+            if (string.IsNullOrWhiteSpace(roleId))
+            {
+                throw new ArgumentException("Role id must be provided.", nameof(roleId));
+            }
+
+            return _rolesByIdByStorylet.TryGetValue(storylet, out var rolesById)
+                && rolesById.TryGetValue(roleId, out role);
+        }
+
+        public bool TryGetAssignedEntity(
+            IReadOnlyList<RoleAssignment> assignments,
+            string roleId,
+            out Entity entity)
+        {
+            entity = null;
+
+            if (assignments == null)
+            {
+                throw new ArgumentNullException(nameof(assignments));
+            }
+
+            foreach (var assignment in assignments)
+            {
+                if (assignment.Role.Id != roleId)
+                {
+                    continue;
+                }
+
+                entity = assignment.Entity;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool IsRelationRequirementSatisfied(
+            Entity self,
+            Entity target,
+            RelationRequirement requirement)
+        {
+            if (self == null)
+            {
+                throw new ArgumentNullException(nameof(self));
+            }
+
+            if (target == null)
+            {
+                throw new ArgumentNullException(nameof(target));
+            }
+
+            return requirement.Direction switch
+            {
+                RelationDirection.FromSelfToTarget =>
+                    requirement.RelationQuery.Matches(RelationIndex.GetRelationTags(self, target)),
+                RelationDirection.FromTargetToSelf =>
+                    requirement.RelationQuery.Matches(RelationIndex.GetRelationTags(target, self)),
+                RelationDirection.AnyDirection =>
+                    requirement.RelationQuery.Matches(RelationIndex.GetRelationTags(self, target))
+                    || requirement.RelationQuery.Matches(RelationIndex.GetRelationTags(target, self)),
+                RelationDirection.BothDirections =>
+                    requirement.RelationQuery.Matches(RelationIndex.GetRelationTags(self, target))
+                    && requirement.RelationQuery.Matches(RelationIndex.GetRelationTags(target, self)),
+                _ => false
+            };
+        }
+
+        public bool HasPotentialTargetCandidate(
+            Storylet storylet,
+            IReadOnlyList<RoleAssignment> assignments,
+            HashSet<Entity> freeEntities,
+            HashSet<Entity> locallyUsedEntities,
+            Role sourceRole,
+            Entity sourceEntity,
+            RelationRequirement requirement)
+        {
+            if (TryGetAssignedEntity(assignments, requirement.TargetRoleId, out var assignedTargetEntity))
+            {
+                return IsRelationRequirementSatisfied(sourceEntity, assignedTargetEntity, requirement);
+            }
+
+            if (!TryGetRoleById(storylet, requirement.TargetRoleId, out var targetRole))
+            {
+                return false;
+            }
+
+            foreach (var candidateEntity in GetCompatibleEntities(targetRole))
+            {
+                if (candidateEntity == sourceEntity)
+                {
+                    continue;
+                }
+
+                if (!freeEntities.Contains(candidateEntity))
+                {
+                    continue;
+                }
+
+                if (locallyUsedEntities.Contains(candidateEntity))
+                {
+                    continue;
+                }
+
+                if (IsRelationRequirementSatisfied(sourceEntity, candidateEntity, requirement))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public float EvaluateAssignmentRelationScore(IReadOnlyList<RoleAssignment> assignments)
+        {
+            if (assignments == null)
+            {
+                throw new ArgumentNullException(nameof(assignments));
+            }
+
+            var score = 0f;
+
+            foreach (var assignment in assignments)
+            {
+                foreach (var requirement in assignment.Role.RelationRequirements)
+                {
+                    if (!TryGetAssignedEntity(assignments, requirement.TargetRoleId, out var targetEntity))
+                    {
+                        continue;
+                    }
+
+                    if (IsRelationRequirementSatisfied(assignment.Entity, targetEntity, requirement))
+                    {
+                        score += 1f;
+                    }
+                }
+            }
+
+            return score;
+        }
+
+        private void RegisterStoryletRoles(Storylet storylet)
+        {
+            var rolesById = new Dictionary<string, Role>(StringComparer.Ordinal);
+
+            foreach (var role in storylet.Roles.Where(role => role != null))
+            {
+                if (!rolesById.TryAdd(role.Id, role))
+                {
+                    continue;
+                }
+            }
+
+            _rolesByIdByStorylet[storylet] = rolesById;
         }
     }
 }
