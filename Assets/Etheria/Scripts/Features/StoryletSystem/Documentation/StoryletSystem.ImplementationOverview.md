@@ -99,6 +99,26 @@
 
 ---
 
+## 1.2. Как теперь разложен код по папкам
+
+После cleanup-круга код `StoryletSystem` разделён по слоям:
+
+- `Primitives/**`
+- `Matching/**`
+- `Planner/**`
+- `Smoke/**`
+- `Installers/**`
+- `Legacy/**`
+- `Documentation/**`
+
+Ключевая практическая граница:
+
+- active planner pipeline живёт в `Planner`, `Matching`, `Primitives`, `Smoke`, `Installers`;
+- quarantined legacy matcher flow живёт в `Legacy`;
+- старый `GreedyStoryletMatcher` больше не лежит рядом с активными planner services.
+
+---
+
 ## 2. Главная архитектурная идея
 
 Система теперь разделена на два разных класса задач.
@@ -310,7 +330,7 @@ Smoke entry point:
 
 ## 5.1. `StoryletWorldState`
 
-Файл: `StoryletPlannerDomain.cs`
+Файлы: `Planner/Domain/StoryletWorldState.cs` и соседние domain types в `Planner/Domain`
 
 Это главный snapshot мира для planner-а.
 
@@ -348,7 +368,7 @@ Smoke entry point:
 
 ## 5.2. `StoryletDefinition`
 
-Файл: `StoryletPlannerDomain.cs`
+Файл: `Planner/Domain/StoryletDefinition.cs`
 
 Это новая planner-facing форма storylet-а.
 
@@ -401,7 +421,7 @@ Smoke entry point:
 
 ## 5.5. `StoryletPlannerMemory`
 
-Файл: `StoryletPlannerDomain.cs`
+Файл: `Planner/Domain/StoryletPlannerMemory.cs`
 
 Это planner-side память о прошлом.
 
@@ -454,7 +474,7 @@ Smoke entry point:
 
 ## 6. Preconditions: как теперь проверяется доступность storylet-а
 
-Файл: `StoryletPlannerPreconditions.cs`
+Файлы: `Planner/Preconditions/*.cs`
 
 Все precondition-ы реализуют:
 
@@ -506,7 +526,7 @@ bool IsSatisfied(
 
 ## 7. Effects: как теперь storylet меняет мир
 
-Файл: `StoryletPlannerEffects.cs`
+Файлы: `Planner/Effects/*.cs`
 
 Базовый тип:
 
@@ -991,6 +1011,7 @@ Composition root:
 Особенно важно понимать про старый `GreedyStoryletMatcher`:
 
 - он сохранён как reference/legacy algorithm;
+- теперь он физически лежит в `Legacy/Matching`;
 - но **не используется как top-level planner**;
 - финальная v1-архитектура не зависит от него как от orchestration-слоя.
 
