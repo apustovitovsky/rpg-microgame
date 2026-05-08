@@ -7,35 +7,35 @@ namespace Etheria.Features.StoryletSystem
             TagSet.Empty,
             TagSet.Empty);
 
-        public readonly TagSet AllOf;
-        public readonly TagSet AnyOf;
-        public readonly TagSet NoneOf;
+        public readonly TagSet Required;
+        public readonly TagSet Any;
+        public readonly TagSet Excluded;
 
-        public TagQuery(TagSet allOf, TagSet anyOf, TagSet noneOf)
+        public TagQuery(TagSet required, TagSet any, TagSet excluded)
         {
-            AllOf = allOf;
-            AnyOf = anyOf;
-            NoneOf = noneOf;
+            Required = required;
+            Any = any;
+            Excluded = excluded;
         }
 
         public bool IsEmpty =>
-            AllOf.IsEmpty &&
-            AnyOf.IsEmpty &&
-            NoneOf.IsEmpty;
+            Required.IsEmpty &&
+            Any.IsEmpty &&
+            Excluded.IsEmpty;
 
         public readonly bool Matches(TagSet tags)
         {
-            if (!tags.ContainsAll(AllOf))
+            if (!tags.ContainsAll(Required))
             {
                 return false;
             }
 
-            if (!AnyOf.IsEmpty && !tags.Overlaps(AnyOf))
+            if (!Any.IsEmpty && !tags.Overlaps(Any))
             {
                 return false;
             }
 
-            if (!tags.Excludes(NoneOf))
+            if (!tags.Excludes(Excluded))
             {
                 return false;
             }
