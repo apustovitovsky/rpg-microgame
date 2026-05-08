@@ -35,15 +35,18 @@ namespace Etheria.Features.StoryletSystem
         public StoryletPlannerResult Plan(
             StoryletWorldState initialWorldState,
             IReadOnlyList<StoryletDefinition> storylets,
-            StoryletPlannerMemory initialMemory = null)
+            StoryletPlannerMemory initialMemory = null,
+            StoryletPlannerOptions options = null)
         {
+            var beamWidth = options?.BeamWidth ?? _beamWidth;
+            var maxDepth = options?.MaxDepth ?? _maxDepth;
             var traceExpansions = new List<StoryletBeamExpansionTrace>();
             var activeBranches = new List<PlannerBranch>
             {
                 new("root", initialWorldState, initialMemory ?? StoryletPlannerMemory.Empty, new List<StoryletPlannedStep>(), 0f)
             };
 
-            for (var depth = 0; depth < _maxDepth; depth++)
+            for (var depth = 0; depth < maxDepth; depth++)
             {
                 var expandedBranches = new List<PlannerBranch>();
                 var seen = new HashSet<string>(StringComparer.Ordinal);
@@ -92,12 +95,12 @@ namespace Etheria.Features.StoryletSystem
                     .OrderByDescending(branch => branch.TotalScore)
                     .ThenBy(branch => branch.WorldState.SnapshotId)
                     .ToList();
-                var kept = ordered.Take(_beamWidth).ToList();
-                var pruned = ordered.Skip(_beamWidth).ToList();
+                var kept = ordered.Take(beamWidth).ToList();
+                var pruned = ordered.Skip(beamWidth).ToList();
 
                 traceExpansions.Add(new StoryletBeamExpansionTrace(
                     depth + 1,
-                    _beamWidth,
+                    beamWidth,
                     ordered.Select(branch => ToBeamTrace(branch)).ToList(),
                     kept.Select(branch => ToBeamTrace(branch, "kept")).ToList(),
                     pruned.Select(branch => ToBeamTrace(branch, "pruned_by_beam")).ToList()));

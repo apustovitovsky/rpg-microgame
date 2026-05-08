@@ -6,7 +6,7 @@ namespace Etheria.Features.StoryletSystem
     {
         public EntityId(int value)
         {
-            Value = value;
+            Value = StoryletIdRange.EnsureValid(nameof(EntityId), value);
         }
 
         public int Value { get; }

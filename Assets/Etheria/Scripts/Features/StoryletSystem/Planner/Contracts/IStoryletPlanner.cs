@@ -7,6 +7,7 @@ namespace Etheria.Features.StoryletSystem
         StoryletPlannerResult Plan(
             StoryletWorldState initialWorldState,
             IReadOnlyList<StoryletDefinition> storylets,
-            StoryletPlannerMemory initialMemory = null);
+            StoryletPlannerMemory initialMemory = null,
+            StoryletPlannerOptions options = null);
     }
 }
