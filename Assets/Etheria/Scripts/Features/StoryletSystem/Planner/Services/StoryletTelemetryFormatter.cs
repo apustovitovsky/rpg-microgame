@@ -4,29 +4,18 @@ using System.Linq;
 
 namespace Etheria.Features.StoryletSystem
 {
-    public sealed class StoryletDiagnosticsFormatter : IStoryletDiagnosticsFormatter
+    public sealed class StoryletTelemetryFormatter : IStoryletTelemetryFormatter
     {
-        public string Format(StoryletSimulationResult result)
+        public string Format(StoryletPlannerResult result)
         {
             var lines = new List<string>
             {
-                "=== Storylet Simulation Summary ===",
-                $"Steps: {result.Steps.Count}",
-                $"Initial snapshot id: {result.InitialWorldState.SnapshotId}",
-                $"Final snapshot id: {result.FinalWorldState.SnapshotId}",
-                $"Total score: {result.TotalScore:0.##}",
-                $"Path: {FormatStepKeys(result.Steps)}",
+                "=== Storylet Planner Smoke ===",
+                $"Winning steps: {result.WinningSteps.Count}",
                 string.Empty
             };
 
-            if (result.Diagnostics == null)
-            {
-                return string.Join(Environment.NewLine, lines);
-            }
-
-            lines.Add("=== Storylet Diagnostics ===");
-
-            foreach (var stepTrace in result.Diagnostics.StepTraces)
+            foreach (var stepTrace in result.Trace.StepTraces)
             {
                 lines.Add($"Step {stepTrace.StepNumber}");
                 lines.Add($"Current world snapshot id: {stepTrace.CurrentSnapshotId}");
@@ -67,7 +56,7 @@ namespace Etheria.Features.StoryletSystem
 
             lines.Add("Beam expansions:");
 
-            foreach (var expansion in result.Diagnostics.BeamExpansions)
+            foreach (var expansion in result.Trace.BeamExpansions)
             {
                 lines.Add($"Depth {expansion.Depth} / beam width {expansion.BeamWidth}");
 
@@ -79,13 +68,6 @@ namespace Etheria.Features.StoryletSystem
             }
 
             return string.Join(Environment.NewLine, lines);
-        }
-
-        private static string FormatStepKeys(IReadOnlyList<StoryletPlannedStep> steps)
-        {
-            return steps.Count == 0
-                ? "<none>"
-                : string.Join(" -> ", steps.Select(step => step.Candidate.Definition.Key));
         }
 
         private static string FormatAssignment(IReadOnlyList<RoleAssignment> assignment)

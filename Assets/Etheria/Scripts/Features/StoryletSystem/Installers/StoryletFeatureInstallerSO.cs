@@ -13,10 +13,7 @@ namespace Etheria.Features.StoryletSystem
     {
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
-            builder.RegisterEntryPoint<StoryletSmokeScenarioEntryPoint>(Lifetime.Singleton);
-            builder.Register<StoryletSmokeScenarioProvider>(Lifetime.Singleton)
-                .AsSelf()
-                .As<IStoryletSmokeScenarioProvider>();
+            builder.RegisterEntryPoint<StoryletMatcherSmokeTestService>(Lifetime.Singleton);
 
             builder.Register<AttributePreferenceEntityRoleFitEvaluator>(Lifetime.Singleton)
                 .AsSelf()
@@ -58,13 +55,9 @@ namespace Etheria.Features.StoryletSystem
                 .AsSelf()
                 .As<IStoryletPlanner>();
 
-            builder.Register<StoryletSimulationService>(Lifetime.Singleton)
+            builder.Register<StoryletTelemetryFormatter>(Lifetime.Singleton)
                 .AsSelf()
-                .As<IStoryletSimulationService>();
-
-            builder.Register<StoryletDiagnosticsFormatter>(Lifetime.Singleton)
-                .AsSelf()
-                .As<IStoryletDiagnosticsFormatter>();
+                .As<IStoryletTelemetryFormatter>();
         }
     }
 }
