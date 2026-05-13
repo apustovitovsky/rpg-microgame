@@ -1,0 +1,16 @@
+{
+    "name": "Etheria.Features.HWFC_Old",
+    "rootNamespace": "Etheria.Features.HWFC_Old",
+    "references": [
+        "Etheria.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

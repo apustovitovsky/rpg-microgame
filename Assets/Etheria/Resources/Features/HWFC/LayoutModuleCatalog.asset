@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c61c100fddd022e45bbc63dc5e644bd8, type: 3}
+  m_Name: LayoutModuleCatalog
+  m_EditorClassIdentifier: Etheria.Features.HWFC::Etheria.Features.HWFC.ModuleCatalogSO
+  _items:
+  - {fileID: 11400000, guid: ceeaf6a2ff034f158abcb54a3645f448, type: 2}
+  - {fileID: 11400000, guid: c26621ab95e842008378c9393ea0ff11, type: 2}
+  - {fileID: 11400000, guid: 8074dad4e7064cbe93073666ae4f7d3a, type: 2}
+  - {fileID: 11400000, guid: 7bb438c8d9fa4e8bad8523da7a9595ca, type: 2}
+  - {fileID: 11400000, guid: bad02bd4bbfb4f1d9728d290eff37510, type: 2}

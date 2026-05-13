@@ -1,7 +1,10 @@
 {
     "name": "Etheria.Features.HWFC",
     "rootNamespace": "Etheria.Features.HWFC",
-    "references": [],
+    "references": [
+        "Unity.Mathematics",
+        "Etheria.Core"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

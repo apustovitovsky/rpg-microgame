@@ -1,0 +1,621 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 614cb406b5ee4cdda4e07eff3c1b3ae8, type: 3}
+  m_Name: LayoutModuleCatalog.ModuleSetData
+  m_EditorClassIdentifier: Etheria.Features.HWFC::Etheria.Features.HWFC.ModuleSetData
+  _moduleCount: 14
+  _directionCount: 6
+  _variants:
+  - _sourceModuleName: Layout_Corner
+    _sourceModuleIndex: 0
+    _layoutFamily: 0
+    _rotation: 0
+    _probability: 1
+    _connectors: 010000000400000002000000000000000300000000000000
+    _left: CornerL
+    _down: CornerD
+    _back: CornerR
+    _right: CornerF
+    _up: CornerU
+    _forward: CornerF
+  - _sourceModuleName: Layout_Corner
+    _sourceModuleIndex: 0
+    _layoutFamily: 0
+    _rotation: 1
+    _probability: 1
+    _connectors: 020000000400000000000000000000000300000001000000
+    _left: CornerR
+    _down: CornerD
+    _back: CornerF
+    _right: CornerF
+    _up: CornerU
+    _forward: CornerL
+  - _sourceModuleName: Layout_Corner
+    _sourceModuleIndex: 0
+    _layoutFamily: 0
+    _rotation: 2
+    _probability: 1
+    _connectors: 000000000400000000000000010000000300000002000000
+    _left: CornerF
+    _down: CornerD
+    _back: CornerF
+    _right: CornerL
+    _up: CornerU
+    _forward: CornerR
+  - _sourceModuleName: Layout_Corner
+    _sourceModuleIndex: 0
+    _layoutFamily: 0
+    _rotation: 3
+    _probability: 1
+    _connectors: 000000000400000001000000020000000300000000000000
+    _left: CornerF
+    _down: CornerD
+    _back: CornerL
+    _right: CornerR
+    _up: CornerU
+    _forward: CornerF
+  - _sourceModuleName: Layout_Side
+    _sourceModuleIndex: 1
+    _layoutFamily: 1
+    _rotation: 0
+    _probability: 1
+    _connectors: 070000000a00000006000000080000000900000005000000
+    _left: SideL
+    _down: SideD
+    _back: SideB
+    _right: SideR
+    _up: SideU
+    _forward: SideF
+  - _sourceModuleName: Layout_Side
+    _sourceModuleIndex: 1
+    _layoutFamily: 1
+    _rotation: 1
+    _probability: 1
+    _connectors: 060000000a00000008000000050000000900000007000000
+    _left: SideB
+    _down: SideD
+    _back: SideR
+    _right: SideF
+    _up: SideU
+    _forward: SideL
+  - _sourceModuleName: Layout_Side
+    _sourceModuleIndex: 1
+    _layoutFamily: 1
+    _rotation: 2
+    _probability: 1
+    _connectors: 080000000a00000005000000070000000900000006000000
+    _left: SideR
+    _down: SideD
+    _back: SideF
+    _right: SideL
+    _up: SideU
+    _forward: SideB
+  - _sourceModuleName: Layout_Side
+    _sourceModuleIndex: 1
+    _layoutFamily: 1
+    _rotation: 3
+    _probability: 1
+    _connectors: 050000000a00000007000000060000000900000008000000
+    _left: SideF
+    _down: SideD
+    _back: SideL
+    _right: SideB
+    _up: SideU
+    _forward: SideR
+  - _sourceModuleName: Layout_Center
+    _sourceModuleIndex: 2
+    _layoutFamily: 2
+    _rotation: 0
+    _probability: 0.5
+    _connectors: 0b0000000d0000000b0000000b0000000c0000000b000000
+    _left: Center
+    _down: CenterD
+    _back: Center
+    _right: Center
+    _up: CenterU
+    _forward: Center
+  - _sourceModuleName: Layout_Space
+    _sourceModuleIndex: 3
+    _layoutFamily: 3
+    _rotation: 0
+    _probability: 1
+    _connectors: 10000000130000000f00000011000000120000000e000000
+    _left: SpaceL
+    _down: SpaceD
+    _back: SpaceB
+    _right: SpaceR
+    _up: SpaceU
+    _forward: SpaceF
+  - _sourceModuleName: Layout_Space
+    _sourceModuleIndex: 3
+    _layoutFamily: 3
+    _rotation: 1
+    _probability: 1
+    _connectors: 0f00000013000000110000000e0000001200000010000000
+    _left: SpaceB
+    _down: SpaceD
+    _back: SpaceR
+    _right: SpaceF
+    _up: SpaceU
+    _forward: SpaceL
+  - _sourceModuleName: Layout_Space
+    _sourceModuleIndex: 3
+    _layoutFamily: 3
+    _rotation: 2
+    _probability: 1
+    _connectors: 11000000130000000e00000010000000120000000f000000
+    _left: SpaceR
+    _down: SpaceD
+    _back: SpaceF
+    _right: SpaceL
+    _up: SpaceU
+    _forward: SpaceB
+  - _sourceModuleName: Layout_Space
+    _sourceModuleIndex: 3
+    _layoutFamily: 3
+    _rotation: 3
+    _probability: 1
+    _connectors: 0e00000013000000100000000f0000001200000011000000
+    _left: SpaceF
+    _down: SpaceD
+    _back: SpaceL
+    _right: SpaceB
+    _up: SpaceU
+    _forward: SpaceR
+  - _sourceModuleName: Layout_Air
+    _sourceModuleIndex: 4
+    _layoutFamily: 4
+    _rotation: 0
+    _probability: 1
+    _connectors: 140000001400000014000000140000001400000014000000
+    _left: Air
+    _down: Air
+    _back: Air
+    _right: Air
+    _up: Air
+    _forward: Air
+  _constraints:
+  - _bits0: 24
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 511
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 34
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 1024
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 15887
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 512
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 68
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 511
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 2048
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 1024
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 15887
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 33
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 4096
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 511
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 2048
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 66
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 15887
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 136
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 4096
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 511
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 132
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 17
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 15887
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 512
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 24
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 496
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 256
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 17
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 16127
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 512
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 256
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 496
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 34
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 1024
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 16127
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 33
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 68
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 496
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 2048
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 66
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 16127
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 256
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 4096
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 496
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 132
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 256
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 16127
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 136
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 384
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 256
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 320
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 288
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 16383
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 272
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 8704
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 8191
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 25
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 8704
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 15872
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 8192
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 35
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 8191
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 9216
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 8192
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 15872
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 9216
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 10240
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 8191
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 8192
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 10240
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 15872
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 70
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 8192
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 8191
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 12288
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 140
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 15872
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 12288
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 11776
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 16383
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 13824
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 14848
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 8192
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  - _bits0: 15360
+    _bits1: 0
+    _bits2: 0
+    _bits3: 0
+    _moduleCount: 14
+  _probabilities:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 0.5
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1

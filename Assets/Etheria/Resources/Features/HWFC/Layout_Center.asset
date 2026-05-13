@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d75d23f46466fc4cb6f8a6cca7c7e79, type: 3}
+  m_Name: Layout_Center
+  m_EditorClassIdentifier: Etheria.Features.HWFC::Etheria.Features.HWFC.ModuleDataSO
+  _probability: 0.5
+  _allowRotations: 1
+  _layoutFamily: 2
