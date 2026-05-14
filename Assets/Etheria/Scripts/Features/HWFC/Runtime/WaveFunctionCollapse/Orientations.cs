@@ -4,8 +4,6 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-namespace Etheria.Features.HWFC
-{
 public class Orientations {
 	public const int LEFT = 0;
 	public const int DOWN = 1;
@@ -80,5 +78,4 @@ public class Orientations {
 			return 5;
 		}
 	}
-}
 }
