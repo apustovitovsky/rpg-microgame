@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd372f4cf8a1b044eb3e625b146f3ac9, type: 3}
+  m_Name: MinimalSmokeTestCatalog.Baked
+  m_EditorClassIdentifier: Etheria.Features.HWFC::Etheria.Features.HWFC.ModuleBakeDataSO
+  SourceCatalog: {fileID: 11400000, guid: cfaa2f500e6f1b14fbd85abf957860a0, type: 2}
+  Variants:
+  - StableId: e20d8859c098ae845a9b8bf6b7a9aa6e
+    Name: Interior_Floor R0
+    Source: {fileID: 11400000, guid: 31d7b6500a8a4ea4095711d7386dc1c7, type: 2}
+    Prefab: {fileID: 1005094764303508, guid: 4a2572d1fc5058348a351808364e5f83, type: 3}
+    Rotation: 0
+    Index: 0
+    Probability: 0.2
+    Spawn: 1
+    IsInterior: 1
+    Left:
+      Connector: 50
+      Walkable: 1
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Down:
+      Connector: 1
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 0
+      Flipped: 0
+      Invariant: 1
+      Rotation: 0
+      ExcludedStableIds: []
+    Back:
+      Connector: 50
+      Walkable: 1
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Right:
+      Connector: 50
+      Walkable: 1
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Up:
+      Connector: 1
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 0
+      Flipped: 0
+      Invariant: 1
+      Rotation: 0
+      ExcludedStableIds: []
+    Forward:
+      Connector: 50
+      Walkable: 1
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+  Adjacency:
+    DirectionCount: 6
+    ModuleCount: 1
+    AllowedNeighborIndices:
+    - Indices: 00000000
+    - Indices: 00000000
+    - Indices: 00000000
+    - Indices: 00000000
+    - Indices: 00000000
+    - Indices: 00000000
+  Simplified: 0
+  SourceFingerprint: e20d8859c098ae845a9b8bf6b7a9aa6e|0,2|1|1|1|50|1|0|0|1|0|0|0|50|1|0|0|50|1|0|0|1|0|0|0|50|1|0|0

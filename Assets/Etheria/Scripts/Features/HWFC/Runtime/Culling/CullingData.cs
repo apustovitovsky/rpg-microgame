@@ -7,7 +7,8 @@ using System.Linq;
 using UnityEditor;
 #endif
 
-public class CullingData : MonoBehaviour {
+    [RequireComponent(typeof(MapBehaviour))]
+    public class CullingData : MonoBehaviour {
 	[HideInInspector]
 	public MapBehaviour MapBehaviour;
 
@@ -25,39 +26,39 @@ public class CullingData : MonoBehaviour {
 	public bool DrawGizmo = false;
 
 	public void Initialize() {
-		this.MapBehaviour = this.GetComponent<MapBehaviour>();
-		this.RoomsByPosition = new Dictionary<Vector3Int, Room>();
-		this.portalsByPosition = new Dictionary<Vector3Int, Portal[]>();
-		this.outdatedSlots = new HashSet<Vector3Int>();
-		this.Chunks = new Dictionary<Vector3Int, Chunk>();
-		this.ChunksInRange = new List<Chunk>();
+		MapBehaviour = GetComponent<MapBehaviour>();
+		RoomsByPosition = new Dictionary<Vector3Int, Room>();
+		portalsByPosition = new Dictionary<Vector3Int, Portal[]>();
+		outdatedSlots = new HashSet<Vector3Int>();
+		Chunks = new Dictionary<Vector3Int, Chunk>();
+		ChunksInRange = new List<Chunk>();
 	}
 
 	public Vector3Int GetChunkAddress(Vector3Int position) {
-		return Vector3Int.FloorToInt(position.ToVector3() / this.ChunkSize);
+		return Vector3Int.FloorToInt(position.ToVector3() / ChunkSize);
 	}
 
 	public Vector3 GetChunkCenter(Vector3Int chunkAddress) {
-		return this.MapBehaviour.GetWorldspacePosition(chunkAddress * this.ChunkSize) + (this.ChunkSize - 1) * 0.5f * AbstractMap.BLOCK_SIZE * Vector3.one;
+		return MapBehaviour.GetWorldspacePosition(chunkAddress * ChunkSize) + (ChunkSize - 1) * 0.5f * AbstractMap.BLOCK_SIZE * Vector3.one;
 	}
 
-	private Chunk getChunk(Vector3Int chunkAddress) {
-		if (this.Chunks.ContainsKey(chunkAddress)) {
-			return this.Chunks[chunkAddress];
+	private Chunk GetChunk(Vector3Int chunkAddress) {
+		if (Chunks.ContainsKey(chunkAddress)) {
+			return Chunks[chunkAddress];
 		}
-		var chunk = new Chunk(new Bounds(this.GetChunkCenter(chunkAddress), Vector3.one * AbstractMap.BLOCK_SIZE * this.ChunkSize));
-		this.Chunks[chunkAddress] = chunk;
-		this.ChunksInRange.Add(chunk);
+		var chunk = new Chunk(new Bounds(GetChunkCenter(chunkAddress), Vector3.one * AbstractMap.BLOCK_SIZE * ChunkSize));
+		Chunks[chunkAddress] = chunk;
+		ChunksInRange.Add(chunk);
 		return chunk;
 	}
 
-	public Chunk getChunkFromPosition(Vector3Int position) {
-		return this.getChunk(this.GetChunkAddress(position));
+	public Chunk GetChunkFromPosition(Vector3Int position) {
+		return GetChunk(GetChunkAddress(position));
 	}
 
 	public Room GetRoom(Vector3Int position) {
-		if (this.RoomsByPosition.ContainsKey(position)) {
-			return this.RoomsByPosition[position];
+		if (RoomsByPosition.ContainsKey(position)) {
+			return RoomsByPosition[position];
 		} else {
 			return null;
 		}
@@ -67,12 +68,12 @@ public class CullingData : MonoBehaviour {
 		if (!slot.Collapsed) {
 			return;
 		}
-		var chunk = this.getChunkFromPosition(slot.Position);
-		if (!slot.Module.Prototype.IsInterior) {
+		var chunk = GetChunkFromPosition(slot.Position);
+		if (!slot.Module.IsInterior) {
 			for (int i = 0; i < 6; i++) {
 				var face = slot.Module.GetFace(i);
 				if (face.IsOcclusionPortal) {
-					var portal = this.getPortal(slot.Position, i);
+					var portal = GetPortal(slot.Position, i);
 					if (portal.Room != null && !portal.Room.Portals.Contains(portal)) {
 						portal.Room.Portals.Add(portal);
 					}
@@ -93,11 +94,11 @@ public class CullingData : MonoBehaviour {
 			if (neighbor == null) {
 				continue;
 			}
-			if (neighbor.Collapsed && this.RoomsByPosition.ContainsKey(neighbor.Position) && !neighbor.Module.GetFace((i + 3) % 6).IsOcclusionPortal) {
+			if (neighbor.Collapsed && RoomsByPosition.ContainsKey(neighbor.Position) && !neighbor.Module.GetFace((i + 3) % 6).IsOcclusionPortal) {
 				if (room == null) {
-					room = this.RoomsByPosition[neighbor.Position];
-				} if (room != this.RoomsByPosition[neighbor.Position]) {
-					room = this.mergeRooms(this.RoomsByPosition[neighbor.Position], room);
+					room = RoomsByPosition[neighbor.Position];
+				} if (room != RoomsByPosition[neighbor.Position]) {
+					room = MergeRooms(RoomsByPosition[neighbor.Position], room);
 				}
 			}
 		}
@@ -109,7 +110,7 @@ public class CullingData : MonoBehaviour {
 		foreach (var renderer in slot.GameObject.GetComponentsInChildren<Renderer>()) {
 			room.Renderers.Add(renderer);
 		}
-		this.RoomsByPosition[slot.Position] = room;
+		RoomsByPosition[slot.Position] = room;
 
 		for (int i = 0; i < 6; i++) {
 			var face = slot.Module.GetFace(i);
@@ -117,8 +118,8 @@ public class CullingData : MonoBehaviour {
 				continue;
 			}
 			var neighbor = slot.GetNeighbor(i);
-			if (face.IsOcclusionPortal || (neighbor != null && neighbor.Collapsed && (!neighbor.Module.Prototype.IsInterior || neighbor.Module.GetFace((i + 3) % 6).IsOcclusionPortal))) {
-				var portal = this.getPortal(slot.Position, i);
+			if (face.IsOcclusionPortal || (neighbor != null && neighbor.Collapsed && (!neighbor.Module.IsInterior || neighbor.Module.GetFace((i + 3) % 6).IsOcclusionPortal))) {
+				var portal = GetPortal(slot.Position, i);
 				room.Portals.Add(portal);
 				var otherRoom = portal.Follow(room);
 				if (otherRoom != null && !otherRoom.Portals.Contains(portal)) {
@@ -126,12 +127,12 @@ public class CullingData : MonoBehaviour {
 				}
 			}
 		}
-		this.updatePortals(slot.Position, room);
+		UpdatePortals(slot.Position, room);
 	}
 
-	private void updatePortals(Vector3Int position, Room room) {
+	private void UpdatePortals(Vector3Int position, Room room) {
 		Portal[] portals = null;
-		if (this.portalsByPosition.TryGetValue(position, out portals)) {
+		if (portalsByPosition.TryGetValue(position, out portals)) {
 			for (int i = 0; i < 3; i++) {
 				if (portals[i] != null) {
 					portals[i].Room1 = room;
@@ -140,36 +141,36 @@ public class CullingData : MonoBehaviour {
 		}
 		for (int i = 0; i < 3; i++) {
 			var neighborPosition = position + Orientations.Direction[3 + i];
-			if (this.portalsByPosition.TryGetValue(neighborPosition, out portals) && portals[i] != null) {
+			if (portalsByPosition.TryGetValue(neighborPosition, out portals) && portals[i] != null) {
 				portals[i].Room2 = room;
 			}
 		}
 	}
 
 	public void ClearOutdatedSlots() {
-		if (!this.outdatedSlots.Any()) {
+		if (!outdatedSlots.Any()) {
 			return;
 		}
-		var items = this.outdatedSlots.ToArray();
-		this.outdatedSlots.Clear();
+		var items = outdatedSlots.ToArray();
+		outdatedSlots.Clear();
 		foreach (var position in items) {
-			var slot = this.MapBehaviour.Map.GetSlot(position);
+			var slot = MapBehaviour.Map.GetSlot(position);
 			if (slot == null || !slot.Collapsed) {
 				continue;
 			}
-			this.AddSlot(slot);
+			AddSlot(slot);
 		}
 	}
 
-	private void removePortal(Portal portal) {
-		if (this.portalsByPosition.ContainsKey(portal.Position1)) {
-			this.portalsByPosition[portal.Position1][portal.Direction] = null;
-			if (this.portalsByPosition[portal.Position1].All(p => p == null)) {
-				this.portalsByPosition.Remove(portal.Position1);
+	private void RemovePortal(Portal portal) {
+		if (portalsByPosition.ContainsKey(portal.Position1)) {
+			portalsByPosition[portal.Position1][portal.Direction] = null;
+			if (portalsByPosition[portal.Position1].All(p => p == null)) {
+				portalsByPosition.Remove(portal.Position1);
 			}
-		}		
-		this.getChunkFromPosition(portal.Position1).Portals.Remove(portal);
-		this.getChunkFromPosition(portal.Position2).Portals.Remove(portal);
+		}
+		GetChunkFromPosition(portal.Position1).Portals.Remove(portal);
+		GetChunkFromPosition(portal.Position2).Portals.Remove(portal);
 		if (portal.Room1 != null) {
 			portal.Room1.Portals.Remove(portal);
 		}
@@ -179,35 +180,35 @@ public class CullingData : MonoBehaviour {
 	}
 
 	public void RemoveSlot(Slot slot) {
-		var chunk = this.getChunkFromPosition(slot.Position);
+		var chunk = GetChunkFromPosition(slot.Position);
 		chunk.RemoveBlock(slot);
 
-		if (this.RoomsByPosition.ContainsKey(slot.Position)) {
-			var room = this.RoomsByPosition[slot.Position];
+		if (RoomsByPosition.ContainsKey(slot.Position)) {
+			var room = RoomsByPosition[slot.Position];
 			foreach (var portal in room.Portals.ToArray()) {
-				this.removePortal(portal);
+				RemovePortal(portal);
 			}
 			foreach (var roomSlot in room.Slots) {
-				this.outdatedSlots.Add(roomSlot.Position);
-				this.RoomsByPosition.Remove(roomSlot.Position);
+				outdatedSlots.Add(roomSlot.Position);
+				RoomsByPosition.Remove(roomSlot.Position);
 			}
-			this.removeRoom(room);
+			RemoveRoom(room);
 		}
-		this.outdatedSlots.Remove(slot.Position);
+		outdatedSlots.Remove(slot.Position);
 	}
 
-	private void removeRoom(Room room) {
+	private void RemoveRoom(Room room) {
 		foreach (var slot in room.Slots) {
-			var chunk = this.getChunkFromPosition(slot.Position);
+			var chunk = GetChunkFromPosition(slot.Position);
 			if (chunk.Rooms.Contains(room)) {
 				chunk.Rooms.Remove(room);
 			}
 		}
 	}
 
-	private Room mergeRooms(Room room1, Room room2) {
+	private Room MergeRooms(Room room1, Room room2) {
 		foreach (var slot in room1.Slots) {
-			this.RoomsByPosition[slot.Position] = room2;
+			RoomsByPosition[slot.Position] = room2;
 			room2.Slots.Add(slot);
 		}
 		room2.Renderers.AddRange(room1.Renderers);
@@ -216,30 +217,30 @@ public class CullingData : MonoBehaviour {
 			portal.ReplaceRoom(room1, room2);
 			room2.Portals.Add(portal);
 		}
-		this.removeRoom(room1);
+		RemoveRoom(room1);
 		return room2;
 	}
-	
-	private void addPortalToChunks(Portal portal) {
-		var chunk1 = this.getChunkFromPosition(portal.Position1);
+
+	private void AddPortalToChunks(Portal portal) {
+		var chunk1 = GetChunkFromPosition(portal.Position1);
 		chunk1.Portals.Add(portal);
-		var chunk2 = this.getChunkFromPosition(portal.Position2);
+		var chunk2 = GetChunkFromPosition(portal.Position2);
 		if (chunk2 != chunk1) {
 			chunk2.Portals.Add(portal);
 		}
 	}
 
-	private Portal getPortal(Vector3Int position, int direction) {
+	private Portal GetPortal(Vector3Int position, int direction) {
 		if (direction >= 3) {
 			position = position + Orientations.Direction[direction];
 			direction -= 3;
 		}
-		if (this.portalsByPosition.ContainsKey(position)) {
-			var array = this.portalsByPosition[position];
+		if (portalsByPosition.ContainsKey(position)) {
+			var array = portalsByPosition[position];
 			if (array[direction] == null) {
 				var portal = new Portal(position, direction, this);
 				array[direction] = portal;
-				this.addPortalToChunks(portal);
+				AddPortalToChunks(portal);
 				return portal;
 			} else {
 				return array[direction];
@@ -248,8 +249,8 @@ public class CullingData : MonoBehaviour {
 			var portal = new Portal(position, direction, this);
 			var array = new Portal[3];
 			array[direction] = portal;
-			this.portalsByPosition[position] = array;
-			this.addPortalToChunks(portal);
+			portalsByPosition[position] = array;
+			AddPortalToChunks(portal);
 			return portal;
 		}
 	}
@@ -269,4 +270,3 @@ public class CullingData : MonoBehaviour {
 #endif
 }
 }
-

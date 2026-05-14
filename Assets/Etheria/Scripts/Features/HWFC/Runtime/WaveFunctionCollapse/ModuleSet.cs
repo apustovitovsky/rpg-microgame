@@ -18,10 +18,10 @@ public class ModuleSet : ICollection<Module> {
 	public int Count {
 		get {
 			int result = 0;
-			for (int i = 0; i < this.data.Length - 1; i++) {
-				result += countBits(this.data[i]);
+			for (int i = 0; i < data.Length - 1; i++) {
+				result += countBits(data[i]);
 			}
-			return result + countBits(this.data[this.data.Length - 1] & this.lastItemUsageMask);
+			return result + countBits(data[data.Length - 1] & lastItemUsageMask);
 		}
 	}
 
@@ -33,56 +33,56 @@ public class ModuleSet : ICollection<Module> {
 
 	public bool Full {
 		get {
-			for (int i = 0; i < this.data.Length - 1; i++) {
-				if (this.data[i] != ~0) {
+			for (int i = 0; i < data.Length - 1; i++) {
+				if (data[i] != ~0) {
 					return false;
 				}
 			}
-			return (~this.data[this.data.Length - 1] & this.lastItemUsageMask) == 0;
+			return (~data[data.Length - 1] & lastItemUsageMask) == 0;
 		}
 	}
 
 	public bool Empty {
 		get {
-			for (int i = 0; i < this.data.Length - 1; i++) {
-				if (this.data[i] != 0) {
+			for (int i = 0; i < data.Length - 1; i++) {
+				if (data[i] != 0) {
 					return false;
 				}
 			}
-			return (this.data[this.data.Length - 1] & this.lastItemUsageMask) == 0;
+			return (data[data.Length - 1] & lastItemUsageMask) == 0;
 		}
 	}
 
 	public float Entropy {
 		get {
-			if (this.entropyOutdated) {
-				this.entropy = this.calculateEntropy();
-				this.entropyOutdated = false;
+			if (entropyOutdated) {
+				entropy = calculateEntropy();
+				entropyOutdated = false;
 			}
-			return this.entropy;
+			return entropy;
 		}
 	}
-	
+
 	public ModuleSet(bool initializeFull = false) {
-		this.data = new long[ModuleData.Current.Length / bitsPerItem + (ModuleData.Current.Length % bitsPerItem == 0 ? 0 : 1)];
-		
+		data = new long[ModuleData.Current.Length / bitsPerItem + (ModuleData.Current.Length % bitsPerItem == 0 ? 0 : 1)];
+
 		if (initializeFull) {
-			for (int i = 0; i < this.data.Length; i++) {
-				this.data[i] = ~0;
+			for (int i = 0; i < data.Length; i++) {
+				data[i] = ~0;
 			}
 		}
 	}
 
 	public ModuleSet(IEnumerable<Module> source) : this() {
 		foreach (var module in source) {
-			this.Add(module);
+			Add(module);
 		}
 	}
 
 	public ModuleSet(ModuleSet source) {
-		this.data = source.data.ToArray();
-		this.entropy = source.Entropy;
-		this.entropyOutdated = false;
+		data = source.data.ToArray();
+		entropy = source.Entropy;
+		entropyOutdated = false;
 	}
 
 	public static ModuleSet FromEnumerable(IEnumerable<Module> source) {
@@ -97,11 +97,11 @@ public class ModuleSet : ICollection<Module> {
 		int i = module.Index / bitsPerItem;
 		long mask = (long)1 << (module.Index % bitsPerItem);
 
-		long value = this.data[i];
-	
+		long value = data[i];
+
 		if ((value & mask) == 0) {
-			this.data[i] = value | mask;
-			this.entropyOutdated = true;
+			data[i] = value | mask;
+			entropyOutdated = true;
 		}
 	}
 
@@ -109,11 +109,11 @@ public class ModuleSet : ICollection<Module> {
 		int i = module.Index / bitsPerItem;
 		long mask = (long)1 << (module.Index % bitsPerItem);
 
-		long value = this.data[i];
-	
+		long value = data[i];
+
 		if ((value & mask) != 0) {
-			this.data[i] = value & ~mask;
-			this.entropyOutdated = true;
+			data[i] = value & ~mask;
+			entropyOutdated = true;
 			return true;
 		} else {
 			return false;
@@ -123,19 +123,19 @@ public class ModuleSet : ICollection<Module> {
 	public bool Contains(Module module) {
 		int i = module.Index / bitsPerItem;
 		long mask = (long)1 << (module.Index % bitsPerItem);
-		return (this.data[i] & mask) != 0;
+		return (data[i] & mask) != 0;
 	}
 
 	public bool Contains(int index) {
 		int i = index / bitsPerItem;
 		long mask = (long)1 << (index % bitsPerItem);
-		return (this.data[i] & mask) != 0;
+		return (data[i] & mask) != 0;
 	}
 
 	public void Clear() {
-		this.entropyOutdated = true;
-		for (int i = 0; i < this.data.Length; i++) {
-			this.data[i] = 0;
+		entropyOutdated = true;
+		for (int i = 0; i < data.Length; i++) {
+			data[i] = 0;
 		}
 	}
 
@@ -144,40 +144,40 @@ public class ModuleSet : ICollection<Module> {
 	/// </summary>
 	/// <param name="moduleSet"></param>
 	/// <returns></returns>
-	
+
 	public void Intersect(ModuleSet moduleSet) {
-		for (int i = 0; i < this.data.Length; i++) {
-			long current = this.data[i];
+		for (int i = 0; i < data.Length; i++) {
+			long current = data[i];
 			long mask = moduleSet.data[i];
 			long updated = current & mask;
 
 			if (current != updated) {
-				this.data[i] = updated;
-				this.entropyOutdated = true;
+				data[i] = updated;
+				entropyOutdated = true;
 			}
 		}
 	}
 
 	public void Add(ModuleSet set) {
-		for (int i = 0; i < this.data.Length; i++) {
-			long current = this.data[i];
+		for (int i = 0; i < data.Length; i++) {
+			long current = data[i];
 			long updated = current | set.data[i];
 
 			if (current != updated) {
-				this.data[i] = updated;
-				this.entropyOutdated = true;
+				data[i] = updated;
+				entropyOutdated = true;
 			}
 		}
 	}
 
 	public void Remove(ModuleSet set) {
-		for (int i = 0; i < this.data.Length; i++) {
-			long current = this.data[i];
+		for (int i = 0; i < data.Length; i++) {
+			long current = data[i];
 			long updated = current & ~set.data[i];
 
 			if (current != updated) {
-				this.data[i] = updated;
-				this.entropyOutdated = true;
+				data[i] = updated;
+				entropyOutdated = true;
 			}
 		}
 	}
@@ -204,8 +204,8 @@ public class ModuleSet : ICollection<Module> {
 
 	public IEnumerator<Module> GetEnumerator() {
 		int index = 0;
-		for (int i = 0; i < this.data.Length; i++) {
-			long value = this.data[i];
+		for (int i = 0; i < data.Length; i++) {
+			long value = data[i];
 			if (value == 0) {
 				index += bitsPerItem;
 				continue;
@@ -223,18 +223,17 @@ public class ModuleSet : ICollection<Module> {
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() {
-		return (IEnumerator)this.GetEnumerator();
+		return (IEnumerator)GetEnumerator();
 	}
 
 	private float calculateEntropy() {
 		float total = 0;
 		float entropySum = 0;
 		foreach (var module in this) {
-			total += module.Prototype.Probability;
+			total += module.Probability;
 			entropySum += module.PLogP;
 		}
 		return -1f / total * entropySum + Mathf.Log(total);
 	}
 }
 }
-

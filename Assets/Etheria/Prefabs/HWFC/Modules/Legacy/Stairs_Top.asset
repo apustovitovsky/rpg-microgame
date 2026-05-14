@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f1a2261f04912d4baa59d210d2ff62a, type: 3}
+  m_Name: Stairs_Top
+  m_EditorClassIdentifier: Etheria.Features.HWFC::Etheria.Features.HWFC.ModuleDefinitionSO
+  StableId: 
+  Prefab: {fileID: 1886858674043056, guid: 205f2f4529e28554bad7c590809e3097, type: 3}
+  Probability: 2
+  Spawn: 1
+  IsInterior: 0
+  AllowRotations: 1
+  Left:
+    Walkable: 1
+    Connector: 2
+    EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
+    ExcludedNeighbours: []
+    Symmetric: 1
+    Flipped: 0
+  Down:
+    Walkable: 1
+    Connector: 8
+    EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
+    ExcludedNeighbours: []
+    Invariant: 0
+    Rotation: 0
+  Back:
+    Walkable: 0
+    Connector: 5
+    EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
+    ExcludedNeighbours: []
+    Symmetric: 0
+    Flipped: 0
+  Right:
+    Walkable: 0
+    Connector: 0
+    EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
+    ExcludedNeighbours: []
+    Symmetric: 1
+    Flipped: 0
+  Up:
+    Walkable: 0
+    Connector: 0
+    EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
+    ExcludedNeighbours: []
+    Invariant: 1
+    Rotation: 0
+  Forward:
+    Walkable: 0
+    Connector: 5
+    EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
+    ExcludedNeighbours: []
+    Symmetric: 0
+    Flipped: 1

@@ -1,13 +1,13 @@
-namespace Etheria.Features.HWFC {
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
-using System.Linq;
-using System;
 
+namespace Etheria.Features.HWFC {
 public class ModulePrototype : MonoBehaviour {
 	[System.Serializable]
 	public abstract class FaceDetails {
@@ -72,12 +72,12 @@ public class ModulePrototype : MonoBehaviour {
 	public FaceDetails[] Faces {
 		get {
 			return new FaceDetails[] {
-				this.Left,
-				this.Down,
-				this.Back,
-				this.Right,
-				this.Up,
-				this.Forward
+				Left,
+				Down,
+				Back,
+				Right,
+				Up,
+				Forward
 			};
 		}
 	}
@@ -100,6 +100,10 @@ public class ModulePrototype : MonoBehaviour {
 
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
 	static void DrawGizmo(ModulePrototype modulePrototype, GizmoType gizmoType) {
+		if (modulePrototype == null || !modulePrototype.HasValidFaces()) {
+			return;
+		}
+
 		var transform = modulePrototype.transform;
 		Vector3 position = transform.position;
 		var rotation = transform.rotation;
@@ -144,6 +148,21 @@ public class ModulePrototype : MonoBehaviour {
 		}
 	}
 #endif
+
+	private bool HasValidFaces() {
+		var faces = Faces;
+		if (faces == null || faces.Length != 6) {
+			return false;
+		}
+
+		for (int i = 0; i < faces.Length; i++) {
+			if (faces[i] == null) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 	
 	public bool CompareRotatedVariants(int r1, int r2) {
 		if (!(this.Faces[Orientations.UP] as VerticalFaceDetails).Invariant || !(this.Faces[Orientations.DOWN] as VerticalFaceDetails).Invariant) {
@@ -182,4 +201,3 @@ public class ModulePrototype : MonoBehaviour {
 	}
 }
 }
-

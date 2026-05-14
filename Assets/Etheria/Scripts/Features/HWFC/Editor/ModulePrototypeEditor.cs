@@ -1,9 +1,7 @@
-namespace Etheria.Features.HWFC.Editor {
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using Etheria.Features.HWFC;
+
 
 [CustomEditor(typeof(ModulePrototype))]
 public class ModulePrototypeEditor : Editor {
@@ -14,7 +12,7 @@ public class ModulePrototypeEditor : Editor {
 		if (GUILayout.Button("Distribute")) {
 			int i = 0;
 			foreach (Transform transform in modulePrototype.transform.parent) {
-				transform.localPosition = Vector3.forward * i * InfiniteMap.BLOCK_SIZE * 2f;
+				transform.localPosition = 2f * i * InfiniteMap.BLOCK_SIZE * Vector3.forward;
 				i++;
 			}
 		}
@@ -43,5 +41,3 @@ public class ModulePrototypeEditor : Editor {
 		}
 	}
 }
-}
-

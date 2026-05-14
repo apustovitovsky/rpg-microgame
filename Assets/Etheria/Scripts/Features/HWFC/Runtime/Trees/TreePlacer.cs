@@ -21,8 +21,8 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 	private void prepareModulesThatGrowTrees() {
 		this.modulesThatGrowTrees = new HashSet<int>();
 
-		foreach (var module in this.mapBehaviour.ModuleData.Modules) {
-			if (module.Prototype.GetComponent<TreeGrowingPrototype>() != null) {
+		foreach (var module in ModuleData.Current) {
+			if (module.Prefab != null && module.Prefab.GetComponent<TreeGrowingPrototype>() != null) {
 				this.modulesThatGrowTrees.Add(module.Index);
 			}
 		}
@@ -135,4 +135,3 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 	}
 }
 }
-

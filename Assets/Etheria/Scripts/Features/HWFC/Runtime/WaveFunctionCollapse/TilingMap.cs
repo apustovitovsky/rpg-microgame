@@ -15,33 +15,33 @@ public class TilingMap : AbstractMap {
 	private readonly Slot[,,] slots;
 
 	public TilingMap(Vector3Int size) : base() {
-		this.Size = size;
-		this.slots = new Slot[size.x, size.y, size.z];
+		Size = size;
+		slots = new Slot[size.x, size.y, size.z];
 
 		for (int x = 0; x < size.x; x++) {
 			for (int y = 0; y < size.y; y++) {
 				for (int z = 0; z < size.z; z++) {
-					this.slots[x,y,z] = new Slot(new Vector3Int(x,y,z), this);
+					slots[x,y,z] = new Slot(new Vector3Int(x,y,z), this);
 				}
 			}
 		}
 	}
 
 	public override Slot GetSlot(Vector3Int position) {
-		if (position.y < 0 || position.y >= this.Size.y) {
+		if (position.y < 0 || position.y >= Size.y) {
 			return null;
 		}
-		return this.slots[
-			position.x % this.Size.x + (position.x % this.Size.x < 0 ? this.Size.x : 0),
+		return slots[
+			position.x % Size.x + (position.x % Size.x < 0 ? Size.x : 0),
 			position.y,
-			position.z % this.Size.z + (position.z % this.Size.z < 0 ? this.Size.z : 0)];
+			position.z % Size.z + (position.z % Size.z < 0 ? Size.z : 0)];
 	}
 
 	public override IEnumerable<Slot> GetAllSlots() {
-		for (int x = 0; x < this.Size.x; x++) {
-			for (int y = 0; y < this.Size.y; y++) {
-				for (int z = 0; z < this.Size.z; z++) {
-					yield return this.slots[x, y, z];
+		for (int x = 0; x < Size.x; x++) {
+			for (int y = 0; y < Size.y; y++) {
+				for (int z = 0; z < Size.z; z++) {
+					yield return slots[x, y, z];
 				}
 			}
 		}
@@ -51,27 +51,27 @@ public class TilingMap : AbstractMap {
 		foreach (var constraint in constraints) {
 			int y = constraint.RelativeY;
 			if (y < 0) {
-				y += this.Size.y;
+				y += Size.y;
 			}
 			switch (constraint.Direction) {
 				case BoundaryConstraint.ConstraintDirection.Up:
-					for (int x = 0; x < this.Size.x; x++) {
-						for (int z = 0; z < this.Size.z; z++) {
+					for (int x = 0; x < Size.x; x++) {
+						for (int z = 0; z < Size.z; z++) {
 							if (constraint.Mode == BoundaryConstraint.ConstraintMode.EnforceConnector) {
-								this.GetSlot(new Vector3Int(x, this.Size.y - 1, z)).EnforceConnector(4, constraint.Connector);
+								GetSlot(new Vector3Int(x, Size.y - 1, z)).EnforceConnector(4, constraint.Connector);
 							} else {
-								this.GetSlot(new Vector3Int(x, this.Size.y - 1, z)).ExcludeConnector(4, constraint.Connector);
+								GetSlot(new Vector3Int(x, Size.y - 1, z)).ExcludeConnector(4, constraint.Connector);
 							}
 						}
 					}
 					break;
 				case BoundaryConstraint.ConstraintDirection.Down:
-					for (int x = 0; x < this.Size.x; x++) {
-						for (int z = 0; z < this.Size.z; z++) {
+					for (int x = 0; x < Size.x; x++) {
+						for (int z = 0; z < Size.z; z++) {
 							if (constraint.Mode == BoundaryConstraint.ConstraintMode.EnforceConnector) {
-								this.GetSlot(new Vector3Int(x, 0, z)).EnforceConnector(1, constraint.Connector);
+								GetSlot(new Vector3Int(x, 0, z)).EnforceConnector(1, constraint.Connector);
 							} else {
-								this.GetSlot(new Vector3Int(x, 0, z)).ExcludeConnector(1, constraint.Connector);
+								GetSlot(new Vector3Int(x, 0, z)).ExcludeConnector(1, constraint.Connector);
 							}
 						}
 					}

@@ -4,7 +4,7 @@ namespace Etheria.Features.HWFC
 {
     public sealed class MinPriorityQueue<T>
     {
-        private readonly List<(T Item, float Priority)> _heap = new();
+        private readonly List<(T Item, float Priority)> _heap = new List<(T Item, float Priority)>();
 
         public int Count => _heap.Count;
 
