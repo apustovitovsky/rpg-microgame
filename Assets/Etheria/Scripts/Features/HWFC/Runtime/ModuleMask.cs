@@ -5,228 +5,211 @@ using UnityEngine;
 
 namespace Etheria.Features.HWFC
 {
-    [Serializable]
-    public struct ModuleSet : IEnumerable<int>, IEquatable<ModuleSet>
-    {
-        [SerializeField]
-        private BitMask256 _mask;
+	[Serializable]
+	public struct ModuleSet : ICollection<Module>
+	{
+		[SerializeField]
+		private BitMask256 _mask;
 
-        [SerializeField]
-        private int _moduleCount;
+		[SerializeField]
+		private float _entropy;
 
-        public ModuleSet(int moduleCount, bool filled)
-        {
-            ValidateModuleCount(moduleCount);
+		[SerializeField]
+		private bool _entropyOutdated;
 
-            _moduleCount = moduleCount;
-            _mask = filled ? CreateUniverseMask(moduleCount) : BitMask256.Empty;
-        }
+		public ModuleSet(bool initializeFull)
+		{
+			_mask = initializeFull ? UniverseMask : BitMask256.Empty;
+			_entropy = 0f;
+			_entropyOutdated = true;
+		}
 
-        private ModuleSet(int moduleCount, BitMask256 mask)
-        {
-            ValidateModuleCount(moduleCount);
+		public ModuleSet(ModuleSet source)
+		{
+			_mask = source._mask;
+			_entropy = source.Entropy;
+			_entropyOutdated = false;
+		}
 
-            _moduleCount = moduleCount;
-            _mask = mask;
-        }
+		public ModuleSet(BitMask256 mask)
+		{
+			_mask = mask;
+			_entropy = 0f;
+			_entropyOutdated = true;
+		}
 
-        public int ModuleCount => _moduleCount;
+		public int Count => _mask.Count;
 
-        public int Count => _mask.Count;
+		public bool Empty => _mask.IsEmpty;
 
-        public bool IsEmpty => _mask.IsEmpty;
+		public bool Full => _mask == UniverseMask;
 
-        public bool IsFull => _mask == CreateUniverseMask(_moduleCount);
+		public bool IsReadOnly => false;
 
-        public static ModuleSet Empty(int moduleCount)
-        {
-            return new ModuleSet(moduleCount, filled: false);
-        }
+		public float Entropy
+		{
+			get
+			{
+				if (_entropyOutdated)
+				{
+					_entropy = CalculateEntropy();
+					_entropyOutdated = false;
+				}
 
-        public static ModuleSet Full(int moduleCount)
-        {
-            return new ModuleSet(moduleCount, filled: true);
-        }
+				return _entropy;
+			}
+		}
 
-        public static ModuleSet Single(int moduleCount, int moduleIndex)
-        {
-            var set = Empty(moduleCount);
-            set.Add(moduleIndex);
-            return set;
-        }
+		public static ModuleSet EmptySet => new(BitMask256.Empty);
 
-        public bool Contains(int moduleIndex)
-        {
-            ValidateModuleIndex(moduleIndex);
-            return _mask.ContainsIndex(moduleIndex);
-        }
+		public static ModuleSet FullSet => new(UniverseMask);
 
-        public void Add(int moduleIndex)
-        {
-            ValidateModuleIndex(moduleIndex);
-            _mask = _mask | BitMask256.FromIndex(moduleIndex);
-        }
+		private static int ModuleCount => 0;
 
-        public bool Remove(int moduleIndex)
-        {
-            ValidateModuleIndex(moduleIndex);
-            var itemMask = BitMask256.FromIndex(moduleIndex);
-            if (!_mask.Overlaps(itemMask))
-            {
-                return false;
-            }
+		private static BitMask256 UniverseMask
+		{
+			get
+			{
+				var mask = BitMask256.Empty;
 
-            _mask = _mask.Without(itemMask);
-            return true;
-        }
+				for (int i = 0; i < ModuleCount; i++)
+					mask |= BitMask256.FromIndex(i);
 
-        public void Clear()
-        {
-            _mask = BitMask256.Empty;
-        }
+				return mask;
+			}
+		}
 
-        public bool Overlaps(ModuleSet other)
-        {
-            EnsureCompatible(other);
-            return _mask.Overlaps(other._mask);
-        }
+		public static ModuleSet FromEnumerable(IEnumerable<Module> source)
+		{
+			var result = new ModuleSet(BitMask256.Empty);
 
-        public bool ContainsAll(ModuleSet other)
-        {
-            EnsureCompatible(other);
-            return _mask.ContainsAll(other._mask);
-        }
+			foreach (var module in source)
+				result.Add(module);
 
-        public void IntersectWith(ModuleSet other)
-        {
-            EnsureCompatible(other);
-            _mask = _mask & other._mask;
-        }
+			return result;
+		}
 
-        public void UnionWith(ModuleSet other)
-        {
-            EnsureCompatible(other);
-            _mask = _mask | other._mask;
-        }
+		public void Add(Module module)
+		{
+			var updated = _mask | BitMask256.FromIndex(module.Index);
 
-        public void ExceptWith(ModuleSet other)
-        {
-            EnsureCompatible(other);
-            _mask = _mask.Without(other._mask);
-        }
+			if (updated == _mask)
+				return;
 
-        public float CalculateEntropy(ModuleModel model)
-        {
-            if (model == null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
+			_mask = updated;
+			_entropyOutdated = true;
+		}
 
-            if (_moduleCount != model.ModuleCount)
-            {
-                throw new ArgumentException("ModuleSet and ModuleModel must use the same module count.", nameof(model));
-            }
+		public void Add(ModuleSet set)
+		{
+			var updated = _mask | set._mask;
 
-            if (_mask.IsEmpty)
-            {
-                return float.PositiveInfinity;
-            }
+			if (updated == _mask)
+				return;
 
-            double totalWeight = 0d;
-            double totalWeightLogWeight = 0d;
+			_mask = updated;
+			_entropyOutdated = true;
+		}
 
-            foreach (var moduleIndex in this)
-            {
-                totalWeight += model.Weights[moduleIndex];
-                totalWeightLogWeight += model.WeightLogWeights[moduleIndex];
-            }
+		public bool Remove(Module module)
+		{
+			var moduleMask = BitMask256.FromIndex(module.Index);
 
-            if (totalWeight <= 0d)
-            {
-                return float.PositiveInfinity;
-            }
+			if (!_mask.Overlaps(moduleMask))
+				return false;
 
-            return (float)(Math.Log(totalWeight) - (totalWeightLogWeight / totalWeight));
-        }
+			_mask = _mask.Without(moduleMask);
+			_entropyOutdated = true;
+			return true;
+		}
 
-        public IEnumerator<int> GetEnumerator()
-        {
-            for (var moduleIndex = 0; moduleIndex < _moduleCount; moduleIndex++)
-            {
-                if (_mask.ContainsIndex(moduleIndex))
-                {
-                    yield return moduleIndex;
-                }
-            }
-        }
+		public void Remove(ModuleSet set)
+		{
+			var updated = _mask.Without(set._mask);
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+			if (updated == _mask)
+				return;
 
-        public bool Equals(ModuleSet other)
-        {
-            return _moduleCount == other._moduleCount && _mask.Equals(other._mask);
-        }
+			_mask = updated;
+			_entropyOutdated = true;
+		}
 
-        public override bool Equals(object obj)
-        {
-            return obj is ModuleSet other && Equals(other);
-        }
+		/// <summary>
+		/// Removes all modules that are not in the supplied set.
+		/// </summary>
+		public void Intersect(ModuleSet moduleSet)
+		{
+			var updated = _mask & moduleSet._mask;
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (_mask.GetHashCode() * 397) ^ _moduleCount;
-            }
-        }
+			if (updated == _mask)
+				return;
 
-        public static bool operator ==(ModuleSet left, ModuleSet right)
-        {
-            return left.Equals(right);
-        }
+			_mask = updated;
+			_entropyOutdated = true;
+		}
 
-        public static bool operator !=(ModuleSet left, ModuleSet right)
-        {
-            return !left.Equals(right);
-        }
+		public bool Contains(Module module)
+		{
+			return _mask.ContainsIndex(module.Index);
+		}
 
-        private static BitMask256 CreateUniverseMask(int moduleCount)
-        {
-            var mask = BitMask256.Empty;
+		public bool Contains(int index)
+		{
+			return _mask.ContainsIndex(index);
+		}
 
-            for (var moduleIndex = 0; moduleIndex < moduleCount; moduleIndex++)
-            {
-                mask |= BitMask256.FromIndex(moduleIndex);
-            }
+		public void Clear()
+		{
+			if (_mask.IsEmpty)
+				return;
 
-            return mask;
-        }
+			_mask = BitMask256.Empty;
+			_entropyOutdated = true;
+		}
 
-        private static void ValidateModuleCount(int moduleCount)
-        {
-            if (moduleCount < 0 || moduleCount > BitMask256.Capacity)
-            {
-                throw new ArgumentOutOfRangeException(nameof(moduleCount));
-            }
-        }
+		public void CopyTo(Module[] array, int arrayIndex)
+		{
+			foreach (var module in this)
+			{
+				array[arrayIndex] = module;
+				arrayIndex++;
+			}
+		}
 
-        private void ValidateModuleIndex(int moduleIndex)
-        {
-            if (moduleIndex < 0 || moduleIndex >= _moduleCount)
-            {
-                throw new ArgumentOutOfRangeException(nameof(moduleIndex));
-            }
-        }
+		public IEnumerator<Module> GetEnumerator()
+		{
+			for (int i = 0; i < ModuleCount; i++)
+			{
+				if (_mask.ContainsIndex(i))
+					yield return default;
+			}
+		}
 
-        private void EnsureCompatible(ModuleSet other)
-        {
-            if (_moduleCount != other._moduleCount)
-            {
-                throw new InvalidOperationException("Cannot combine module sets with different module counts.");
-            }
-        }
-    }
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		private float CalculateEntropy()
+		{
+			if (_mask.IsEmpty)
+				return float.PositiveInfinity;
+
+			float total = 0f;
+			float entropySum = 0f;
+
+			foreach (var module in this)
+			{
+				float probability = 0;
+
+				total += probability;
+				entropySum += module.PLogP;
+			}
+
+			if (total <= 0f)
+				return float.PositiveInfinity;
+
+			return -entropySum / total + Mathf.Log(total);
+		}
+	}
 }
