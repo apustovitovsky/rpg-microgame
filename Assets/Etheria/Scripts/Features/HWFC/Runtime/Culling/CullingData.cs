@@ -1,8 +1,11 @@
-﻿using System.Collections;
+namespace Etheria.Features.HWFC {
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public class CullingData : MonoBehaviour {
 	[HideInInspector]
@@ -265,3 +268,5 @@ public class CullingData : MonoBehaviour {
 	}
 #endif
 }
+}
+

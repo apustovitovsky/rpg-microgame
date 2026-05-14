@@ -1,6 +1,9 @@
-﻿using System.Collections;
+namespace Etheria.Features.HWFC {
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 // This behaviour marks prototypes on which trees can grow
 public class TreeGrowingPrototype : MonoBehaviour { }
+}
+

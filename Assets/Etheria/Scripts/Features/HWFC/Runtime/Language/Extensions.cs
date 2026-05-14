@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+namespace Etheria.Features.HWFC {
+using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
@@ -61,3 +62,5 @@ public static class Extensions
 	}
 	
 }
+}
+

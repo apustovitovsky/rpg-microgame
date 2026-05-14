@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Etheria.Features.HWFC_Old
 {
     [CreateAssetMenu(
-        menuName = "Etheria/HWFC/Layout Generation Debug Result",
+        menuName = "Etheria/HWFC_Old/Layout Generation Debug Result",
         fileName = "LayoutGenerationDebugResult")]
     public sealed class LayoutGenerationDebugResultSO : ScriptableObject
     {

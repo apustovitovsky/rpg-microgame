@@ -1,4 +1,5 @@
-﻿using System.Collections;
+namespace Etheria.Features.HWFC {
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -79,3 +80,5 @@ public class Orientations {
 		}
 	}
 }
+}
+

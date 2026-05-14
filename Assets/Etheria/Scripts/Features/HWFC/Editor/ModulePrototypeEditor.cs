@@ -1,7 +1,9 @@
-﻿using System.Collections;
+namespace Etheria.Features.HWFC.Editor {
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Etheria.Features.HWFC;
 
 [CustomEditor(typeof(ModulePrototype))]
 public class ModulePrototypeEditor : Editor {
@@ -41,3 +43,5 @@ public class ModulePrototypeEditor : Editor {
 		}
 	}
 }
+}
+

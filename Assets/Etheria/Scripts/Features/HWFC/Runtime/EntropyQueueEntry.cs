@@ -9,7 +9,7 @@ namespace Etheria.Features.HWFC
         public EntropyQueueEntry(Slot slot)
         {
             Slot = slot;
-            Version = slot.Version;
+            Version = 0;
         }
     }
 }

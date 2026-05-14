@@ -1,6 +1,9 @@
+namespace Etheria.Features.HWFC {
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 public class Room {
@@ -46,3 +49,5 @@ public class Room {
 	}
 #endif
 }
+}
+

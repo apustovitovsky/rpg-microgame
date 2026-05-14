@@ -1,9 +1,11 @@
+namespace Etheria.Features.HWFC.Editor {
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using System.Linq;
 using UnityEditor.SceneManagement;
+using Etheria.Features.HWFC;
 
 [CustomEditor(typeof(MapBehaviour))]
 public class MapBehaviourEditor : Editor {
@@ -32,3 +34,5 @@ public class MapBehaviourEditor : Editor {
 		GUILayout.EndHorizontal();
 	}
 }
+}
+

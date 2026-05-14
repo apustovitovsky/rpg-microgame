@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Etheria.Features.HWFC_Old
 {
     [CreateAssetMenu(
-        menuName = "Etheria/HWFC/Module Set Data",
+        menuName = "Etheria/HWFC_Old/Module Set Data",
         fileName = "ModuleSetData")]
     public sealed class ModuleSetData : ScriptableObject
     {

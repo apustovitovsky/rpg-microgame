@@ -1,7 +1,9 @@
-﻿using System.Collections;
+namespace Etheria.Features.HWFC.Editor {
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Etheria.Features.HWFC;
 
 [CustomEditor(typeof(TreeGenerator))]
 public class TreeEditor : Editor {
@@ -15,3 +17,5 @@ public class TreeEditor : Editor {
 		}
 	}
 }
+}
+

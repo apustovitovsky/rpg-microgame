@@ -1,8 +1,10 @@
+namespace Etheria.Features.HWFC.Editor {
 using UnityEditor;
 using UnityEngine;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using Etheria.Features.HWFC;
 
 [CustomEditor(typeof(SlotInspector))]
 public class SlotInspectorEditor : Editor {
@@ -220,3 +222,5 @@ public class SlotInspectorEditor : Editor {
 		}
 	}
 }
+}
+

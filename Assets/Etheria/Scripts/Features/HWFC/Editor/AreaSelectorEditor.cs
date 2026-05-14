@@ -1,7 +1,9 @@
-﻿using System.Collections;
+namespace Etheria.Features.HWFC.Editor {
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Etheria.Features.HWFC;
 
 [CustomEditor(typeof(AreaSelector))]
 public class AreaSelectorEditor : Editor {
@@ -19,3 +21,5 @@ public class AreaSelectorEditor : Editor {
 		}
 	}
 }
+}
+

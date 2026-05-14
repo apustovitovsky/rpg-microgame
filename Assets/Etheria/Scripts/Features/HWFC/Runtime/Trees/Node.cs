@@ -1,8 +1,11 @@
+namespace Etheria.Features.HWFC {
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System;
 
 public class Node {
@@ -153,3 +156,5 @@ public class Node {
 		}
 	}
 }
+}
+

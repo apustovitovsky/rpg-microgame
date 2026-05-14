@@ -1,9 +1,12 @@
-﻿using System.Collections;
+namespace Etheria.Features.HWFC {
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 [System.Serializable]
 public class Module {
@@ -64,3 +67,5 @@ public class Module {
 		return this.Name;
 	}
 }
+}
+

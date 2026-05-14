@@ -1,3 +1,4 @@
+namespace Etheria.Features.HWFC {
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -235,3 +236,5 @@ public class ModuleSet : ICollection<Module> {
 		return -1f / total * entropySum + Mathf.Log(total);
 	}
 }
+}
+

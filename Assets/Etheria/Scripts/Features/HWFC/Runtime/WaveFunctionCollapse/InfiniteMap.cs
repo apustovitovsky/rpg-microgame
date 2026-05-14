@@ -1,9 +1,12 @@
+namespace Etheria.Features.HWFC {
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public class InfiniteMap : AbstractMap {
 	private Dictionary<Vector3Int, Slot> slots;
@@ -99,3 +102,5 @@ public class InfiniteMap : AbstractMap {
 		this.muteRangeLimitWarning = true;
 	}
 }
+}
+

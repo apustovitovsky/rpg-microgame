@@ -1,4 +1,5 @@
-﻿using System;
+namespace Etheria.Features.HWFC {
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -67,3 +68,5 @@ public class RingBuffer<T> {
 		return this.Count != 0;
 	}
 }
+}
+

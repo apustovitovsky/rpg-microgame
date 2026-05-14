@@ -1,7 +1,10 @@
-﻿using System.Collections;
+namespace Etheria.Features.HWFC {
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public class AreaSelector : MonoBehaviour {
 	public MapBehaviour MapBehaviour;
@@ -42,4 +45,5 @@ public class AreaSelector : MonoBehaviour {
 		Gizmos.DrawWireCube(areaSelector.MapBehaviour.transform.position + start + size * 0.5f, size);
 	}
 #endif
+}
 }

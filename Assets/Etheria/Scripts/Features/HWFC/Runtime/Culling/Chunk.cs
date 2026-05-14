@@ -1,4 +1,5 @@
-﻿using System.Collections;
+namespace Etheria.Features.HWFC {
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -82,3 +83,5 @@ public class Chunk {
 		this.GameObjects.Remove(slot.GameObject);
 	}
 }
+}
+
