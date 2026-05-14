@@ -1,15 +1,16 @@
-
 namespace Etheria.Features.HWFC
 {
     public readonly struct EntropyQueueEntry
     {
-        public readonly Slot Slot;
+        public readonly int NodeIndex;
         public readonly int Version;
+        public readonly float Entropy;
 
-        public EntropyQueueEntry(Slot slot)
+        public EntropyQueueEntry(int nodeIndex, int version, float entropy)
         {
-            Slot = slot;
-            Version = slot.Version;
+            NodeIndex = nodeIndex;
+            Version = version;
+            Entropy = entropy;
         }
     }
 }
