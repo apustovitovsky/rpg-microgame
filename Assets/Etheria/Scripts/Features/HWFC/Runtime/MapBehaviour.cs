@@ -13,7 +13,7 @@ namespace Etheria.Features.HWFC
 	{
 		public InfiniteMap Map;
 
-		public int MapHeight = 6;
+		public int MapHeight = 24;
 
 		public BoundaryConstraint[] BoundaryConstraints;
 

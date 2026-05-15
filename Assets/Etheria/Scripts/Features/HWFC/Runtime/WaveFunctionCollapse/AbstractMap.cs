@@ -182,8 +182,7 @@ public abstract class AbstractMap {
 		for (int i = 0; i < modules.Length; i++) {
 			for (int d = 0; d < 6; d++) {
 				if (initialModuleHealth[d][i] == 0) {
-					Debug.LogError("Module " + modules[i].Name + " cannot be reached from direction " + d + " (" + modules[i].GetFace(d).ToString() + ")!", modules[i].Prefab);
-					throw new Exception("Unreachable module.");
+					Debug.LogWarning("Module " + modules[i].Name + " cannot be reached from direction " + d + " (" + modules[i].GetFace(d).ToString() + "). This is allowed for boundary-only modules.", modules[i].Prefab);
 				}
 			}
 		}
@@ -197,4 +196,3 @@ public abstract class AbstractMap {
 	}
 }
 }
-

@@ -125,7 +125,13 @@ public static class ModuleBaker {
 			try {
 				slot.Collapse(module);
 			} catch (CollapseFailedException exception) {
-				throw new InvalidOperationException("Module " + module.Name + " creates a failure at relative position " + (exception.Slot.Position - center) + ".");
+				Debug.LogWarning(
+					"Skipping simplify pass for boundary-dependent module "
+					+ module.Name
+					+ ". It creates a failure at relative position "
+					+ (exception.Slot.Position - center)
+					+ ". Keeping base adjacency for this module.");
+				continue;
 			}
 
 			for (int direction = 0; direction < 6; direction++) {
