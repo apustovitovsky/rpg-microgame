@@ -10,7 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6754678588b28674caf80e209028519f, type: 3}
-  m_Name: MinimalSmokeTestCatalog
+  m_Name: SimpleCubesCatalog
   m_EditorClassIdentifier: Etheria.Features.HWFC::Etheria.Features.HWFC.ModuleCatalogSO
   Items:
-  - {fileID: 11400000, guid: 31d7b6500a8a4ea4095711d7386dc1c7, type: 2}
+  - {fileID: 11400000, guid: cdfeba6ce45414645974fa11a025c661, type: 2}
+  - {fileID: 11400000, guid: 7ee8d46657ee68c4f86c14b36324c1d4, type: 2}
+  - {fileID: 11400000, guid: 7717a890290c5c246a51b36bc92ddf90, type: 2}
+  - {fileID: 11400000, guid: 88af615cdaa98ac4ab739a07b9a942a9, type: 2}

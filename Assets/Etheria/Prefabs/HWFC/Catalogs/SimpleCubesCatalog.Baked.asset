@@ -1,0 +1,325 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd372f4cf8a1b044eb3e625b146f3ac9, type: 3}
+  m_Name: SimpleCubesCatalog.Baked
+  m_EditorClassIdentifier: Etheria.Features.HWFC::Etheria.Features.HWFC.ModuleBakeDataSO
+  SourceCatalog: {fileID: 11400000, guid: e72ae7f20db15f64c8ea996d275ebac3, type: 2}
+  Variants:
+  - StableId: 52d4445d37de9d642b3044cb9d395930
+    Name: Empty R0
+    Source: {fileID: 11400000, guid: cdfeba6ce45414645974fa11a025c661, type: 2}
+    Prefab: {fileID: 1351484772775764, guid: bc1b6821051a0c14aafd9e40dd95892c, type: 3}
+    Rotation: 0
+    Index: 0
+    Probability: 1
+    Spawn: 1
+    IsInterior: 0
+    Left:
+      Connector: 0
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Down:
+      Connector: 0
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 0
+      Flipped: 0
+      Invariant: 1
+      Rotation: 0
+      ExcludedStableIds: []
+    Back:
+      Connector: 0
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Right:
+      Connector: 0
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Up:
+      Connector: 0
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 0
+      Flipped: 0
+      Invariant: 1
+      Rotation: 0
+      ExcludedStableIds: []
+    Forward:
+      Connector: 0
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+  - StableId: simple-cubes-solid
+    Name: Solid R0
+    Source: {fileID: 11400000, guid: 7ee8d46657ee68c4f86c14b36324c1d4, type: 2}
+    Prefab: {fileID: 5183324698573747680, guid: 9df45638c27bf194faabbee96fc8fed4,
+      type: 3}
+    Rotation: 0
+    Index: 1
+    Probability: 1
+    Spawn: 1
+    IsInterior: 0
+    Left:
+      Connector: 1
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Down:
+      Connector: 1
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 0
+      Flipped: 0
+      Invariant: 1
+      Rotation: 0
+      ExcludedStableIds: []
+    Back:
+      Connector: 1
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Right:
+      Connector: 1
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Up:
+      Connector: 1
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 0
+      Flipped: 0
+      Invariant: 1
+      Rotation: 0
+      ExcludedStableIds: []
+    Forward:
+      Connector: 1
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+  - StableId: simple-cubes-floor
+    Name: Floor R0
+    Source: {fileID: 11400000, guid: 7717a890290c5c246a51b36bc92ddf90, type: 2}
+    Prefab: {fileID: 8412495750137315922, guid: 6a0e6e8d213107b46a63b02c068768ef,
+      type: 3}
+    Rotation: 0
+    Index: 2
+    Probability: 1
+    Spawn: 1
+    IsInterior: 0
+    Left:
+      Connector: 2
+      Walkable: 1
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Down:
+      Connector: 1
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 0
+      Flipped: 0
+      Invariant: 1
+      Rotation: 0
+      ExcludedStableIds: []
+    Back:
+      Connector: 2
+      Walkable: 1
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Right:
+      Connector: 2
+      Walkable: 1
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Up:
+      Connector: 1
+      Walkable: 1
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 0
+      Flipped: 0
+      Invariant: 1
+      Rotation: 0
+      ExcludedStableIds: []
+    Forward:
+      Connector: 2
+      Walkable: 1
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+  - StableId: simple-cubes-roof
+    Name: Roof R0
+    Source: {fileID: 11400000, guid: 88af615cdaa98ac4ab739a07b9a942a9, type: 2}
+    Prefab: {fileID: 1062646957945740271, guid: 3e6e4dc17eeb6cb4aa889383e65fb82b,
+      type: 3}
+    Rotation: 0
+    Index: 3
+    Probability: 1
+    Spawn: 1
+    IsInterior: 0
+    Left:
+      Connector: 0
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Down:
+      Connector: 1
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 0
+      Flipped: 0
+      Invariant: 1
+      Rotation: 0
+      ExcludedStableIds: []
+    Back:
+      Connector: 0
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Right:
+      Connector: 0
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+    Up:
+      Connector: 0
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 0
+      Flipped: 0
+      Invariant: 1
+      Rotation: 0
+      ExcludedStableIds: []
+    Forward:
+      Connector: 0
+      Walkable: 0
+      EnforceWalkableNeighbor: 0
+      IsOcclusionPortal: 0
+      Symmetric: 1
+      Flipped: 0
+      Invariant: 0
+      Rotation: 0
+      ExcludedStableIds: []
+  Adjacency:
+    DirectionCount: 6
+    ModuleCount: 4
+    AllowedNeighborIndices:
+    - Indices: 0000000003000000
+    - Indices: 0000000003000000
+    - Indices: 0000000003000000
+    - Indices: 0000000003000000
+    - Indices: 00000000
+    - Indices: 0000000003000000
+    - Indices: 01000000
+    - Indices: 0100000002000000
+    - Indices: 01000000
+    - Indices: 01000000
+    - Indices: 010000000200000003000000
+    - Indices: 01000000
+    - Indices: 02000000
+    - Indices: 0100000002000000
+    - Indices: 02000000
+    - Indices: 02000000
+    - Indices: 010000000200000003000000
+    - Indices: 02000000
+    - Indices: 0000000003000000
+    - Indices: 0100000002000000
+    - Indices: 0000000003000000
+    - Indices: 0000000003000000
+    - Indices: 00000000
+    - Indices: 0000000003000000
+  Simplified: 0
+  SourceFingerprint: 52d4445d37de9d642b3044cb9d395930|1|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|simple-cubes-floor|1|1|0|0|2|1|0|0|1|0|0|0|2|1|0|0|2|1|0|0|1|1|0|0|2|1|0|0|simple-cubes-roof|1|1|0|0|0|0|0|0|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|simple-cubes-solid|1|1|0|0|1|0|0|0|1|0|0|0|1|0|0|0|1|0|0|0|1|0|0|0|1|0|0|0
