@@ -94,8 +94,7 @@ namespace Etheria.Features.HWFC
 
 		public void CollapseRandom()
 		{
-			var supportedCandidates = Modules.Where(IsSupportedByCurrentNeighborhood).ToArray();
-			if (!supportedCandidates.Any())
+			if (!Modules.Any())
 			{
 				throw new CollapseFailedException(this);
 			}
@@ -104,10 +103,10 @@ namespace Etheria.Features.HWFC
 				throw new Exception("Slot is already collapsed.");
 			}
 
-			float max = supportedCandidates.Sum(module => module.Probability);
+			float max = Modules.Select(module => module.Probability).Sum();
 			float roll = (float)(InfiniteMap.Random.NextDouble() * max);
 			float p = 0;
-			foreach (var candidate in supportedCandidates)
+			foreach (var candidate in Modules)
 			{
 				p += candidate.Probability;
 				if (p >= roll)
@@ -116,7 +115,7 @@ namespace Etheria.Features.HWFC
 					return;
 				}
 			}
-			Collapse(supportedCandidates.First());
+			Collapse(Modules.First());
 		}
 
 		// This modifies the supplied ModuleSet as a side effect
@@ -224,45 +223,10 @@ namespace Etheria.Features.HWFC
 			RemoveModules(ModuleSet.FromEnumerable(toRemove));
 		}
 
-		public void EnforceBoundaryConnector(int direction, int connector)
-		{
-			var supportedModules = Modules.Where(module => module.Fits(direction, connector)).ToArray();
-			EnforceConnector(direction, connector);
-
-			foreach (var module in supportedModules)
-			{
-				if (!Modules.Contains(module))
-				{
-					continue;
-				}
-
-				ModuleHealth[direction][module.Index]++;
-			}
-		}
-
 		public void ExcludeConnector(int direction, int connector)
 		{
 			var toRemove = Modules.Where(module => module.Fits(direction, connector));
 			RemoveModules(ModuleSet.FromEnumerable(toRemove));
-		}
-
-		private bool IsSupportedByCurrentNeighborhood(Module module)
-		{
-			for (int direction = 0; direction < 6; direction++)
-			{
-				var neighbor = GetNeighbor(direction);
-				if (neighbor == null || neighbor.Forgotten)
-				{
-					continue;
-				}
-
-				if (ModuleHealth[direction][module.Index] <= 0)
-				{
-					return false;
-				}
-			}
-
-			return true;
 		}
 
 		public override int GetHashCode()

@@ -58,7 +58,7 @@ public class TilingMap : AbstractMap {
 					for (int x = 0; x < Size.x; x++) {
 						for (int z = 0; z < Size.z; z++) {
 							if (constraint.Mode == BoundaryConstraint.ConstraintMode.EnforceConnector) {
-								GetSlot(new Vector3Int(x, Size.y - 1, z)).EnforceBoundaryConnector(4, constraint.Connector);
+								GetSlot(new Vector3Int(x, Size.y - 1, z)).EnforceConnector(4, constraint.Connector);
 							} else {
 								GetSlot(new Vector3Int(x, Size.y - 1, z)).ExcludeConnector(4, constraint.Connector);
 							}
@@ -69,7 +69,7 @@ public class TilingMap : AbstractMap {
 					for (int x = 0; x < Size.x; x++) {
 						for (int z = 0; z < Size.z; z++) {
 							if (constraint.Mode == BoundaryConstraint.ConstraintMode.EnforceConnector) {
-								GetSlot(new Vector3Int(x, 0, z)).EnforceBoundaryConnector(1, constraint.Connector);
+								GetSlot(new Vector3Int(x, 0, z)).EnforceConnector(1, constraint.Connector);
 							} else {
 								GetSlot(new Vector3Int(x, 0, z)).ExcludeConnector(1, constraint.Connector);
 							}
@@ -84,3 +84,4 @@ public class TilingMap : AbstractMap {
 	}
 }
 }
+

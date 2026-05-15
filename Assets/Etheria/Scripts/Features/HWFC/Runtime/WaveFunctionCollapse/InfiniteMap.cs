@@ -68,7 +68,7 @@ public class InfiniteMap : AbstractMap {
 			foreach (int d in directions) {
 				switch (constraint.Mode) {
 					case BoundaryConstraint.ConstraintMode.EnforceConnector:
-						this.defaultColumn.GetSlot(new Vector3Int(0, y, 0)).EnforceBoundaryConnector(d, constraint.Connector);
+						this.defaultColumn.GetSlot(new Vector3Int(0, y, 0)).EnforceConnector(d, constraint.Connector);
 						break;
 					case BoundaryConstraint.ConstraintMode.ExcludeConnector:
 						this.defaultColumn.GetSlot(new Vector3Int(0, y, 0)).ExcludeConnector(d, constraint.Connector);
@@ -103,3 +103,4 @@ public class InfiniteMap : AbstractMap {
 	}
 }
 }
+
