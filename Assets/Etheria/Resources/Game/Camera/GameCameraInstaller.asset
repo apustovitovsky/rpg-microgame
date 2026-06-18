@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4e64eb163581d94ba93fd9c51a02833, type: 3}
+  m_Name: GameCameraInstaller
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.Camera.MainCameraInstallerSO
+  _mainCamera: {fileID: -769583575774091526, guid: 46dd0a950dd001b429943a53059ef717,
+    type: 3}

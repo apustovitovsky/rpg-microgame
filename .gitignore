@@ -1,4 +1,13 @@
 # This .gitignore file should be placed at the root of your Unity project directory
+
+# Only track Etheria, GAS, FPS inside Assets
+/[Aa]ssets/*
+!/[Aa]ssets/Etheria
+!/[Aa]ssets/Etheria.meta
+!/[Aa]ssets/GAS
+!/[Aa]ssets/GAS.meta
+!/[Aa]ssets/FPS
+!/[Aa]ssets/FPS.meta
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
@@ -10,6 +19,7 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+/[Ee]xamples/
 *.log
 
 # By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.
@@ -33,6 +43,7 @@
 
 # Claude Code
 .claude/
+/docs/
 
 # Visual Studio cache directory
 .vs/
@@ -47,6 +58,7 @@ ExportedObj/
 *.csproj
 *.unityproj
 *.sln
+*.slnx
 *.suo
 *.tmp
 *.user
