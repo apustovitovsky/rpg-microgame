@@ -4,11 +4,10 @@ using UnityEngine;
 using VContainer;
 using Etheria.Game.Targeting;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
-    public class SyntyActorAnimationController : MonoBehaviour
+    public class PlayerCharacterAnimationController : MonoBehaviour
     {
-
         private IPlayerInputSource _inputReader;
         private IPlayerTargetService _targetSelection;
 
@@ -99,7 +98,10 @@ namespace Etheria.Features.Actor
 
         [Tooltip("Animator component for controlling player animations")]
         [SerializeField]
-        private Animator _animator;
+        private CharacterVisual _visual;
+
+        // [SerializeField]
+        // private Animator _visual.Animator;
 
         [Tooltip("Character Controller component for controlling player movement")]
         [SerializeField]
@@ -648,40 +650,40 @@ namespace Etheria.Features.Actor
         /// </summary>
         private void UpdateAnimatorController()
         {
-            _animator.SetFloat(_leanValueHash, _leanValue);
-            _animator.SetFloat(_headLookXHash, _headLookX);
-            _animator.SetFloat(_headLookYHash, _headLookY);
-            _animator.SetFloat(_bodyLookXHash, _bodyLookX);
-            _animator.SetFloat(_bodyLookYHash, _bodyLookY);
+            _visual.Animator.SetFloat(_leanValueHash, _leanValue);
+            _visual.Animator.SetFloat(_headLookXHash, _headLookX);
+            _visual.Animator.SetFloat(_headLookYHash, _headLookY);
+            _visual.Animator.SetFloat(_bodyLookXHash, _bodyLookX);
+            _visual.Animator.SetFloat(_bodyLookYHash, _bodyLookY);
 
-            _animator.SetFloat(_isStrafingHash, _isStrafing ? 1.0f : 0.0f);
+            _visual.Animator.SetFloat(_isStrafingHash, _isStrafing ? 1.0f : 0.0f);
 
-            _animator.SetFloat(_inclineAngleHash, _inclineAngle);
+            _visual.Animator.SetFloat(_inclineAngleHash, _inclineAngle);
 
-            _animator.SetFloat(_moveSpeedHash, _speed2D);
-            _animator.SetInteger(_currentGaitHash, (int)_currentGait);
+            _visual.Animator.SetFloat(_moveSpeedHash, _speed2D);
+            _visual.Animator.SetInteger(_currentGaitHash, (int)_currentGait);
 
-            _animator.SetFloat(_strafeDirectionXHash, _strafeDirectionX);
-            _animator.SetFloat(_strafeDirectionZHash, _strafeDirectionZ);
-            _animator.SetFloat(_forwardStrafeHash, _forwardStrafe);
-            _animator.SetFloat(_cameraRotationOffsetHash, _cameraRotationOffset);
+            _visual.Animator.SetFloat(_strafeDirectionXHash, _strafeDirectionX);
+            _visual.Animator.SetFloat(_strafeDirectionZHash, _strafeDirectionZ);
+            _visual.Animator.SetFloat(_forwardStrafeHash, _forwardStrafe);
+            _visual.Animator.SetFloat(_cameraRotationOffsetHash, _cameraRotationOffset);
 
-            _animator.SetBool(_movementInputHeldHash, _movementInputHeld);
-            _animator.SetBool(_movementInputPressedHash, _movementInputPressed);
-            _animator.SetBool(_movementInputTappedHash, _movementInputTapped);
-            _animator.SetFloat(_shuffleDirectionXHash, _shuffleDirectionX);
-            _animator.SetFloat(_shuffleDirectionZHash, _shuffleDirectionZ);
+            _visual.Animator.SetBool(_movementInputHeldHash, _movementInputHeld);
+            _visual.Animator.SetBool(_movementInputPressedHash, _movementInputPressed);
+            _visual.Animator.SetBool(_movementInputTappedHash, _movementInputTapped);
+            _visual.Animator.SetFloat(_shuffleDirectionXHash, _shuffleDirectionX);
+            _visual.Animator.SetFloat(_shuffleDirectionZHash, _shuffleDirectionZ);
 
-            _animator.SetBool(_isTurningInPlaceHash, _isTurningInPlace);
-            _animator.SetBool(_isCrouchingHash, _isCrouching);
+            _visual.Animator.SetBool(_isTurningInPlaceHash, _isTurningInPlace);
+            _visual.Animator.SetBool(_isCrouchingHash, _isCrouching);
 
-            _animator.SetFloat(_fallingDurationHash, _fallingDuration);
-            _animator.SetBool(_isGroundedHash, _isGrounded);
+            _visual.Animator.SetFloat(_fallingDurationHash, _fallingDuration);
+            _visual.Animator.SetBool(_isGroundedHash, _isGrounded);
 
-            _animator.SetBool(_isWalkingHash, _isWalking);
-            _animator.SetBool(_isStoppedHash, _isStopped);
+            _visual.Animator.SetBool(_isWalkingHash, _isWalking);
+            _visual.Animator.SetBool(_isStoppedHash, _isStopped);
 
-            _animator.SetFloat(_locomotionStartDirectionHash, _locomotionStartDirection);
+            _visual.Animator.SetFloat(_locomotionStartDirectionHash, _locomotionStartDirection);
         }
 
         #endregion
@@ -970,7 +972,7 @@ namespace Etheria.Features.Actor
                     if (!_isStarting)
                     {
                         _locomotionStartDirection = _newDirectionDifferenceAngle;
-                        _animator.SetFloat(_locomotionStartDirectionHash, _locomotionStartDirection);
+                        _visual.Animator.SetFloat(_locomotionStartDirectionHash, _locomotionStartDirection);
                     }
 
                     float delayTime = 0.2f;
@@ -987,7 +989,7 @@ namespace Etheria.Features.Actor
             }
 
             _isStarting = isStartingCheck;
-            _animator.SetBool(_isStartingHash, _isStarting);
+            _visual.Animator.SetBool(_isStartingHash, _isStarting);
         }
 
         /// <summary>
@@ -1396,7 +1398,7 @@ namespace Etheria.Features.Actor
         /// </summary>
         private void EnterJumpState()
         {
-            _animator.SetBool(_isJumpingAnimHash, true);
+            _visual.Animator.SetBool(_isJumpingAnimHash, true);
 
             _isSliding = false;
 
@@ -1413,7 +1415,7 @@ namespace Etheria.Features.Actor
 
             if (_velocity.y <= 0f)
             {
-                _animator.SetBool(_isJumpingAnimHash, false);
+                _visual.Animator.SetBool(_isJumpingAnimHash, false);
                 SwitchState(AnimationState.Fall);
             }
 
@@ -1431,7 +1433,7 @@ namespace Etheria.Features.Actor
         /// </summary>
         private void ExitJumpState()
         {
-            _animator.SetBool(_isJumpingAnimHash, false);
+            _visual.Animator.SetBool(_isJumpingAnimHash, false);
         }
 
         #endregion

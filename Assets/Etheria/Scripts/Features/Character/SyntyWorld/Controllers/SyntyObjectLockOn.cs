@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     public class SyntyObjectLockOn : MonoBehaviour
     {
@@ -30,7 +30,7 @@ namespace Etheria.Features.Actor
         /// <param name="otherCollider">The collider to check.</param>
         private void OnTriggerEnter(Collider otherCollider)
         {
-            SyntyActorAnimationController playerAnimationController = otherCollider.GetComponent<SyntyActorAnimationController>();
+            PlayerCharacterAnimationController playerAnimationController = otherCollider.GetComponent<PlayerCharacterAnimationController>();
 
             // Only interested in player collisions if they have the controller script.
             if (playerAnimationController != null)
@@ -45,7 +45,7 @@ namespace Etheria.Features.Actor
         /// <param name="otherCollider">The collider to check.</param>
         private void OnTriggerExit(Collider otherCollider)
         {
-            SyntyActorAnimationController playerAnimationController = otherCollider.GetComponent<SyntyActorAnimationController>();
+            PlayerCharacterAnimationController playerAnimationController = otherCollider.GetComponent<PlayerCharacterAnimationController>();
 
             // Only interested in player collisions if they have the controller script.
             if (playerAnimationController != null)

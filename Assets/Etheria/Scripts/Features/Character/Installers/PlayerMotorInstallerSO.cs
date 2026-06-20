@@ -4,7 +4,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     [CreateAssetMenu(fileName = "PlayerMotorInstaller", menuName = "Etheria/Gameplay/Installers/Player Motor Installer")]
     public class PlayerMotorInstallerSO : ScopeInstallerSO

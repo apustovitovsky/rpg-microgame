@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Etheria.Features.Character
 {
+    [RequireComponent(typeof(NpcMotor))]
     public sealed class NpcPatrol : MonoBehaviour
     {
         [SerializeField] private NpcMotor _motor;
@@ -11,6 +12,12 @@ namespace Etheria.Features.Character
         private int _pointIndex;
         private float _waitTimer;
         private bool _isWaiting;
+
+        private void Awake()
+        {
+            if (_motor == null)
+                _motor = GetComponent<NpcMotor>();
+        }
 
         private void Start()
         {
@@ -26,7 +33,7 @@ namespace Etheria.Features.Character
 
         private void Update()
         {
-            if (_points.Length == 0)
+            if (_motor == null || _points == null || _points.Length == 0)
                 return;
 
             if (_isWaiting)
@@ -58,8 +65,13 @@ namespace Etheria.Features.Character
 
         private void MoveToCurrentPoint()
         {
-            if (_points.Length == 0 || _points[_pointIndex] == null)
+            if (_motor == null ||
+                _points == null ||
+                _points.Length == 0 ||
+                _points[_pointIndex] == null)
+            {
                 return;
+            }
 
             _motor.MoveTo(_points[_pointIndex].position);
         }

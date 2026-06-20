@@ -1,6 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Etheria.Features.Actor;
+using Etheria.Features.Character;
 using Etheria.Game.Input;
 using Etheria.Game.Actor;
 using Unity.Cinemachine;

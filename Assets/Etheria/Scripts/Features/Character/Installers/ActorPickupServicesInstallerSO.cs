@@ -5,7 +5,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     [CreateAssetMenu(fileName = "ActorPickupServicesInstaller", menuName = "Etheria/Gameplay/Pickup/Actor Pickup Services Installer")]
     public sealed class ActorPickupServicesInstallerSO : ScopeInstallerSO

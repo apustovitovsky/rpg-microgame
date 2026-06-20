@@ -2,7 +2,7 @@ using Etheria.Core.DI;
 using UnityEngine;
 using VContainer;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     [CreateAssetMenu(fileName = "ActorGravityInstaller", menuName = "Etheria/Gameplay/Installers/Actor Gravity Installer")]
     public class ActorGravityInstallerSO : ScopeInstallerSO

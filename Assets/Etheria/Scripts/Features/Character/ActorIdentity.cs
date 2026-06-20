@@ -3,7 +3,7 @@ using Etheria.Core.Helpers;
 using Etheria.Game.Actor;
 using UnityEngine;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     public sealed class ActorIdentity : MonoBehaviour, IActorIdentity
     {

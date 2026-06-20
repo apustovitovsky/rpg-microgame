@@ -4,7 +4,7 @@ using Etheria.Features.Inventory;
 using UnityEngine;
 using VContainer;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     [DisallowMultipleComponent]
     public sealed class PickupCollector : MonoBehaviour, IPickupTarget

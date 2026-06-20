@@ -3,7 +3,7 @@ using UnityEngine;
 using VContainer;
 
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     [CreateAssetMenu(
         fileName = "ActorAnimationControllerInstaller",
@@ -12,7 +12,7 @@ namespace Etheria.Features.Actor
     {
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
-            builder.Register<SyntyActorAnimationController>(Lifetime.Singleton);
+            builder.Register<PlayerCharacterAnimationController>(Lifetime.Singleton);
         }
     }
 }

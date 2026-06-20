@@ -1,6 +1,6 @@
 using Etheria.Game.Common;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     public sealed class ActorNameGenerator : IPrefixedStringGenerator
     {

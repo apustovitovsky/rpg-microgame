@@ -1,7 +1,7 @@
 using Etheria.Game.Targeting;
 using UnityEngine;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     public sealed class ActorHitbox : MonoBehaviour, ITargetableProvider
     {

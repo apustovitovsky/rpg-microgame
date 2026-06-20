@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     [CreateAssetMenu(
         fileName = "SyntyLookSettings",

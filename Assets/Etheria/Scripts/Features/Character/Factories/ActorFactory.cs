@@ -2,7 +2,7 @@ using Etheria.Game.Actor;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     public sealed class ActorFactory : IActorFactory
     {

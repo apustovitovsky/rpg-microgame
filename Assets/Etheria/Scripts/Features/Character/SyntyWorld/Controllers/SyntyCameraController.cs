@@ -2,7 +2,7 @@ using Etheria.Core.Helpers;
 using Etheria.Game.Input;
 using UnityEngine;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     public class SyntyCameraController : MonoBehaviour
     {

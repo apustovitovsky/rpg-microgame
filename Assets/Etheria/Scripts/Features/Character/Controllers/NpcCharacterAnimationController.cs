@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 namespace Etheria.Features.Character
 {
-    public sealed class NpcAnimationController : MonoBehaviour
+    public sealed class NpcCharacterAnimationController : MonoBehaviour
     {
         private static readonly int IsGrounded =
             Animator.StringToHash("IsGrounded");
@@ -23,21 +23,32 @@ namespace Etheria.Features.Character
         private static readonly int CurrentGait =
             Animator.StringToHash("CurrentGait");
 
-        [SerializeField] private Animator _animator;
+        [SerializeField] private Transform _visualRoot;
+
+        private CharacterVisual _visual;
+
+        private void Awake()
+        {
+            _visual = _visualRoot.GetComponentInChildren<CharacterVisual>(true);
+        }
+
         [SerializeField] private NavMeshAgent _agent;
 
         private void Update()
         {
+            if (_visual == null || _agent == null)
+                return;
+                
             float speed = _agent.velocity.magnitude;
             bool isMoving = speed > 0.05f;
 
-            _animator.SetBool(IsGrounded, _agent.isOnNavMesh);
-            _animator.SetBool(IsStopped, !isMoving);
-            _animator.SetBool(MovementInputHeld, isMoving);
-            _animator.SetBool(MovementInputPressed, isMoving);
+            _visual.Animator.SetBool(IsGrounded, _agent.isOnNavMesh);
+            _visual.Animator.SetBool(IsStopped, !isMoving);
+            _visual.Animator.SetBool(MovementInputHeld, isMoving);
+            _visual.Animator.SetBool(MovementInputPressed, isMoving);
 
-            _animator.SetFloat(MoveSpeed, speed);
-            _animator.SetInteger(CurrentGait, GetGait(speed));
+            _visual.Animator.SetFloat(MoveSpeed, speed);
+            _visual.Animator.SetInteger(CurrentGait, GetGait(speed));
         }
 
         private static int GetGait(float speed)

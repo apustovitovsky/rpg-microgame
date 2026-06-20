@@ -4,7 +4,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     [CreateAssetMenu(fileName = "DroneMotorInstaller", menuName = "Etheria/Gameplay/Installers/Drone Motor Installer")]
     public class DroneMotorInstallerSO : ScopeInstallerSO

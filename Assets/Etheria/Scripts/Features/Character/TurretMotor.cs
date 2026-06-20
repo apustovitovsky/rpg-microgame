@@ -4,7 +4,7 @@ using Etheria.Game.Player;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     public sealed class TurretMotor : IActorInputHandler, IActorFacingHandler, ITickable
     {

@@ -9,7 +9,7 @@ using Etheria.Features.Character;
 
 
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     [CreateAssetMenu(
         fileName = "ActorFeatureInstaller",

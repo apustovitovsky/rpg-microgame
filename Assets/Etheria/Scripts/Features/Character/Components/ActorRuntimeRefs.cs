@@ -2,7 +2,7 @@ using Etheria.Core.Helpers;
 using Etheria.Game.Actor;
 using UnityEngine;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     [DisallowMultipleComponent]
     public sealed class ActorRuntimeRefs : MonoBehaviour,

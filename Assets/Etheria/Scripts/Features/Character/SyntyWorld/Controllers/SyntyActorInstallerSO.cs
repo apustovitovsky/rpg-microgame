@@ -3,7 +3,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Etheria.Features.Actor
+namespace Etheria.Features.Character
 {
     [CreateAssetMenu(
         fileName = "SyntyActorInstaller",
@@ -15,7 +15,7 @@ namespace Etheria.Features.Actor
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
             var syntyCameraController = rootObject.GetComponentInChildren<SyntyCameraController>(true);
-            var syntyPlayerController = rootObject.GetComponentInChildren<SyntyActorAnimationController>(true);
+            var syntyPlayerController = rootObject.GetComponentInChildren<PlayerCharacterAnimationController>(true);
 
             if (syntyCameraController != null)
             {
