@@ -1,0 +1,22 @@
+{
+    "name": "Etheria.Features.Actor",
+    "rootNamespace": "Etheria.Features.Actor",
+    "references": [
+        "UniTask",
+        "Unity.Cinemachine",
+        "VContainer",
+        "Etheria.Core",
+        "Etheria.Game",
+        "Etheria.Features",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

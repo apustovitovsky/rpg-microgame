@@ -1,0 +1,17 @@
+{
+    "name": "Etheria.Features.Interaction",
+    "rootNamespace": "Etheria.Features.Interaction",
+    "references": [
+        "VContainer",
+        "Etheria.Game"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

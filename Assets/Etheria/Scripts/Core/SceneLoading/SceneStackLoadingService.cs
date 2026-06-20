@@ -12,7 +12,7 @@ namespace Etheria.Core.DI
     public sealed class SceneStackLoadingService : ISceneStackLoadingService
     {
         private const string SceneEntryName = "[SceneRoot]";
-        private const string SceneScopeName = "[LifetimeScope]";
+        private const string SceneScopeName = "[SceneScope]";
 
         private readonly LifetimeScope _parentScope;
 
@@ -216,11 +216,17 @@ namespace Etheria.Core.DI
 
         private static GameObject CreateSceneRoot(Scene scene)
         {
+            var existingRoots = scene.GetRootGameObjects();
+
             var sceneRoot = new GameObject(SceneEntryName);
-
             SceneManager.MoveGameObjectToScene(sceneRoot, scene);
-            sceneRoot.transform.SetSiblingIndex(0);
 
+            foreach (var root in existingRoots)
+            {
+                root.transform.SetParent(sceneRoot.transform, true);
+            }
+
+            sceneRoot.transform.SetSiblingIndex(0);
             return sceneRoot;
         }
     }

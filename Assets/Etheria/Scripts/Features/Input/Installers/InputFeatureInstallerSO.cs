@@ -16,7 +16,7 @@ namespace Etheria.Features
         {
             // builder.RegisterEntryPoint<PlayerAvatarInputBinder>(Lifetime.Singleton);
 
-            builder.Register<GameInputRouter>(Lifetime.Singleton)
+            builder.Register<PlayerInputSource>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

@@ -5,7 +5,8 @@
         "VContainer",
         "Etheria.Core",
         "Etheria.Game",
-        "Etheria.Features"
+        "Etheria.Features",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

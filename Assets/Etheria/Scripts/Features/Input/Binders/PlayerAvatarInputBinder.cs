@@ -10,14 +10,14 @@ namespace Etheria.Features.Input
     public sealed class PlayerAvatarInputBinder : IStartable, IDisposable
     {
         private readonly IPlayerAvatarProvider _playerAvatarProvider;
-        private readonly IGameInputRouter _gameInputRouter;
+        private readonly IPlayerInputSource _gameInputRouter;
         private IActorInputHandler _currentHandler;
         private IActorStanceInputHandler _currentStanceHandler;
         private IPlayerLookInputHandler _currentLookHandler;
 
         public PlayerAvatarInputBinder(
             IPlayerAvatarProvider playerAvatarProvider,
-            IGameInputRouter gameInputRouter)
+            IPlayerInputSource gameInputRouter)
         {
             _playerAvatarProvider = playerAvatarProvider;
             _gameInputRouter = gameInputRouter;

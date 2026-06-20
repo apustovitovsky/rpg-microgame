@@ -15,7 +15,7 @@ namespace Etheria.Features.Pooling
 
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
-            
+
             builder.RegisterComponentInNewPrefab(_poolHostPrefab, Lifetime.Singleton)
                 .UnderTransform(rootObject.transform);
 
@@ -23,10 +23,6 @@ namespace Etheria.Features.Pooling
 
             builder.Register<IPickupPoolRoots>(
                 resolver => resolver.Resolve<ScenePoolHost>().Pickups,
-                Lifetime.Singleton);
-
-            builder.Register<IActorPoolRoots>(
-                resolver => resolver.Resolve<ScenePoolHost>().Actors,
                 Lifetime.Singleton);
         }
     }
