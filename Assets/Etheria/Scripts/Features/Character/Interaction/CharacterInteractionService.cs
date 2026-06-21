@@ -4,16 +4,16 @@ using Etheria.Game.Interaction;
 using Etheria.Game.Targeting;
 using VContainer.Unity;
 
-namespace Etheria.Features.Player
+namespace Etheria.Features.Character
 {
-    public sealed class PlayerInteractionService : IStartable, IDisposable
+    public sealed class CharacterInteractionService : IStartable, IDisposable
     {
         private readonly IPlayerInputSource _inputSource;
-        private readonly IPlayerTargetProvider _targetProvider;
+        private readonly ITargetProvider _targetProvider;
 
-        public PlayerInteractionService(
+        public CharacterInteractionService(
             IPlayerInputSource inputSource,
-            IPlayerTargetProvider targetProvider)
+            ITargetProvider targetProvider)
         {
             _inputSource = inputSource;
             _targetProvider = targetProvider;
@@ -31,11 +31,14 @@ namespace Etheria.Features.Player
 
         private void OnInteractPerformed()
         {
-            var target = _targetProvider.CurrentTarget;
-            if (target == null)
+            ITargetCandidate target = _targetProvider.CurrentTarget;
+
+            if (target?.Root == null)
                 return;
 
-            var interactable = target.GetComponentInParent<IInteractable>();
+            var interactable =
+                target.Root.GetComponentInParent<IInteractable>();
+
             if (interactable == null || !interactable.CanInteract)
                 return;
 

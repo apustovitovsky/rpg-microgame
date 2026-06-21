@@ -2,22 +2,18 @@ using System.Collections.Generic;
 using Etheria.Game.Input;
 using UnityEngine;
 using VContainer;
-using Etheria.Game.Targeting;
 
 namespace Etheria.Features.Character
 {
     public class PlayerCharacterAnimationController : MonoBehaviour
     {
         private IPlayerInputSource _inputReader;
-        private IPlayerTargetService _targetSelection;
 
         [Inject]
         public void Construct(
-            IPlayerInputSource playerInput,
-            IPlayerTargetService lockOnTargetState)
+            IPlayerInputSource playerInput)
         {
             _inputReader = playerInput;
-            _targetSelection = lockOnTargetState;
         }
 
         #region Enum
@@ -92,7 +88,7 @@ namespace Etheria.Features.Character
         [Header("External Components")]
         [Tooltip("Script controlling camera behavior")]
         [SerializeField]
-        private SyntyCameraController _cameraController;
+        private PlayerCameraLookController _cameraController;
 
 
 
@@ -1326,7 +1322,7 @@ namespace Etheria.Features.Character
                 }
             }
 
-            _targetSelection.SetTarget(_currentLockOnTarget != null ? _currentLockOnTarget.transform : null);
+            // _targetSelection.SetTarget(_currentLockOnTarget != null ? _currentLockOnTarget.transform : null);
         }
 
         #endregion

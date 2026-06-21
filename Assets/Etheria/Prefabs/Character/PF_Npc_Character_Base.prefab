@@ -180,8 +180,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b707a0a9997ffb54cb077d50c504a55e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Actor.ActorIdentity
-  _id: 4e1242b0-1ebc-4734-9af6-a98f5b1fb528
+  _id: 8a3cf7ae-b769-4535-80ea-ddc47aaec8f7
   _displayName: Guard
+  _aimPoint: {fileID: 8240171142152720911}
+  _uiAnchor: {fileID: 5570886999373855952}
 --- !u!114 &3805486479156814958
 MonoBehaviour:
   m_ObjectHideFlags: 0

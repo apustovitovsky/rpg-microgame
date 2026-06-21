@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1c9a443806fbc245bfd2d3fcc2b325e, type: 3}
-  m_Name: SyntyActorInstaller
+  m_Name: CharacterInstaller
   m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Actor.SyntyActorInstallerSO

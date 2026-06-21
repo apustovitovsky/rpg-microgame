@@ -31,7 +31,6 @@ namespace Etheria.Features.Character
 
             builder.Register<CharacterLabelPool>(Lifetime.Singleton);
 
-            builder.RegisterEntryPoint<CharacterLabelPresenter>(Lifetime.Singleton);
         }
     }
 }

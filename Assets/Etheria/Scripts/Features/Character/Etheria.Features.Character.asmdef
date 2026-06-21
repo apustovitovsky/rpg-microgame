@@ -1,6 +1,6 @@
 {
-    "name": "Etheria.Features.Actor",
-    "rootNamespace": "Etheria.Features.Actor",
+    "name": "Etheria.Features.Character",
+    "rootNamespace": "Etheria.Features.Character",
     "references": [
         "UniTask",
         "Unity.Cinemachine",

@@ -42,7 +42,7 @@ namespace Etheria.Features
             _playerCharacterProvider.Set(characterController.transform);
 
             var runtimeRefs = playerScope.gameObject.GetComponent<SyntyActorRuntimeRefs>();
-            var syntyCameraController = playerScope.gameObject.GetComponentInChildren<SyntyCameraController>(true);
+            var syntyCameraController = playerScope.gameObject.GetComponentInChildren<PlayerCameraLookController>(true);
 
             _vCamera.Follow = runtimeRefs.CameraPivot;
             _vCamera.LookAt = null;

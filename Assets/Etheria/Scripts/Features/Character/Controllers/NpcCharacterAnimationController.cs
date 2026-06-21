@@ -38,7 +38,7 @@ namespace Etheria.Features.Character
         {
             if (_visual == null || _agent == null)
                 return;
-                
+
             float speed = _agent.velocity.magnitude;
             bool isMoving = speed > 0.05f;
 

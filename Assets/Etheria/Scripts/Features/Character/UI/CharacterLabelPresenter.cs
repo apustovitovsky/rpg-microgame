@@ -10,14 +10,14 @@ namespace Etheria.Features.Character
         IStartable,
         IDisposable
     {
-        private readonly IPlayerTargetProvider _targetProvider;
+        private readonly ITargetProvider _targetProvider;
         private readonly CharacterLabelPool _pool;
 
         private CharacterLabelView _currentView;
         private Camera _camera;
 
         public CharacterLabelPresenter(
-            IPlayerTargetProvider targetProvider,
+            ITargetProvider targetProvider,
             CharacterLabelPool pool)
         {
             _targetProvider = targetProvider;
@@ -38,28 +38,20 @@ namespace Etheria.Features.Character
             ReleaseCurrentView();
         }
 
-        private void OnTargetChanged(Transform target)
+        private void OnTargetChanged(ITargetCandidate target)
         {
             ReleaseCurrentView();
 
-            if (target == null || _camera == null)
+            if (target == null ||
+                target.UiAnchor == null ||
+                _camera == null)
+            {
                 return;
-
-            IActorIdentity identity =
-                target.GetComponentInParent<IActorIdentity>();
-
-            if (identity is not Component identityComponent)
-                return;
-
-            Transform uiAnchor =
-                identityComponent.transform.Find("UiAnchor");
-
-            if (uiAnchor == null)
-                return;
+            }
 
             _currentView = _pool.Get(
-                uiAnchor,
-                identity.DisplayName,
+                target.UiAnchor,
+                target.DisplayName,
                 _camera);
         }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Etheria.Features.Character
 {
-    public class SyntyCameraController : MonoBehaviour
+    public class PlayerCameraLookController : MonoBehaviour
     {
         private const string DefaultCameraPivotName = "CameraPivot";
         private const string DefaultPlayerTargetName = "SyntyPlayer_LookAt";
