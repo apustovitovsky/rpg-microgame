@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.Serialization;
 using VContainer.Unity;
 
 namespace Etheria.Features
@@ -10,7 +11,8 @@ namespace Etheria.Features
     public sealed class GameplayConfigSO : ScriptableObject
     {
         [field: SerializeField]
-        public LifetimeScope PlayerAvatarPrefab { get; private set; }
+        [field: FormerlySerializedAs("<PlayerAvatarPrefab>k__BackingField")]
+        public LifetimeScope PlayerCharacterPrefab { get; private set; }
         
         [field: SerializeField, Min(0)]
         public int AdditionalPlayersCount { get; private set; } = 5;

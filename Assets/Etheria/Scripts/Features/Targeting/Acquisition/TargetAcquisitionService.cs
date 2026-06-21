@@ -1,5 +1,4 @@
 using System;
-using Etheria.Game.Targeting;
 
 namespace Etheria.Features.Targeting
 {

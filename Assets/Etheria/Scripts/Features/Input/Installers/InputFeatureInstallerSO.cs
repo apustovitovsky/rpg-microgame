@@ -14,8 +14,6 @@ namespace Etheria.Features
     {
         public override void Install(IContainerBuilder builder, GameObject rootObject)
         {
-            // builder.RegisterEntryPoint<PlayerAvatarInputBinder>(Lifetime.Singleton);
-
             builder.Register<PlayerInputSource>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }

@@ -35,7 +35,9 @@ namespace Etheria.Features
 
         public async UniTask StartAsync(CancellationToken cancellation = default)
         {
-            var playerScope = _actorFactory.Create(_gameplayConfig.PlayerAvatarPrefab, GetRandomSpawnPosition(10));
+            var playerScope = _actorFactory.Create(
+                _gameplayConfig.PlayerCharacterPrefab,
+                GetRandomSpawnPosition(10));
             var characterController =
                 playerScope.GetComponentInChildren<CharacterController>(true);
 
