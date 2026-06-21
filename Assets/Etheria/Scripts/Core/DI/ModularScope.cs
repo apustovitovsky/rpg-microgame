@@ -6,19 +6,23 @@ namespace Etheria.Core.DI
 {
     public sealed class ModularScope : LifetimeScope
     {
-        [SerializeField] private ScopeInstallerSO[] _ScopeInstallers;
+        [SerializeField] private Transform _ContentRoot;
+        [SerializeField] private InstallerSO[] _ScopeInstallers;
 
         protected override void Configure(IContainerBuilder builder)
         {
-            if (_ScopeInstallers != null)
-            {
-                foreach (var installer in _ScopeInstallers)
-                {
-                    if (installer == null)
-                        continue;
+            builder.RegisterInstance(
+                new ScopeHierarchy(_ContentRoot != null ? _ContentRoot : transform));
 
-                    installer.Install(builder, gameObject);
-                }
+            if (_ScopeInstallers == null)
+                return;
+
+            foreach (var installer in _ScopeInstallers)
+            {
+                if (installer == null)
+                    continue;
+
+                installer.Install(builder);
             }
         }
     }

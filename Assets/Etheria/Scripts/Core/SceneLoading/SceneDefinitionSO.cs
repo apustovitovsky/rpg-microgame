@@ -19,12 +19,10 @@ namespace Etheria.Core.DI
 #endif
 
         [SerializeField, ReadOnlyField] private string _scenePath;
-        [SerializeField] private ScopeInstallerSO[] _scopeInstallers;
         [SerializeField] private bool _setActiveOnLoad;
 
         public bool IsValid => !string.IsNullOrWhiteSpace(_scenePath);
         public string ScenePath => _scenePath;
-        public ScopeInstallerSO[] ScopeInstallers => _scopeInstallers;
         public bool SetActiveOnLoad => _setActiveOnLoad;
 
 #if UNITY_EDITOR

@@ -8,11 +8,11 @@ namespace Etheria.Features
     [CreateAssetMenu(
         fileName = "GameplayInstaller",
         menuName = "Etheria/Gameplay/Installers/Gameplay Installer")]
-    public class GameplayInstallerSO : ScopeInstallerSO
+    public class GameplayInstallerSO : InstallerSO
     {
         [SerializeField] private GameplayConfigSO _gameplayConfig;
 
-        public override void Install(IContainerBuilder builder, GameObject rootObject)
+        public override void Install(IContainerBuilder builder)
         {
             builder.RegisterInstance(_gameplayConfig);
         }

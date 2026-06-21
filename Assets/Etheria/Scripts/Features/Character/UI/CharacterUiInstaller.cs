@@ -9,24 +9,19 @@ namespace Etheria.Features.Character
     [CreateAssetMenu(
         fileName = "CharacterUiInstaller",
         menuName = "Etheria/Features/Character/UI Installer")]
-    public sealed class CharacterUiInstallerSO : ScopeInstallerSO
+    public sealed class CharacterUiInstallerSO : InstallerSO
     {
         [SerializeField]
         private CharacterLabelView _labelPrefab;
 
-        public override void Install(
-            IContainerBuilder builder,
-            GameObject rootObject)
+        public override void Install(IContainerBuilder builder)
         {
-            CharacterUiPoolHost host =
-                rootObject.GetComponentInChildren<CharacterUiPoolHost>(true);
-
-            builder.RegisterComponent(host);
+            builder.RegisterComponentInHierarchy<CharacterUiPoolHost>();
 
             builder.RegisterInstance(_labelPrefab);
 
             builder.Register<ICharacterLabelPoolRoots>(
-                _ => host.Labels,
+                resolver => resolver.Resolve<CharacterUiPoolHost>().Labels,
                 Lifetime.Singleton);
 
             builder.Register<CharacterLabelPool>(Lifetime.Singleton);

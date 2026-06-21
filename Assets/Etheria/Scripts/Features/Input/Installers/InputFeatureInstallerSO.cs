@@ -10,9 +10,9 @@ namespace Etheria.Features
     [CreateAssetMenu(
         fileName = "InputFeatureInstaller",
         menuName = "Etheria/Features/Input/Input Feature Installer")]
-    public class InputFeatureInstallerSO : ScopeInstallerSO
+    public class InputFeatureInstallerSO : InstallerSO
     {
-        public override void Install(IContainerBuilder builder, GameObject rootObject)
+        public override void Install(IContainerBuilder builder)
         {
             builder.Register<PlayerInputSource>(Lifetime.Singleton)
                 .AsImplementedInterfaces();

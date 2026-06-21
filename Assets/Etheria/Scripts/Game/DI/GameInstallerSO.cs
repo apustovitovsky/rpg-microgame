@@ -9,11 +9,11 @@ namespace Etheria.Game.DI
     [CreateAssetMenu(
         fileName = "GameInstaller",
         menuName = "Etheria/Game/Installers/Game Installer")]
-    public class GameInstallerSO : ScopeInstallerSO
+    public class GameInstallerSO : InstallerSO
     {
         [SerializeField] private GameSettingsSO _gameConfig;
 
-        public override void Install(IContainerBuilder builder, GameObject rootObject)
+        public override void Install(IContainerBuilder builder)
         {
             builder.Register<InputSystem_Actions>(Lifetime.Singleton);
 

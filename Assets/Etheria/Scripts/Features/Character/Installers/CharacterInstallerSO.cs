@@ -9,45 +9,27 @@ namespace Etheria.Features.Character
     [CreateAssetMenu(
         fileName = "CharacterInstaller",
         menuName = "Etheria/Features/Character/Character Installer")]
-    public class CharacterInstallerSO : ScopeInstallerSO
+    public class CharacterInstallerSO : InstallerSO
     {
-        public override void Install(IContainerBuilder builder, GameObject rootObject)
+        public override void Install(IContainerBuilder builder)
         {
-
             builder.RegisterEntryPoint<CharacterInteractionService>(
                 Lifetime.Singleton);
 
-            var cameraLookController =
-                rootObject.GetComponentInChildren<PlayerCameraLookController>(true);
+            builder.RegisterComponentInHierarchy<CharacterTargetSensor>()
+                .UnderScopeRoot()
+                .As<ITargetCandidateSource>();
 
-            var characterController =
-                rootObject.GetComponentInChildren<PlayerCharacterAnimationController>(true);
+            builder.RegisterComponentInHierarchy<PlayerCameraLookController>()
+                .UnderScopeRoot();
 
-            var targetSensor =
-                rootObject.GetComponentInChildren<CharacterTargetSensor>(true);
+            builder.RegisterComponentInHierarchy<PlayerCharacterAnimationController>()
+                .UnderScopeRoot();
 
-            if (targetSensor != null && cameraLookController != null)
-            {
-                builder.RegisterComponent(targetSensor)
-                    .As<ITargetCandidateSource>();
+            builder.RegisterEntryPoint<CharacterTargetingService>(Lifetime.Scoped)
+                .As<ITargetProvider>();
 
-                builder.RegisterEntryPoint<CharacterTargetingService>(Lifetime.Scoped)
-                    .As<ITargetProvider>();
-
-                builder.RegisterEntryPoint<CharacterLabelPresenter>(Lifetime.Scoped);
-            }
-
-            if (cameraLookController != null)
-            {
-                builder.RegisterComponent(cameraLookController)
-                    .AsSelf();
-            }
-
-            if (characterController != null)
-            {
-                builder.RegisterComponent(characterController)
-                    .AsSelf();
-            }
+            builder.RegisterEntryPoint<CharacterLabelPresenter>(Lifetime.Scoped);
         }
     }
 }

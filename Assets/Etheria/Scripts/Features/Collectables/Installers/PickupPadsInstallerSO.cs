@@ -8,9 +8,9 @@ namespace Etheria.Features.Collectables
     [CreateAssetMenu(
         fileName = "PickupPadsInstaller",
         menuName = "Etheria/Gameplay/Pickup/Pickup Pads Installer")]
-    public sealed class PickupPadsInstallerSO : ScopeInstallerSO
+    public sealed class PickupPadsInstallerSO : InstallerSO
     {
-        public override void Install(IContainerBuilder builder, GameObject rootObject)
+        public override void Install(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<PickupPad>();
         }

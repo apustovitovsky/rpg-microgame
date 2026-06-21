@@ -11,9 +11,6 @@ namespace Etheria.Core.DI
 {
     public sealed class SceneStackLoadingService : ISceneStackLoadingService
     {
-        private const string SceneEntryName = "[SceneRoot]";
-        private const string SceneScopeName = "[SceneScope]";
-
         private readonly LifetimeScope _parentScope;
 
         public SceneStackLoadingService(
@@ -48,8 +45,6 @@ namespace Etheria.Core.DI
 
             var scopes = new List<LifetimeScope>(definitions.Length);
 
-            LifetimeScope currentParent = _parentScope;
-
             for (var i = 0; i < definitions.Length; i++)
             {
                 ct.ThrowIfCancellationRequested();
@@ -74,110 +69,80 @@ namespace Etheria.Core.DI
                     ? LoadSceneMode.Single
                     : LoadSceneMode.Additive;
 
-                var scene = await LoadSceneAsync(
-                    definition.ScenePath,
-                    loadMode,
-                    ct);
+                Scene scene;
 
-                if (i == activeSceneIndex)
-                    SceneManager.SetActiveScene(scene);
-
-                var sceneRoot = CreateSceneRoot(scene);
-
-                var sceneScope = CreateSceneScopeDebug(
-                    currentParent,
-                    sceneRoot,
-                    definition);
-
-                scopes.Add(sceneScope);
-                currentParent = sceneScope;
-            }
-
-            return scopes;
-        }
-
-        private LifetimeScope CreateSceneScope(
-            LifetimeScope parentScope,
-            GameObject sceneRoot,
-            SceneDefinitionSO definition)
-        {
-            var scopeObject = new GameObject(SceneScopeName);
-            scopeObject.transform.SetParent(sceneRoot.transform, false);
-            scopeObject.transform.SetSiblingIndex(0);
-
-            using (LifetimeScope.EnqueueParent(parentScope))
-            using (LifetimeScope.Enqueue(builder =>
-            {
-                InstallScopeInstallers(
-                    builder,
-                    definition.ScopeInstallers,
-                    sceneRoot);
-            }))
-            {
-                return scopeObject.AddComponent<LifetimeScope>();
-            }
-        }
-
-        private LifetimeScope CreateSceneScopeDebug(
-            LifetimeScope parentScope,
-            GameObject sceneRoot,
-            SceneDefinitionSO definition)
-        {
-            var scopeObject = new GameObject(SceneScopeName);
-            scopeObject.transform.SetParent(sceneRoot.transform, false);
-            scopeObject.transform.SetSiblingIndex(0);
-
-            try
-            {
-                using (LifetimeScope.EnqueueParent(parentScope))
+                using (LifetimeScope.EnqueueParent(_parentScope))
                 using (LifetimeScope.Enqueue(builder =>
                 {
                     builder.RegisterEntryPointExceptionHandler(ex =>
                     {
                         Debug.LogError(
-                            $"[VContainer EntryPoint Error] Scope='{scopeObject.name}', SceneDefinition='{definition.name}'\n{ex.Message}");
+                            $"[VContainer EntryPoint Error] SceneDefinition='{definition.name}'\n{ex.Message}");
 
                         Debug.LogException(ex);
                     });
-
-                    InstallScopeInstallers(
-                        builder,
-                        definition.ScopeInstallers,
-                        sceneRoot);
                 }))
                 {
-                    return scopeObject.AddComponent<LifetimeScope>();
+                    scene = await LoadSceneAsync(
+                        definition.ScenePath,
+                        loadMode,
+                        ct);
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError(
-                    $"[VContainer Build Error] Failed to create scene scope.\n" +
-                    $"SceneDefinition: {definition.name}\n" +
-                    $"ScenePath: {definition.ScenePath}\n" +
-                    $"ScopeObject: {scopeObject.name}\n" +
-                    $"Error: {ex.Message}");
 
-                Debug.LogException(ex);
-                throw;
+                if (i == activeSceneIndex)
+                    SceneManager.SetActiveScene(scene);
+
+                var sceneScope = FindSceneScope(scene, definition);
+
+                scopes.Add(sceneScope);
             }
+
+            return scopes;
         }
 
-        private static void InstallScopeInstallers(
-            IContainerBuilder builder,
-            ScopeInstallerSO[] installers,
-            GameObject sceneRoot)
+        private ModularScope FindSceneScope(
+            Scene scene,
+            SceneDefinitionSO definition)
         {
-            if (installers == null)
-                return;
+            var scopes = new List<ModularScope>();
 
-            foreach (var installer in installers)
+            foreach (var root in scene.GetRootGameObjects())
             {
-                if (installer == null)
-                    continue;
-
-                installer.Install(builder, sceneRoot);
+                if (root.TryGetComponent<ModularScope>(out var rootScope))
+                    scopes.Add(rootScope);
             }
+
+            if (scopes.Count != 1)
+            {
+                throw new InvalidOperationException(
+                    $"Loaded scene must contain exactly one {nameof(ModularScope)}.\n" +
+                    $"SceneDefinition: {definition.name}\n" +
+                    $"ScenePath: {definition.ScenePath}\n" +
+                    $"Found: {scopes.Count}");
+            }
+
+            var scope = scopes[0];
+
+            if (scope.Container == null)
+            {
+                throw new InvalidOperationException(
+                    $"Scene scope was found but its container was not built.\n" +
+                    $"SceneDefinition: {definition.name}\n" +
+                    $"ScenePath: {definition.ScenePath}\n" +
+                    $"ScopeObject: {scope.name}");
+            }
+
+            if (scope.Parent != _parentScope)
+            {
+                throw new InvalidOperationException(
+                    $"Scene scope has an unexpected parent.\n" +
+                    $"SceneDefinition: {definition.name}\n" +
+                    $"ScenePath: {definition.ScenePath}\n" +
+                    $"Expected: {_parentScope.name}\n" +
+                    $"Actual: {(scope.Parent != null ? scope.Parent.name : "<null>")}");
+            }
+
+            return scope;
         }
 
         private static async UniTask<Scene> LoadSceneAsync(
@@ -185,12 +150,12 @@ namespace Etheria.Core.DI
             LoadSceneMode loadMode,
             CancellationToken ct)
         {
-            var beforeHandles = new HashSet<int>();
+            var beforeHandles = new HashSet<ulong>();
 
             for (var i = 0; i < SceneManager.sceneCount; i++)
             {
                 var loadedScene = SceneManager.GetSceneAt(i);
-                beforeHandles.Add(loadedScene.handle);
+                beforeHandles.Add(loadedScene.handle.GetRawData());
             }
 
             var operation = SceneManager.LoadSceneAsync(scenePath, loadMode)
@@ -201,7 +166,7 @@ namespace Etheria.Core.DI
             for (var i = 0; i < SceneManager.sceneCount; i++)
             {
                 var loadedScene = SceneManager.GetSceneAt(i);
-                if (!beforeHandles.Contains(loadedScene.handle) &&
+                if (!beforeHandles.Contains(loadedScene.handle.GetRawData()) &&
                     loadedScene.IsValid() &&
                     loadedScene.isLoaded &&
                     loadedScene.path == scenePath)
@@ -212,22 +177,6 @@ namespace Etheria.Core.DI
 
             throw new InvalidOperationException(
                 $"Scene '{scenePath}' was loaded, but new scene instance was not found.");
-        }
-
-        private static GameObject CreateSceneRoot(Scene scene)
-        {
-            var existingRoots = scene.GetRootGameObjects();
-
-            var sceneRoot = new GameObject(SceneEntryName);
-            SceneManager.MoveGameObjectToScene(sceneRoot, scene);
-
-            foreach (var root in existingRoots)
-            {
-                root.transform.SetParent(sceneRoot.transform, true);
-            }
-
-            sceneRoot.transform.SetSiblingIndex(0);
-            return sceneRoot;
         }
     }
 }

@@ -12,22 +12,17 @@ namespace Etheria.Features.Campaign
     [CreateAssetMenu(
         fileName = "CampaignFeatureInstaller",
         menuName = "Etheria/Features/Campaign/Campaign Feature Installer")]
-    public sealed class CampaignFeatureInstallerSO : ScopeInstallerSO
+    public sealed class CampaignFeatureInstallerSO : InstallerSO
     {
-        public override void Install(
-            IContainerBuilder builder,
-            GameObject rootObject)
+        public override void Install(IContainerBuilder builder)
         {
-
-
             var dialogueInteractables =
-                rootObject.GetComponentsInChildren<NpcDialogueInteractable>(true);
+                SceneComponentLookup.FindAll<NpcDialogueInteractable>(builder);
 
             var questCompletionInteractables =
-                rootObject.GetComponentsInChildren<QuestCompletionInteractable>(true);
+                SceneComponentLookup.FindAll<QuestCompletionInteractable>(builder);
 
-            builder.RegisterComponentInHierarchy<DialogueRunner>()
-                .UnderTransform(rootObject.transform);
+            builder.RegisterComponentInHierarchy<DialogueRunner>();
 
             builder.Register<DialogueService>(Lifetime.Singleton)
                 .As<IDialogueService>();

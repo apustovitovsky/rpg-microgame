@@ -14,7 +14,7 @@ namespace Etheria.Features.Character
     [CreateAssetMenu(
         fileName = "ActorFeatureInstaller",
         menuName = "Etheria/Features/Actor/Actor Feature Installer")]
-    public class ActorFeatureInstallerSO : ScopeInstallerSO
+    public class ActorFeatureInstallerSO : InstallerSO
     {
         [SerializeField]
         private ActorFeatureSettingsSO _featureSettings;
@@ -22,7 +22,7 @@ namespace Etheria.Features.Character
         [SerializeField]
         private SyntyLookSettingsSO _syntyLookSettings;
 
-        public override void Install(IContainerBuilder builder, GameObject rootObject)
+        public override void Install(IContainerBuilder builder)
         {
             builder.RegisterInstance(_featureSettings);
             builder.RegisterInstance(_syntyLookSettings);

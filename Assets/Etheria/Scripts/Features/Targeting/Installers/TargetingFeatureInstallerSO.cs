@@ -8,11 +8,11 @@ namespace Etheria.Features.Targeting
     [CreateAssetMenu(
         fileName = "TargetSystemInstaller",
         menuName = "Etheria/Features/Targeting/Target Feature Installer")]
-    public class TargetingFeatureInstallerSO : ScopeInstallerSO
+    public class TargetingFeatureInstallerSO : InstallerSO
     {
         [SerializeField] private TargetingSettingsSO _targetingSettings;
 
-        public override void Install(IContainerBuilder builder, GameObject rootObject)
+        public override void Install(IContainerBuilder builder)
         {
             builder.RegisterInstance(_targetingSettings);
 

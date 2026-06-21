@@ -8,11 +8,11 @@ namespace Etheria.Features.Collectables
     [CreateAssetMenu(
         fileName = "PickupInstaller",
         menuName = "Etheria/Gameplay/Pickup/Pickup Installer")]
-    public sealed class PickupInstallerSO : ScopeInstallerSO
+    public sealed class PickupInstallerSO : InstallerSO
     {
         [SerializeField] private PickupConfigSO _pickupConfig;
 
-        public override void Install(IContainerBuilder builder, GameObject rootObject)
+        public override void Install(IContainerBuilder builder)
         {
             builder.RegisterInstance(_pickupConfig.PickupPrefab).As<Pickup>();
             builder.RegisterInstance(_pickupConfig.PickupDefinition);

@@ -8,7 +8,7 @@ using VContainer.Unity;
 namespace Etheria.Features.Character
 {
     [CreateAssetMenu(fileName = "ActorPickupServicesInstaller", menuName = "Etheria/Gameplay/Pickup/Actor Pickup Services Installer")]
-    public sealed class ActorPickupServicesInstallerSO : ScopeInstallerSO
+    public sealed class ActorPickupServicesInstallerSO : InstallerSO
     {
         [Header("Parameters")]
 
@@ -19,7 +19,7 @@ namespace Etheria.Features.Character
         [Tooltip("Amount of actor gold")]
         [SerializeField] private int curGold = 5;
 
-        public override void Install(IContainerBuilder builder, GameObject rootObject)
+        public override void Install(IContainerBuilder builder)
         {
             builder.Register<ActorHealth>(Lifetime.Scoped)
                 .WithParameter(nameof(curHealth), curHealth)
@@ -31,7 +31,7 @@ namespace Etheria.Features.Character
                 .AsImplementedInterfaces();
 
             builder.RegisterComponentInHierarchy<PickupCollector>()
-                .UnderTransform(rootObject.transform);
+                .UnderScopeRoot();
         }
     }
 }

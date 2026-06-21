@@ -9,15 +9,15 @@ namespace Etheria.Game
     [CreateAssetMenu(
     fileName = "LoadingScreenInstaller",
     menuName = "Etheria/Game/Loading Screen Installer")]
-    public class LoadingScreenInstallerSO : ScopeInstallerSO
+    public class LoadingScreenInstallerSO : InstallerSO
     {
         [SerializeField] private LoadingScreenSettingsSO _loadingScreenSettings;
-        public override void Install(IContainerBuilder builder, GameObject rootObject)
+        public override void Install(IContainerBuilder builder)
         {
             builder.RegisterComponentInNewPrefab(
                 _loadingScreenSettings.LoadingScreenView,
                 Lifetime.Singleton)
-            .UnderTransform(rootObject.transform);
+                .UnderScopeRoot();
 
             builder.RegisterEntryPoint<LoadingScreenService>(Lifetime.Singleton)
                 .As<ILoadingScreenService>();

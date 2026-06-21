@@ -14,12 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Etheria.Core::Etheria.Core.DI.SceneDefinitionSO
   _scene: {fileID: 102900000, guid: fde5ce2fd00e69147b6bc232ddf4d0f6, type: 3}
   _scenePath: Assets/Etheria/Scenes/WorldScene.unity
-  _scopeInstallers:
-  - {fileID: 11400000, guid: 9435324e1ab933d4ab8de2ea90082cd2, type: 2}
-  - {fileID: 11400000, guid: 4d2d8a64527c7764da43891b5677264f, type: 2}
-  - {fileID: 11400000, guid: 747c9cda3a62cc947bf2e871d8b6f347, type: 2}
-  - {fileID: 11400000, guid: ae0b044fb64d18046b198d73d96f6057, type: 2}
-  - {fileID: 11400000, guid: 568e05ec6aa102047bae2e4097f3a1aa, type: 2}
-  - {fileID: 11400000, guid: a86688bf4d1ac244aae3c9ca82e195e5, type: 2}
-  - {fileID: 11400000, guid: c16c743c69a3aed4c8f66a766d9febe0, type: 2}
   _setActiveOnLoad: 1
