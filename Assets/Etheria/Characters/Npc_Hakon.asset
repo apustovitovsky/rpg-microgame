@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Npc_Hakon
   m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterDefinitionSO
   <Id>k__BackingField: hakon
+  <Prefab>k__BackingField: {fileID: 7392174610888469709, guid: 5e6e4e93e93c11047b4e97547f34f00b,
+    type: 3}

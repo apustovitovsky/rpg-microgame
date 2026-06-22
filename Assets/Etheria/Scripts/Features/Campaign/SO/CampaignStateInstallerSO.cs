@@ -1,5 +1,6 @@
 using Etheria.Core.DI;
 using Etheria.Game.Quests;
+using Etheria.Game.World;
 using UnityEngine;
 using VContainer;
 
@@ -21,6 +22,9 @@ namespace Etheria.Features.Campaign
 
             builder.Register<QuestTextProvider>(Lifetime.Singleton)
                 .As<IQuestTextProvider>();
+
+            builder.Register<WorldFactService>(Lifetime.Singleton)
+                .As<IWorldFactService>();
         }
     }
 }

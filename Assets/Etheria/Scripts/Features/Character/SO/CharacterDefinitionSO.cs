@@ -10,6 +10,9 @@ namespace Etheria.Features.Character
         [field: SerializeField]
         public string Id { get; private set; }
 
+        [field: SerializeField]
+        public GameObject Prefab { get; private set; }
+
         private void OnValidate()
         {
             Id = Id?.Trim();

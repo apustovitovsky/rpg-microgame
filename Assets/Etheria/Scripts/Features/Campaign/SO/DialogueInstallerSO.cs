@@ -27,12 +27,12 @@ namespace Etheria.Features.Campaign
             builder.RegisterComponentInHierarchy<DialogueRunner>();
 
             builder.RegisterInstance(_entryCatalog);
-            
+
             builder.Register<DialogueService>(Lifetime.Singleton)
                 .As<IDialogueService>();
 
-            builder.RegisterEntryPoint<QuestCommandHandler>(
-                Lifetime.Singleton);
+            builder.RegisterEntryPoint<QuestCommandHandler>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<WorldFactCommandHandler>(Lifetime.Singleton);
 
             builder.RegisterComponentInHierarchy<DialogueSpeakerPresenter>();
 

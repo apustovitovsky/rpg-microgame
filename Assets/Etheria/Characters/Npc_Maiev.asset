@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Npc_Maiev
   m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterDefinitionSO
   <Id>k__BackingField: maiev
+  <Prefab>k__BackingField: {fileID: 1329946723156357907, guid: f5f0e06957a0ba34f8fa89184cb840fe,
+    type: 3}

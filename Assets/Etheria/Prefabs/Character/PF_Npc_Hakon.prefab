@@ -173,6 +173,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -7732201513063138512}
+    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4755525452855365691}
   m_SourcePrefab: {fileID: 100100000, guid: 33536a6bbb02c764bab34a1b259f70ba, type: 3}
 --- !u!4 &1078607603977380843 stripped
 Transform:
@@ -199,3 +203,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterIdentity
   _definition: {fileID: 11400000, guid: 5aaefd13387de344387355c9af3e55bf, type: 2}
+--- !u!114 &4755525452855365691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7392174610888469709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eba580eb03cf5c4c8a7a425a19af77d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Features.Campaign::Etheria.Features.Campaign.QuestStageInteractable
+  _questId: clear_bandits
+  _requiredStage: 20
+  _nextStage: 30
+  _journalEntry: clear_bandits.target_cleared

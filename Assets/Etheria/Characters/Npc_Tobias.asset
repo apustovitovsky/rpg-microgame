@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Npc_Tobias
   m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterDefinitionSO
   <Id>k__BackingField: tobias
+  <Prefab>k__BackingField: {fileID: 6740401117405363649, guid: 87a0e43163c0f0b46be224a967079f2c,
+    type: 3}

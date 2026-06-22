@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Npc_Bartok
   m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterDefinitionSO
   <Id>k__BackingField: bartok
+  <Prefab>k__BackingField: {fileID: 3472145620573168433, guid: 5f40708070c7ca34c81fb2eed97c49ee,
+    type: 3}

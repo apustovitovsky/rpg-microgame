@@ -13,15 +13,5 @@ MonoBehaviour:
   m_Name: Npc_GuardCaptain
   m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterDefinitionSO
   <Id>k__BackingField: guard_captain
-  <DisplayName>k__BackingField:
-    m_TableReference:
-      m_TableCollectionName: GUID:598fa95b447bdca419c83b135657cea0
-    m_TableEntryReference:
-      m_KeyId: 0
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
-  references:
-    version: 2
-    RefIds: []
+  <Prefab>k__BackingField: {fileID: 4748039879204056702, guid: 0813cad268d661b4fbeea2c6f14d70ae,
+    type: 3}

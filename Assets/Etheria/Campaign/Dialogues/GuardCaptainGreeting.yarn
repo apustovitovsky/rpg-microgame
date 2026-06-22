@@ -1,13 +1,15 @@
 title: GuardCaptainGreeting
 ---
-<<if quest_is_completed("clear_bandits")>>
+<<if world_fact("road_to_city_safe")>>
     Дорога теперь безопасна. Спасибо.
 
 <<elseif quest_stage("clear_bandits") == 30>>
     Разбойники уничтожены.
 
     Отличная работа.
+    <<set_quest_stage "clear_bandits" 100>>
     <<add_quest_log "clear_bandits" "clear_bandits.completed">>
+    <<set_world_fact "road_to_city_safe">>
     <<complete_quest "clear_bandits">>
 
 <<elseif quest_is_active("clear_bandits")>>
