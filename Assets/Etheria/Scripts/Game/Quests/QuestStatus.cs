@@ -4,6 +4,7 @@ namespace Etheria.Game.Quests
     {
         Inactive,
         Active,
-        Completed
+        Completed,
+        Failed
     }
 }

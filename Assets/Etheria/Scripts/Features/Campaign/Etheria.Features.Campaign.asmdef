@@ -6,7 +6,8 @@
         "Etheria.Core",
         "Etheria.Game",
         "UniTask",
-        "YarnSpinner.Unity"
+        "YarnSpinner.Unity",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

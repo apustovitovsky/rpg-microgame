@@ -10,14 +10,15 @@ namespace Etheria.Features.Campaign
         MonoBehaviour,
         IInteractable
     {
-        [SerializeField] private string _startNode = "GuardGreeting";
-
+        private ICharacterIdentity _identity;
         private IDialogueService _dialogueService;
         private IDialogueParticipant _participant;
 
         private IPlayerCharacterProvider _playerCharacterProvider;
 
         public bool CanInteract =>
+            _identity != null &&
+            !string.IsNullOrWhiteSpace(_identity.CharacterId) &&
             isActiveAndEnabled &&
             _dialogueService != null &&
             !_dialogueService.IsRunning;
@@ -34,6 +35,7 @@ namespace Etheria.Features.Campaign
         private void Awake()
         {
             _participant = GetComponentInParent<IDialogueParticipant>();
+            _identity = GetComponentInParent<ICharacterIdentity>();
         }
 
         public void Interact()
@@ -42,9 +44,9 @@ namespace Etheria.Features.Campaign
                 return;
 
             _dialogueService.TryStart(
-            _startNode,
-            _participant,
-            _playerCharacterProvider.Current);
+                _identity.CharacterId,
+                _participant,
+                _playerCharacterProvider.Current);
         }
     }
 }

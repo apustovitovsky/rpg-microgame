@@ -13,9 +13,16 @@ namespace Etheria.Features.Campaign
         private readonly DialogueRunner _runner;
         private IDialogueParticipant _participant;
 
-        public DialogueService(DialogueRunner runner)
+        private readonly DialogueEntryCatalogSO _entryCatalog;
+
+        public string DefaultSpeakerId { get; private set; }
+
+        public DialogueService(
+            DialogueRunner runner,
+            DialogueEntryCatalogSO entryCatalog)
         {
             _runner = runner;
+            _entryCatalog = entryCatalog;
 
             _runner.onDialogueComplete ??= new UnityEvent();
             _runner.onDialogueComplete.AddListener(OnDialogueCompleted);
@@ -24,12 +31,20 @@ namespace Etheria.Features.Campaign
         public bool IsRunning => _runner.IsDialogueRunning;
 
         public bool TryStart(
-            string nodeName,
-            IDialogueParticipant participant,
-            Transform interlocutor)
+    string characterId,
+    IDialogueParticipant participant,
+    Transform interlocutor)
         {
-            if (IsRunning || string.IsNullOrWhiteSpace(nodeName))
+            if (IsRunning || string.IsNullOrWhiteSpace(characterId))
                 return false;
+
+            if (!_entryCatalog.TryGetNode(characterId, out var nodeName))
+            {
+                Debug.LogWarning(
+                    $"No dialogue entry registered for character '{characterId}'.");
+
+                return false;
+            }
 
             var project = _runner.YarnProject;
 
@@ -47,6 +62,8 @@ namespace Etheria.Features.Campaign
                 return false;
             }
 
+            DefaultSpeakerId = characterId;
+
             _participant = participant;
             _participant?.OnDialogueStarted(interlocutor);
 
@@ -62,7 +79,9 @@ namespace Etheria.Features.Campaign
         private void OnDialogueCompleted()
         {
             _participant?.OnDialogueCompleted();
+
             _participant = null;
+            DefaultSpeakerId = null;
         }
     }
 }

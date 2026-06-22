@@ -1,5 +1,6 @@
 using System;
-using Etheria.Game.Actor;
+
+using Etheria.Game.Character;
 using Etheria.Game.Targeting;
 using UnityEngine;
 using VContainer.Unity;
@@ -13,15 +14,19 @@ namespace Etheria.Features.Character
         private readonly ITargetProvider _targetProvider;
         private readonly CharacterLabelPool _pool;
 
+        private readonly ICharacterNameProvider _characterNameProvider;
+
         private CharacterLabelView _currentView;
         private Camera _camera;
 
         public CharacterLabelPresenter(
             ITargetProvider targetProvider,
-            CharacterLabelPool pool)
+            CharacterLabelPool pool,
+            ICharacterNameProvider characterNameProvider)
         {
             _targetProvider = targetProvider;
             _pool = pool;
+            _characterNameProvider = characterNameProvider;
         }
 
         public void Start()
@@ -49,9 +54,14 @@ namespace Etheria.Features.Character
                 return;
             }
 
+            var displayName = target.Root
+                .GetComponentInParent(typeof(ICharacterIdentity)) is ICharacterIdentity identity
+                ? _characterNameProvider.GetDisplayName(identity.CharacterId)
+                : target.DisplayName;
+
             _currentView = _pool.Get(
                 target.UiAnchor,
-                target.DisplayName,
+                displayName,
                 _camera);
         }
 

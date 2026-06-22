@@ -5,9 +5,10 @@ namespace Etheria.Game.Dialogue
     public interface IDialogueService
     {
         bool IsRunning { get; }
+        string DefaultSpeakerId { get; }
 
         bool TryStart(
-            string nodeName,
+            string characterId,
             IDialogueParticipant participant,
             Transform interlocutor);
     }
