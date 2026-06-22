@@ -7,8 +7,6 @@ namespace Etheria.Game.Targeting
 {
     public interface ITargetCandidate : IIdentifiable<Guid>
     {
-        string DisplayName { get; }
-
         Transform Root { get; }
         Transform AimPoint { get; }
         Transform UiAnchor { get; }

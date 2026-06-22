@@ -18,6 +18,9 @@ namespace Etheria.Features.Campaign
 
             builder.Register<QuestService>(Lifetime.Singleton)
                 .As<IQuestService>();
+
+            builder.Register<QuestTextProvider>(Lifetime.Singleton)
+                .As<IQuestTextProvider>();
         }
     }
 }

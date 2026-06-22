@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b7ba7cdd1f46f94db970ba8a2574f34, type: 3}
-  m_Name: Character_Bartok
+  m_Name: Npc_Hakon
   m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterDefinitionSO
-  <Id>k__BackingField: bartok
+  <Id>k__BackingField: hakon

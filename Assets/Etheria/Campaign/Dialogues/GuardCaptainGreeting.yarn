@@ -1,8 +1,29 @@
 title: GuardCaptainGreeting
 ---
-На дороге появились разбойники.
+<<if quest_is_completed("clear_bandits")>>
+    Дорога теперь безопасна. Спасибо.
 
-player: Я разберусь.
+<<elseif quest_stage("clear_bandits") == 30>>
+    Разбойники уничтожены.
 
-Возвращайся, когда закончишь.
+    Отличная работа.
+    <<add_quest_log "clear_bandits" "clear_bandits.completed">>
+    <<complete_quest "clear_bandits">>
+
+<<elseif quest_is_active("clear_bandits")>>
+    Ты уже разобрался с разбойниками?
+
+    player: Пока нет.
+
+<<else>>
+    На дороге появились разбойники.
+
+    player: Я разберусь.
+
+    <<start_quest "clear_bandits">>
+    <<set_quest_stage "clear_bandits" 20>>
+    <<add_quest_log "clear_bandits" "clear_bandits.started">>
+
+    Возвращайся, когда закончишь.
+<<endif>>
 ===

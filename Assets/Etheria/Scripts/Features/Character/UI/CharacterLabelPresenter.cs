@@ -54,10 +54,12 @@ namespace Etheria.Features.Character
                 return;
             }
 
-            var displayName = target.Root
-                .GetComponentInParent(typeof(ICharacterIdentity)) is ICharacterIdentity identity
-                ? _characterNameProvider.GetDisplayName(identity.CharacterId)
-                : target.DisplayName;
+            if (target.Root
+                .GetComponentInParent(typeof(ICharacterIdentity)) is not ICharacterIdentity identity)
+                return;
+
+            var displayName =
+                _characterNameProvider.GetDisplayName(identity.CharacterId);
 
             _currentView = _pool.Get(
                 target.UiAnchor,

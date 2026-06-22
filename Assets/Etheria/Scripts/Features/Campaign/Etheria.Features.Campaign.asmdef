@@ -7,7 +7,8 @@
         "Etheria.Game",
         "UniTask",
         "YarnSpinner.Unity",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "Unity.Localization"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

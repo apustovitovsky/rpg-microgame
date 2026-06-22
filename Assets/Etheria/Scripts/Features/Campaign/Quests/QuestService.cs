@@ -19,6 +19,19 @@ namespace Etheria.Features.Campaign
 
         public event Action<string> QuestChanged;
 
+        public IReadOnlyList<string> GetTrackedQuestIds()
+        {
+            var result = new List<string>();
+
+            foreach (var pair in _states)
+            {
+                if (pair.Value.Status != QuestStatus.Inactive)
+                    result.Add(pair.Key);
+            }
+
+            return result.AsReadOnly();
+        }
+
         public QuestService(QuestDefinitionSO[] definitions)
         {
             _definitions = new Dictionary<string, QuestDefinitionSO>(

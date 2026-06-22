@@ -10,6 +10,7 @@ namespace Etheria.Features.Input
         private readonly InputSystem_Actions _input;
 
         public event Action InteractPerformed;
+        public event Action ToggleJournalPerformed;
 
         public PlayerInputSource(
             InputSystem_Actions input)
@@ -200,6 +201,13 @@ namespace Etheria.Features.Input
 
         }
 
+        public void OnToggleJournal(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+
+            ToggleJournalPerformed?.Invoke();
+        }
     }
 
 }

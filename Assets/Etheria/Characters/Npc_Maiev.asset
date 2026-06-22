@@ -10,18 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b7ba7cdd1f46f94db970ba8a2574f34, type: 3}
-  m_Name: Character_GuardCaptain
+  m_Name: Npc_Maiev
   m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterDefinitionSO
-  <Id>k__BackingField: guard_captain
-  <DisplayName>k__BackingField:
-    m_TableReference:
-      m_TableCollectionName: GUID:598fa95b447bdca419c83b135657cea0
-    m_TableEntryReference:
-      m_KeyId: 0
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
-  references:
-    version: 2
-    RefIds: []
+  <Id>k__BackingField: maiev

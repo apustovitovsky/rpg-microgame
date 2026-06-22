@@ -10,7 +10,6 @@ namespace Etheria.Features.Character
     ITargetCandidate
     {
         [SerializeField, ReadOnlyField] private string _id;
-        [SerializeField] private string _displayName;
         [SerializeField] private Transform _aimPoint;
         [SerializeField] private Transform _uiAnchor;
 
@@ -18,8 +17,6 @@ namespace Etheria.Features.Character
             Guid.TryParse(_id, out var id)
                 ? id
                 : Guid.Empty;
-
-        public string DisplayName => _displayName;
 
         public Transform Root => transform;
         public Transform AimPoint => _aimPoint;

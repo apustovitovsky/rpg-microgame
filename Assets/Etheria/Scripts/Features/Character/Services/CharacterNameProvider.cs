@@ -12,10 +12,11 @@ namespace Etheria.Features.Character
             if (string.IsNullOrWhiteSpace(characterId))
                 return string.Empty;
 
-            var localizedName =
-                LocalizationSettings.StringDatabase.GetLocalizedString(
-                    TableName,
-                    characterId);
+            var result = LocalizationSettings.StringDatabase.GetTableEntry(
+                TableName,
+                characterId);
+
+            var localizedName = result.Entry?.GetLocalizedString();
 
             return string.IsNullOrWhiteSpace(localizedName)
                 ? characterId

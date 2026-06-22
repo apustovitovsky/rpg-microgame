@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Quests Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: Quests
+  m_TableCollectionNameGuidString: 66bf53cb89f8eff419cae2df25e269f1
+  m_Entries:
+  - m_Id: 20522151936
+    m_Key: clear_bandits.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 121420328960
+    m_Key: clear_bandits.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 132828835840
+    m_Key: clear_bandits.started
+    m_Metadata:
+      m_Items: []
+  - m_Id: 162709057536
+    m_Key: clear_bandits.target_cleared
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357471563776
+    m_Key: clear_bandits.completed
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 7199645481083076909
+  references:
+    version: 2
+    RefIds:
+    - rid: 7199645481083076909
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables,
+        asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1782161431441

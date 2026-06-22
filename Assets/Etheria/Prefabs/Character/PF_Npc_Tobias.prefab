@@ -71,5 +71,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1945050838850649452}
   m_SourcePrefab: {fileID: 100100000, guid: 33536a6bbb02c764bab34a1b259f70ba, type: 3}
+--- !u!1 &6740401117405363649 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 7750543860641097867}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1945050838850649452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6740401117405363649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6180e0eb75be638498b3c04fa8662b4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterIdentity
+  _definition: {fileID: 11400000, guid: aab1c638e0b6ddd4c871de27ca4fed3b, type: 2}
