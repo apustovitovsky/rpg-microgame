@@ -1025,6 +1025,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1074969669}
+  - {fileID: 1398765111}
+  - {fileID: 997571311}
+  - {fileID: 794502597}
   - {fileID: 263783786}
   - {fileID: 1695550895}
   - {fileID: 1462144397}
@@ -2264,6 +2267,51 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 781321496}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &794502596
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 794502597}
+  - component: {fileID: 794502598}
+  m_Layer: 0
+  m_Name: city_storage_shelter_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &794502597
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794502596}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 23.29, y: 0, z: 5.91}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 398308800}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &794502598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794502596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
+  _id: city_storage_shelter_02
 --- !u!1 &834438844
 GameObject:
   m_ObjectHideFlags: 0
@@ -2762,6 +2810,51 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 959343291}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &997571310
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 997571311}
+  - component: {fileID: 997571312}
+  m_Layer: 0
+  m_Name: city_storage_shelter_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &997571311
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997571310}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071062, z: -0, w: 0.7071075}
+  m_LocalPosition: {x: -3.73, y: 0, z: -12.57}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 398308800}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &997571312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997571310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
+  _id: city_storage_shelter_01
 --- !u!1001 &1046895725
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2862,7 +2955,7 @@ GameObject:
   - component: {fileID: 1074969669}
   - component: {fileID: 1074969670}
   m_Layer: 0
-  m_Name: city_entrance_02
+  m_Name: storage_entrance_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2895,7 +2988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: city_entrance_02
+  _id: storage_entrance_02
 --- !u!1001 &1079498012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2986,7 +3079,7 @@ GameObject:
   - component: {fileID: 1081895675}
   - component: {fileID: 1081895676}
   m_Layer: 0
-  m_Name: city_entrance_01
+  m_Name: storage_entrance_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3019,7 +3112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: city_entrance_01
+  _id: storage_entrance_01
 --- !u!1001 &1097832161
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4172,6 +4265,51 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1386957864}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1398765110
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1398765111}
+  - component: {fileID: 1398765112}
+  m_Layer: 0
+  m_Name: city_bandit_escape_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1398765111
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398765110}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.00000086426724, z: -0, w: 1}
+  m_LocalPosition: {x: 31.09, y: 0, z: -29.530003}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 398308800}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1398765112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398765110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
+  _id: city_bandit_escape_01
 --- !u!1001 &1406587152
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5710,6 +5848,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3859336324316773513, guid: 52571f68872914e24837210513edea1d,
+        type: 3}
+      propertyPath: hurryUpLineKeyCode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7262066351540048079, guid: 52571f68872914e24837210513edea1d,
         type: 3}
       propertyPath: m_Name
@@ -5767,7 +5910,57 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8020628925107869966, guid: 52571f68872914e24837210513edea1d,
         type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020628925107869966, guid: 52571f68872914e24837210513edea1d,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020628925107869966, guid: 52571f68872914e24837210513edea1d,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020628925107869966, guid: 52571f68872914e24837210513edea1d,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020628925107869966, guid: 52571f68872914e24837210513edea1d,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020628925107869966, guid: 52571f68872914e24837210513edea1d,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020628925107869966, guid: 52571f68872914e24837210513edea1d,
+        type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020628925107869966, guid: 52571f68872914e24837210513edea1d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020628925107869966, guid: 52571f68872914e24837210513edea1d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020628925107869966, guid: 52571f68872914e24837210513edea1d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020628925107869966, guid: 52571f68872914e24837210513edea1d,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8020628925673895293, guid: 52571f68872914e24837210513edea1d,

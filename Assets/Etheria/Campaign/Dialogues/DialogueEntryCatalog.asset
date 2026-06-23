@@ -15,3 +15,7 @@ MonoBehaviour:
   _entries:
   - <CharacterId>k__BackingField: guard_captain
     <NodeName>k__BackingField: GuardCaptainGreeting
+  - <CharacterId>k__BackingField: hakon
+    <NodeName>k__BackingField: HakonGreeting
+  - <CharacterId>k__BackingField: bandit
+    <NodeName>k__BackingField: BanditConfrontation

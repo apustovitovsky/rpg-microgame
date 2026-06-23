@@ -27,12 +27,20 @@ MonoBehaviour:
     m_Key: clear_bandits.started
     m_Metadata:
       m_Items: []
-  - m_Id: 162709057536
-    m_Key: clear_bandits.target_cleared
-    m_Metadata:
-      m_Items: []
   - m_Id: 357471563776
     m_Key: clear_bandits.completed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 219074402922496
+    m_Key: clear_bandits.hakon_hint
+    m_Metadata:
+      m_Items: []
+  - m_Id: 219209740529664
+    m_Key: clear_bandits.bandit_killed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 219243471122432
+    m_Key: clear_bandits.bandit_released
     m_Metadata:
       m_Items: []
   m_Metadata:

@@ -1,0 +1,40 @@
+title: HakonGreeting
+---
+<<if quest_is_active("clear_bandits") and quest_stage("clear_bandits") == 20>>
+    <<jump HakonBanditQuestion>>
+<<else>>
+    <<jump HakonDefaultGreeting>>
+<<endif>>
+===
+
+title: HakonBanditQuestion
+---
+Привет. Что тебе нужно?
+
+-> Ты ничего не слышал о бандите?
+    <<jump HakonBanditAnswer>>
+
+-> Ничего.
+    Тогда не задерживай меня.
+===
+
+title: HakonBanditAnswer
+---
+<<if world_fact("hakon_told_bandit_location")>>
+    Я уже сказал: видел подозрительного человека возле хранилища.
+<<else>>
+    Видел одного подозрительного типа возле хранилища.
+
+    player: Спасибо. Проверю.
+
+    <<set_world_fact "hakon_told_bandit_location">>
+    <<add_quest_log "clear_bandits" "clear_bandits.hakon_hint">>
+<<endif>>
+===
+
+title: HakonDefaultGreeting
+---
+Привет.
+
+player: Привет.
+===

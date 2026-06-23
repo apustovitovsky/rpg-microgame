@@ -33,6 +33,7 @@ namespace Etheria.Features.Campaign
 
             builder.RegisterEntryPoint<QuestCommandHandler>(Lifetime.Singleton);
             builder.RegisterEntryPoint<WorldFactCommandHandler>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<CharacterWorldCommandHandler>(Lifetime.Singleton);
 
             builder.RegisterComponentInHierarchy<DialogueSpeakerPresenter>();
 

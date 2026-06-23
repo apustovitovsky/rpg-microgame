@@ -17,8 +17,21 @@ namespace Etheria.Features.Character
             ? transform.parent
             : transform;
 
-        public IReadOnlyCollection<ITargetCandidate> Candidates =>
-            _candidates;
+        public IReadOnlyCollection<ITargetCandidate> Candidates
+        {
+            get
+            {
+                _candidates.RemoveWhere(IsDestroyed);
+                return _candidates;
+            }
+        }
+
+        private static bool IsDestroyed(ITargetCandidate candidate)
+        {
+            return candidate == null ||
+                   candidate is UnityEngine.Object unityObject &&
+                   unityObject == null;
+        }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -47,6 +60,11 @@ namespace Etheria.Features.Character
             var rigidbody = GetComponent<Rigidbody>();
             rigidbody.isKinematic = true;
             rigidbody.useGravity = false;
+        }
+
+        private void OnDisable()
+        {
+            _candidates.Clear();
         }
     }
 }

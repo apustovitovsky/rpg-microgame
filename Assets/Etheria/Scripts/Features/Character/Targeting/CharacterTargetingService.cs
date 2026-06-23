@@ -58,9 +58,18 @@ namespace Etheria.Features.Character
 
         private static bool IsValid(ITargetCandidate candidate)
         {
-            return candidate != null
-                && candidate.IsTargetable
-                && candidate.AimPoint != null;
+            if (candidate == null)
+                return false;
+
+            if (candidate is UnityEngine.Object unityObject &&
+                unityObject == null)
+            {
+                return false;
+            }
+
+            return candidate.IsTargetable &&
+                   candidate.Root != null &&
+                   candidate.AimPoint != null;
         }
 
         private void SetTarget(ITargetCandidate target)
@@ -84,7 +93,10 @@ namespace Etheria.Features.Character
             }
             else if (candidates.Count == 1)
             {
-                newBestTarget = GetOnlyCandidate(candidates);
+                var candidate = GetOnlyCandidate(candidates);
+                newBestTarget = IsValid(candidate)
+                    ? candidate
+                    : null;
             }
             else
             {
@@ -128,7 +140,8 @@ namespace Etheria.Features.Character
             }
             else
             {
-                if (Contains(candidates, CurrentTarget))
+                if (IsValid(CurrentTarget) &&
+                    Contains(candidates, CurrentTarget))
                 {
                     // Сохраняем зафиксированную цель.
                 }
