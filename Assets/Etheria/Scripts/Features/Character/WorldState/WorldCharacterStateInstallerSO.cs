@@ -13,9 +13,15 @@ namespace Etheria.Features.Character
         [SerializeField]
         private WorldCharacterSetupSO _setup;
 
+        [SerializeField]
+        private CharacterCatalogSO _catalog;
+
         public override void Install(IContainerBuilder builder)
         {
+            _catalog.Validate();
+
             builder.RegisterInstance(_setup);
+            builder.RegisterInstance(_catalog);
 
             builder.Register<CharacterWorldStateService>(
                     Lifetime.Singleton)

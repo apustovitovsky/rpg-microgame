@@ -27,7 +27,7 @@ namespace Etheria.Features.Character
             builder.RegisterInstance(_featureSettings);
             builder.RegisterInstance(_syntyLookSettings);
 
-            builder.RegisterEntryPoint<NpcSpawner>(
+            builder.RegisterEntryPoint<CharacterSpawner>(
                 Lifetime.Singleton);
 
             builder.Register<CharacterNameProvider>(Lifetime.Singleton)

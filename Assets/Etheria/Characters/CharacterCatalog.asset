@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26df7a3c94b4343bf2ed570bfaf752d, type: 3}
+  m_Name: CharacterCatalog
+  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterCatalogSO
+  _definitions:
+  - {fileID: 11400000, guid: 9a4be434e197a2f41a26b3ac0424a30c, type: 2}
+  - {fileID: 11400000, guid: 292a730cd067aec478810c2422f93582, type: 2}
+  - {fileID: 11400000, guid: 5aaefd13387de344387355c9af3e55bf, type: 2}
+  - {fileID: 11400000, guid: 34a0b502e646e2b459184b81ff9b1360, type: 2}
+  - {fileID: 11400000, guid: aab1c638e0b6ddd4c871de27ca4fed3b, type: 2}

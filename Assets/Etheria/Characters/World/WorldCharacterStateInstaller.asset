@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: WorldCharacterStateInstaller
   m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.WorldCharacterStateInstallerSO
   _setup: {fileID: 11400000, guid: 189e8281af7886145beff1487ff50dcf, type: 2}
+  _catalog: {fileID: 11400000, guid: 5ee6023fb774431292792bd7b985213c, type: 2}

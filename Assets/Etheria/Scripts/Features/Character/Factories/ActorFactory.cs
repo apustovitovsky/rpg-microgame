@@ -8,14 +8,14 @@ namespace Etheria.Features.Character
     public sealed class ActorFactory : IActorFactory
     {
         private readonly LifetimeScope _parentScope;
-        private readonly ScopeHierarchy _scopeHierarchy;
+        private readonly ScopeContentRoot _scopeContentRoot;
 
         public ActorFactory(
             LifetimeScope parentScope,
-            ScopeHierarchy scopeHierarchy)
+            ScopeContentRoot scopeContentRoot)
         {
             _parentScope = parentScope;
-            _scopeHierarchy = scopeHierarchy;
+            _scopeContentRoot = scopeContentRoot;
         }
 
         public LifetimeScope Create(
@@ -29,7 +29,7 @@ namespace Etheria.Features.Character
                 rotation = Quaternion.identity;
 
             scope.transform.SetParent(
-                _scopeHierarchy.ContentRoot,
+                _scopeContentRoot.Transform,
                 worldPositionStays: false);
 
             scope.transform.SetPositionAndRotation(position, rotation);

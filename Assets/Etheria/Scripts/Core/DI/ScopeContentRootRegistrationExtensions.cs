@@ -3,13 +3,13 @@ using VContainer.Unity;
 
 namespace Etheria.Core.DI
 {
-    public static class ScopeHierarchyRegistrationExtensions
+    public static class ScopeContentRootRegistrationExtensions
     {
         public static ComponentRegistrationBuilder UnderScopeRoot(
             this ComponentRegistrationBuilder registration)
         {
             return registration.UnderTransform(
-                resolver => resolver.Resolve<ScopeHierarchy>().ContentRoot);
+                resolver => resolver.Resolve<ScopeContentRoot>().Transform);
         }
     }
 }

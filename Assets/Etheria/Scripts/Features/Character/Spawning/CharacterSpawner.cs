@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Etheria.Core.DI;
 using Etheria.Game.Character;
 using Etheria.Game.World;
@@ -8,32 +7,30 @@ using VContainer.Unity;
 
 namespace Etheria.Features.Character
 {
-    public sealed class NpcSpawner : IStartable
+    public sealed class CharacterSpawner : IStartable
     {
         private readonly IWorldLocationRegistry _locations;
         private readonly ICharacterWorldStateService _worldState;
-        private readonly WorldCharacterSetupSO _setup;
+        private readonly CharacterCatalogSO _catalog;
         private readonly IObjectResolver _resolver;
-        private readonly ScopeHierarchy _scopeHierarchy;
+        private readonly ScopeContentRoot _scopeContentRoot;
 
-        public NpcSpawner(
+        public CharacterSpawner(
             IWorldLocationRegistry locations,
             ICharacterWorldStateService worldState,
-            WorldCharacterSetupSO setup,
+            CharacterCatalogSO catalog,
             IObjectResolver resolver,
-            ScopeHierarchy scopeHierarchy)
+            ScopeContentRoot scopeContentRoot)
         {
             _locations = locations;
             _worldState = worldState;
-            _setup = setup;
+            _catalog = catalog;
             _resolver = resolver;
-            _scopeHierarchy = scopeHierarchy;
+            _scopeContentRoot = scopeContentRoot;
         }
 
         public void Start()
         {
-            var definitionsById = CreateDefinitionMap();
-
             foreach (var state in _worldState.States)
             {
                 if (!state.IsAlive ||
@@ -49,7 +46,7 @@ namespace Etheria.Features.Character
                     continue;
                 }
 
-                if (!definitionsById.TryGetValue(
+                if (!_catalog.TryGet(
                         state.CharacterId,
                         out var definition))
                 {
@@ -67,32 +64,8 @@ namespace Etheria.Features.Character
                     definition.Prefab,
                     location.Transform.position,
                     location.Transform.rotation,
-                    _scopeHierarchy.ContentRoot);
+                    _scopeContentRoot.Transform);
             }
-        }
-
-        private Dictionary<string, CharacterDefinitionSO>
-            CreateDefinitionMap()
-        {
-            var result =
-                new Dictionary<string, CharacterDefinitionSO>(
-                    StringComparer.Ordinal);
-
-            foreach (var entry in _setup.Characters)
-            {
-                var definition = entry.Character;
-
-                if (definition == null)
-                    continue;
-
-                if (!result.TryAdd(definition.Id, definition))
-                {
-                    throw new InvalidOperationException(
-                        $"Duplicate character definition: '{definition.Id}'.");
-                }
-            }
-
-            return result;
         }
     }
 }
