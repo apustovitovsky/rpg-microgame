@@ -31,11 +31,19 @@ namespace Etheria.Features.Campaign
             builder.Register<DialogueService>(Lifetime.Singleton)
                 .As<IDialogueService>();
 
+            builder.RegisterComponentInHierarchy<DialogueView>();
+
+            builder.Register<DialoguePresenter>(Lifetime.Singleton)
+                .AsSelf()
+                .AsImplementedInterfaces();
+
+            builder.RegisterEntryPoint<DialogueInputHandler>(Lifetime.Singleton);
+
             builder.RegisterEntryPoint<QuestCommandHandler>(Lifetime.Singleton);
             builder.RegisterEntryPoint<WorldFactCommandHandler>(Lifetime.Singleton);
             builder.RegisterEntryPoint<CharacterWorldCommandHandler>(Lifetime.Singleton);
 
-            builder.RegisterComponentInHierarchy<DialogueSpeakerPresenter>();
+            builder.RegisterComponentInHierarchy<YarnDialoguePresenter>();
 
             builder.RegisterBuildCallback(container =>
             {

@@ -1,31 +1,61 @@
 title: GuardCaptainGreeting
 ---
 <<if world_fact("road_to_city_safe")>>
-    Дорога теперь безопасна. Спасибо.
-
-<<elseif quest_stage("clear_bandits") == 30>>
-    Разбойники уничтожены.
-
-    Отличная работа.
-    <<set_quest_stage "clear_bandits" 100>>
-    <<add_quest_log "clear_bandits" "clear_bandits.completed">>
-    <<set_world_fact "road_to_city_safe">>
-    <<complete_quest "clear_bandits">>
-
-<<elseif quest_is_active("clear_bandits")>>
-    Ты уже разобрался с разбойниками?
-
-    player: Пока нет.
-
+    Город в безопасности. Благодарю.
 <<else>>
-    На дороге появились разбойники.
+    Чем могу помочь?
 
-    player: Я разберусь.
-
-    <<start_quest "clear_bandits">>
-    <<set_quest_stage "clear_bandits" 20>>
-    <<add_quest_log "clear_bandits" "clear_bandits.started">>
-
-    Возвращайся, когда закончишь.
+    <<jump GuardCaptainMenu>>
 <<endif>>
+===
+
+title: GuardCaptainMenu
+---
+-> Я слышал в город пробрались бандиты. <<if not quest_is_active("clear_bandits") and not quest_is_completed("clear_bandits")>>
+    <<jump GuardCaptainStartClearBandits>>
+-> Я разобрался с бандитами. <<if quest_is_active("clear_bandits") and quest_stage("clear_bandits") == 30>>
+    <<jump GuardCaptainReportClearBandits>>
+-> Кто именно из твоей стражи ищет бандитов? <<if quest_is_active("clear_bandits") and quest_stage("clear_bandits") == 20>>
+    <<jump GuardCaptainClearBanditsNotDone>>
+-> Конец.
+    <<jump GuardCaptainEnd>>
+===
+
+title: GuardCaptainStartClearBandits
+---
+Да, в городе начали промышлять бандиты, стража уже разыскивает их.
+
+player: Попробую как-то помочь.
+
+<<start_quest "clear_bandits">>
+<<set_quest_stage "clear_bandits" 20>>
+<<add_quest_log "clear_bandits" "clear_bandits.started">>
+
+Возвращайся, когда закончишь.
+
+<<jump GuardCaptainMenu>>
+===
+
+title: GuardCaptainClearBanditsNotDone
+---
+Хакон, он выставлен возле продовольственного склада.
+
+<<jump GuardCaptainMenu>>
+===
+
+title: GuardCaptainReportClearBandits
+---
+Бандиты уничтожены?
+
+Отличная работа.
+
+<<set_quest_stage "clear_bandits" 100>>
+<<add_quest_log "clear_bandits" "clear_bandits.completed">>
+<<set_world_fact "road_to_city_safe">>
+<<complete_quest "clear_bandits">>
+===
+
+title: GuardCaptainEnd
+---
+Не задерживайся.
 ===

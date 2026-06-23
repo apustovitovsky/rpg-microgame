@@ -3,28 +3,50 @@ title: BanditConfrontation
 <<if quest_is_active("clear_bandits") and quest_stage("clear_bandits") == 20>>
     Чего тебе надо?
 
-    player: Капитан стражи разыскивает тебя.
-
-    -> Ты пойдёшь со мной.
-        Не дождёшься!
-
-        player: Тогда это закончится здесь.
-
-        <<set_world_fact "bandit_killed">>
-        <<set_character_alive "bandit" false>>
-        <<set_quest_stage "clear_bandits" 30>>
-        <<add_quest_log "clear_bandits" "clear_bandits.bandit_killed">>
-
-    -> Уходи. Я скажу, что не нашёл тебя.
-        Не ожидал от тебя такой доброты.
-
-        <<set_world_fact "bandit_released">>
-        <<move_character "bandit" "city_bandit_escape_01">>
-        <<set_quest_stage "clear_bandits" 30>>
-        <<add_quest_log "clear_bandits" "clear_bandits.bandit_released">>
+    -> Капитан стражи разыскивает тебя.
+        <<jump BanditAccuse>>
+    -> Конец.
+        <<jump BanditEnd>>
 <<elseif world_fact("bandit_released")>>
     Нам больше не о чем говорить.
 <<else>>
     Отстань.
 <<endif>>
+===
+
+title: BanditAccuse
+---
+Вот как? И что ты собираешься делать?
+
+-> Ты пойдёшь со мной.
+    <<jump BanditArrest>>
+-> Уходи. Я скажу, что не нашёл тебя.
+    <<jump BanditRelease>>
+===
+
+title: BanditArrest
+---
+Не дождёшься!
+
+player: Тогда это закончится здесь.
+
+<<set_world_fact "bandit_killed">>
+<<set_character_alive "bandit" false>>
+<<set_quest_stage "clear_bandits" 30>>
+<<add_quest_log "clear_bandits" "clear_bandits.bandit_killed">>
+===
+
+title: BanditRelease
+---
+Тогда еще увидимся, благодарю.
+
+<<set_world_fact "bandit_released">>
+<<move_character "bandit" "city_bandit_escape_01">>
+<<set_quest_stage "clear_bandits" 30>>
+<<add_quest_log "clear_bandits" "clear_bandits.bandit_released">>
+===
+
+title: BanditEnd
+---
+Ладно.
 ===

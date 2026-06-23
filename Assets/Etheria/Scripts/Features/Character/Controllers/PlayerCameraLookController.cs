@@ -109,11 +109,11 @@ namespace Etheria.Features.Character
         {
             AutoAssignIfMissing();
 
-            if (_syntyLookSettings != null && _syntyLookSettings.HideCursor)
-            {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
+            // if (_syntyLookSettings != null && _syntyLookSettings.HideCursor)
+            // {
+            //     Cursor.visible = false;
+            //     Cursor.lockState = CursorLockMode.Locked;
+            // }
 
             _cameraInversion = _syntyLookSettings != null && _syntyLookSettings.InvertCamera ? 1 : -1;
 

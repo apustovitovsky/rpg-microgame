@@ -21,7 +21,7 @@ namespace Etheria.Features.Campaign
             !string.IsNullOrWhiteSpace(_identity.CharacterId) &&
             isActiveAndEnabled &&
             _dialogueService != null &&
-            !_dialogueService.IsRunning;
+            !_dialogueService.IsActive;
 
         [Inject]
         public void Construct(

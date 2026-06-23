@@ -1,4 +1,5 @@
 using System;
+using Etheria.Game.Dialogue;
 using Etheria.Game.Input;
 using Etheria.Game.Interaction;
 using Etheria.Game.Targeting;
@@ -11,12 +12,16 @@ namespace Etheria.Features.Character
         private readonly IPlayerInputSource _inputSource;
         private readonly ITargetProvider _targetProvider;
 
+        private readonly IDialogueService _dialogueService;
+
         public CharacterInteractionService(
             IPlayerInputSource inputSource,
-            ITargetProvider targetProvider)
+            ITargetProvider targetProvider,
+            IDialogueService dialogueService)
         {
             _inputSource = inputSource;
             _targetProvider = targetProvider;
+            _dialogueService = dialogueService;
         }
 
         public void Start()
@@ -31,6 +36,9 @@ namespace Etheria.Features.Character
 
         private void OnInteractPerformed()
         {
+            if (_dialogueService.IsActive)
+                return;
+                
             ITargetCandidate target = _targetProvider.CurrentTarget;
 
             if (target?.Root == null)

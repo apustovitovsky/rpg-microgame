@@ -1,24 +1,21 @@
 title: HakonGreeting
 ---
-<<if quest_is_active("clear_bandits") and quest_stage("clear_bandits") == 20>>
+Привет. Что тебе нужно?
+
+<<jump HakonMenu>>
+===
+
+title: HakonMenu
+---
+-> Ты ничего не слышал о бандите? <<if quest_is_active("clear_bandits") and quest_stage("clear_bandits") == 20 and not world_fact("hakon_told_bandit_location")>>
     <<jump HakonBanditQuestion>>
-<<else>>
-    <<jump HakonDefaultGreeting>>
-<<endif>>
+-> Как идут дела?
+    <<jump HakonSmallTalk>>
+-> Конец.
+    <<jump HakonEnd>>
 ===
 
 title: HakonBanditQuestion
----
-Привет. Что тебе нужно?
-
--> Ты ничего не слышал о бандите?
-    <<jump HakonBanditAnswer>>
-
--> Ничего.
-    Тогда не задерживай меня.
-===
-
-title: HakonBanditAnswer
 ---
 <<if world_fact("hakon_told_bandit_location")>>
     Я уже сказал: видел подозрительного человека возле хранилища.
@@ -30,11 +27,18 @@ title: HakonBanditAnswer
     <<set_world_fact "hakon_told_bandit_location">>
     <<add_quest_log "clear_bandits" "clear_bandits.hakon_hint">>
 <<endif>>
+
+<<jump HakonMenu>>
 ===
 
-title: HakonDefaultGreeting
+title: HakonSmallTalk
 ---
-Привет.
+Всё как обычно. Работа сама себя не сделает.
 
-player: Привет.
+<<jump HakonMenu>>
+===
+
+title: HakonEnd
+---
+Тогда не задерживай меня.
 ===

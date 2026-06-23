@@ -28,14 +28,17 @@ namespace Etheria.Features.Campaign
             _runner.onDialogueComplete.AddListener(OnDialogueCompleted);
         }
 
+        private bool _isActive;
+        public bool IsActive => _isActive;
         public bool IsRunning => _runner.IsDialogueRunning;
 
+
         public bool TryStart(
-    string characterId,
-    IDialogueParticipant participant,
-    Transform interlocutor)
+            string characterId,
+            IDialogueParticipant participant,
+            Transform interlocutor)
         {
-            if (IsRunning || string.IsNullOrWhiteSpace(characterId))
+            if (_isActive || string.IsNullOrWhiteSpace(characterId))
                 return false;
 
             if (!_entryCatalog.TryGetNode(characterId, out var nodeName))
@@ -67,6 +70,7 @@ namespace Etheria.Features.Campaign
             _participant = participant;
             _participant?.OnDialogueStarted(interlocutor);
 
+            _isActive = true;
             _runner.StartDialogue(nodeName).Forget();
             return true;
         }
@@ -82,6 +86,7 @@ namespace Etheria.Features.Campaign
 
             _participant = null;
             DefaultSpeakerId = null;
+            _isActive = false;
         }
     }
 }

@@ -5,12 +5,18 @@ using UnityEngine.InputSystem;
 
 namespace Etheria.Features.Input
 {
-    public class PlayerInputSource : IPlayerInputSource, InputSystem_Actions.IPlayerActions, IDisposable
+    public class PlayerInputSource :
+        IPlayerInputSource,
+        InputSystem_Actions.IPlayerActions,
+        InputSystem_Actions.IUIActions,
+        IDisposable
     {
         private readonly InputSystem_Actions _input;
 
         public event Action InteractPerformed;
         public event Action ToggleJournalPerformed;
+        public event Action UiSubmitPerformed;
+        public event Action UiCancelPerformed;
 
         public PlayerInputSource(
             InputSystem_Actions input)
@@ -19,11 +25,41 @@ namespace Etheria.Features.Input
 
             _input.Enable();
             _input.Player.SetCallbacks(this);
+            _input.UI.SetCallbacks(this);
+
+            EnterGameplayInput();
+        }
+
+        public void EnterGameplayInput()
+        {
+            _input.UI.Disable();
+            _input.Player.Enable();
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            MouseDelta = Vector2.zero;
+            MoveComposite = Vector2.zero;
+            MovementInputDetected = false;
+        }
+
+        public void EnterUiInput()
+        {
+            _input.Player.Disable();
+            _input.UI.Enable();
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            MouseDelta = Vector2.zero;
+            MoveComposite = Vector2.zero;
+            MovementInputDetected = false;
         }
 
         public void Dispose()
         {
             _input.Player.SetCallbacks(null);
+            _input.UI.SetCallbacks(null);
             _input.Disable();
         }
 
@@ -207,6 +243,58 @@ namespace Etheria.Features.Input
                 return;
 
             ToggleJournalPerformed?.Invoke();
+        }
+
+        public void OnNavigate(InputAction.CallbackContext context)
+        {
+        }
+
+        public void OnSubmit(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+
+            UiSubmitPerformed?.Invoke();
+        }
+
+        public void OnCancel(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+
+            UiCancelPerformed?.Invoke();
+        }
+
+        public void OnPoint(InputAction.CallbackContext context)
+        {
+        }
+
+        public void OnClick(InputAction.CallbackContext context)
+        {
+        }
+
+        public void OnRightClick(InputAction.CallbackContext context)
+        {
+        }
+
+        public void OnMiddleClick(InputAction.CallbackContext context)
+        {
+        }
+
+        public void OnScrollWheel(InputAction.CallbackContext context)
+        {
+        }
+
+        public void OnTrackedDevicePosition(InputAction.CallbackContext context)
+        {
+        }
+
+        public void OnTrackedDeviceOrientation(InputAction.CallbackContext context)
+        {
+        }
+
+        public void OnMenu(InputAction.CallbackContext context)
+        {
         }
     }
 

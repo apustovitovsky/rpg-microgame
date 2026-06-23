@@ -12,6 +12,8 @@ namespace Etheria.Game.Input
 
         event Action InteractPerformed;
         event Action ToggleJournalPerformed;
+        event Action UiSubmitPerformed;
+        event Action UiCancelPerformed;
 
         public Action OnAimActivated { get; set; }
         public Action OnAimDeactivated { get; set; }
@@ -22,7 +24,7 @@ namespace Etheria.Game.Input
         public Action OnSprintActivated { get; set; }
         public Action OnSprintDeactivated { get; set; }
         public Action OnWalkToggled { get; set; }
-
-
+        void EnterGameplayInput();
+        void EnterUiInput();
     }
 }

@@ -26,6 +26,8 @@ namespace Etheria.Features.Character
             _camera = camera;
             _nameText.text = displayName;
 
+            _rectTransform ??= transform as RectTransform;
+
             UpdatePosition();
         }
 

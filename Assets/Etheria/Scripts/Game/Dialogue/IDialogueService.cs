@@ -4,6 +4,7 @@ namespace Etheria.Game.Dialogue
 {
     public interface IDialogueService
     {
+        bool IsActive { get; }
         bool IsRunning { get; }
         string DefaultSpeakerId { get; }
 

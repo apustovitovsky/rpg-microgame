@@ -37,7 +37,7 @@ namespace Etheria.Features
         {
             var playerScope = _actorFactory.Create(
                 _gameplayConfig.PlayerCharacterPrefab,
-                GetRandomSpawnPosition(10));
+                GetRandomSpawnPosition(1));
             var characterController =
                 playerScope.GetComponentInChildren<CharacterController>(true);
 
