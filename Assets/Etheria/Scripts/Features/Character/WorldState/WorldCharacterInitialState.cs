@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Etheria.Features.Character
 {
@@ -10,7 +11,8 @@ namespace Etheria.Features.Character
         public CharacterDefinitionSO Character { get; private set; }
 
         [field: SerializeField]
-        public string SpawnPointId { get; private set; }
+        [field: FormerlySerializedAs("<SpawnPointId>k__BackingField")]
+        public string LocationId { get; private set; }
 
         [field: SerializeField]
         public bool IsAlive { get; private set; } = true;

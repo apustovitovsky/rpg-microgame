@@ -1,208 +1,96 @@
-Ты рассуждаешь правильно. Для Gothic-подобной RPG нужно разделить **персонажа**, **его положение в мире**, **диалоги** и **квесты**.
-
-**Главное разделение**
-```text
-NPC Definition
-Кто этот персонаж вообще
-
-World Character State
-Где он сейчас и что с ним произошло
-
-Spawn Point
-Физическое место на карте
-
-Dialogue
-Что он может сказать при текущем состоянии мира
-
-Quest State
-Что произошло в конкретной сюжетной линии
-```
-
-### NPC не должен владеть квестом
-
-На NPC не должно быть списка:
+Сейчас у нас готова цепочка:
 
 ```text
-Quests Given:
-- clear_bandits
-- find_sword
+WorldCharacterSetup
+→ CharacterWorldStateService
+→ LocationId
+→ WorldLocationRegistry
+→ NpcSpawner
+→ NPC instance
 ```
 
-NPC знает только:
+Следующий важный шаг: сделать эту цепочку не только стартовой, но и реактивной.
 
-- свой постоянный `CharacterId`;
-- внешний вид;
-- поведение;
-- корневой диалог.
+## Рекомендованный порядок
 
-А уже Yarn знает сюжетные связи:
+1. **Проверить текущий spawn в Play Mode**
+   - появились все пять NPC;
+   - нет дубликатов;
+   - работают AI, имена, таргетинг и диалоги.
 
-```yarn
-<<if quest_stage("clear_bandits") == 0>>
-    // предложить квест
-<<elseif quest_stage("clear_bandits") == 30>>
-    // принять отчёт
-<<endif>>
-```
+2. **Отделить каталог персонажей от начального состояния**
 
-То есть NPC не выдаёт квест напрямую. Он запускает диалог, а диалог читает состояние кампании.
-
----
-
-## Постоянная личность NPC
-
-Нужен отдельный стабильный ID:
+Сейчас `NpcSpawner` ищет prefab через `WorldCharacterSetupSO`. Это смешивает:
 
 ```text
-hakon
-guard_captain
-blacksmith_harad
+CharacterCatalog
+→ какие персонажи существуют и какие у них prefab
+
+WorldCharacterSetup
+→ где они находятся в новой игре
 ```
 
-Он не должен зависеть от:
+Нужен отдельный `CharacterCatalogSO`, содержащий все `CharacterDefinitionSO`.
 
-- имени GameObject;
-- позиции;
-- Unity instance ID;
-- конкретного созданного prefab instance.
+3. **Добавить runtime presence NPC**
 
-Текущий GUID внутри `TargetCandidate` относится скорее к таргетингу. Для сохранений лучше позже вернуть отдельную сущность вроде:
+Текущий `NpcSpawner` работает только один раз. После:
 
 ```csharp
-CharacterIdentity
-{
-    CharacterId
-}
+TryMove("hakon", "city_marketplace_03");
 ```
 
-## Definition и State
+Хакон физически не переместится.
 
-### `NpcDefinitionSO`
+Нужен сервис вроде `CharacterWorldPresenter`, который:
 
-Неизменяемые authoring-данные:
+- хранит `CharacterId → GameObject`;
+- слушает `CharacterChanged`;
+- создаёт персонажа, если его location есть в текущей сцене;
+- перемещает уже созданного персонажа;
+- удаляет его, если `IsAlive == false` или location отсутствует в сцене.
+
+4. **Подключить world-state к Yarn**
+
+Например:
+
+```yarn
+<<move_character "hakon" "city_marketplace_03">>
+<<set_character_alive "bandit_01" false>>
+
+<<if character_is_alive("hakon")>>
+```
+
+Так диалоги смогут менять размещение персонажей без прямых ссылок на GameObject.
+
+5. **Добавить сохранение**
+
+DTO:
 
 ```text
-Id: hakon
-Visual: CharacterVisual_Grunt
-Dialogue Node: Hakon
-Default Behaviour: Civilian
+QuestStates
+WorldFacts
+CharacterStates
 ```
 
-### `WorldCharacterState`
-
-Runtime-данные:
+Для персонажа:
 
 ```text
-CharacterId: hakon
-LocationId: city_gate
-SpawnPointId: gate_guard_post
-IsAlive: true
-RoutineState: Working
+CharacterId
+LocationId
+IsAlive
 ```
 
-Именно `WorldCharacterState` сохраняется, а не `GameObject`.
-
----
-
-## Spawn points
-
-В перспективе на сцене лучше размещать не готовых NPC, а точки:
+6. **После этого делать патрули и расписание**
 
 ```text
-NpcSpawnPoint
-├── Id: gate_guard_post
-├── Default Character: hakon
-└── Transform
+PatrolRoute
+→ список LocationId
+
+Schedule
+→ время + LocationId
 ```
 
-При загрузке сцены:
+## Что делать прямо сейчас
 
-```text
-WorldState
-→ определяет, кто должен находиться здесь
-→ NpcSpawner находит точку
-→ создаёт общий NPC prefab
-→ применяет NpcDefinitionSO
-→ восстанавливает runtime-состояние
-```
-
-Для начала точка может содержать `Default Character`. Это задаёт начальное состояние новой игры. После загрузки сохранения главным становится `WorldState`.
-
-## Перемещение NPC
-
-NPC не переносится между сценами как вечный GameObject. Переносится его состояние:
-
-```text
-Hakon.LocationId = "tavern"
-Hakon.SpawnPointId = "tavern_table_02"
-```
-
-Если нужная сцена загружена, spawner переставляет или пересоздаёт Хакона. Если не загружена, меняются только данные.
-
-Позже распорядок дня может выбирать точки:
-
-```text
-08:00 → forge_work
-18:00 → tavern_table
-22:00 → home_bed
-```
-
-## Структура сохранения
-
-```text
-SaveGame
-├── PlayerState
-├── QuestStates
-├── WorldFacts
-├── CharacterStates
-├── DoorStates
-├── ChestStates
-└── PickupStates
-```
-
-Примеры:
-
-```text
-QuestState:
-clear_bandits, Completed, stage 100
-
-CharacterState:
-hakon, alive, location city_gate
-
-WorldFact:
-old_mine_open = true
-
-ChestState:
-chest_city_04, opened = true
-```
-
-Все сохраняемые объекты мира требуют постоянного ID.
-
-## Важный момент с локализацией
-
-Сейчас журнал хранит готовый текст. Для прототипа нормально, но в сохранении лучше хранить ключ:
-
-```text
-clear_bandits.started
-clear_bandits.target_cleared
-clear_bandits.completed
-```
-
-Не стоит сохранять русскую строку. Иначе при смене языка старые записи останутся русскими.
-
-Yarn должен предоставлять локализуемый текст, а `QuestState` хранить идентификаторы записей.
-
-## Что делать дальше
-
-Правильная последовательность:
-
-1. Завершить текущий квестовый вертикальный срез.
-2. Добавить отдельный постоянный `CharacterIdentity`.
-3. Создать `NpcDefinitionSO`.
-4. Создать `NpcSpawnPoint`.
-5. Сделать простой `WorldStateService` только в памяти.
-6. Перенести одного Хакона со сцены на создание через spawn point.
-7. Затем добавить сохранение DTO в файл.
-8. Только после этого делать расписания и перемещение между точками.
-
-Следующий разумный шаг: **`CharacterIdentity + NpcDefinitionSO`**, пока без спавнера и сохранения. Это заложит правильную идентичность NPC, не заставляя сразу строить всю систему мира.
+Я бы начал с **`CharacterCatalogSO`**. Это небольшой рефактор, который устранит последнее смешение initial state и definition catalog. Затем безопасно превратим `NpcSpawner` в реактивный runtime-сервис.

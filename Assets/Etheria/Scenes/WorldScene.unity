@@ -802,7 +802,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.NpcSpawnPoint
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
   _id: city_marketplace_01
 --- !u!1001 &285547175
 PrefabInstance:
@@ -1005,7 +1005,7 @@ GameObject:
   m_Component:
   - component: {fileID: 398308800}
   m_Layer: 0
-  m_Name: NpcSpawnPoints
+  m_Name: WorldLocations
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2987,7 +2987,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.NpcSpawnPoint
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
   _id: city_entrance_02
 --- !u!1001 &1079498012
 PrefabInstance:
@@ -3111,7 +3111,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.NpcSpawnPoint
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
   _id: city_entrance_01
 --- !u!1001 &1097832161
 PrefabInstance:
@@ -4634,7 +4634,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.NpcSpawnPoint
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
   _id: city_marketplace_03
 --- !u!1001 &1466491850
 PrefabInstance:
@@ -5497,7 +5497,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.NpcSpawnPoint
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
   _id: city_marketplace_02
 --- !u!1001 &1700471342
 PrefabInstance:
@@ -6261,7 +6261,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.NpcSpawnPoint
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
   _id: city_wall_01
 --- !u!4 &1810385472 stripped
 Transform:
@@ -7032,7 +7032,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.NpcSpawnPoint
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
   _id: city_guard_captain
 --- !u!1001 &2096865993
 PrefabInstance:
@@ -7255,6 +7255,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a86688bf4d1ac244aae3c9ca82e195e5, type: 2}
   - {fileID: 11400000, guid: c16c743c69a3aed4c8f66a766d9febe0, type: 2}
   - {fileID: 11400000, guid: d5b8a757ba06e9d48a44b04f1c1546f8, type: 2}
+  - {fileID: 11400000, guid: a4fd73cbde4f461e8d5307c6e8a01763, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

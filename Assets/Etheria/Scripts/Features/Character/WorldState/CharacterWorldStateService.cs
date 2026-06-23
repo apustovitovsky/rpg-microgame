@@ -15,7 +15,7 @@ namespace Etheria.Features.Character
         private sealed class RuntimeState
         {
             public string CharacterId;
-            public string SpawnPointId;
+            public string LocationId;
             public bool IsAlive;
         }
 
@@ -35,7 +35,7 @@ namespace Etheria.Features.Character
                     new RuntimeState
                     {
                         CharacterId = characterId,
-                        SpawnPointId = entry.SpawnPointId,
+                        LocationId = entry.LocationId,
                         IsAlive = entry.IsAlive
                     }))
                 {
@@ -74,16 +74,16 @@ namespace Etheria.Features.Character
 
         public bool TryMove(
             string characterId,
-            string spawnPointId)
+            string locationId)
         {
             if (!_states.TryGetValue(characterId, out var state) ||
-                string.IsNullOrWhiteSpace(spawnPointId) ||
-                state.SpawnPointId == spawnPointId)
+                string.IsNullOrWhiteSpace(locationId) ||
+                state.LocationId == locationId)
             {
                 return false;
             }
 
-            state.SpawnPointId = spawnPointId;
+            state.LocationId = locationId;
             CharacterChanged?.Invoke(characterId);
             return true;
         }
@@ -108,7 +108,7 @@ namespace Etheria.Features.Character
         {
             return new WorldCharacterState(
                 state.CharacterId,
-                state.SpawnPointId,
+                state.LocationId,
                 state.IsAlive);
         }
     }

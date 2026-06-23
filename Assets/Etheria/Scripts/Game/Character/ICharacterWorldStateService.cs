@@ -13,7 +13,7 @@ namespace Etheria.Game.Character
 
         bool TryMove(
             string characterId,
-            string spawnPointId);
+            string locationId);
 
         bool TrySetAlive(
             string characterId,

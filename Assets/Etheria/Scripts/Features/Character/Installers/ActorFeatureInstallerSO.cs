@@ -27,8 +27,6 @@ namespace Etheria.Features.Character
             builder.RegisterInstance(_featureSettings);
             builder.RegisterInstance(_syntyLookSettings);
 
-            var npcSpawnPoints = SceneComponentLookup.FindAll<NpcSpawnPoint>(builder);
-            builder.RegisterInstance(npcSpawnPoints);
             builder.RegisterEntryPoint<NpcSpawner>(
                 Lifetime.Singleton);
 

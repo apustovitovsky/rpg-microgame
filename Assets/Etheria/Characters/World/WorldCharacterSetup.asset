@@ -15,21 +15,21 @@ MonoBehaviour:
   <Characters>k__BackingField:
   - <Character>k__BackingField: {fileID: 11400000, guid: 9a4be434e197a2f41a26b3ac0424a30c,
       type: 2}
-    <SpawnPointId>k__BackingField: city_entrance_01
+    <LocationId>k__BackingField: city_entrance_01
     <IsAlive>k__BackingField: 1
   - <Character>k__BackingField: {fileID: 11400000, guid: 292a730cd067aec478810c2422f93582,
       type: 2}
-    <SpawnPointId>k__BackingField: city_guard_captain
+    <LocationId>k__BackingField: city_guard_captain
     <IsAlive>k__BackingField: 1
   - <Character>k__BackingField: {fileID: 11400000, guid: 5aaefd13387de344387355c9af3e55bf,
       type: 2}
-    <SpawnPointId>k__BackingField: city_marketplace_01
+    <LocationId>k__BackingField: city_marketplace_01
     <IsAlive>k__BackingField: 1
   - <Character>k__BackingField: {fileID: 11400000, guid: 34a0b502e646e2b459184b81ff9b1360,
       type: 2}
-    <SpawnPointId>k__BackingField: city_marketplace_02
+    <LocationId>k__BackingField: city_marketplace_02
     <IsAlive>k__BackingField: 1
   - <Character>k__BackingField: {fileID: 11400000, guid: aab1c638e0b6ddd4c871de27ca4fed3b,
       type: 2}
-    <SpawnPointId>k__BackingField: city_wall_01
+    <LocationId>k__BackingField: city_wall_01
     <IsAlive>k__BackingField: 1

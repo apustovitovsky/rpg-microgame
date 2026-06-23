@@ -3,13 +3,13 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Etheria.Features.Character
+namespace Etheria.Game.World
 {
-    public sealed class NpcSpawnPoint : MonoBehaviour
+    public sealed class WorldLocation : MonoBehaviour
     {
         [SerializeField]
         private string _id;
-        
+
         public string Id => _id;
         public Transform Transform => transform;
 
