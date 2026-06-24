@@ -19,6 +19,10 @@ namespace Etheria.Game.Character
             string characterId,
             bool isAlive);
 
+        bool TrySetPresent(
+            string characterId,
+            bool isPresent);
+
         event Action<string> CharacterChanged;
     }
 }

@@ -17,16 +17,13 @@ title: HakonMenu
 
 title: HakonBanditQuestion
 ---
-<<if world_fact("hakon_told_bandit_location")>>
-    Я уже сказал: видел подозрительного человека возле хранилища.
-<<else>>
-    Видел одного подозрительного типа возле хранилища.
+Видел одного подозрительного типа возле хранилища.
 
-    player: Спасибо. Проверю.
+-> Конец.
 
-    <<set_world_fact "hakon_told_bandit_location">>
-    <<add_quest_log "clear_bandits" "clear_bandits.hakon_hint">>
-<<endif>>
+<<set_world_fact "hakon_told_bandit_location">>
+<<set_character_present "bandit" true>>
+<<add_quest_log "clear_bandits" "clear_bandits.hakon_hint">>
 
 <<jump HakonMenu>>
 ===

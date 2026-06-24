@@ -53,6 +53,7 @@ namespace Etheria.Features.Character
         private void Synchronize(WorldCharacterState state)
         {
             if (!state.IsAlive ||
+                !state.IsPresent ||
                 string.IsNullOrWhiteSpace(state.LocationId) ||
                 !_locations.TryGet(state.LocationId, out var location))
             {

@@ -16,5 +16,8 @@ namespace Etheria.Features.Character
 
         [field: SerializeField]
         public bool IsAlive { get; private set; } = true;
+
+        [field: SerializeField]
+        public bool IsPresent { get; private set; } = true;
     }
 }

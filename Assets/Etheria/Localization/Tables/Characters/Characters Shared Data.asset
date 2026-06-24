@@ -23,6 +23,10 @@ MonoBehaviour:
     m_Key: bartok
     m_Metadata:
       m_Items: []
+  - m_Id: 434683942219776
+    m_Key: hakon
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

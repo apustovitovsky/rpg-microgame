@@ -6,14 +6,18 @@ namespace Etheria.Game.Character
         public string LocationId { get; }
         public bool IsAlive { get; }
 
+        public bool IsPresent { get; }
+
         public WorldCharacterState(
             string characterId,
             string locationId,
-            bool isAlive)
+            bool isAlive,
+            bool isPresent)
         {
             CharacterId = characterId;
             LocationId = locationId;
             IsAlive = isAlive;
+            IsPresent = isPresent;
         }
     }
 }

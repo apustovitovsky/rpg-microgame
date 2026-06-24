@@ -17,6 +17,7 @@ namespace Etheria.Features.Character
             public string CharacterId;
             public string LocationId;
             public bool IsAlive;
+            public bool IsPresent;
         }
 
         public CharacterWorldStateService(
@@ -36,7 +37,8 @@ namespace Etheria.Features.Character
                     {
                         CharacterId = characterId,
                         LocationId = entry.LocationId,
-                        IsAlive = entry.IsAlive
+                        IsAlive = entry.IsAlive,
+                        IsPresent = entry.IsPresent
                     }))
                 {
                     throw new InvalidOperationException(
@@ -103,13 +105,29 @@ namespace Etheria.Features.Character
             return true;
         }
 
+        public bool TrySetPresent(
+            string characterId,
+            bool isPresent)
+        {
+            if (!_states.TryGetValue(characterId, out var state) ||
+                state.IsPresent == isPresent)
+            {
+                return false;
+            }
+
+            state.IsPresent = isPresent;
+            CharacterChanged?.Invoke(characterId);
+            return true;
+        }
+
         private static WorldCharacterState CreateSnapshot(
             RuntimeState state)
         {
             return new WorldCharacterState(
                 state.CharacterId,
                 state.LocationId,
-                state.IsAlive);
+                state.IsAlive,
+                state.IsPresent);
         }
     }
 }

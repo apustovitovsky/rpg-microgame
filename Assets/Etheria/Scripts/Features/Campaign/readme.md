@@ -575,3 +575,533 @@ Data layer:
 
 Главный вывод: у тебя уже правильная основа. Я бы сейчас не расширял квесты в “суперсистему”, а наоборот укрепил границы: **definitions отдельно, initial setup отдельно, runtime state отдельно, scene presentation отдельно, Yarn только как командный мост**. Для Gothic-like RPG это гораздо важнее, чем ранний node editor или универсальный AI.
 
+Да, но с важной оговоркой: **не всех NPC/мобов нужно держать в `WorldCharacterState` одинаково**.
+
+Правильнее разделить актёров мира на классы по степени “нарративной адресуемости”. В Gothic/Skyrim/Witcher-like архитектуре не каждый физический humanoid/monster является полноценным персонажем кампании.
+
+## Главный ответ
+
+**В `WorldCharacterState` нужно держать только тех, к кому игра должна уметь обратиться по стабильному ID.**
+
+То есть:
+
+```text
+CharacterId: "hakon"
+CharacterId: "bandit_in_storage"
+CharacterId: "old_camp_guard_torrez"
+CharacterId: "quest_fogling_alpha"
+```
+
+Но не обязательно:
+
+```text
+random_wolf_001
+random_wolf_002
+ambient_citizen_17
+generic_city_beggar_04
+forest_scavenger_spawn_13
+```
+
+Для последних лучше использовать **encounter/spawn system**, а не полноценный `WorldCharacterState`.
+
+---
+
+# Как это делают большие RPG-подобные системы
+
+## Gothic-like подход
+
+В Gothic важные NPC имеют ежедневные рутины: где быть, что делать, в какие часы, какие script states запускать. Daily routine задаёт активность и waypoint; если NPC нечего делать, он возвращается к своей routine. Inside-Gothic описывает это так: routine выполняется, если у NPC пустая очередь событий, а сами routine-строки регистрируют активность NPC на временной интервал и waypoint. ([ataulien.github.io][1])
+
+Это очень похоже на то, что тебе нужно:
+
+```text
+NPC существует как персонаж мира
+у него есть schedule/routine
+его текущая активность может быть перебита разговором, боем, scripted state
+после этого он возвращается к routine
+```
+
+Также у Gothic NPC есть knowledge/dialog database и daily routine; routine определяет, где NPC должен быть в разное время дня, а для монстров используется более простая логика — sleep/eat/roam/repeat. ([ataulien.github.io][2])
+
+Отсюда вывод для твоего проекта:
+
+**Именные NPC — да, должны иметь persistent campaign state. Обычные монстры — нет, чаще должны жить через spawn/encounter state.**
+
+---
+
+## Skyrim-like подход
+
+В Skyrim/Creation Kit есть важная идея `Quest Alias`: квест не обязан напрямую хранить ссылку на конкретный объект сцены; alias может быть меткой для актёра, объекта или локации, используемой квестом, и позволяет подставлять нужные элементы runtime-способом. ([tesck.ru][3])
+
+Но у Skyrim есть проблема с persistence: если актёр или ObjectReference удерживается напрямую как property, он становится persistent/always loaded, поэтому в моддинг-практиках рекомендуют избегать прямых Actor/ObjectReference properties и по возможности использовать reference aliases, которые очищаются после окончания квеста. ([wiki.beyondskyrim.org][4])
+
+Для твоего Unity-проекта это переводится так:
+
+```text
+Не держи GameObject / MonoBehaviour / Transform всех NPC в глобальном сервисе.
+Держи stable ID и маленький DTO state.
+Физический instance создавай только когда он нужен в текущей сцене.
+```
+
+То есть `WorldCharacterState` может хранить:
+
+```csharp
+CharacterId
+LocationId
+IsAlive
+IsPresent
+RoutineId
+QuestBindingId?
+```
+
+Но не должен хранить:
+
+```csharp
+GameObject
+Transform
+NavMeshAgent
+Animator
+NpcMotor
+```
+
+---
+
+## Witcher 3 / REDkit-like подход
+
+В REDkit для The Witcher 3 официальная документация прямо разделяет **Encounters** и **Communities**. Encounters используются для больших групп NPC, городских толп, стад, монстрятников, патрулей и quest fights; Communities используются для quest-related NPC с разными фазами и небольших групп врагов. ([cdprojektred.atlassian.net][5])
+
+В другом туториале REDkit говорит, что generic merchants можно спавнить через Encounters, а merchants с большой ролью в квесте — через Communities. ([cdprojektred.atlassian.net][6])
+
+В туториале по созданию квеста Witcher 3 NPC reward giver спавнится через community file, story phase, spawn tags, story phase name, timetable и spawn point tags. Там же показана логика: quest graph включает нужную phase, а spawnset/community определяет, кто и где появляется. ([cdprojektred.atlassian.net][7])
+
+Это очень сильный ориентир для твоего проекта:
+
+```text
+Именные/квестовые NPC -> CharacterWorldState / Community-like system
+Группы мобов, патрули, случайные враги -> Encounter system
+```
+
+---
+
+# Моя рекомендация для твоей архитектуры
+
+Я бы ввёл не один общий тип “NPC”, а минимум четыре категории.
+
+## 1. Persistent Character
+
+Это полноценный персонаж мира.
+
+Примеры:
+
+```text
+Hakon
+Diego-like mentor
+староста деревни
+именованный бандит
+важный торговец
+фракционный лидер
+```
+
+Для них нужен `WorldCharacterState`.
+
+```csharp
+public sealed class WorldCharacterState
+{
+    public string CharacterId { get; }
+    public string LocationId { get; private set; }
+    public bool IsAlive { get; private set; }
+    public bool IsPresent { get; private set; }
+    public string? RoutineId { get; private set; }
+    public string? CurrentCommandId { get; private set; }
+}
+```
+
+Такие NPC должны переживать save/load, главы, перемещения, смерть, исчезновение, смену routine.
+
+---
+
+## 2. Quest-scoped Character
+
+Это NPC/моб, который важен только в рамках конкретного квеста или фазы.
+
+Пример:
+
+```text
+bandit_in_storage
+escaped_prisoner
+witness_merchant
+quest_monster_alpha
+ambush_leader
+```
+
+Его тоже можно держать в `WorldCharacterState`, но не обязательно заранее активировать.
+
+Стартовое состояние:
+
+```text
+CharacterId = bandit_in_storage
+LocationId = city_storage_bandit_01
+IsAlive = true
+IsPresent = false
+Lifecycle = QuestScoped
+OwnerQuestId = hakon_bandit_question
+```
+
+После раскрытия:
+
+```yarn
+<<set_character_present "bandit_in_storage" true>>
+```
+
+После завершения квеста:
+
+```yarn
+<<set_character_present "bandit_in_storage" false>>
+```
+
+Или:
+
+```yarn
+<<set_character_alive "bandit_in_storage" false>>
+```
+
+Главное: **он имеет ID, потому что квест, диалог или сейв должны уметь сказать “именно этот бандит убежал / умер / сдался / был отпущен”.**
+
+---
+
+## 3. Encounter Actor
+
+Это не персонаж кампании, а представитель encounter’а.
+
+Примеры:
+
+```text
+3 волка у дороги
+5 бандитов в засаде
+ночной патруль
+монстры у пещеры
+```
+
+Их не надо всех держать как отдельных `WorldCharacterState`.
+
+Вместо этого нужен:
+
+```csharp
+public sealed class WorldEncounterState
+{
+    public string EncounterId { get; }
+    public EncounterStatus Status { get; private set; }
+    public int RemainingCount { get; private set; }
+    public bool HasBeenDiscovered { get; private set; }
+    public bool IsCleared { get; private set; }
+    public string SpawnGroupId { get; private set; }
+}
+```
+
+Например:
+
+```text
+EncounterId = forest_wolves_near_bridge
+Status = Active
+RemainingCount = 3
+IsCleared = false
+```
+
+Когда игрок входит в зону:
+
+```text
+EncounterPresenter спавнит 3 wolf prefab
+```
+
+Если игрок убил двух и убежал:
+
+```text
+RemainingCount = 1
+```
+
+Если всех убил:
+
+```text
+IsCleared = true
+```
+
+Это дешевле, проще и ближе к Witcher-like encounter/community разделению.
+
+---
+
+## 4. Ambient Actor
+
+Это вообще не часть save-state, или почти не часть.
+
+Примеры:
+
+```text
+городская толпа
+прохожие
+декоративные рабочие
+птицы
+крысы
+фоновые крестьяне
+```
+
+Их состояние можно не сохранять индивидуально. Максимум — через population profile:
+
+```text
+city_market_population_day
+city_market_population_night
+old_camp_workers
+tavern_evening_crowd
+```
+
+При загрузке сцены система просто создаёт нужную атмосферу.
+
+---
+
+# То есть ответ: “всех держать в state?” — нет
+
+Я бы сделал так:
+
+```text
+WorldCharacterState
+  только named / quest-addressable / schedule-driven NPC
+
+WorldEncounterState
+  группы врагов, монстров, патрулей, засад
+
+WorldPopulationState
+  опционально: состояние зон, если нужна симуляция населения
+
+No State
+  чисто ambient/decorative NPC
+```
+
+Практическое правило:
+
+> Если ты можешь написать про сущность в Yarn `<<send_character "...">>` или `<<character_is_alive "...">>`, ей нужен `CharacterId` и state.
+
+> Если игроку не важно, какой именно волк из трёх умер, нужен `EncounterId`, а не три `CharacterId`.
+
+> Если NPC нужен только для фона и не влияет на квесты, он не должен попадать в campaign state.
+
+---
+
+# Как это применить к твоему `IsPresent`
+
+Твой `IsPresent` подходит, но я бы не делал его универсальным для всех мобов.
+
+Он нужен для `PersistentCharacter` и `QuestScopedCharacter`.
+
+```text
+IsAlive = физически жив
+IsPresent = должен быть представлен в мире
+LocationId = логическое место
+```
+
+Пример с бандитом:
+
+```text
+bandit_in_storage:
+  IsAlive: true
+  IsPresent: false
+  LocationId: city_storage_bandit_01
+```
+
+После разговора:
+
+```text
+IsPresent: true
+```
+
+Если отпустили:
+
+```text
+runtime command: send_character
+после добегания:
+  LocationId = city_bandit_escape_01
+  IsPresent = false
+```
+
+Почему `IsPresent = false` после побега? Потому что он может быть жив, но больше не обязан физически существовать в мире. Позже ты можешь вернуть его:
+
+```text
+LocationId = bandit_hideout_02
+IsPresent = true
+```
+
+---
+
+# Я бы добавил `LifecycleType`
+
+Чтобы не гадать, как обрабатывать персонажа, добавь тип жизненного цикла.
+
+```csharp
+public enum CharacterLifecycleType
+{
+    Persistent,     // всегда часть мира: Хакон, торговец, лидер
+    QuestScoped,    // существует ради квеста/фазы
+    Summoned,        // временно создаётся командой/сценой
+    Disabled        // есть в каталоге, но не участвует в текущей кампании
+}
+```
+
+В `CharacterDefinitionSO`:
+
+```csharp
+public CharacterLifecycleType LifecycleType;
+```
+
+В `WorldCharacterState`:
+
+```csharp
+public bool IsPresent;
+public bool IsAlive;
+public string LocationId;
+public string? OwnerQuestId;
+```
+
+Для encounter-мобов это вообще не нужно. Они должны идти через отдельные `EncounterDefinitionSO` и `WorldEncounterState`.
+
+---
+
+# Рекомендуемая модель данных
+
+```text
+CharacterCatalogSO
+  Hakon
+  BanditInStorage
+  GateGuardTorrez
+  SmithKardif
+
+EncounterCatalogSO
+  ForestWolvesNearBridge
+  BanditAmbushOldRoad
+  MinecrawlerNest01
+
+PopulationCatalogSO
+  CityMarketDayCrowd
+  TavernEveningCrowd
+```
+
+Runtime:
+
+```text
+CampaignRuntimeState
+  CharacterStates
+  EncounterStates
+  WorldFacts
+  QuestStates
+  TimeState
+```
+
+Scene layer:
+
+```text
+CharacterWorldPresenter
+  показывает CharacterStates
+
+EncounterPresenter
+  показывает EncounterStates
+
+PopulationPresenter
+  показывает ambient crowds
+```
+
+---
+
+# Для твоего проекта я бы сделал так
+
+## Сейчас
+
+Добавь `IsPresent` в `WorldCharacterState`.
+
+Это правильный шаг.
+
+```csharp
+public bool IsPresent { get; private set; }
+```
+
+И команды:
+
+```yarn
+<<set_character_present "bandit" true>>
+<<set_character_present "bandit" false>>
+<<send_character "bandit" "city_bandit_escape_01">>
+```
+
+## Следующий шаг
+
+Не расширяй `WorldCharacterState` на всех мобов.
+
+Введи отдельную систему:
+
+```csharp
+EncounterDefinitionSO
+EncounterRuntimeState
+EncounterService
+EncounterPresenter
+```
+
+Пример:
+
+```csharp
+public sealed class EncounterRuntimeState
+{
+    public string EncounterId { get; }
+    public bool IsActive { get; private set; }
+    public bool IsCleared { get; private set; }
+    public int RemainingActors { get; private set; }
+}
+```
+
+Yarn-команды:
+
+```yarn
+<<activate_encounter "bandit_ambush_old_road">>
+<<clear_encounter "forest_wolves_near_bridge">>
+```
+
+Условия:
+
+```yarn
+<<if encounter_cleared("forest_wolves_near_bridge")>>
+```
+
+## Позже
+
+Для более сложных групп:
+
+```text
+Encounter member promoted to CharacterState
+```
+
+Например, если один бандит из засады выжил и стал важным:
+
+```text
+Encounter: bandit_ambush_old_road
+  RemainingActors = 0
+CharacterState:
+  CharacterId = escaped_bandit_survivor
+  IsPresent = true
+  LocationId = city_jail_cell_01
+```
+
+Это хороший компромисс: не все мобы являются characters, но игра может “повысить” конкретного моба до named state, если он стал сюжетно важным.
+
+---
+
+# Ключевое архитектурное правило
+
+Я бы сформулировал так:
+
+```text
+WorldCharacterState — для сущностей с личной историей.
+WorldEncounterState — для групп с игровым состоянием.
+Scene instances — только временное физическое представление.
+```
+
+Твой бандит из примера — **не generic mob**. Он участвует в диалоге, может быть раскрыт Хаконом, отпущен, убит, сбежать, возможно появиться позже. Значит ему нужен `WorldCharacterState`.
+
+А вот “три крысы в подвале” — нет. Им нужен `EncounterState` или вообще ничего, если они респавнятся/неважны.
+
+И это хорошо ложится на Gothic/Witcher/Skyrim-like подход: важные NPC живут через устойчивые ID, routine/alias/community/phase/state; группы и фоновые сущности — через spawn systems, encounters, population layers, а не через вечный список индивидуальных персонажей.
+
