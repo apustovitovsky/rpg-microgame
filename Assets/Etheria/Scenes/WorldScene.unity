@@ -779,7 +779,7 @@ Transform:
   m_GameObject: {fileID: 263783785}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710707, z: -0, w: 0.70710653}
-  m_LocalPosition: {x: 10.88, y: 0, z: -4.46}
+  m_LocalPosition: {x: -1.5899997, y: -1.75, z: -0.039999485}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -877,6 +877,55 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 745975165}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &362153268
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 362153269}
+  - component: {fileID: 362153270}
+  m_Layer: 0
+  m_Name: city_bandit_escape_route_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &362153269
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 362153268}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.38, y: 0, z: -1.37}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 930162569}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &362153270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 362153268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1ea275d2c610df42b85f42a94a71212, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldRoute
+  _id: city_bandit_escape_route_01
+  _nodes:
+  - {fileID: 997571312}
+  - {fileID: 2027680809}
+  - {fileID: 1398765112}
 --- !u!1001 &364083135
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -996,12 +1045,13 @@ Transform:
   m_GameObject: {fileID: 398308799}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.76632, y: -1.75, z: 8.1743}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1074969669}
   - {fileID: 1398765111}
+  - {fileID: 2027680810}
   - {fileID: 997571311}
   - {fileID: 794502597}
   - {fileID: 263783786}
@@ -1010,7 +1060,7 @@ Transform:
   - {fileID: 1081895675}
   - {fileID: 1809318047}
   - {fileID: 2070351739}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1117279797}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &419317682
 PrefabInstance:
@@ -2450,7 +2500,7 @@ Transform:
   m_GameObject: {fileID: 794502596}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 23.29, y: 0, z: 5.91}
+  m_LocalPosition: {x: 10.820002, y: -1.75, z: 10.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3037,6 +3087,38 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 172564576}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &930162568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 930162569}
+  m_Layer: 0
+  m_Name: WorldRoutes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &930162569
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930162568}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 362153269}
+  m_Father: {fileID: 1117279797}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &941244709
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3306,7 +3388,7 @@ Transform:
   m_GameObject: {fileID: 997571310}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071062, z: -0, w: 0.7071075}
-  m_LocalPosition: {x: -3.73, y: 0, z: -12.57}
+  m_LocalPosition: {x: 5.56, y: -1.75, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3440,7 +3522,7 @@ Transform:
   m_GameObject: {fileID: 1074969668}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710707, z: -0, w: 0.70710653}
-  m_LocalPosition: {x: 18.41, y: 0, z: -8.81}
+  m_LocalPosition: {x: 5.94, y: -1.75, z: -4.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3564,7 +3646,7 @@ Transform:
   m_GameObject: {fileID: 1081895674}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710677, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 18.06, y: 0, z: 3.17}
+  m_LocalPosition: {x: 5.5899997, y: -1.75, z: 7.5900006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3695,7 +3777,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 398308800}
+  - {fileID: 930162569}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1123781928
@@ -4835,7 +4919,7 @@ GameObject:
   - component: {fileID: 1398765111}
   - component: {fileID: 1398765112}
   m_Layer: 0
-  m_Name: city_bandit_escape_01
+  m_Name: city_bandit_escape_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4850,7 +4934,7 @@ Transform:
   m_GameObject: {fileID: 1398765110}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.00000086426724, z: -0, w: 1}
-  m_LocalPosition: {x: 31.09, y: 0, z: -29.530003}
+  m_LocalPosition: {x: 22, y: -1.75, z: -22.42}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4868,7 +4952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: city_bandit_escape_01
+  _id: city_bandit_escape_02
 --- !u!1001 &1406587152
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5221,7 +5305,7 @@ Transform:
   m_GameObject: {fileID: 1462144396}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 2.87, y: 0, z: 2.17}
+  m_LocalPosition: {x: -9.6, y: -1.75, z: 6.5900006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5575,7 +5659,7 @@ GameObject:
   - component: {fileID: 1563471396}
   - component: {fileID: 1563471397}
   m_Layer: 0
-  m_Name: Navigation
+  m_Name: NavigationMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6053,7 +6137,7 @@ Transform:
   m_GameObject: {fileID: 1695550894}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.19, y: 0, z: -9.71}
+  m_LocalPosition: {x: -6.2799997, y: -1.75, z: -5.2899995}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6924,7 +7008,7 @@ Transform:
   m_GameObject: {fileID: 1809318046}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000058114523}
-  m_LocalPosition: {x: 0.8100004, y: 0, z: 11.95}
+  m_LocalPosition: {x: -10.91, y: -1.75, z: 17.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7804,6 +7888,51 @@ Transform:
   - {fileID: 941244710}
   m_Father: {fileID: 1747044259}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2027680808
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2027680810}
+  - component: {fileID: 2027680809}
+  m_Layer: 0
+  m_Name: city_bandit_escape_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2027680809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027680808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
+  _id: city_bandit_escape_01
+--- !u!4 &2027680810
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027680808}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000058114523}
+  m_LocalPosition: {x: 22, y: -1.75, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 398308800}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1 &2039571095
 GameObject:
   m_ObjectHideFlags: 0
@@ -7903,7 +8032,7 @@ Transform:
   m_GameObject: {fileID: 2070351738}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.06, y: 0, z: -6.54}
+  m_LocalPosition: {x: -14.529999, y: -1.75, z: -2.1199994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8143,7 +8272,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a86688bf4d1ac244aae3c9ca82e195e5, type: 2}
   - {fileID: 11400000, guid: c16c743c69a3aed4c8f66a766d9febe0, type: 2}
   - {fileID: 11400000, guid: d5b8a757ba06e9d48a44b04f1c1546f8, type: 2}
-  - {fileID: 11400000, guid: a4fd73cbde4f461e8d5307c6e8a01763, type: 2}
+  - {fileID: 11400000, guid: 5e8074c69b2bf254cb8b410262935ce2, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -8154,5 +8283,4 @@ SceneRoots:
   - {fileID: 1563471396}
   - {fileID: 1708557757}
   - {fileID: 877328310}
-  - {fileID: 398308800}
   - {fileID: 1855070806}

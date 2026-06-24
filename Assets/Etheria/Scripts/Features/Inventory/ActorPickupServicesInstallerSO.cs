@@ -30,8 +30,8 @@ namespace Etheria.Features.Character
                 .WithParameter(curGold)
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInHierarchy<PickupCollector>()
-                .UnderScopeRoot();
+            // builder.RegisterComponentInHierarchy<PickupCollector>()
+            //     .UnderScopeRoot();
         }
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Etheria.Game.Dialogue;
 using UnityEngine;
 
@@ -10,9 +12,11 @@ namespace Etheria.Features.Character
         public enum State
         {
             Patrol,
-            Dialogue
+            Dialogue,
+            Travel
         }
 
+        [SerializeField] private NpcTravelController _travel;
         [SerializeField] private NpcMotor _motor;
         [SerializeField] private NpcPatrol _patrol;
         [SerializeField, Min(0f)] private float _rotationSpeed = 360f;
@@ -23,6 +27,15 @@ namespace Etheria.Features.Character
 
         private void Awake()
         {
+            if (_travel == null)
+                _travel = GetComponent<NpcTravelController>();
+
+            if (_motor == null)
+                _motor = GetComponent<NpcMotor>();
+
+            if (_patrol == null)
+                _patrol = GetComponent<NpcPatrol>();
+
             EnterPatrol();
         }
 
@@ -37,21 +50,87 @@ namespace Etheria.Features.Character
             CurrentState = State.Dialogue;
             _interlocutor = interlocutor;
 
-            _patrol.enabled = false;
-            _motor.Stop();
-            _motor.BeginManualRotation();
-        }
+            if (_patrol != null)
+                _patrol.enabled = false;
 
+            if (_motor != null)
+            {
+                _motor.Stop();
+                _motor.BeginManualRotation();
+            }
+        }
+        
+        public bool TravelRoute(
+            IReadOnlyList<Vector3> route,
+            Action arrived)
+        {
+            if (_travel == null)
+                return false;
+
+            CurrentState = State.Travel;
+            _interlocutor = null;
+
+            if (_patrol != null)
+                _patrol.enabled = false;
+
+            if (_motor != null)
+                _motor.EndManualRotation();
+
+            return _travel.TravelRoute(
+                route,
+                () =>
+                {
+                    arrived?.Invoke();
+
+                    if (CurrentState == State.Travel)
+                        EnterPatrol();
+                });
+        }
         public void OnDialogueCompleted()
         {
             _interlocutor = null;
-            _motor.EndManualRotation();
-            EnterPatrol();
+
+            if (_motor != null)
+                _motor.EndManualRotation();
+
+            if (CurrentState == State.Dialogue)
+                EnterPatrol();
+        }
+
+        public bool TravelTo(
+            Vector3 destination,
+            Action arrived)
+        {
+            if (_travel == null)
+                return false;
+
+            CurrentState = State.Travel;
+            _interlocutor = null;
+
+            if (_patrol != null)
+                _patrol.enabled = false;
+
+            if (_motor != null)
+                _motor.EndManualRotation();
+
+            return _travel.TravelTo(
+                destination,
+                () =>
+                {
+                    arrived?.Invoke();
+
+                    if (CurrentState == State.Travel)
+                        EnterPatrol();
+                });
         }
 
         private void EnterPatrol()
         {
             CurrentState = State.Patrol;
+
+            if (_patrol == null)
+                return;
+
             _patrol.enabled = true;
             _patrol.Resume();
         }

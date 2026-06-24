@@ -19,3 +19,5 @@ MonoBehaviour:
     <NodeName>k__BackingField: HakonGreeting
   - <CharacterId>k__BackingField: bandit
     <NodeName>k__BackingField: BanditConfrontation
+  - <CharacterId>k__BackingField: bartok
+    <NodeName>k__BackingField: BartokGreeting

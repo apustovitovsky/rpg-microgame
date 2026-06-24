@@ -11,13 +11,16 @@ namespace Etheria.Features.Campaign
     {
         private readonly DialogueRunner _runner;
         private readonly ICharacterWorldStateService _worldState;
+        private readonly ICharacterTravelService _travel;
 
         public CharacterWorldCommandHandler(
             DialogueRunner runner,
-            ICharacterWorldStateService worldState)
+            ICharacterWorldStateService worldState,
+            ICharacterTravelService travel)
         {
             _runner = runner;
             _worldState = worldState;
+            _travel = travel;
         }
 
         public void Start()
@@ -45,6 +48,14 @@ namespace Etheria.Features.Campaign
             _runner.AddFunction<string, string>(
                 "character_location",
                 GetCharacterLocation);
+
+            _runner.AddCommandHandler<string, string>(
+                "send_character",
+                SendCharacter);
+
+            _runner.AddCommandHandler<string, string>(
+                "send_character_route",
+                SendCharacterRoute);
         }
 
         public void Dispose()
@@ -57,6 +68,9 @@ namespace Etheria.Features.Campaign
 
             _runner.RemoveCommandHandler("set_character_present");
             _runner.RemoveFunction("character_is_present");
+
+            _runner.RemoveCommandHandler("send_character");
+            _runner.RemoveCommandHandler("send_character_route");
         }
 
         private void MoveCharacter(
@@ -103,6 +117,20 @@ namespace Etheria.Features.Campaign
                 out var state)
                     ? state.LocationId
                     : string.Empty;
+        }
+
+        private void SendCharacter(
+            string characterId,
+            string locationId)
+        {
+            _travel.TrySend(characterId, locationId);
+        }
+
+        private void SendCharacterRoute(
+            string characterId,
+            string routeId)
+        {
+            _travel.TrySendRoute(characterId, routeId);
         }
     }
 }

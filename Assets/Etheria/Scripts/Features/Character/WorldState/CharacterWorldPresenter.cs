@@ -9,7 +9,8 @@ namespace Etheria.Features.Character
 {
     public sealed class CharacterWorldPresenter :
         IStartable,
-        IDisposable
+        IDisposable,
+        ICharacterInstanceRegistry
     {
         private readonly ICharacterWorldStateService _worldState;
         private readonly IWorldLocationRegistry _locations;
@@ -34,6 +35,14 @@ namespace Etheria.Features.Character
 
             foreach (var state in _worldState.States)
                 Synchronize(state);
+        }
+
+        public bool TryGetInstance(
+            string characterId,
+            out GameObject instance)
+        {
+            return _instances.TryGetValue(characterId, out instance) &&
+                   instance != null;
         }
 
         public void Dispose()

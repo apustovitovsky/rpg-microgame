@@ -1,1107 +1,1013 @@
-Сейчас у нас готова цепочка:
+Да, ты точно правильно видишь проблему: **NavMesh — это не система рутины**. NavMesh отвечает на узкий вопрос:
 
-```text
-WorldCharacterSetup
-→ CharacterWorldStateService
-→ LocationId
-→ WorldLocationRegistry
-→ NpcSpawner
-→ NPC instance
+> Как из текущей позиции пройти к destination по walkable surface?
+
+А рутина отвечает на совсем другой вопрос:
+
+> Почему NPC туда идёт, каким способом, по какому маршруту, что делает по пути, что делать при прерывании, что делать после прибытия?
+
+Поэтому я бы строил систему в несколько слоёв.
+
+---
+
+# 1. Базовая модель: Routine ≠ Movement ≠ NavMesh
+
+Я бы разделил так:
+
+```text id="ernggr"
+NpcRoutineService
+  решает, какая активность должна быть сейчас
+
+NpcBehaviorState
+  исполняет активность: работать, сидеть, патрулировать, сопровождать, ждать, говорить
+
+NpcTravelController
+  исполняет перемещение как задачу
+
+NpcMotor / NavMeshMotor
+  низкоуровнево двигает агента
+
+NavMeshAgent
+  строит путь по NavMesh к конкретной точке
 ```
 
-Следующий важный шаг: сделать эту цепочку не только стартовой, но и реактивной.
+То есть `NavMeshAgent.SetDestination()` должен быть самым нижним уровнем. В документации Unity `SetDestination` именно “sets or updates the destination thus triggering calculation for a new path”, а сам `NavMeshAgent` даёт свойства вроде `remainingDistance`, `pathStatus`, `steeringTarget`, `isStopped`, `autoBraking`, `avoidancePriority`, `areaMask`, `speed` и т.д. Это полезные механизмы, но они не описывают смысловую рутину NPC. ([docs.unity3d.com][1])
 
-## Рекомендованный порядок
+Правильная иерархия:
 
-1. **Проверить текущий spawn в Play Mode**
-   - появились все пять NPC;
-   - нет дубликатов;
-   - работают AI, имена, таргетинг и диалоги.
-
-2. **Отделить каталог персонажей от начального состояния**
-
-Сейчас `NpcSpawner` ищет prefab через `WorldCharacterSetupSO`. Это смешивает:
-
-```text
-CharacterCatalog
-→ какие персонажи существуют и какие у них prefab
-
-WorldCharacterSetup
-→ где они находятся в новой игре
+```text id="pjwz7n"
+Routine:    08:00–12:00 WorkAtForge
+Behavior:   go to forge, occupy freepoint, play work animation
+Travel:     follow route or navigate to forge
+Motor:      NavMeshAgent.SetDestination(nextPoint)
 ```
 
-Нужен отдельный `CharacterCatalogSO`, содержащий все `CharacterDefinitionSO`.
+---
 
-3. **Добавить runtime presence NPC**
+# 2. Gothic-like модель: Routine вызывает Script State
 
-Текущий `NpcSpawner` работает только один раз. После:
+В Gothic очень хороший ориентир: daily routine исполняется, когда NPC “больше нечего делать”; routine-строки задают activity, временной интервал и waypoint. Пример из анализа Gothic: `TA_Sleep`, `TA_SitAround`, `TA_Smalltalk` регистрируются на конкретные интервалы времени и waypoint. ([ataulien.github.io][2])
 
-```csharp
-TryMove("hakon", "city_marketplace_03");
+Ключевая идея не в том, что NPC просто идёт в точку. Ключевая идея такая:
+
+```text id="kimly9"
+В заданный промежуток времени NPC входит в поведенческое состояние.
+Это состояние само решает:
+  куда идти,
+  что искать рядом,
+  какую анимацию играть,
+  что делать при занятости места,
+  когда завершиться.
 ```
 
-Хакон физически не переместится.
+В Gothic script state имеет begin/init, loop и end-фазы; begin готовит действие, loop повторяется пока состояние активно, end корректно завершает состояние. ([GothicMDK][3])
 
-Нужен сервис вроде `CharacterWorldPresenter`, который:
+Я бы прямо скопировал эту концепцию в Unity.
 
-- хранит `CharacterId → GameObject`;
-- слушает `CharacterChanged`;
-- создаёт персонажа, если его location есть в текущей сцене;
-- перемещает уже созданного персонажа;
-- удаляет его, если `IsAlive == false` или location отсутствует в сцене.
+---
 
-4. **Подключить world-state к Yarn**
+# 3. Твоя целевая структура routine
 
-Например:
+## Routine Definition
 
-```yarn
-<<move_character "hakon" "city_marketplace_03">>
-<<set_character_alive "bandit_01" false>>
-
-<<if character_is_alive("hakon")>>
-```
-
-Так диалоги смогут менять размещение персонажей без прямых ссылок на GameObject.
-
-5. **Добавить сохранение**
-
-DTO:
-
-```text
-QuestStates
-WorldFacts
-CharacterStates
-```
-
-Для персонажа:
-
-```text
-CharacterId
-LocationId
-IsAlive
-```
-
-6. **После этого делать патрули и расписание**
-
-```text
-PatrolRoute
-→ список LocationId
-
-Schedule
-→ время + LocationId
-```
-
-## Что делать прямо сейчас
-
-Я бы начал с **`CharacterCatalogSO`**. Это небольшой рефактор, который устранит последнее смешение initial state и definition catalog. Затем безопасно превратим `NpcSpawner` в реактивный runtime-сервис.
-
-Да. По текущему состоянию проекта я бы не стал советовать “переписать всё”. У тебя уже выбран правильный общий вектор: **данные кампании отдельно, runtime-сервисы отдельно, Yarn-команды как мост между диалогами и состоянием мира, VContainer для сборки зависимостей**. Это хороший фундамент для Gothic-like системы.
-
-Но сейчас есть несколько глобальных архитектурных решений, которые лучше зафиксировать до того, как проект разрастётся.
-
-## 1. Главная идея: мир должен жить не в сцене, а в Campaign Runtime State
-
-Для игры “как Gothic” ключевое решение такое:
-
-**NPC, квесты, факты мира, отношения, главы, расписания и смерть персонажей должны быть частью единого состояния кампании, а не набором объектов на сцене.**
-
-Сцена должна быть только визуализацией текущего состояния.
-
-У тебя уже есть зародыш этого подхода: `CharacterWorldStateService` хранит `CharacterId`, `LocationId`, `IsAlive`, умеет `TryMove`, `TrySetAlive` и кидает `CharacterChanged` при изменениях. Это правильное ядро для NPC-состояния. ([GitHub][1])
-
-Я бы формализовал это так:
-
-```text
-CampaignRuntimeState
-  WorldFacts
-  QuestStates
-  CharacterStates
-  ChapterState
-  FactionRelations
-  DiscoveredInfo
-  TimeState
-```
-
-А поверх него:
-
-```text
-Scene / GameObjects / NPC Prefabs / UI
-= presentation layer
-```
-
-То есть если диалог говорит:
-
-```text
-<<move_character "hakon" "city_marketplace_03">>
-<<set_character_alive "bandit_01" false>>
-```
-
-это должно менять **модель мира**, а физическое перемещение или despawn NPC должно происходить реактивно через presenter/spawner. У тебя уже есть Yarn-обвязка для `move_character`, `set_character_alive`, `character_is_alive`, `character_location`, что подтверждает правильный вектор. ([GitHub][2])
-
-## 2. Раздели “кто существует” и “где он сейчас находится”
-
-Это, на мой взгляд, самый важный следующий рефактор.
-
-Сейчас даже в твоём `readme.md` уже зафиксирована проблема: `NpcSpawner` ищет prefab через `WorldCharacterSetupSO`, из-за чего смешиваются две разные сущности — каталог персонажей и начальное состояние мира. Там же предлагается `CharacterCatalogSO`, содержащий все `CharacterDefinitionSO`. ([GitHub][3])
-
-Я полностью согласен с этим направлением.
-
-Должно быть так:
-
-```text
-CharacterDefinitionSO
-  Id
-  DisplayName
-  Prefab
-  Faction
-  DialogueEntry
-  DefaultBehaviorProfile
-  Voice/Profile/Icon/etc
-
-CharacterCatalogSO
-  List<CharacterDefinitionSO>
-
-WorldCharacterSetupSO
-  CharacterId
-  InitialLocationId
-  InitialAliveState
-  InitialScheduleId
-```
-
-`CharacterDefinitionSO` отвечает на вопрос:
-
-> Кто такой Hakon как игровой персонаж?
-
-`WorldCharacterSetupSO` отвечает на вопрос:
-
-> Где Hakon находится в новой игре / в первой главе / в этом сценарии?
-
-А `CharacterWorldStateService` отвечает:
-
-> Где Hakon находится сейчас в конкретном прохождении?
-
-Это критично для Gothic-like структуры, потому что один и тот же NPC может быть: в лагере в первой главе, у ворот во второй, мёртв в третьей, временно скрыт после квеста, перемещён в тюрьму после диалога.
-
-## 3. NPC не должны быть “поставлены в сцену” как источник истины
-
-Для такого типа RPG я бы запретил себе думать так:
-
-> NPC стоит в сцене, значит он существует там.
-
-Правильнее:
-
-> NPC существует в `CharacterWorldState`; если его `LocationId` относится к текущей сцене, presenter создаёт или обновляет его GameObject.
-
-То есть тебе нужен слой:
-
-```text
-CharacterWorldPresenter / NpcPresencePresenter
-```
-
-Он делает примерно это:
-
-```text
-on scene loaded:
-  получить текущие WorldLocationAnchor в сцене
-  пройти по CharacterWorldStateService.States
-  если NPC alive и LocationId есть в сцене:
-      spawn prefab из CharacterCatalog
-      поставить в anchor
-  иначе:
-      не создавать
-
-on CharacterChanged(characterId):
-  если NPC должен быть в текущей сцене:
-      spawn / move / update
-  если NPC больше не должен быть в текущей сцене:
-      despawn
-```
-
-Это ровно то, что уже написано в твоём `readme.md`: сервис должен хранить `CharacterId → GameObject`, слушать `CharacterChanged`, создавать, перемещать или удалять NPC в зависимости от `LocationId` и `IsAlive`. ([GitHub][3])
-
-Глобальное правило: **квесты и диалоги никогда не должны напрямую двигать GameObject NPC**. Они должны менять state.
-
-## 4. Квестовая система сейчас нормальная для MVP, но её надо не усложнять раньше времени
-
-Текущий `QuestDefinitionSO` у тебя очень простой: `Id` и массив `QuestStageDefinition[]`. Это хорошо для старта. ([GitHub][4])
-
-`QuestService` хранит runtime-состояние квестов в словаре: status, stage, journal entries; умеет `TryStart`, `TrySetStage`, `TryAddJournalEntry`, `TryComplete`, `TryFail`; и публикует `QuestChanged`. ([GitHub][5])
-
-Это хорошая база. Я бы **не** делал сейчас сложные quest graph, node editor, dependency graph, automatic objective resolver и прочее. Для Gothic-like лучше оставить квесты как **ручной сценарный state machine**, управляемый диалогами, триггерами, интеракциями и world facts.
-
-То есть квест — это не “самостоятельный мозг”. Квест — это запись в состоянии кампании:
-
-```text
-questId: "missing_apprentice"
-status: Active
-stage: 20
-journalEntries: [...]
-```
-
-А логика переходов может жить в:
-
-```text
-Yarn commands
-QuestStageInteractable
-World trigger
-Combat/death event
-Item pickup event
-Custom quest script, если нужно
-```
-
-Это ближе к Gothic: квесты часто продвигаются через диалоги, убийство конкретного NPC, наличие предмета, членство во фракции, главу, репутацию, знание факта.
-
-## 5. Добавь WorldFacts как отдельную систему, не пихай всё в квесты
-
-Сейчас есть риск, что `QuestService` начнёт превращаться в свалку глобального состояния. Этого лучше избежать.
-
-Примеры фактов, которые не являются квестами:
-
-```text
-player_joined_old_camp = true
-gate_guard_bribed = true
-hakon_knows_about_betrayal = true
-chapter = 2
-player_has_permission_to_enter_castle = true
-```
-
-Для них нужен отдельный сервис:
-
-```csharp
-public interface IWorldFactService
+```csharp id="76c9h7"
+[CreateAssetMenu]
+public sealed class NpcRoutineDefinitionSO : ScriptableObject
 {
-    bool Has(string factId);
-    void Set(string factId, bool value = true);
-    int GetInt(string factId);
-    void SetInt(string factId, int value);
-    event Action<string> FactChanged;
+    public string RoutineId;
+    public List<NpcRoutineEntry> Entries;
 }
-```
 
-И Yarn-команды:
-
-```text
-<<set_fact "gate_guard_bribed">>
-<<clear_fact "npc_hakon_angry">>
-
-<<if fact("player_joined_old_camp")>>
-<<if int_fact("chapter") >= 2>>
-```
-
-Почему это важно: в Gothic-like игре очень много условий диалога не являются квестовыми стадиями. Если всё выражать через `quest_stage`, система быстро станет хрупкой.
-
-## 6. Диалоги должны быть тонким orchestration layer, а не местом всей логики
-
-У тебя уже есть `QuestCommandHandler`, который регистрирует команды и функции в Yarn: `start_quest`, `set_quest_stage`, `add_quest_log`, `complete_quest`, `fail_quest`, а также проверки `quest_is_active`, `quest_is_completed`, `quest_stage` и т.д. ([GitHub][6])
-
-Это правильный подход.
-
-Но я бы ввёл правило:
-
-**Yarn может вызывать команды домена, но не должен знать Unity-объекты.**
-
-Хорошо:
-
-```text
-<<start_quest "join_camp">>
-<<set_quest_stage "join_camp" 20>>
-<<move_character "hakon" "tavern_night">>
-<<set_fact "player_insulted_gomez">>
-```
-
-Плохо:
-
-```text
-<<teleport_gameobject "HakonPrefab(Clone)" 12 0 44>>
-<<disable_component "GuardAI">>
-<<set_animator_bool "Hakon" "Angry" true>>
-```
-
-Yarn должен работать с `questId`, `characterId`, `locationId`, `factId`, `factionId`, но не с GameObject, Transform, Animator, Scene object reference.
-
-## 7. LocationId должен стать центральной абстракцией мира
-
-Для Gothic-like системы `LocationId` — не просто точка спавна. Это абстракция “где находится персонаж в мире”.
-
-Я бы разделил:
-
-```text
-WorldLocationDefinition
-  LocationId
-  SceneId
-  SemanticType: Camp, Tavern, Gate, Mine, PatrolPoint, Bed, WorkPlace
-  Optional Tags
-
-WorldLocationAnchor : MonoBehaviour
-  LocationId
-  Transform
-```
-
-В состоянии NPC хранится только:
-
-```text
-characterId = "hakon"
-locationId = "old_camp_blacksmith_day"
-```
-
-А сцена сама регистрирует anchors:
-
-```text
-WorldLocationRegistry
-  locationId -> Transform
-```
-
-Так ты сможешь делать:
-
-```text
-<<move_character "hakon" "city_marketplace_03">>
-```
-
-без знания, в какой сцене сейчас игрок. Если игрок не в этой сцене — GameObject не нужен. Когда игрок придёт туда позже, NPC появится в правильной точке.
-
-## 8. Расписание NPC делай после reactive presence, не раньше
-
-Не делай расписание, пока NPC ещё спавнятся одноразово. Сначала:
-
-```text
-CharacterWorldStateService
-CharacterCatalogSO
-WorldLocationRegistry
-CharacterWorldPresenter
-Save/Load CharacterStates
-```
-
-Только потом:
-
-```text
-NpcScheduleService
-```
-
-Архитектурно расписание должно быть не “NPC сам ходит по расписанию”, а сервис, который вычисляет желаемое состояние:
-
-```text
-Schedule says:
-  08:00 -> smithy_workplace
-  20:00 -> tavern_table
-  23:00 -> home_bed
-```
-
-И применяет:
-
-```text
-CharacterWorldStateService.TryMove("hakon", calculatedLocationId)
-```
-
-То есть schedule — это ещё один источник изменений world-state, такой же как диалог или квест.
-
-## 9. Для Gothic-like лучше использовать не “универсальный AI”, а layered behavior
-
-Я бы не делал NPC как полностью автономных агентов. В Gothic-like игре важнее предсказуемость и сценарность.
-
-Хорошая модель:
-
-```text
-CharacterWorldState
-  где NPC должен быть
-
-PresencePresenter
-  существует ли NPC физически в текущей сцене
-
-NpcBrain
-  что он делает прямо сейчас, если заспавнен
-
-ScheduleService
-  куда он должен переместиться по времени
-
-DialogueSystem
-  что он говорит и какие world-state изменения вызывает
-```
-
-Внутри `NpcBrain`:
-
-```text
-Priority 100: Combat
-Priority 80: Dialogue lock
-Priority 60: Scripted scene / cutscene
-Priority 40: Travel to scheduled location
-Priority 20: Ambient work / idle / patrol
-```
-
-Не пытайся делать один AI, который сам “понимает” квесты. Пусть квесты и диалоги меняют state, а AI только исполняет локальное поведение.
-
-## 10. Сохранение надо проектировать сейчас, даже если реализуешь позже
-
-Твой `readme.md` уже правильно перечисляет будущий save DTO: `QuestStates`, `WorldFacts`, `CharacterStates`, а для персонажа — `CharacterId`, `LocationId`, `IsAlive`. ([GitHub][3])
-
-Я бы сделал save-модель такой:
-
-```csharp
 [Serializable]
-public sealed class CampaignSaveData
+public sealed class NpcRoutineEntry
 {
-    public int Version;
-    public string ChapterId;
-    public WorldTimeSaveData Time;
-    public List<QuestSaveData> Quests;
-    public List<CharacterSaveData> Characters;
-    public List<WorldFactSaveData> Facts;
+    public int StartMinute; // 0..1439
+    public int EndMinute;   // 0..1439
+
+    public string BehaviorId;    // "work_forge", "sleep", "patrol", "guard", "smalltalk"
+    public string TargetId;      // location/freepoint/route/group id
+    public string RouteId;       // optional
+    public RoutinePriority Priority;
 }
 ```
 
-Важно: **не сохраняй ScriptableObject references, GameObject references, scene references**. Только стабильные ID и простые значения.
+Пример:
 
-Сохранять:
-
-```text
-questId
-questStatus
-questStage
-journalEntryIds или journalEntryTexts
-characterId
-locationId
-isAlive
-factId/value
-time
-chapter
+```text id="29zayw"
+HakonRoutine:
+  06:00–08:00  eat_breakfast      tavern_table_01
+  08:00–12:00  work_forge         blacksmith_work_area
+  12:00–13:00  eat_lunch          tavern_table_02
+  13:00–18:00  work_forge         blacksmith_work_area
+  18:00–22:00  sit_campfire       old_camp_fire_01
+  22:00–06:00  sleep              hakon_bed
 ```
 
-Не сохранять:
+Но это не значит “телепортируйся в `blacksmith_work_area`”. Это значит:
 
-```text
-QuestDefinitionSO reference
-CharacterDefinitionSO reference
-Transform
-GameObject
-Animator state как главный источник истины
+```text id="euw1d3"
+Стартуй поведенческое состояние WorkForgeState с target = blacksmith_work_area.
 ```
 
-## 11. Квестовые стадии лучше сделать смысловыми, но хранить числом можно
+---
 
-Числовые стадии — нормальная практика:
+# 4. Behavior State — главный исполнитель рутины
 
-```text
-0 inactive
-10 got_task
-20 found_clue
-30 confronted_npc
-100 completed
+Тебе нужны не просто точки маршрута, а **состояния поведения**.
+
+```csharp id="fwmnum"
+public interface INpcBehaviorState
+{
+    string Id { get; }
+
+    void Enter(NpcBehaviorContext context, NpcRoutineEntry entry);
+    void Tick(float deltaTime);
+    void Exit();
+    bool IsFinished { get; }
+}
 ```
 
-Но в данных и tooling лучше иметь label:
+Примеры:
 
-```text
-QuestStageDefinition
-  Value: 20
-  Key: "found_clue"
-  JournalText
+```text id="slz6jw"
+SleepState
+SitState
+WorkAtForgeState
+GuardState
+PatrolState
+SmalltalkState
+FollowPlayerState
+GuidePlayerState
+FleeState
+TravelToLocationState
 ```
 
-Сейчас `QuestDefinitionSO.ContainsStage(int stage)` просто проверяет наличие стадии в массиве `Stages`, что нормально для валидации. ([GitHub][4])
+Почему это важно: `Sleep`, `WorkAtForge`, `Guard`, `Patrol` и `FollowPlayer` используют перемещение, но это разные gameplay-сценарии.
 
-Но для удобства контента я бы позже добавил:
+---
 
-```text
-StageId / DebugName
-JournalEntryId
-ObjectiveTextId
+# 5. Freepoints / Smart Objects вместо “точка назначения”
+
+Для Gothic-like рутины очень важны не просто координаты, а **места действия**.
+
+Тебе нужен аналог Gothic freepoint / mobsi / smart object:
+
+```csharp id="mx54y7"
+public sealed class NpcActivityPoint : MonoBehaviour
+{
+    public string PointId;
+    public string ActivityType; // "forge", "sleep", "sit", "smalltalk", "guard"
+    public Transform StandPoint;
+    public Transform LookAtPoint;
+    public bool IsOccupied;
+    public int Priority;
+}
 ```
 
-При этом runtime всё ещё может хранить `int Stage`. Не усложняй до полноценного graph editor.
+Например `WorkAtForgeState` делает не:
 
-## 12. Рекомендуемая целевая структура систем
-
-Я бы мысленно разложил проект так:
-
-```text
-Game layer:
-  Character
-  Inventory
-  Combat
-  Interaction
-  Targeting
-  Movement
-
-Campaign layer:
-  Quests
-  Dialogue
-  WorldFacts
-  CharacterWorldState
-  Time
-  Factions
-  Reputation
-  Chapters
-
-Presentation layer:
-  NpcPresencePresenter
-  QuestJournalUI
-  DialogueUI
-  WorldLocationAnchors
-  SceneInstallers
-
-Data layer:
-  CharacterCatalogSO
-  QuestCatalogSO
-  DialogueEntryCatalogSO
-  WorldLocationCatalogSO
-  CampaignInitialStateSO
+```text id="haijqe"
+go to blacksmith_work_area.position
+play animation
 ```
 
-Текущее разделение `Scripts/Core`, `Scripts/Features`, `Scripts/Game`, `Campaign`, `Characters`, `Resources`, `Scenes` уже в целом подходит. В `Scripts/Features/Campaign` у тебя уже есть `Quests`, `SO`, `UI`, `World`, `DialogueService`, `NpcDialogueInteractable`; это хорошая зона для доменных campaign-систем. ([GitHub][3])
+А:
 
-## Мой конкретный roadmap для твоего проекта
+```text id="dn0uxm"
+найти свободный ActivityPoint типа "forge" рядом с blacksmith_work_area
+занять его
+дойти до StandPoint
+повернуться к LookAtPoint
+запустить forge animation
+освободить point при Exit()
+```
 
-Я бы двигался в таком порядке:
+Это решает сразу много проблем:
 
-1. **Ввести `CharacterCatalogSO`**
-   Убрать зависимость спавнера от `WorldCharacterSetupSO` как источника prefab. `WorldCharacterSetupSO` должен быть только initial state.
+```text id="c41e8q"
+NPC не встают в одну точку
+NPC могут выбирать альтернативное рабочее место
+поведение переносимо между сценами
+рутину можно задавать через смысловые зоны, а не координаты
+```
 
-2. **Сделать `CharacterWorldPresenter` / `NpcPresencePresenter`**
-   Он должен слушать `CharacterChanged`, создавать, перемещать и удалять NPC в текущей сцене.
+В Gothic-подобной модели это особенно важно: по анализу Gothic, daily routine может указывать waypoint, а state потом ищет nearby freepoint нужного типа; например smalltalk-state идёт к waypoint, затем ищет свободный freepoint `SMALLTALK` и поворачивается в нужную сторону. ([ataulien.github.io][2])
 
-3. **Добавить `WorldFactService`**
-   Не смешивать квестовые стадии и глобальные факты мира.
+---
 
-4. **Сделать save/load DTO для QuestStates + CharacterStates + WorldFacts**
-   Даже если UI сохранения будет позже, сами сервисы должны уметь экспортировать/импортировать состояние.
+# 6. Route — отдельная сущность, не равная NavMesh path
 
-5. **Ввести `WorldLocationDefinition` и строгую систему `LocationId`**
-   Чтобы NPC можно было перемещать не только внутри текущей сцены.
+Теперь к твоему главному вопросу: заранее подготовленный маршрут.
 
-6. **После этого делать расписания NPC**
-   Schedule должен менять `CharacterWorldState`, а не двигать GameObject напрямую.
+Да, тебе нужна отдельная сущность:
 
-7. **Потом — фракции, репутация, crime/witness система**
-   Это уже следующий слой, когда базовая state-machine кампании стабильна.
+```csharp id="7u6s72"
+[CreateAssetMenu]
+public sealed class NpcRouteDefinitionSO : ScriptableObject
+{
+    public string RouteId;
+    public List<RouteNodeRef> Nodes;
+    public RouteTraversalMode TraversalMode;
+}
 
-Главный вывод: у тебя уже правильная основа. Я бы сейчас не расширял квесты в “суперсистему”, а наоборот укрепил границы: **definitions отдельно, initial setup отдельно, runtime state отдельно, scene presentation отдельно, Yarn только как командный мост**. Для Gothic-like RPG это гораздо важнее, чем ранний node editor или универсальный AI.
+public enum RouteTraversalMode
+{
+    Once,
+    Loop,
+    PingPong,
+    Random,
+    PatrolWithWaits
+}
 
-Да, но с важной оговоркой: **не всех NPC/мобов нужно держать в `WorldCharacterState` одинаково**.
+[Serializable]
+public sealed class RouteNodeRef
+{
+    public string LocationId;
+    public float WaitSeconds;
+    public string OnArriveBehaviorId; // optional: look_around, inspect, sit, guard
+    public MovementMode MovementMode; // Walk, Run, Sneak
+}
+```
 
-Правильнее разделить актёров мира на классы по степени “нарративной адресуемости”. В Gothic/Skyrim/Witcher-like архитектуре не каждый физический humanoid/monster является полноценным персонажем кампании.
+Но `Route` — это **не baked path**. Это список смысловых waypoint-ов.
 
-## Главный ответ
+```text id="r9wmvr"
+guard_patrol_old_gate:
+  old_gate_left_post     wait 8 sec
+  old_gate_center        wait 2 sec
+  old_gate_right_post    wait 8 sec
+  old_gate_watch_fire    wait 4 sec
+```
 
-**В `WorldCharacterState` нужно держать только тех, к кому игра должна уметь обратиться по стабильному ID.**
+А между этими точками `NpcTravelController` использует NavMesh.
 
 То есть:
 
-```text
-CharacterId: "hakon"
-CharacterId: "bandit_in_storage"
-CharacterId: "old_camp_guard_torrez"
-CharacterId: "quest_fogling_alpha"
+```text id="d3zyyu"
+Prepared route:
+  A -> B -> C -> D
+
+NavMesh:
+  строит физический путь от A до B,
+  потом от B до C,
+  потом от C до D.
 ```
 
-Но не обязательно:
-
-```text
-random_wolf_001
-random_wolf_002
-ambient_citizen_17
-generic_city_beggar_04
-forest_scavenger_spawn_13
-```
-
-Для последних лучше использовать **encounter/spawn system**, а не полноценный `WorldCharacterState`.
+Это нормальный подход. Не надо вручную рисовать каждый поворот маршрута, если тебе не нужна кинематографическая точность.
 
 ---
 
-# Как это делают большие RPG-подобные системы
+# 7. Когда нужен именно заранее заданный spline/path
 
-## Gothic-like подход
+Есть два разных типа маршрутов:
 
-В Gothic важные NPC имеют ежедневные рутины: где быть, что делать, в какие часы, какие script states запускать. Daily routine задаёт активность и waypoint; если NPC нечего делать, он возвращается к своей routine. Inside-Gothic описывает это так: routine выполняется, если у NPC пустая очередь событий, а сами routine-строки регистрируют активность NPC на временной интервал и waypoint. ([ataulien.github.io][1])
+## A. Semantic route
 
-Это очень похоже на то, что тебе нужно:
+Для 90% рутин:
 
-```text
-NPC существует как персонаж мира
-у него есть schedule/routine
-его текущая активность может быть перебита разговором, боем, scripted state
-после этого он возвращается к routine
+```text id="s9iph6"
+точка кузницы -> точка таверны -> точка кровати
 ```
 
-Также у Gothic NPC есть knowledge/dialog database и daily routine; routine определяет, где NPC должен быть в разное время дня, а для монстров используется более простая логика — sleep/eat/roam/repeat. ([ataulien.github.io][2])
+Внутри каждого перехода можно использовать NavMesh.
 
-Отсюда вывод для твоего проекта:
+## B. Authored path
 
-**Именные NPC — да, должны иметь persistent campaign state. Обычные монстры — нет, чаще должны жить через spawn/encounter state.**
+Для случаев, где NPC должен идти именно по заданной траектории:
 
----
-
-## Skyrim-like подход
-
-В Skyrim/Creation Kit есть важная идея `Quest Alias`: квест не обязан напрямую хранить ссылку на конкретный объект сцены; alias может быть меткой для актёра, объекта или локации, используемой квестом, и позволяет подставлять нужные элементы runtime-способом. ([tesck.ru][3])
-
-Но у Skyrim есть проблема с persistence: если актёр или ObjectReference удерживается напрямую как property, он становится persistent/always loaded, поэтому в моддинг-практиках рекомендуют избегать прямых Actor/ObjectReference properties и по возможности использовать reference aliases, которые очищаются после окончания квеста. ([wiki.beyondskyrim.org][4])
-
-Для твоего Unity-проекта это переводится так:
-
-```text
-Не держи GameObject / MonoBehaviour / Transform всех NPC в глобальном сервисе.
-Держи stable ID и маленький DTO state.
-Физический instance создавай только когда он нужен в текущей сцене.
+```text id="u5jml4"
+торжественная процессия
+стражник идёт по стене определённым обходом
+NPC ведёт игрока красивой дорогой
+NPC должен пройти через конкретные ворота
+кат-сценный маршрут
+узкая тропа, где NavMesh может выбрать некрасивый путь
 ```
 
-То есть `WorldCharacterState` может хранить:
+Для этого я бы добавил:
 
-```csharp
-CharacterId
-LocationId
-IsAlive
-IsPresent
-RoutineId
-QuestBindingId?
-```
-
-Но не должен хранить:
-
-```csharp
-GameObject
-Transform
-NavMeshAgent
-Animator
-NpcMotor
-```
-
----
-
-## Witcher 3 / REDkit-like подход
-
-В REDkit для The Witcher 3 официальная документация прямо разделяет **Encounters** и **Communities**. Encounters используются для больших групп NPC, городских толп, стад, монстрятников, патрулей и quest fights; Communities используются для quest-related NPC с разными фазами и небольших групп врагов. ([cdprojektred.atlassian.net][5])
-
-В другом туториале REDkit говорит, что generic merchants можно спавнить через Encounters, а merchants с большой ролью в квесте — через Communities. ([cdprojektred.atlassian.net][6])
-
-В туториале по созданию квеста Witcher 3 NPC reward giver спавнится через community file, story phase, spawn tags, story phase name, timetable и spawn point tags. Там же показана логика: quest graph включает нужную phase, а spawnset/community определяет, кто и где появляется. ([cdprojektred.atlassian.net][7])
-
-Это очень сильный ориентир для твоего проекта:
-
-```text
-Именные/квестовые NPC -> CharacterWorldState / Community-like system
-Группы мобов, патрули, случайные враги -> Encounter system
-```
-
----
-
-# Моя рекомендация для твоей архитектуры
-
-Я бы ввёл не один общий тип “NPC”, а минимум четыре категории.
-
-## 1. Persistent Character
-
-Это полноценный персонаж мира.
-
-Примеры:
-
-```text
-Hakon
-Diego-like mentor
-староста деревни
-именованный бандит
-важный торговец
-фракционный лидер
-```
-
-Для них нужен `WorldCharacterState`.
-
-```csharp
-public sealed class WorldCharacterState
+```csharp id="tufmnl"
+public sealed class NpcAuthoredPath : MonoBehaviour
 {
-    public string CharacterId { get; }
-    public string LocationId { get; private set; }
-    public bool IsAlive { get; private set; }
-    public bool IsPresent { get; private set; }
-    public string? RoutineId { get; private set; }
-    public string? CurrentCommandId { get; private set; }
+    public string PathId;
+    public List<Transform> Nodes;
+    public PathTraversalMode Mode;
 }
 ```
 
-Такие NPC должны переживать save/load, главы, перемещения, смерть, исчезновение, смену routine.
+И режим движения:
+
+```text id="hvjhbw"
+FollowAuthoredPath:
+  for each authored node:
+      NavMeshAgent.SetDestination(node.position)
+      wait until reached
+```
+
+Это всё ещё использует NavMesh между узлами, но путь контролируется дизайнером.
+
+Если нужна абсолютно точная траектория — например кат-сцена — тогда можно временно отключать `NavMeshAgent.updatePosition/updateRotation` и вести root motion / spline follower, но для обычной рутины я бы так не делал. В Unity у `NavMeshAgent` есть свойства `updatePosition`, `updateRotation`, `nextPosition`, `velocity`, `Move`, что позволяет отделять симуляцию агента от transform/root-motion при необходимости. ([docs.unity3d.com][1])
 
 ---
 
-## 2. Quest-scoped Character
+# 8. NpcTravelController: центральный слой перемещения
 
-Это NPC/моб, который важен только в рамках конкретного квеста или фазы.
+Я бы сделал один компонент, через который проходят все “долгие перемещения” NPC:
 
-Пример:
-
-```text
-bandit_in_storage
-escaped_prisoner
-witness_merchant
-quest_monster_alpha
-ambush_leader
-```
-
-Его тоже можно держать в `WorldCharacterState`, но не обязательно заранее активировать.
-
-Стартовое состояние:
-
-```text
-CharacterId = bandit_in_storage
-LocationId = city_storage_bandit_01
-IsAlive = true
-IsPresent = false
-Lifecycle = QuestScoped
-OwnerQuestId = hakon_bandit_question
-```
-
-После раскрытия:
-
-```yarn
-<<set_character_present "bandit_in_storage" true>>
-```
-
-После завершения квеста:
-
-```yarn
-<<set_character_present "bandit_in_storage" false>>
-```
-
-Или:
-
-```yarn
-<<set_character_alive "bandit_in_storage" false>>
-```
-
-Главное: **он имеет ID, потому что квест, диалог или сейв должны уметь сказать “именно этот бандит убежал / умер / сдался / был отпущен”.**
-
----
-
-## 3. Encounter Actor
-
-Это не персонаж кампании, а представитель encounter’а.
-
-Примеры:
-
-```text
-3 волка у дороги
-5 бандитов в засаде
-ночной патруль
-монстры у пещеры
-```
-
-Их не надо всех держать как отдельных `WorldCharacterState`.
-
-Вместо этого нужен:
-
-```csharp
-public sealed class WorldEncounterState
+```csharp id="uuwb2v"
+public sealed class NpcTravelController : MonoBehaviour
 {
-    public string EncounterId { get; }
-    public EncounterStatus Status { get; private set; }
-    public int RemainingCount { get; private set; }
-    public bool HasBeenDiscovered { get; private set; }
-    public bool IsCleared { get; private set; }
-    public string SpawnGroupId { get; private set; }
+    public TravelTask CurrentTask { get; private set; }
+
+    public void TravelToLocation(string locationId, TravelOptions options);
+    public void FollowRoute(string routeId, TravelOptions options);
+    public void FollowTarget(Transform target, FollowOptions options);
+    public void FleeFrom(Transform threat, string fallbackLocationId);
+    public void Stop(TravelStopReason reason);
 }
 ```
 
-Например:
+И тип задачи:
 
-```text
-EncounterId = forest_wolves_near_bridge
-Status = Active
-RemainingCount = 3
-IsCleared = false
+```csharp id="9jwjsh"
+public enum TravelTaskType
+{
+    GoToLocation,
+    FollowRoute,
+    PatrolRoute,
+    FollowTarget,
+    GuidePlayer,
+    FleeToLocation,
+    WanderInArea
+}
 ```
 
-Когда игрок входит в зону:
+Важное правило:
 
-```text
-EncounterPresenter спавнит 3 wolf prefab
+```text id="5ks4eq"
+BehaviorState не должен напрямую вызывать NavMeshAgent.SetDestination.
+BehaviorState должен просить NpcTravelController выполнить travel-задачу.
 ```
 
-Если игрок убил двух и убежал:
+Например `PatrolState`:
 
-```text
-RemainingCount = 1
+```csharp id="2tlijo"
+public sealed class PatrolState : INpcBehaviorState
+{
+    public void Enter(NpcBehaviorContext context, NpcRoutineEntry entry)
+    {
+        context.Travel.FollowRoute(entry.RouteId, TravelOptions.WalkLoop);
+    }
+
+    public void Exit()
+    {
+        context.Travel.Stop(TravelStopReason.BehaviorChanged);
+    }
+}
 ```
-
-Если всех убил:
-
-```text
-IsCleared = true
-```
-
-Это дешевле, проще и ближе к Witcher-like encounter/community разделению.
 
 ---
 
-## 4. Ambient Actor
+# 9. Перемещение внутри routine: логика такая
 
-Это вообще не часть save-state, или почти не часть.
+Допустим сейчас 08:00, Hakon должен идти работать.
 
-Примеры:
+```text id="2k5b75"
+NpcRoutineService:
+  вычисляет active entry = WorkAtForge
 
-```text
-городская толпа
-прохожие
-декоративные рабочие
-птицы
-крысы
-фоновые крестьяне
+NpcBehaviorController:
+  если текущий state не WorkAtForge:
+      Exit old state
+      Enter WorkAtForgeState
+
+WorkAtForgeState.Enter:
+  найти forge activity point
+  TravelToLocation(forge_point)
+
+NpcTravelController:
+  SetDestination(forge_point.position)
+  дождаться прибытия
+
+WorkAtForgeState:
+  занять point
+  повернуть NPC
+  проиграть work animation
+  держать состояние до конца временного окна
 ```
 
-Их состояние можно не сохранять индивидуально. Максимум — через population profile:
+Если в 12:00 routine меняется:
 
-```text
-city_market_population_day
-city_market_population_night
-old_camp_workers
-tavern_evening_crowd
+```text id="lgryoe"
+RoutineService:
+  active entry = EatLunch
+
+BehaviorController:
+  Exit WorkAtForgeState
+  освобождает forge point
+  Enter EatLunchState
+  TravelToLocation(tavern_table)
 ```
 
-При загрузке сцены система просто создаёт нужную атмосферу.
+Если игрок заговорил:
+
+```text id="fc1w5l"
+DialogueState прерывает WorkAtForgeState
+NPC входит в TalkState
+после разговора:
+  если нет других high-priority states:
+      RoutineService снова активирует актуальную routine entry
+      NPC возвращается к forge/eat/sleep
+```
+
+Это прямо соответствует Gothic-идее: routine state прерывается разговором, уроном, perception/state change, а когда внештатное состояние заканчивается, NPC возвращается к daily routine. ([ataulien.github.io][2])
 
 ---
 
-# То есть ответ: “всех держать в state?” — нет
+# 10. Сопровождение и “веди игрока” — это тоже routine-like states
+
+Тут важный момент: сопровождение — не отдельная “особая система”, а тип behavior state.
+
+В Gothic-разборе даже “following the player” и “guiding the player to some location” указаны как необычные, но всё равно связанные с daily routine/script-state элементы. ([ataulien.github.io][2])
 
 Я бы сделал так:
 
-```text
-WorldCharacterState
-  только named / quest-addressable / schedule-driven NPC
+```text id="49g7xx"
+FollowPlayerState
+  NPC держится рядом с игроком
+  если игрок далеко — догоняет
+  если игрок слишком близко — останавливается
+  если бой — combat interrupt
+  если destination reached или quest command — завершение
 
-WorldEncounterState
-  группы врагов, монстров, патрулей, засад
-
-WorldPopulationState
-  опционально: состояние зон, если нужна симуляция населения
-
-No State
-  чисто ambient/decorative NPC
+GuidePlayerState
+  NPC идёт по route/path
+  если игрок отстал — ждёт
+  если игрок подошёл — продолжает
+  если attacked — interrupt
+  если дошёл — world command / quest stage
 ```
 
-Практическое правило:
+Пример Yarn:
 
-> Если ты можешь написать про сущность в Yarn `<<send_character "...">>` или `<<character_is_alive "...">>`, ей нужен `CharacterId` и state.
-
-> Если игроку не важно, какой именно волк из трёх умер, нужен `EncounterId`, а не три `CharacterId`.
-
-> Если NPC нужен только для фона и не влияет на квесты, он не должен попадать в campaign state.
-
----
-
-# Как это применить к твоему `IsPresent`
-
-Твой `IsPresent` подходит, но я бы не делал его универсальным для всех мобов.
-
-Он нужен для `PersistentCharacter` и `QuestScopedCharacter`.
-
-```text
-IsAlive = физически жив
-IsPresent = должен быть представлен в мире
-LocationId = логическое место
+```yarn id="tyf2ni"
+<<start_behavior "hakon" "guide_player" "old_mine_entrance_route">>
 ```
 
-Пример с бандитом:
+Но лучше типизированно:
 
-```text
-bandit_in_storage:
-  IsAlive: true
-  IsPresent: false
-  LocationId: city_storage_bandit_01
+```yarn id="5ui2d1"
+<<guide_player "hakon" "route_to_old_mine">>
 ```
 
-После разговора:
+C#:
 
-```text
-IsPresent: true
-```
-
-Если отпустили:
-
-```text
-runtime command: send_character
-после добегания:
-  LocationId = city_bandit_escape_01
-  IsPresent = false
-```
-
-Почему `IsPresent = false` после побега? Потому что он может быть жив, но больше не обязан физически существовать в мире. Позже ты можешь вернуть его:
-
-```text
-LocationId = bandit_hideout_02
-IsPresent = true
+```text id="4ujwlr"
+CharacterWorldCommandHandler
+  -> find live instance
+  -> NpcBehaviorController.PushState(GuidePlayerState)
+  -> GuidePlayerState uses NpcTravelController.FollowRoute()
 ```
 
 ---
 
-# Я бы добавил `LifecycleType`
+# 11. Patrol — не просто loop SetDestination
 
-Чтобы не гадать, как обрабатывать персонажа, добавь тип жизненного цикла.
+Патруль должен быть отдельным behavior state, потому что у него есть дополнительные правила:
 
-```csharp
-public enum CharacterLifecycleType
-{
-    Persistent,     // всегда часть мира: Хакон, торговец, лидер
-    QuestScoped,    // существует ради квеста/фазы
-    Summoned,        // временно создаётся командой/сценой
-    Disabled        // есть в каталоге, но не участвует в текущей кампании
-}
-```
-
-В `CharacterDefinitionSO`:
-
-```csharp
-public CharacterLifecycleType LifecycleType;
-```
-
-В `WorldCharacterState`:
-
-```csharp
-public bool IsPresent;
-public bool IsAlive;
-public string LocationId;
-public string? OwnerQuestId;
-```
-
-Для encounter-мобов это вообще не нужно. Они должны идти через отдельные `EncounterDefinitionSO` и `WorldEncounterState`.
-
----
-
-# Рекомендуемая модель данных
-
-```text
-CharacterCatalogSO
-  Hakon
-  BanditInStorage
-  GateGuardTorrez
-  SmithKardif
-
-EncounterCatalogSO
-  ForestWolvesNearBridge
-  BanditAmbushOldRoad
-  MinecrawlerNest01
-
-PopulationCatalogSO
-  CityMarketDayCrowd
-  TavernEveningCrowd
-```
-
-Runtime:
-
-```text
-CampaignRuntimeState
-  CharacterStates
-  EncounterStates
-  WorldFacts
-  QuestStates
-  TimeState
-```
-
-Scene layer:
-
-```text
-CharacterWorldPresenter
-  показывает CharacterStates
-
-EncounterPresenter
-  показывает EncounterStates
-
-PopulationPresenter
-  показывает ambient crowds
-```
-
----
-
-# Для твоего проекта я бы сделал так
-
-## Сейчас
-
-Добавь `IsPresent` в `WorldCharacterState`.
-
-Это правильный шаг.
-
-```csharp
-public bool IsPresent { get; private set; }
-```
-
-И команды:
-
-```yarn
-<<set_character_present "bandit" true>>
-<<set_character_present "bandit" false>>
-<<send_character "bandit" "city_bandit_escape_01">>
-```
-
-## Следующий шаг
-
-Не расширяй `WorldCharacterState` на всех мобов.
-
-Введи отдельную систему:
-
-```csharp
-EncounterDefinitionSO
-EncounterRuntimeState
-EncounterService
-EncounterPresenter
+```text id="29r6b0"
+какой route
+loop/pingpong/random
+ждать ли на точках
+куда смотреть на точках
+замечать ли игрока
+менять ли скорость
+что делать при тревоге
+возвращаться ли к маршруту после боя
 ```
 
 Пример:
 
-```csharp
-public sealed class EncounterRuntimeState
+```csharp id="fdocxp"
+public sealed class PatrolRouteDefinitionSO : ScriptableObject
 {
-    public string EncounterId { get; }
-    public bool IsActive { get; private set; }
-    public bool IsCleared { get; private set; }
-    public int RemainingActors { get; private set; }
+    public string PatrolId;
+    public List<PatrolNode> Nodes;
+    public PatrolMode Mode;
+    public bool ResumeFromNearestNodeAfterInterrupt;
+}
+
+[Serializable]
+public sealed class PatrolNode
+{
+    public string LocationId;
+    public float WaitSeconds;
+    public string LookAtId;
+    public string AnimationId;
+    public PatrolAlertness Alertness;
 }
 ```
 
-Yarn-команды:
+Для стражника:
 
-```yarn
-<<activate_encounter "bandit_ambush_old_road">>
-<<clear_encounter "forest_wolves_near_bridge">>
+```text id="h46r9v"
+08:00–20:00 GuardPatrol old_gate_patrol
+20:00–22:00 SitCampfire guard_fire_01
+22:00–08:00 Sleep barracks_bed_03
 ```
-
-Условия:
-
-```yarn
-<<if encounter_cleared("forest_wolves_near_bridge")>>
-```
-
-## Позже
-
-Для более сложных групп:
-
-```text
-Encounter member promoted to CharacterState
-```
-
-Например, если один бандит из засады выжил и стал важным:
-
-```text
-Encounter: bandit_ambush_old_road
-  RemainingActors = 0
-CharacterState:
-  CharacterId = escaped_bandit_survivor
-  IsPresent = true
-  LocationId = city_jail_cell_01
-```
-
-Это хороший компромисс: не все мобы являются characters, но игра может “повысить” конкретного моба до named state, если он стал сюжетно важным.
 
 ---
 
-# Ключевое архитектурное правило
+# 12. Как решить “передвижение по большой карте”
 
-Я бы сформулировал так:
+Тут нужно разделить **online** и **offline** симуляцию.
 
-```text
-WorldCharacterState — для сущностей с личной историей.
-WorldEncounterState — для групп с игровым состоянием.
-Scene instances — только временное физическое представление.
+## Online: NPC рядом с игроком / в загруженной сцене
+
+Тогда NPC существует как GameObject и физически идёт:
+
+```text id="mad5io"
+NavMeshAgent
+TravelController
+BehaviorState
+Animations
+Avoidance
 ```
 
-Твой бандит из примера — **не generic mob**. Он участвует в диалоге, может быть раскрыт Хаконом, отпущен, убит, сбежать, возможно появиться позже. Значит ему нужен `WorldCharacterState`.
+## Offline: NPC далеко / сцена не загружена
 
-А вот “три крысы в подвале” — нет. Им нужен `EncounterState` или вообще ничего, если они респавнятся/неважны.
+Тогда не надо держать агента и считать NavMesh. Нужно обновлять только логическое состояние.
 
-И это хорошо ложится на Gothic/Witcher/Skyrim-like подход: важные NPC живут через устойчивые ID, routine/alias/community/phase/state; группы и фоновые сущности — через spawn systems, encounters, population layers, а не через вечный список индивидуальных персонажей.
+Например NPC должен в 08:00 быть у кузницы, а игрок пришёл туда в 09:30.
 
+Ты не обязан симулировать весь путь NPC с кровати до кузницы. Можно сделать:
+
+```text id="yqhi7f"
+RoutineProjectionService:
+  по текущему времени вычисляет expected location/activity
+  CharacterWorldState.LocationId = forge_area
+  when scene loads:
+      CharacterWorldPresenter spawns NPC at forge activity point
+```
+
+Это особенно важно для большого мира. Полная симуляция всех NPC по NavMesh вне зоны игрока — дорого и почти всегда не нужно.
+
+---
+
+# 13. Но что если игрок может встретить NPC по дороге?
+
+Вот тут появляется интересная архитектура.
+
+У тебя есть три уровня точности:
+
+## Уровень 1 — простая проекция
+
+Если NPC не загружен:
+
+```text id="vyqese"
+08:00 = forge
+12:00 = tavern
+18:00 = campfire
+```
+
+Игрок не увидит переход между ними, если не находится рядом.
+
+Это достаточно для MVP.
+
+## Уровень 2 — travel windows
+
+Ты явно задаёшь, что между 07:45 и 08:10 NPC “в пути”.
+
+```text id="5wdd8f"
+07:45–08:10 Travel home_to_forge_route
+08:10–12:00 Work forge
+```
+
+Если игрок встречает NPC на маршруте, ты можешь заспавнить его на ближайшей точке route с учётом времени.
+
+```text id="7j0jvo"
+progress = (currentTime - travelStart) / travelDuration
+spawn near route point at progress
+```
+
+Это уже даёт иллюзию живого мира.
+
+## Уровень 3 — persistent travel state
+
+Для важных NPC ты сохраняешь travel-команду:
+
+```csharp id="nngx4e"
+public sealed class CharacterTravelState
+{
+    public string RouteId;
+    public int StartedAtMinute;
+    public int ExpectedArrivalMinute;
+    public string FromLocationId;
+    public string ToLocationId;
+    public float Progress01;
+}
+```
+
+Если игрок сохраняет игру, пока бандит убегает, после загрузки ты можешь восстановить:
+
+```text id="cpq182"
+если сцена загружена рядом — заспавнить на route progress
+если прошло достаточно времени — считать прибывшим
+```
+
+Я бы делал уровень 1 сейчас, уровень 2 для важных городских NPC, уровень 3 только для сюжетных перемещений типа побега, сопровождения, конвоя.
+
+---
+
+# 14. Очень важное решение: routine не должна постоянно менять `WorldCharacterState.LocationId`
+
+Я бы разделил:
+
+```text id="c0i9b1"
+Home/Anchor LocationId
+Current Logical LocationId
+Current Activity
+Current Travel Task
+```
+
+Если NPC идёт от дома к кузнице, не обязательно каждую секунду писать в `WorldCharacterState.LocationId`.
+
+Лучше так:
+
+```text id="40g57x"
+LocationId = "hakon_home" или "hakon_forge" после прибытия
+CurrentTravel = home_to_forge
+CurrentActivity = Traveling
+```
+
+Для live instance позиция берётся из Transform/NavMeshAgent.
+
+Для save/load:
+
+```text id="1p4v8w"
+если CurrentTravel есть:
+  восстановить по route/progress
+иначе:
+  spawn at LocationId
+```
+
+Иначе `LocationId` превратится в странную штуку: то логическое место, то фактическая текущая позиция, то destination.
+
+Я бы сделал так:
+
+```csharp id="k5e8ja"
+public sealed class WorldCharacterState
+{
+    public string CharacterId;
+    public bool IsAlive;
+    public bool IsPresent;
+
+    public string LocationId; // последняя стабильная/логическая локация
+    public string ActivityId; // sleep/work/patrol/travel/etc
+
+    public CharacterTravelState? Travel;
+}
+```
+
+---
+
+# 15. Команды должны различать instant relocation и physical travel
+
+Ты уже это правильно сформулировал ранее. Я бы закрепил API:
+
+```yarn id="swtrn7"
+<<move_character "hakon" "forge">>
+```
+
+Смысл:
+
+```text id="q5udxc"
+Мгновенно изменить логическую позицию.
+Используется для offscreen, save load, chapter change, teleport-like story changes.
+```
+
+```yarn id="a82ap4"
+<<send_character "hakon" "forge">>
+```
+
+Смысл:
+
+```text id="ab4jke"
+Дать physical travel command.
+Если NPC заспавнен рядом — он реально идёт.
+Если он offscreen — создаётся travel state или сразу projected arrival.
+```
+
+```yarn id="bjpy7t"
+<<guide_player "hakon" "route_to_mine">>
+```
+
+Смысл:
+
+```text id="5de9ic"
+Включить behavior state GuidePlayerState.
+NPC идёт по маршруту и учитывает игрока.
+```
+
+```yarn id="9wgqq7"
+<<start_patrol "guard_01" "old_gate_patrol">>
+```
+
+Смысл:
+
+```text id="jc6k98"
+Прервать обычную routine и дать временную patrol behavior.
+```
+
+---
+
+# 16. Как бы я реализовал минимальный MVP
+
+## Data
+
+```text id="rgxpf2"
+WorldLocationAnchor
+  LocationId
+  Transform
+
+NpcRoutineDefinitionSO
+  entries by time
+
+NpcRouteDefinitionSO
+  nodes: LocationId + wait + movement mode
+
+NpcActivityPoint
+  ActivityType
+  StandPoint
+  LookAtPoint
+  Occupancy
+```
+
+## Runtime
+
+```text id="lwef0c"
+NpcRoutineService
+  determines current routine entry
+
+NpcBehaviorController
+  owns current behavior state
+  supports PushState/PopState/SetRoutineState
+
+NpcTravelController
+  TravelToLocation
+  FollowRoute
+  FollowTarget
+  Stop
+
+NavMeshMotor
+  wraps NavMeshAgent
+```
+
+## States
+
+Начни с малого:
+
+```text id="naqi45"
+TravelToLocationState
+PatrolState
+WorkAtPointState
+SitState
+SleepState
+TalkState
+FollowPlayerState
+GuidePlayerState
+FleeState
+```
+
+Не делай сразу behavior tree. Тебе сейчас выгоднее явные state-классы.
+
+---
+
+# 17. Пример потока: обычная рутина
+
+```text id="w6lti8"
+08:00
+RoutineService finds:
+  WorkAtPoint forge_area
+
+BehaviorController:
+  exits SleepState
+  enters WorkAtPointState
+
+WorkAtPointState:
+  asks ActivityPointRegistry for free "forge" point near forge_area
+  reserves point
+  TravelController.TravelToLocation(point.StandPoint)
+
+TravelController:
+  NavMeshAgent.SetDestination(point.StandPoint.position)
+
+When arrived:
+  Motor stops
+  NPC rotates to point.LookAt
+  AnimationController plays "forge_work"
+
+12:00
+Routine switches to EatState
+WorkAtPointState.Exit:
+  stops animation
+  releases forge point
+```
+
+---
+
+# 18. Пример потока: патруль
+
+```text id="ah5g0n"
+Routine entry:
+  08:00–20:00 Patrol old_gate_patrol
+
+PatrolState.Enter:
+  load route old_gate_patrol
+  choose start node:
+    nearest node / first node / saved node
+
+Loop:
+  TravelToLocation(currentNode)
+  wait node.WaitSeconds
+  look at node.LookAt
+  play optional animation
+  advance next node
+
+On interruption:
+  save current node index if needed
+  Stop travel
+
+After dialogue/combat:
+  resume from nearest or saved node
+```
+
+---
+
+# 19. Пример потока: сопровождение игрока
+
+```text id="d3u61w"
+Yarn:
+  <<guide_player "hakon" "route_to_old_mine">>
+
+GuidePlayerState.Enter:
+  route = route_to_old_mine
+  currentNode = 0
+
+Loop:
+  if player too far behind:
+      stop and wait
+      play "wait" bark: "Hurry up"
+  else:
+      TravelToLocation(route[currentNode])
+  if reached node:
+      currentNode++
+  if route complete:
+      complete quest stage / set fact
+      return to routine
+```
+
+Сопровождение — это не патруль, потому что здесь есть зависимость от игрока.
+
+---
+
+# 20. Пример потока: побег бандита
+
+```text id="bpvoy8"
+Yarn:
+  <<send_character "bandit" "city_bandit_escape_01">>
+```
+
+Внутри:
+
+```text id="uswtqn"
+если bandit live:
+  PushState(FleeToLocationState)
+  TravelToLocation(city_bandit_escape_01, Run)
+  когда дошёл:
+      CharacterWorldState.LocationId = city_bandit_escape_01
+      IsPresent = false или true, зависит от дизайна
+      set_fact bandit_escaped
+
+если bandit offscreen:
+  CharacterWorldState.Travel = escape_travel_state
+  или сразу LocationId = city_bandit_escape_01
+```
+
+---
+
+# 21. Что делать с “заранее подготовленным маршрутом”
+
+Моё правило:
+
+```text id="5sdl4r"
+Для смысла — RouteDefinition.
+Для физического обхода препятствий — NavMesh.
+Для красивого/контролируемого пути — AuthoredPath с промежуточными nodes.
+Для кат-сцен — scripted/root-motion/spline.
+```
+
+То есть тебе не нужно заменять NavMesh. Тебе нужно **обернуть его в authored travel system**.
+
+NavMesh отвечает за:
+
+```text id="q3q4jl"
+обойти ящик
+обойти игрока
+найти проход вокруг стены
+корректно идти по земле
+```
+
+Route отвечает за:
+
+```text id="g6y9kg"
+идти через северные ворота, а не через южные
+сначала проверить склад
+потом пройти к рынку
+потом вернуться к посту
+```
+
+Behavior отвечает за:
+
+```text id="3xmo11"
+почему он это делает
+что делать на точках
+можно ли его прервать
+что делать после завершения
+```
+
+---
+
+# 22. Очень практический совет для Unity
+
+Не полагайся только на `remainingDistance`.
+
+В Unity `remainingDistance` — это расстояние до destination по текущему path, но на практике важно проверять ещё `pathPending`, `hasPath`, `pathStatus`, скорость и `stoppingDistance`. В официальном API есть все эти свойства: `pathPending`, `pathStatus`, `remainingDistance`, `stoppingDistance`, `hasPath`, `velocity`. ([docs.unity3d.com][1])
+
+Я бы сделал helper:
+
+```csharp id="apm4vs"
+public bool HasArrived()
+{
+    if (_agent.pathPending)
+        return false;
+
+    if (_agent.pathStatus == NavMeshPathStatus.PathInvalid)
+        return false;
+
+    if (_agent.remainingDistance > _agent.stoppingDistance)
+        return false;
+
+    if (_agent.hasPath && _agent.velocity.sqrMagnitude > 0.01f)
+        return false;
+
+    return true;
+}
+```
+
+И не размазывал эту проверку по behavior states.
+
+---
+
+# 23. Моя главная рекомендация для твоего проекта
+
+Не делай “Routine = список locationId”. Делай:
+
+```text id="rj01p8"
+Routine = расписание behavior states.
+BehaviorState = смысловое действие.
+TravelController = исполнитель перемещений.
+Route = authored список смысловых узлов.
+NavMesh = низкоуровневый pathfinder между узлами.
+```
+
+И тогда у тебя естественно появятся все Gothic-like сценарии:
+
+```text id="lsvx0z"
+NPC работает у кузницы
+NPC идёт в таверну
+NPC садится на лавку
+NPC ищет свободное место у костра
+NPC патрулирует ворота
+NPC ведёт игрока в шахту
+NPC ждёт, если игрок отстал
+NPC убегает после диалога
+NPC возвращается к routine после разговора
+NPC offscreen логически оказывается там, где должен быть по времени
+```
+
+Самое важное архитектурное правило:
+
+```text id="q5j3yd"
+WorldCharacterState хранит логическое состояние.
+RoutineService выбирает, что NPC должен делать.
+BehaviorState исполняет смысловое действие.
+TravelController решает, как идти.
+NavMeshAgent только строит путь между ближайшими физическими точками.
+```
+
+Это даст тебе Gothic-like систему без попытки превратить NavMesh в “искусственный интеллект”.
+
+[1]: https://docs.unity3d.com/6000.1/Documentation/ScriptReference/AI.NavMeshAgent.html "Unity - Scripting API: NavMeshAgent"
+[2]: https://ataulien.github.io/Inside-Gothic/DailyRoutine/ "Daily Routine - Inside-Gothic"
+[3]: https://mdk.gothicarchive.org/docs/skripte/gothic_skripte.htm "GothicMDK | Scripts"
