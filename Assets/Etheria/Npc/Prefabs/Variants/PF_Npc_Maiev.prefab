@@ -92,14 +92,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -3570623170557051903}
-    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8524255366941208557}
-    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 9124615073555084657}
   m_SourcePrefab: {fileID: 100100000, guid: 33536a6bbb02c764bab34a1b259f70ba, type: 3}
 --- !u!1 &1329946723156357907 stripped
 GameObject:
@@ -120,49 +112,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterIdentity
   _definition: {fileID: 11400000, guid: 34a0b502e646e2b459184b81ff9b1360, type: 2}
---- !u!114 &8524255366941208557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1329946723156357907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e94bf6dc5ac3b5f42a4a04d9ab257d29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Character.NpcPatrol
-  _motor: {fileID: 3102158175636455178}
-  _points: []
-  _waitDuration: 1
---- !u!114 &9124615073555084657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1329946723156357907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7c7aea92ebaf564985bf26773bc6f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Character.NpcStateController
-  _travel: {fileID: 0}
-  _motor: {fileID: 3102158175636455178}
-  _patrol: {fileID: 8524255366941208557}
-  _rotationSpeed: 360
---- !u!114 &3102158175636455178 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1115835639749728595, guid: 33536a6bbb02c764bab34a1b259f70ba,
-    type: 3}
-  m_PrefabInstance: {fileID: 2625927296080586329}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1329946723156357907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74dfde15efcda3b4086f39e44da8007e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Character.NpcMotor
 --- !u!4 &8797033369249365045 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6801699648399415916, guid: 33536a6bbb02c764bab34a1b259f70ba,

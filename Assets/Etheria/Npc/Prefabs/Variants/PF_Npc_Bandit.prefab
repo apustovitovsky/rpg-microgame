@@ -216,27 +216,7 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6645740688309336879}
-    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2752439098150302217}
-    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6780422643539077777}
   m_SourcePrefab: {fileID: 100100000, guid: 33536a6bbb02c764bab34a1b259f70ba, type: 3}
---- !u!114 &5128521433968539353 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1115835639749728595, guid: 33536a6bbb02c764bab34a1b259f70ba,
-    type: 3}
-  m_PrefabInstance: {fileID: 5210688443829137290}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9103415324080110272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74dfde15efcda3b4086f39e44da8007e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Character.NpcMotor
 --- !u!1 &9103415324080110272 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
@@ -268,33 +248,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5767451af0522488343de988ed996a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Etheria.Features.Campaign::Etheria.Features.Campaign.NpcDialogueInteractable
---- !u!114 &2752439098150302217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9103415324080110272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 889b54dc6d2435142b330075ee54ea52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.NpcTravelController
-  _motor: {fileID: 5128521433968539353}
-  _patrol: {fileID: 0}
---- !u!114 &6780422643539077777
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9103415324080110272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7c7aea92ebaf564985bf26773bc6f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.NpcStateController
-  _travel: {fileID: 2752439098150302217}
-  _motor: {fileID: 5128521433968539353}
-  _patrol: {fileID: 0}
-  _rotationSpeed: 360
