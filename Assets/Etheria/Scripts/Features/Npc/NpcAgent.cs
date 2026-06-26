@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using Etheria.Game.Interaction;
 using Etheria.Game.Npc;
@@ -34,8 +33,6 @@ namespace Etheria.Npc
             _definition != null
                 ? _definition.NpcId
                 : string.Empty;
-
-        public string CharacterId => NpcId;
 
         public Transform Transform => transform;
 

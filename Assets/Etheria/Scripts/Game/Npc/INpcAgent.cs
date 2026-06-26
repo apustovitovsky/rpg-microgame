@@ -8,9 +8,6 @@ namespace Etheria.Game.Npc
     {
         string NpcId { get; }
 
-        // Legacy compatibility. Remove it after refactor.
-        string CharacterId => NpcId;
-
         Transform Transform { get; }
 
         bool IsBusy { get; }
