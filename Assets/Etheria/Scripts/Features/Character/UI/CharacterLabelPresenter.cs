@@ -1,6 +1,6 @@
 using System;
-
 using Etheria.Game.Character;
+using Etheria.Game.Npc;
 using Etheria.Game.Targeting;
 using UnityEngine;
 using VContainer.Unity;
@@ -54,17 +54,29 @@ namespace Etheria.Features.Character
                 return;
             }
 
-            if (target.Root
-                .GetComponentInParent(typeof(ICharacterIdentity)) is not ICharacterIdentity identity)
+            var characterId = GetCharacterId(target.Root);
+
+            if (string.IsNullOrWhiteSpace(characterId))
                 return;
 
             var displayName =
-                _characterNameProvider.GetDisplayName(identity.CharacterId);
+                _characterNameProvider.GetDisplayName(characterId);
 
             _currentView = _pool.Get(
                 target.UiAnchor,
                 displayName,
                 _camera);
+        }
+
+        private static string GetCharacterId(
+            Transform root)
+        {
+            if (root == null)
+                return string.Empty;
+
+            return root.GetComponentInParent(typeof(INpcAgent)) is INpcAgent npc
+                ? npc.NpcId
+                : string.Empty;
         }
 
         private void ReleaseCurrentView()

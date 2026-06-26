@@ -179,47 +179,8 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5728036602733946883}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2091347871947306111}
-    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8466383137401835470}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33536a6bbb02c764bab34a1b259f70ba, type: 3}
---- !u!1 &3472145620573168433 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
-    type: 3}
-  m_PrefabInstance: {fileID: 444250537815078523}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2091347871947306111
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3472145620573168433}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6180e0eb75be638498b3c04fa8662b4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterIdentity
-  _definition: {fileID: 11400000, guid: 9a4be434e197a2f41a26b3ac0424a30c, type: 2}
---- !u!114 &8466383137401835470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3472145620573168433}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e5767451af0522488343de988ed996a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Campaign::Etheria.Features.Campaign.NpcDialogueInteractable
 --- !u!4 &6363083013802257431 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6801699648399415916, guid: 33536a6bbb02c764bab34a1b259f70ba,

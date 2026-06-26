@@ -6,12 +6,11 @@ using Etheria.Game.World;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Etheria.Features.Character
+namespace Etheria.Npc
 {
-    public sealed class CharacterWorldPresenter :
+    public sealed class WorldNpcPresenter :
         IStartable,
-        IDisposable,
-        ICharacterInstanceRegistry
+        IDisposable
     {
         private readonly ICharacterWorldStateService _worldState;
         private readonly IWorldLocationRegistry _locations;
@@ -20,7 +19,7 @@ namespace Etheria.Features.Character
         private readonly Dictionary<string, GameObject> _instances =
             new(StringComparer.Ordinal);
 
-        public CharacterWorldPresenter(
+        public WorldNpcPresenter(
             ICharacterWorldStateService worldState,
             IWorldLocationRegistry locations,
             INpcSpawner spawner)
@@ -36,14 +35,6 @@ namespace Etheria.Features.Character
 
             foreach (var state in _worldState.States)
                 Synchronize(state);
-        }
-
-        public bool TryGetInstance(
-            string characterId,
-            out GameObject instance)
-        {
-            return _instances.TryGetValue(characterId, out instance) &&
-                   instance != null;
         }
 
         public void Dispose()

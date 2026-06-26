@@ -2,6 +2,7 @@ using Etheria.Core.DI;
 using Etheria.Game.Npc;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Etheria.Npc
 {
@@ -25,6 +26,8 @@ namespace Etheria.Npc
 
             builder.Register<NpcSpawner>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
+
+            builder.RegisterEntryPoint<WorldNpcPresenter>(Lifetime.Singleton);
         }
     }
 }

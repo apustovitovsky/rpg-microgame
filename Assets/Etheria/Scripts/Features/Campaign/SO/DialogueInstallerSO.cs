@@ -18,9 +18,6 @@ namespace Etheria.Features.Campaign
 
         public override void Install(IContainerBuilder builder)
         {
-            var dialogueInteractables =
-                SceneComponentLookup.FindAll<NpcDialogueInteractable>(builder);
-
             var questStageInteractables =
                 SceneComponentLookup.FindAll<QuestStageInteractable>(builder);
 
@@ -47,10 +44,6 @@ namespace Etheria.Features.Campaign
 
             builder.RegisterBuildCallback(container =>
             {
-                foreach (var interactable in dialogueInteractables)
-                {
-                    container.Inject(interactable);
-                }
                 foreach (var interactable in questStageInteractables)
                 {
                     container.Inject(interactable);

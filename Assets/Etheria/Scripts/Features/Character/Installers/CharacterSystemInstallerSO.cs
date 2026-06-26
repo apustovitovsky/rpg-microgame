@@ -19,12 +19,6 @@ namespace Etheria.Features.Character
         {
             builder.RegisterInstance(_syntyLookSettings);
 
-            builder.Register<CharacterSpawner>(
-                Lifetime.Singleton);
-
-            builder.Register<CharacterWorldPresenter>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
             builder.Register<CharacterNameProvider>(Lifetime.Singleton)
                 .As<ICharacterNameProvider>();
 

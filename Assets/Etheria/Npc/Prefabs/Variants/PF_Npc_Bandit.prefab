@@ -207,44 +207,5 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -4280288245151525369}
-    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6645740688309336879}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33536a6bbb02c764bab34a1b259f70ba, type: 3}
---- !u!1 &9103415324080110272 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
-    type: 3}
-  m_PrefabInstance: {fileID: 5210688443829137290}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &-4280288245151525369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9103415324080110272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6180e0eb75be638498b3c04fa8662b4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterIdentity
-  _definition: {fileID: 11400000, guid: 96d679b1374d6d448a9a8711a9a0651a, type: 2}
---- !u!114 &6645740688309336879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9103415324080110272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e5767451af0522488343de988ed996a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Campaign::Etheria.Features.Campaign.NpcDialogueInteractable
