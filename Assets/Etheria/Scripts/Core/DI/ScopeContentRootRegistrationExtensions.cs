@@ -9,7 +9,7 @@ namespace Etheria.Core.DI
             this ComponentRegistrationBuilder registration)
         {
             return registration.UnderTransform(
-                resolver => resolver.Resolve<ScopeContentRoot>().Transform);
+                resolver => resolver.Resolve<ScopeRoot>().Transform);
         }
     }
 }

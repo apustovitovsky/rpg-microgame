@@ -16,7 +16,7 @@ namespace Etheria.Core.DI
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterInstance(
-                new ScopeContentRoot(
+                new ScopeRoot(
                     _contentRoot != null
                         ? _contentRoot
                         : transform));

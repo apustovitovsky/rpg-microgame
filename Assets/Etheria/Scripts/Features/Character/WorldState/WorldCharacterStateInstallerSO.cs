@@ -1,5 +1,4 @@
 using Etheria.Core.DI;
-using Etheria.Game.Character;
 using UnityEngine;
 using VContainer;
 
@@ -23,9 +22,8 @@ namespace Etheria.Features.Character
             builder.RegisterInstance(_setup);
             builder.RegisterInstance(_catalog);
 
-            builder.Register<CharacterWorldStateService>(
-                    Lifetime.Singleton)
-                .As<ICharacterWorldStateService>();
+            builder.Register<CharacterWorldStateService>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
         }
     }
 }

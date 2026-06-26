@@ -29,6 +29,9 @@ namespace Etheria.Features.Campaign
         }
 
         private bool _isActive;
+
+        public event Action Completed;
+
         public bool IsActive => _isActive;
         public bool IsRunning => _runner.IsDialogueRunning;
 
@@ -87,6 +90,8 @@ namespace Etheria.Features.Campaign
             _participant = null;
             DefaultSpeakerId = null;
             _isActive = false;
+
+            Completed?.Invoke();
         }
     }
 }

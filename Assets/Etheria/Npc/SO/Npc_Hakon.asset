@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 235bcfbf14d8c1d43a3c8c43b853c7b5, type: 3}
+  m_Name: Npc_Hakon
+  m_EditorClassIdentifier: Etheria.Npc::Etheria.Npc.NpcDefinitionSO
+  <NpcId>k__BackingField: hakon
+  <Prefab>k__BackingField: {fileID: 7392174610888469709, guid: 5e6e4e93e93c11047b4e97547f34f00b,
+    type: 3}

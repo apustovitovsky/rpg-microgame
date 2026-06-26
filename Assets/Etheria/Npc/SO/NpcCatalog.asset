@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6293e8b3d4dba1449068e385f1fd648, type: 3}
+  m_Name: NpcCatalog
+  m_EditorClassIdentifier: Etheria.Npc::Etheria.Npc.NpcCatalogSO
+  _definitions:
+  - {fileID: 11400000, guid: ee52ac20c4458ca4ca5ee4f53da68508, type: 2}
+  - {fileID: 11400000, guid: 423a82072f23ba54ca1456baebedad4c, type: 2}
+  - {fileID: 11400000, guid: 294841c7fb5bb2e429107976d910e0d6, type: 2}
+  - {fileID: 11400000, guid: cb14490844249bc4e90da1769152db86, type: 2}
+  - {fileID: 11400000, guid: 94a9b05cfd8a67c48813be1fa2bf9044, type: 2}
+  - {fileID: 11400000, guid: e391b5cae7c213745bf74bd1e6c43aa1, type: 2}

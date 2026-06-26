@@ -1011,3 +1011,1036 @@ NavMeshAgent только строит путь между ближайшими 
 [1]: https://docs.unity3d.com/6000.1/Documentation/ScriptReference/AI.NavMeshAgent.html "Unity - Scripting API: NavMeshAgent"
 [2]: https://ataulien.github.io/Inside-Gothic/DailyRoutine/ "Daily Routine - Inside-Gothic"
 [3]: https://mdk.gothicarchive.org/docs/skripte/gothic_skripte.htm "GothicMDK | Scripts"
+
+План хороший. Я бы его **не менял по направлению**, но усилил бы в нескольких местах, чтобы потом не получить новую связанность вместо старой.
+
+Сейчас твой рефактор решает правильную проблему: текущая цепочка в проекте уже движется к world-state driven NPC presence, где `WorldCharacterSetup → CharacterWorldStateService → LocationId → WorldLocationRegistry → NpcSpawner → NPC instance`, а в README прямо указано, что следующий шаг — сделать это реактивным, чтобы NPC создавались/перемещались/удалялись по изменению character state. ([GitHub][1])
+
+Но твой новый план добавляет ещё один слой: **live NPC execution model**. Его стоит описать чуть строже.
+
+---
+
+# 1. Главное улучшение: `NpcAgent` не должен становиться “новым God MonoBehaviour”
+
+Твой пункт:
+
+```text
+Создать NpcAgent : MonoBehaviour, INpcAgent, ICharacterIdentity, IDialogueParticipant
+```
+
+правильный, но опасный.
+
+`NpcAgent` должен быть **composition root / facade для конкретного NPC instance**, а не мозгом, мотором, диалогом, патрулём и state machine одновременно.
+
+Я бы прямо зафиксировал:
+
+```csharp
+public sealed class NpcAgent : MonoBehaviour,
+    INpcAgent,
+    ICharacterIdentity,
+    IDialogueParticipant
+{
+    [SerializeField] private CharacterDefinitionSO _definition;
+    [SerializeField] private NavMeshAgent _navMeshAgent;
+
+    private NpcBrain _brain;
+    private INpcAgentRegistryWriter _registry;
+
+    public string CharacterId => _definition.Id;
+    public CharacterDefinitionSO Definition => _definition;
+    public Transform Transform => transform;
+
+    [Inject]
+    public void Construct(
+        NpcBrain brain,
+        INpcAgentRegistryWriter registry)
+    {
+        _brain = brain;
+        _registry = registry;
+    }
+
+    private void OnEnable()
+    {
+        _registry.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        _registry.Unregister(this);
+    }
+}
+```
+
+То есть `NpcAgent`:
+
+```text
+хранит identity;
+регистрирует себя;
+держит ссылку на prefab-level Unity-компоненты;
+передаёт команды в NpcBrain;
+не реализует travel/dialogue/patrol сам.
+```
+
+Это особенно важно, потому что сейчас у тебя уже есть отдельные зоны `Campaign`, `Quests`, `World`, `DialogueService`, `NpcDialogueInteractable` и README указывает на необходимость реактивного world-presenter слоя, а не на перенос всей логики в один MonoBehaviour. ([GitHub][1])
+
+---
+
+# 2. Добавить явное понятие “NPC task ownership”
+
+Сейчас в плане сказано:
+
+```text
+NpcBrain — владелец текущей задачи NPC.
+```
+
+Это надо расписать жёстче. `NpcBrain` должен быть единственной сущностью, которая решает:
+
+```text
+можно ли начать новую задачу;
+что отменять;
+что возобновлять;
+что делать после завершения;
+какая задача сейчас priority owner.
+```
+
+Я бы ввёл:
+
+```csharp
+public enum NpcTaskPriority
+{
+    Routine = 0,
+    TravelCommand = 10,
+    Dialogue = 50,
+    Combat = 100,
+    Despawn = 1000
+}
+```
+
+И API примерно такой:
+
+```csharp
+public sealed class NpcBrain
+{
+    private CancellationTokenSource? _currentTaskCts;
+    private NpcTaskPriority _currentPriority;
+
+    public UniTask RunTaskAsync(
+        INpcTask task,
+        NpcTaskPriority priority,
+        CancellationToken externalToken)
+    {
+        // если новая задача слабее текущей — reject
+        // если сильнее или равна — cancel текущую
+        // создать linked CTS
+        // await task.RunAsync(...)
+        // cleanup
+    }
+
+    public void CancelCurrent(NpcTaskCancelReason reason)
+    {
+        _currentTaskCts?.Cancel();
+    }
+}
+```
+
+Без этого у тебя быстро появятся гонки:
+
+```text
+send_character запустил бег;
+игрок сразу начал диалог;
+рутина решила пойти спать;
+Yarn дал ещё одну команду;
+NPC despawned;
+NavMeshAgent уничтожен.
+```
+
+Если нет одного владельца задач, эти события начнут драться.
+
+---
+
+# 3. Добавить `INpcTask`, а не только отдельные классы задач
+
+Сейчас:
+
+```text
+NpcTravelTask
+NpcDialogueTask
+NpcPatrolTask позже
+```
+
+Я бы добавил общий контракт:
+
+```csharp
+public interface INpcTask
+{
+    string DebugName { get; }
+    UniTask<NpcTaskResult> RunAsync(NpcTaskContext context, CancellationToken cancellationToken);
+}
+```
+
+Результат:
+
+```csharp
+public readonly struct NpcTaskResult
+{
+    public bool Completed { get; }
+    public bool Cancelled { get; }
+    public string? ResultLocationId { get; }
+    public NpcTaskCancelReason? CancelReason { get; }
+}
+```
+
+Тогда `NpcBrain` не знает деталей travel/dialogue/patrol. Он знает только:
+
+```text
+есть задача;
+есть приоритет;
+есть cancellation token;
+есть результат.
+```
+
+Это потом естественно расширится на:
+
+```text
+NpcRoutineTask
+NpcPatrolTask
+NpcFollowPlayerTask
+NpcGuidePlayerTask
+NpcFleeTask
+NpcCombatTask
+```
+
+---
+
+# 4. `CharacterTravelService` не должен сам исполнять NavMesh-логику
+
+Твой пункт:
+
+```text
+CharacterTravelService должен искать NPC через INpcAgentRegistry
+```
+
+Да. Но я бы уточнил границу ответственности.
+
+`CharacterTravelService` — это **campaign/world command service**, не исполнитель движения.
+
+Он должен:
+
+```text
+получить команду send_character;
+проверить, есть ли live NpcAgent;
+если есть — попросить agent/brain выполнить travel task;
+если нет — решить offscreen travel policy;
+после успешного результата обновить WorldCharacterState.
+```
+
+Он не должен:
+
+```text
+лезть в NavMeshAgent;
+искать Transform;
+ждать remainingDistance;
+крутить корутины/UniTask движения;
+знать детали route nodes.
+```
+
+Пример API:
+
+```csharp
+public sealed class CharacterTravelService
+{
+    public async UniTask<SendCharacterResult> SendCharacterAsync(
+        string characterId,
+        string destinationLocationId,
+        CancellationToken cancellationToken)
+    {
+        if (_npcRegistry.TryGet(characterId, out var agent))
+        {
+            var result = await agent.Brain.RunTaskAsync(
+                _taskFactory.CreateTravelTo(destinationLocationId),
+                NpcTaskPriority.TravelCommand,
+                cancellationToken);
+
+            if (result.Completed)
+                _characterWorldState.TryMove(characterId, destinationLocationId);
+
+            return SendCharacterResult.FromTask(result);
+        }
+
+        // offscreen policy
+        _characterWorldState.TryMove(characterId, destinationLocationId);
+        return SendCharacterResult.OffscreenMoved;
+    }
+}
+```
+
+Это хорошо ложится на текущую идею проекта: диалоги должны менять размещение персонажей через world-state/Yarn-команды без прямых ссылок на GameObject. В README уже показаны команды вида `<<move_character "hakon" "city_marketplace_03">>` и `<<set_character_alive "bandit_01" false>>` как желаемая граница между Yarn и миром. ([GitHub][1])
+
+---
+
+# 5. Добавить offscreen policy прямо в план
+
+Сейчас у тебя есть live-flow:
+
+```text
+send_character запускает NpcTravelTask.TravelToAsync
+после завершения route CharacterTravelService обновляет WorldCharacterState.LocationId
+```
+
+Но нужно явно решить, что происходит, если NPC не заспавнен.
+
+Я бы добавил:
+
+```text
+CharacterTravelService:
+  if NPC live:
+      run live travel task
+  else:
+      apply offscreen travel policy
+```
+
+Минимально:
+
+```csharp
+public enum OffscreenTravelMode
+{
+    InstantMove,
+    TimedMove,
+    RejectIfNotPresent
+}
+```
+
+Для MVP:
+
+```text
+send_character:
+  live NPC -> физически идёт
+  offscreen NPC -> мгновенно меняет LocationId или создаёт TravelState
+```
+
+Для бандита:
+
+```text
+если игрок видит бандита -> он бежит physically
+если сцена выгрузилась -> считаем, что он добежал/убежал
+```
+
+Без этого `send_character` будет вести себя нестабильно: иногда работает, иногда “NPC not found”.
+
+---
+
+# 6. Не удалять `NpcStateController` до появления replacement для “режима NPC”
+
+Ты пишешь:
+
+```text
+Удалить NpcStateController
+```
+
+Я бы был осторожнее.
+
+Если `NpcStateController` сейчас отвечает хотя бы за “NPC занят / разговаривает / патрулирует / disabled”, то перед удалением нужен replacement:
+
+```csharp
+public enum NpcBrainState
+{
+    Idle,
+    Routine,
+    Traveling,
+    Dialogue,
+    Combat,
+    Disabled
+}
+```
+
+И публичное read-only состояние:
+
+```csharp
+public NpcBrainState State { get; }
+public bool CanStartDialogue { get; }
+public bool CanReceiveTravelCommand { get; }
+```
+
+Иначе `NpcDialogueInteractable`, label UI, targeting, interaction prompt могут потерять способ понять, можно ли сейчас взаимодействовать с NPC.
+
+---
+
+# 7. `NpcDialogueTask` должен быть не “ждать завершения Yarn”, а lock-state
+
+План говорит:
+
+```text
+NpcDialogueTask — остановка, поворот к собеседнику, ожидание завершения диалога.
+```
+
+Я бы добавил, что dialogue task должен захватывать NPC lock:
+
+```text
+cancel current routine/travel task;
+stop locomotion;
+disable ordinary movement;
+turn to speaker;
+mark NPC as InDialogue;
+wait until dialogue session ended;
+restore allowed state;
+return control to brain.
+```
+
+Пример:
+
+```csharp
+public sealed class NpcDialogueTask : INpcTask
+{
+    public async UniTask<NpcTaskResult> RunAsync(
+        NpcTaskContext context,
+        CancellationToken ct)
+    {
+        context.Locomotion.Stop();
+
+        using var dialogueLock = context.AgentLocks.Acquire(NpcLockKind.Dialogue);
+
+        await context.Facing.TurnToAsync(context.DialogueTarget, ct);
+
+        await context.DialogueSession.WaitUntilFinishedAsync(ct);
+
+        return NpcTaskResult.Completed();
+    }
+}
+```
+
+Важно: если диалог отменён, NPC всё равно должен выйти из dialogue lock в `finally`.
+
+---
+
+# 8. Добавить обязательные `try/finally` правила для UniTask
+
+При переходе на cancellable `UniTask` главный риск — оставить NPC в полусостоянии:
+
+```text
+NavMeshAgent stopped = true;
+точка activity занята;
+диалоговый lock не снят;
+анимация work всё ещё играет;
+registry содержит destroyed agent;
+CTS не disposed.
+```
+
+В план стоит добавить правило:
+
+```text
+Каждая задача обязана освобождать свои side effects в finally.
+```
+
+Пример для travel:
+
+```csharp
+public async UniTask<NpcTaskResult> TravelToAsync(
+    string locationId,
+    CancellationToken ct)
+{
+    try
+    {
+        _locomotion.SetDestination(locationId);
+
+        await UniTask.WaitUntil(
+            () => _locomotion.HasArrived,
+            cancellationToken: ct);
+
+        return NpcTaskResult.Completed(locationId);
+    }
+    catch (OperationCanceledException)
+    {
+        return NpcTaskResult.Cancelled();
+    }
+    finally
+    {
+        _locomotion.Stop();
+    }
+}
+```
+
+Но аккуратно: `finally { Stop(); }` не всегда должен обнулять всё. Для route/patrol это нормально, для combat/flee может быть иначе. Поэтому лучше иметь:
+
+```csharp
+task.CleanupAsync(reason)
+```
+
+или строго документировать cleanup каждой задачи.
+
+---
+
+# 9. Уточнить VContainer prefab scope
+
+Самый важный технический момент: **как именно создаётся NPC prefab scope**.
+
+В VContainer есть риск сделать так, что scene scope зарегистрировал один `NpcBrain`, и все NPC разделяют его. Это будет катастрофа.
+
+Нужно явно зафиксировать:
+
+```text
+Каждый NPC instance получает собственный LifetimeScope.
+NpcBrain / NpcLocomotion / NpcTravelTask / NpcDialogueTask — scoped per NPC instance.
+NpcAgentRegistry / CharacterTravelService — scoped per scene.
+```
+
+Форма:
+
+```text
+SceneLifetimeScope
+  Register<NpcAgentRegistry>(Scoped)
+  Register<CharacterTravelService>(Scoped)
+
+NpcLifetimeScope on prefab
+  RegisterComponent<NpcAgent>()
+  RegisterComponent<NavMeshAgent>()
+  Register<NpcBrain>(Scoped)
+  Register<NpcLocomotion>(Scoped)
+  Register<NpcTravelTask>(Scoped)
+  Register<NpcDialogueTask>(Scoped)
+```
+
+Но я бы улучшил:
+
+```text
+NpcTravelTask и NpcDialogueTask лучше создавать factory/transient,
+а не scoped singleton внутри NPC.
+```
+
+Почему: task обычно имеет параметры.
+
+Например:
+
+```text
+TravelToTask(destinationLocationId, options)
+DialogueTask(speaker, sessionId)
+RouteTask(routeId)
+```
+
+Если они scoped plain-классы, ты начнёшь передавать параметры методами и хранить временное состояние внутри shared task instance. Это может привести к повторному запуску одной и той же task instance.
+
+Лучше:
+
+```csharp
+public interface INpcTaskFactory
+{
+    INpcTask CreateTravelTo(string locationId, TravelOptions options);
+    INpcTask CreateTravelRoute(string routeId, TravelOptions options);
+    INpcTask CreateDialogue(IDialogueSession session, Transform speaker);
+}
+```
+
+А scoped оставить сервисы:
+
+```text
+NpcBrain
+NpcLocomotion
+NpcFacing
+NpcAnimation
+NpcPerception позже
+```
+
+---
+
+# 10. Я бы заменил `NpcTravelTask` на `NpcTravelTaskFactory + task instances`
+
+В твоём плане:
+
+```text
+NpcTravelTask — TravelToAsync и TravelRouteAsync
+```
+
+Можно, но архитектурно лучше:
+
+```text
+NpcTravelTaskFactory
+  CreateTravelTo(...)
+  CreateRoute(...)
+
+TravelToLocationTask : INpcTask
+TravelRouteTask : INpcTask
+```
+
+Почему лучше:
+
+```text
+каждая задача immutable;
+легче логировать DebugName;
+легче отменять;
+легче тестировать;
+легче хранить result;
+легче добавить priority и reason.
+```
+
+Пример:
+
+```csharp
+public sealed class TravelToLocationTask : INpcTask
+{
+    private readonly string _destinationLocationId;
+    private readonly TravelOptions _options;
+
+    public string DebugName => $"TravelTo({_destinationLocationId})";
+
+    public async UniTask<NpcTaskResult> RunAsync(
+        NpcTaskContext context,
+        CancellationToken ct)
+    {
+        var destination = context.LocationRegistry.Get(_destinationLocationId);
+        await context.Locomotion.MoveToAsync(destination.Position, _options, ct);
+        return NpcTaskResult.Completed(_destinationLocationId);
+    }
+}
+```
+
+---
+
+# 11. `NpcLocomotion` должен работать не с `LocationId`, а с физической целью
+
+Я бы разделил:
+
+```text
+TravelTask:
+  знает LocationId / RouteId / WorldLocationRegistry
+
+Locomotion:
+  знает Vector3 / Transform / NavMeshAgent
+```
+
+То есть не так:
+
+```csharp
+_locomotion.MoveToLocation("city_gate_01");
+```
+
+А так:
+
+```csharp
+var anchor = _locationRegistry.Get(locationId);
+await _locomotion.MoveToAsync(anchor.Position, options, ct);
+```
+
+`NpcLocomotion` — низкий уровень. Он не должен знать campaign/world IDs.
+
+---
+
+# 12. Registry должен быть устойчив к duplicate registration
+
+`NpcAgentRegistry` обязательно должен проверять:
+
+```text
+один CharacterId — один live NpcAgent;
+при duplicate либо error, либо replace policy;
+unregister должен удалять только тот же instance;
+destroyed/null agents не должны оставаться.
+```
+
+Пример:
+
+```csharp
+public void Register(INpcAgent agent)
+{
+    var id = agent.CharacterId;
+
+    if (_agents.TryGetValue(id, out var existing) && !ReferenceEquals(existing, agent))
+    {
+        Debug.LogError($"Duplicate NPC agent for CharacterId '{id}'.");
+        return;
+    }
+
+    _agents[id] = agent;
+}
+
+public void Unregister(INpcAgent agent)
+{
+    var id = agent.CharacterId;
+
+    if (_agents.TryGetValue(id, out var existing) && ReferenceEquals(existing, agent))
+        _agents.Remove(id);
+}
+```
+
+Это важно, потому что текущий README проекта прямо называет проблему возможных дубликатов NPC при Play Mode check: “появились все пять NPC; нет дубликатов; работают AI, имена, таргетинг и диалоги”. ([GitHub][1])
+
+---
+
+# 13. Сохрани старые интерфейсы для UI и dialogue, но убери concrete dependency
+
+Твой пункт:
+
+```text
+После удаления CharacterIdentity с NPC prefab NpcDialogueInteractable и label UI продолжают работать через ICharacterIdentity.
+```
+
+Отличный. Я бы добавил правило:
+
+```text
+Ни UI label, ни DialogueInteractable, ни targeting не должны знать NpcAgent.
+Они должны знать ICharacterIdentity / IDialogueParticipant / IInteractable.
+```
+
+`NpcAgent` может реализовывать эти интерфейсы, но внешние системы не должны кастовать к `NpcAgent`.
+
+Иначе ты снова создашь связанность:
+
+```text
+Dialogue -> NpcAgent -> Brain -> Tasks -> WorldState
+```
+
+Лучше:
+
+```text
+DialogueInteractable -> IDialogueParticipant
+LabelUI -> ICharacterIdentity
+TravelService -> INpcAgentRegistry -> INpcAgent
+```
+
+---
+
+# 14. Добавить migration strategy: compatibility shim
+
+Я бы не удалял старые компоненты одним коммитом. Лучше сделать 2-фазно.
+
+## Фаза 1: Adapter layer
+
+```text
+NpcAgent появляется на prefab.
+CharacterIdentity пока остаётся.
+NpcAgent либо читает тот же CharacterDefinitionSO, либо сверяет с CharacterIdentity.
+NpcDialogueInteractable сначала пробует ICharacterIdentity.
+CharacterTravelService переходит на INpcAgentRegistry.
+Старый NpcTravelController ещё не удалён.
+```
+
+## Фаза 2: Removal
+
+```text
+Удалить CharacterIdentity с NPC prefab.
+Удалить NpcMotor/NpcTravelController/NpcStateController.
+NpcPatrol выключить или оставить legacy-only.
+```
+
+Так ты избежишь “сломалось всё сразу”.
+
+---
+
+# 15. Добавить explicit cancellation cases в Test Plan
+
+Твой test plan хороший, но сейчас он проверяет happy path. Для UniTask-рефактора важнее проверить отмены.
+
+Добавь:
+
+```text
+- Если NPC бежит по send_character и игрок начинает диалог, travel task отменяется, NPC останавливается.
+- После завершения диалога NPC не продолжает старый route самопроизвольно, если команда была одноразовой.
+- Если NPC уничтожен/despawned во время TravelToAsync, task завершается без exception spam.
+- Если destination LocationId отсутствует, команда возвращает failure и не меняет WorldCharacterState.
+- Если route содержит invalid node, task fail'ится управляемо.
+- Если два send_character приходят подряд, второй отменяет первый или rejected по policy.
+- Если диалог отменён/прерван, dialogue lock снимается.
+```
+
+---
+
+# 16. Добавить результат команд, а не `fire-and-forget`
+
+Очень важный пункт.
+
+Yarn-команды часто tempting делать как:
+
+```csharp
+public void SendCharacter(string characterId, string locationId)
+{
+    _travelService.SendCharacterAsync(...).Forget();
+}
+```
+
+Но тогда ошибки пропадают.
+
+Я бы различил:
+
+```text
+fire-and-forget world command
+awaitable command
+```
+
+Для Yarn можно оставить fire-and-forget, но с логированием:
+
+```csharp
+public void SendCharacter(string characterId, string locationId)
+{
+    _travelService.SendCharacterAsync(characterId, locationId, CancellationToken.None)
+        .Forget(ex => Debug.LogException(ex));
+}
+```
+
+Но внутри сервиса обязательно возвращать результат:
+
+```csharp
+public enum SendCharacterStatus
+{
+    Completed,
+    Started,
+    OffscreenResolved,
+    AgentNotFound,
+    InvalidLocation,
+    Cancelled,
+    Failed
+}
+```
+
+Для `send_character_route` особенно полезно знать, завершился ли route. Если потом тебе понадобится Yarn-команда, которая ждёт NPC, ты сможешь сделать:
+
+```yarn
+<<await_send_character_route "hakon" "route_to_mine">>
+```
+
+Даже если сейчас не используешь.
+
+---
+
+# 17. Я бы добавил `CharacterCommandService` над `CharacterTravelService`
+
+Сейчас ты выделяешь:
+
+```text
+CharacterTravelService
+```
+
+Но скоро будут команды:
+
+```text
+send_character
+send_character_route
+set_character_present
+start_dialogue_lock
+start_routine_override
+stop_character
+face_character
+play_animation
+```
+
+Чтобы `CharacterTravelService` не раздулся, можно ввести фасад:
+
+```csharp
+public interface ICharacterCommandService
+{
+    UniTask<CommandResult> SendToLocationAsync(...);
+    UniTask<CommandResult> SendRouteAsync(...);
+    UniTask<CommandResult> StopAsync(...);
+}
+```
+
+А внутри:
+
+```text
+ICharacterCommandService
+  uses INpcAgentRegistry
+  uses ICharacterWorldStateService
+  uses IWorldLocationRegistry
+  uses CharacterTravelService / task factory
+```
+
+Но это можно отложить. Просто не превращай `CharacterTravelService` в “все команды персонажа”.
+
+---
+
+# 18. Уточнить, что `WorldCharacterState.LocationId` обновляется только после semantic completion
+
+Пункт:
+
+```text
+После завершения route CharacterTravelService обновляет WorldCharacterState.LocationId.
+```
+
+Хороший. Я бы расширил:
+
+```text
+TravelToAsync:
+  update LocationId after arrival to destination.
+
+TravelRouteAsync:
+  update LocationId either:
+    after every semantic route node,
+    or only after final node,
+  but choose policy explicitly.
+```
+
+Для патруля, например, не всегда надо писать `LocationId` на каждом узле. Для квестового побега — надо после финальной точки. Для сохранения во время route — лучше иметь отдельный `CharacterTravelState`.
+
+Минимально сейчас:
+
+```text
+send_character_route обновляет LocationId только после финального route node.
+```
+
+---
+
+# 19. Добавить `IsBusy` / dialogue gating
+
+После перехода на `NpcBrain` нужно решить, когда NPC доступен для диалога.
+
+```csharp
+public interface IDialogueParticipant
+{
+    string CharacterId { get; }
+    bool CanStartDialogue { get; }
+    UniTask BeginDialogueAsync(IDialogueSession session, CancellationToken ct);
+}
+```
+
+Например:
+
+```text
+TravelCommand обычный -> можно остановить и начать диалог.
+FleeTask -> нельзя начать диалог.
+CombatTask -> нельзя.
+Routine work/sit/sleep -> можно.
+GuidePlayerState -> можно, но особая реплика.
+```
+
+Иначе игрок сможет остановить бандита во время побега обычным talk interaction, если это не предусмотрено.
+
+---
+
+# 20. Добавить минимальный class layout в план
+
+Я бы переписал shape так:
+
+```text
+NPC prefab MonoBehaviours:
+  NpcAgent
+  NavMeshAgent
+  Animator
+  NpcLifetimeScope
+  NpcDialogueInteractable
+  Label/Target components if needed
+
+NPC scoped services:
+  NpcBrain
+  NpcLocomotion
+  NpcFacing
+  NpcAnimationDriver
+  NpcTaskFactory
+
+Task instances:
+  TravelToLocationTask
+  TravelRouteTask
+  DialogueTask
+  later: PatrolTask, RoutineTask, FollowPlayerTask
+
+Scene services:
+  NpcAgentRegistry
+  CharacterTravelService
+  CharacterWorldPresenter
+  WorldLocationRegistry
+  CharacterWorldStateService
+```
+
+Это лучше, чем делать `NpcTravelTask` и `NpcDialogueTask` scoped-сервисами с внутренним mutable state.
+
+---
+
+# Улучшенная версия твоего плана
+
+Я бы сформулировал так:
+
+```text
+Summary
+Переводим live NPC-логику от набора MonoBehaviour к модели:
+один NpcAgent как Unity-facing facade на prefab,
+per-NPC scoped plain services через VContainer,
+и cancellable UniTask-based task execution через NpcBrain.
+
+NpcAgent
+- MonoBehaviour на NPC prefab.
+- Реализует INpcAgent, ICharacterIdentity, IDialogueParticipant.
+- Хранит CharacterDefinitionSO.
+- Регистрируется в INpcAgentRegistryWriter в OnEnable/OnDisable.
+- Не содержит travel/dialogue/patrol логики.
+
+Per-NPC scope
+- NpcBrain — единственный владелец текущей NPC task.
+- NpcLocomotion — wrapper над NavMeshAgent.
+- NpcFacing — поворот к цели.
+- NpcAnimationDriver — позже/опционально.
+- NpcTaskFactory — создаёт immutable task instances.
+
+Task model
+- INpcTask.RunAsync(context, cancellationToken).
+- TravelToLocationTask.
+- TravelRouteTask.
+- DialogueTask.
+- позже PatrolTask/RoutineTask.
+- Каждая task обязана cleanup через try/finally.
+
+Scene scope
+- NpcAgentRegistry.
+- CharacterTravelService.
+- CharacterWorldStateService.
+- WorldLocationRegistry.
+- CharacterWorldPresenter.
+
+Command behavior
+- send_character:
+    live NPC -> run TravelToLocationTask through NpcBrain.
+    offscreen NPC -> apply offscreen policy.
+- send_character_route:
+    live NPC -> run TravelRouteTask.
+    offscreen NPC -> instant/projected route completion.
+- dialogue:
+    cancels or suspends current low-priority task.
+    runs DialogueTask with higher priority.
+- after successful travel:
+    CharacterTravelService updates WorldCharacterState.LocationId.
+
+Cancellation rules
+- Dialogue cancels routine/travel unless current task is non-interruptible.
+- Despawn cancels all tasks.
+- New travel command cancels previous travel command.
+- Combat/flee later gets higher priority than dialogue.
+
+Migration
+- Add NpcAgent while old components still exist.
+- Move CharacterTravelService to registry.
+- Move dialogue/label to ICharacterIdentity/IDialogueParticipant.
+- Remove CharacterIdentity from prefab.
+- Remove NpcMotor/NpcTravelController/NpcStateController.
+- Leave NpcPatrol legacy until PatrolTask exists.
+```
+
+---
+
+# Самое важное изменение к твоему плану
+
+Я бы изменил это:
+
+```text
+NpcTravelTask — TravelToAsync и TravelRouteAsync
+NpcDialogueTask — остановка, поворот, ожидание
+```
+
+на это:
+
+```text
+NpcTaskFactory создаёт одноразовые immutable tasks:
+  TravelToLocationTask
+  TravelRouteTask
+  DialogueTask
+```
+
+А это:
+
+```text
+NpcBrain — владелец текущей задачи NPC
+```
+
+расширил бы до:
+
+```text
+NpcBrain — единственная точка запуска, отмены, приоритизации и cleanup NPC-задач.
+```
+
+Вот это будет архитектурно прочнее. Тогда рефактор не просто “перепишет MonoBehaviour на UniTask”, а создаст нормальную основу для следующих слоёв: routine, patrol, guide player, flee, combat interrupt, sleep/work/sit activity points.
+
+[1]: https://github.com/apustovitovsky/rpg-microgame/tree/main/Assets/Etheria/Scripts/Features/Campaign "rpg-microgame/Assets/Etheria/Scripts/Features/Campaign at main · apustovitovsky/rpg-microgame · GitHub"
+

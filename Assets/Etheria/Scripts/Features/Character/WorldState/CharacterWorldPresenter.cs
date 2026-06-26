@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Etheria.Game.Character;
+using Etheria.Game.Npc;
 using Etheria.Game.World;
 using UnityEngine;
 using VContainer.Unity;
@@ -14,7 +15,7 @@ namespace Etheria.Features.Character
     {
         private readonly ICharacterWorldStateService _worldState;
         private readonly IWorldLocationRegistry _locations;
-        private readonly CharacterSpawner _spawner;
+        private readonly INpcSpawner _spawner;
 
         private readonly Dictionary<string, GameObject> _instances =
             new(StringComparer.Ordinal);
@@ -22,7 +23,7 @@ namespace Etheria.Features.Character
         public CharacterWorldPresenter(
             ICharacterWorldStateService worldState,
             IWorldLocationRegistry locations,
-            CharacterSpawner spawner)
+            INpcSpawner spawner)
         {
             _worldState = worldState;
             _locations = locations;
@@ -75,15 +76,11 @@ namespace Etheria.Features.Character
                     out var instance) &&
                 instance != null)
             {
-                instance.transform.SetPositionAndRotation(
-                    location.Transform.position,
-                    location.Transform.rotation);
-
                 return;
             }
 
             _instances[state.CharacterId] =
-                _spawner.Spawn(state.CharacterId, location);
+                _spawner.Spawn(state.CharacterId, location.transform);
         }
 
         private void Despawn(string characterId)

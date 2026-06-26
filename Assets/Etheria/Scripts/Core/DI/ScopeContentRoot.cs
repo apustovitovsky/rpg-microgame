@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace Etheria.Core.DI
 {
-    public sealed class ScopeContentRoot
+    public sealed class ScopeRoot
     {
-        public ScopeContentRoot(Transform transform)
+        public ScopeRoot(Transform transform)
         {
             Transform = transform;
         }

@@ -1,0 +1,268 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &2625927296080586329
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1510666091371510809, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: _visual
+      value: 
+      objectReference: {fileID: 7650912521439075096}
+    - target: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_Npc_Maiev
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724014271458141763, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724014271458141763, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724014271458141763, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724014271458141763, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724014271458141763, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724014271458141763, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724014271458141763, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724014271458141763, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724014271458141763, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724014271458141763, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5230240530773854508, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: _definition
+      value: 
+      objectReference: {fileID: 11400000, guid: 94a9b05cfd8a67c48813be1fa2bf9044,
+        type: 2}
+    - target: {fileID: 7832578645720192286, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      propertyPath: _displayName
+      value: Maiev
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 5286342960517006844, guid: 33536a6bbb02c764bab34a1b259f70ba, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6801699648399415916, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1640644312673166000}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -3570623170557051903}
+    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8524255366941208557}
+    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9124615073555084657}
+  m_SourcePrefab: {fileID: 100100000, guid: 33536a6bbb02c764bab34a1b259f70ba, type: 3}
+--- !u!1 &1329946723156357907 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 2625927296080586329}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-3570623170557051903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329946723156357907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6180e0eb75be638498b3c04fa8662b4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Features.Character::Etheria.Features.Character.CharacterIdentity
+  _definition: {fileID: 11400000, guid: 34a0b502e646e2b459184b81ff9b1360, type: 2}
+--- !u!114 &8524255366941208557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329946723156357907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e94bf6dc5ac3b5f42a4a04d9ab257d29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Character.NpcPatrol
+  _motor: {fileID: 3102158175636455178}
+  _points: []
+  _waitDuration: 1
+--- !u!114 &9124615073555084657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329946723156357907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7c7aea92ebaf564985bf26773bc6f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Character.NpcStateController
+  _travel: {fileID: 0}
+  _motor: {fileID: 3102158175636455178}
+  _patrol: {fileID: 8524255366941208557}
+  _rotationSpeed: 360
+--- !u!114 &3102158175636455178 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1115835639749728595, guid: 33536a6bbb02c764bab34a1b259f70ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 2625927296080586329}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329946723156357907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74dfde15efcda3b4086f39e44da8007e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Character.NpcMotor
+--- !u!4 &8797033369249365045 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6801699648399415916, guid: 33536a6bbb02c764bab34a1b259f70ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 2625927296080586329}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6556287757856055916
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8797033369249365045}
+    m_Modifications:
+    - target: {fileID: 3015690145316773228, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: _preset
+      value: 
+      objectReference: {fileID: 11400000, guid: 26b072ab583e58b4d86e7ce908bb0258,
+        type: 2}
+    - target: {fileID: 3517624241429576052, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: _color
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492176811010195676, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492176811010195676, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492176811010195676, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492176811010195676, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492176811010195676, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492176811010195676, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492176811010195676, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492176811010195676, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492176811010195676, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492176811010195676, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6008508126832906005, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+        type: 3}
+      propertyPath: m_Name
+      value: CharacterVisual_Shieldmaiden
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1d23fe0a0ce521d4193c77ef6ec8006b, type: 3}
+--- !u!4 &1640644312673166000 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5492176811010195676, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+    type: 3}
+  m_PrefabInstance: {fileID: 6556287757856055916}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7650912521439075096 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3517624241429576052, guid: 1d23fe0a0ce521d4193c77ef6ec8006b,
+    type: 3}
+  m_PrefabInstance: {fileID: 6556287757856055916}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6659cc09424a94d90f4d002ec7eb2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Character.CharacterVisual

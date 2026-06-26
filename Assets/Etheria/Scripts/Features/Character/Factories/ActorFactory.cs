@@ -8,11 +8,11 @@ namespace Etheria.Features.Character
     public sealed class ActorFactory : IActorFactory
     {
         private readonly LifetimeScope _parentScope;
-        private readonly ScopeContentRoot _scopeContentRoot;
+        private readonly ScopeRoot _scopeContentRoot;
 
         public ActorFactory(
             LifetimeScope parentScope,
-            ScopeContentRoot scopeContentRoot)
+            ScopeRoot scopeContentRoot)
         {
             _parentScope = parentScope;
             _scopeContentRoot = scopeContentRoot;

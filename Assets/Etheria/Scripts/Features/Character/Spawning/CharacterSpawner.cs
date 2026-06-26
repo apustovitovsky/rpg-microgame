@@ -11,12 +11,12 @@ namespace Etheria.Features.Character
     {
         private readonly CharacterCatalogSO _catalog;
         private readonly IObjectResolver _resolver;
-        private readonly ScopeContentRoot _scopeContentRoot;
+        private readonly ScopeRoot _scopeContentRoot;
 
         public CharacterSpawner(
             CharacterCatalogSO catalog,
             IObjectResolver resolver,
-            ScopeContentRoot scopeContentRoot)
+            ScopeRoot scopeContentRoot)
         {
             _catalog = catalog;
             _resolver = resolver;
