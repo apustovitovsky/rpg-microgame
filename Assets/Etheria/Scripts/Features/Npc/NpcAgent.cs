@@ -229,8 +229,7 @@ namespace Etheria.Npc
                 task.Status == NpcTaskStatus.Completed);
         }
 
-        private async UniTask WaitTaskAsync(
-            INpcTask task)
+        private async UniTask WaitTaskAsync(INpcTask task)
         {
             await UniTask.WaitUntil(
                 () => task.Status == NpcTaskStatus.Completed ||

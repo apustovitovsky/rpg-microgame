@@ -993,3 +993,7 @@ RouteRegistry
 ```
 
 Моя рекомендация: **не делай `WorldLocation` маршрутом вообще**. Сделай `WorldLocation` входом в planner, а planner пусть возвращает `RoutePlan` из waypoint’ов. Тогда NPC task system останется чистой, movement будет тестируемым, а маршруты можно будет нормально авторить, расширять и дебажить.
+
+[1]: https://github.com/apustovitovsky/rpg-microgame/blob/main/Assets/Etheria/Scripts/Features/Character/Npc/NpcTravelController.cs "rpg-microgame/Assets/Etheria/Scripts/Features/Character/Npc/NpcTravelController.cs at main · apustovitovsky/rpg-microgame · GitHub"
+[2]: https://github.com/apustovitovsky/rpg-microgame/blob/main/Assets/Etheria/Scripts/Features/Character/Npc/NpcStateController.cs "rpg-microgame/Assets/Etheria/Scripts/Features/Character/Npc/NpcStateController.cs at main · apustovitovsky/rpg-microgame · GitHub"
+[3]: https://github.com/apustovitovsky/rpg-microgame/blob/main/Assets/Etheria/Scripts/Features/Character/Npc/NpcMotor.cs "rpg-microgame/Assets/Etheria/Scripts/Features/Character/Npc/NpcMotor.cs at main · apustovitovsky/rpg-microgame · GitHub"
