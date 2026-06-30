@@ -8,7 +8,9 @@
         "Unity.InputSystem",
         "Etheria.InputActions",
         "Etheria.Core",
-        "Etheria.Game"
+        "Etheria.Game",
+        "Unity.TextMeshPro",
+        "Unity.Behavior"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

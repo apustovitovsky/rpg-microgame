@@ -5,6 +5,6 @@ namespace Etheria.Game.UI
     public sealed class CharacterUiPoolHost : MonoBehaviour
     {
         [field: SerializeField]
-        public CharacterLabelPoolRoots Labels { get; private set; }
+        public NpcNameLabelPoolRoots Labels { get; private set; }
     }
 }

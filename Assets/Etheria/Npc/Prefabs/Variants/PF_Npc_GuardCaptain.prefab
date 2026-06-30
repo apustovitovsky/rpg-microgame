@@ -192,7 +192,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3444503774008902823}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4732388962524133707}
   m_SourcePrefab: {fileID: 100100000, guid: 33536a6bbb02c764bab34a1b259f70ba, type: 3}
 --- !u!4 &2992027734012125528 stripped
 Transform:
@@ -200,3 +204,39 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8638375312739531572}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4748039879204056702 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3892730247540331850, guid: 33536a6bbb02c764bab34a1b259f70ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 8638375312739531572}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4732388962524133707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4748039879204056702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
+  m_Graph: {fileID: 8569874802486822732, guid: 91d75e7f3aa533c49be4fe2723283a23, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 7199645688387600745
+  m_OriginalGraph: {fileID: 0}
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 7199645688387600745
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 4748039879204056702}

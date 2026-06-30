@@ -18,6 +18,7 @@ namespace Etheria.Features.Character
             public string LocationId;
             public bool IsAlive;
             public bool IsPresent;
+            public string AnchorKey;
         }
 
         public CharacterWorldStateService(
@@ -38,7 +39,8 @@ namespace Etheria.Features.Character
                         CharacterId = characterId,
                         LocationId = entry.LocationId,
                         IsAlive = entry.IsAlive,
-                        IsPresent = entry.IsPresent
+                        IsPresent = entry.IsPresent,
+                        AnchorKey = entry.AnchorKey
                     }))
                 {
                     throw new InvalidOperationException(
@@ -126,6 +128,7 @@ namespace Etheria.Features.Character
             return new WorldCharacterState(
                 state.CharacterId,
                 state.LocationId,
+                state.AnchorKey,
                 state.IsAlive,
                 state.IsPresent);
         }

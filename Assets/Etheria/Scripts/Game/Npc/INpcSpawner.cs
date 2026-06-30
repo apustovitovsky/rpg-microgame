@@ -4,8 +4,9 @@ namespace Etheria.Game.Npc
 {
     public interface INpcSpawner
     {
-        public GameObject Spawn(
+        GameObject Spawn(
             string npcId,
-            Transform transform);
+            Vector3 position,
+            Quaternion rotation);
     }
 }

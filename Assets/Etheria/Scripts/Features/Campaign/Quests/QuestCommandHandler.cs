@@ -1,5 +1,7 @@
 using System;
+using Etheria.Game.Npc;
 using Etheria.Game.Quests;
+using UnityEngine;
 using VContainer.Unity;
 using Yarn.Unity;
 
@@ -9,13 +11,19 @@ namespace Etheria.Features.Campaign
     {
         private readonly DialogueRunner _runner;
         private readonly IQuestService _questService;
+        private readonly ICampaignQuestDefinitionProvider _definitions;
+        private readonly INpcTravelService _travel;
 
         public QuestCommandHandler(
             DialogueRunner runner,
-            IQuestService questService)
+            IQuestService questService,
+            ICampaignQuestDefinitionProvider definitions,
+            INpcTravelService travel)
         {
             _runner = runner;
             _questService = questService;
+            _definitions = definitions;
+            _travel = travel;
         }
 
         public void Start()
@@ -55,6 +63,10 @@ namespace Etheria.Features.Campaign
             _runner.AddFunction<string, bool>(
                 "quest_is_failed",
                 IsQuestFailed);
+
+            _runner.AddCommandHandler<string, string>(
+                "run_quest_travel",
+                OnRunQuestTravel);
         }
 
         private void OnStartQuest(string questId)
@@ -102,6 +114,27 @@ namespace Etheria.Features.Campaign
             return GetStatus(questId) == QuestStatus.Failed;
         }
 
+        private void OnRunQuestTravel(
+            string questId,
+            string instructionId)
+        {
+            if (!_definitions.TryGetTravelInstruction(
+                    questId,
+                    instructionId,
+                    out var instruction))
+            {
+                Debug.LogWarning(
+                    $"Quest travel instruction '{questId}/{instructionId}' was not found.");
+                return;
+            }
+
+            _travel.TrySendToAnchor(
+                instruction.NpcId,
+                instruction.LocationId,
+                instruction.AnchorKey,
+                instruction.QueryFilter);
+        }
+
         private QuestStatus GetStatus(string questId)
         {
             return _questService.GetState(questId).Status;
@@ -119,6 +152,7 @@ namespace Etheria.Features.Campaign
             _runner.RemoveFunction("quest_is_active");
             _runner.RemoveFunction("quest_is_completed");
             _runner.RemoveFunction("quest_is_failed");
+            _runner.RemoveCommandHandler("run_quest_travel");
         }
     }
 }

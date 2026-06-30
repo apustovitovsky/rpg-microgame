@@ -444,6 +444,62 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 86533869}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &95235905
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 95235907}
+  - component: {fileID: 95235906}
+  m_Layer: 0
+  m_Name: wp_square_corner_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &95235906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 95235905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_square_corner_04
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 1950380588}
+    _flags: 0
+  - _waypoint: {fileID: 203561894}
+    _flags: 0
+  - _waypoint: {fileID: 1886716058}
+    _flags: 0
+  - _waypoint: {fileID: 1618011458}
+    _flags: 0
+--- !u!4 &95235907
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 95235905}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -10.9, y: 0, z: -8.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1605708846}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &105909648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -741,6 +797,60 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd17687759887a0438ee021e51abc9d9, type: 3}
+--- !u!1 &203561893
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 203561895}
+  - component: {fileID: 203561894}
+  m_Layer: 0
+  m_Name: wp_square_corner_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &203561894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203561893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_square_corner_03
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 279499815}
+    _flags: 0
+  - _waypoint: {fileID: 95235906}
+    _flags: 0
+  - _waypoint: {fileID: 1737372631}
+    _flags: 0
+--- !u!4 &203561895
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203561893}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -10.9, y: 0, z: 8.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1605708846}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &218750089 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2141676431450117668, guid: cd17687759887a0438ee021e51abc9d9,
@@ -753,7 +863,7 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 119948940}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &263783785
+--- !u!1 &279499814
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -761,43 +871,50 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 263783786}
-  - component: {fileID: 263783787}
+  - component: {fileID: 279499816}
+  - component: {fileID: 279499815}
   m_Layer: 0
-  m_Name: city_marketplace_01
+  m_Name: wp_spawn_tavern_wall_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &263783786
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 263783785}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.70710707, z: -0, w: 0.70710653}
-  m_LocalPosition: {x: -1.5899997, y: -1.75, z: -0.039999485}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 398308800}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &263783787
+--- !u!114 &279499815
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 263783785}
+  m_GameObject: {fileID: 279499814}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: city_marketplace_01
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_spawn_tavern_wall_01
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 1881954659}
+    _flags: 0
+  - _waypoint: {fileID: 203561894}
+    _flags: 0
+--- !u!4 &279499816
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279499814}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.78, y: 0, z: 8.54}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1605708846}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &285547175
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -877,7 +994,7 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 745975165}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &362153268
+--- !u!1 &326909887
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -885,47 +1002,32 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 362153269}
-  - component: {fileID: 362153270}
+  - component: {fileID: 326909888}
   m_Layer: 0
-  m_Name: city_bandit_escape_route_01
+  m_Name: city_test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &362153269
+--- !u!4 &326909888
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 362153268}
+  m_GameObject: {fileID: 326909887}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.38, y: 0, z: -1.37}
+  m_LocalPosition: {x: -11.58041, y: -1.75, z: 6.54129}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 930162569}
+  m_Children:
+  - {fileID: 1121140034}
+  - {fileID: 1276872065}
+  - {fileID: 1605708846}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &362153270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 362153268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1ea275d2c610df42b85f42a94a71212, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldRoute
-  _id: city_bandit_escape_route_01
-  _nodes:
-  - {fileID: 997571312}
-  - {fileID: 2027680809}
-  - {fileID: 1398765112}
 --- !u!1001 &364083135
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1020,48 +1122,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 364083135}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &398308799
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 398308800}
-  m_Layer: 0
-  m_Name: WorldLocations
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &398308800
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398308799}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1074969669}
-  - {fileID: 1398765111}
-  - {fileID: 2027680810}
-  - {fileID: 997571311}
-  - {fileID: 794502597}
-  - {fileID: 263783786}
-  - {fileID: 1695550895}
-  - {fileID: 1462144397}
-  - {fileID: 1081895675}
-  - {fileID: 1809318047}
-  - {fileID: 2070351739}
-  m_Father: {fileID: 1117279797}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &419317682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1317,6 +1377,56 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35af8bf2573f2d9458eb42510e2d6006, type: 3}
+--- !u!1 &450401403
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 450401404}
+  - component: {fileID: 450401405}
+  m_Layer: 0
+  m_Name: bandit_escape_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &450401404
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450401403}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.1904106, y: 0, z: -17.80871}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1276872065}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &450401405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450401403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationWaypoint
+  _id: bandit_escape_02
+  _radius: 0.5
+  _flags: 0
+  _neighbors:
+  - _waypoint: {fileID: 2088553869}
+    _flags: 0
 --- !u!1001 &473835691
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1615,6 +1725,60 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd17687759887a0438ee021e51abc9d9, type: 3}
+--- !u!1 &542452323
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 542452324}
+  - component: {fileID: 542452325}
+  m_Layer: 0
+  m_Name: wp_storage_entrance_inner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &542452324
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542452323}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -11.540001, y: 0, z: -0.22999954}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1276872065}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &542452325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542452323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_storage_entrance_inner
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 1138597981}
+    _flags: 0
+  - _waypoint: {fileID: 1450685962}
+    _flags: 0
+  - _waypoint: {fileID: 2090973118}
+    _flags: 0
 --- !u!1 &544136488
 GameObject:
   m_ObjectHideFlags: 0
@@ -2474,51 +2638,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 781321496}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &794502596
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 794502597}
-  - component: {fileID: 794502598}
-  m_Layer: 0
-  m_Name: city_storage_shelter_02
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &794502597
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 794502596}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 10.820002, y: -1.75, z: 10.33}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 398308800}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &794502598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 794502596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: city_storage_shelter_02
 --- !u!1 &829876827
 GameObject:
   m_ObjectHideFlags: 0
@@ -3087,38 +3206,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 172564576}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &930162568
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 930162569}
-  m_Layer: 0
-  m_Name: WorldRoutes
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &930162569
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 930162568}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 362153269}
-  m_Father: {fileID: 1117279797}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &941244709
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3362,51 +3449,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 959343291}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &997571310
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 997571311}
-  - component: {fileID: 997571312}
-  m_Layer: 0
-  m_Name: city_storage_shelter_01
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &997571311
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 997571310}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071062, z: -0, w: 0.7071075}
-  m_LocalPosition: {x: 5.56, y: -1.75, z: 3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 398308800}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &997571312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 997571310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: city_storage_shelter_01
 --- !u!1001 &1046895725
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3496,51 +3538,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1046895725}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1074969668
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1074969669}
-  - component: {fileID: 1074969670}
-  m_Layer: 0
-  m_Name: storage_entrance_02
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1074969669
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1074969668}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.70710707, z: -0, w: 0.70710653}
-  m_LocalPosition: {x: 5.94, y: -1.75, z: -4.39}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 398308800}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &1074969670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1074969668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: storage_entrance_02
 --- !u!1001 &1079498012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3620,51 +3617,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1079498012}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1081895674
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1081895675}
-  - component: {fileID: 1081895676}
-  m_Layer: 0
-  m_Name: storage_entrance_01
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1081895675
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1081895674}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.70710677, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 5.5899997, y: -1.75, z: 7.5900006}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 398308800}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &1081895676
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1081895674}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: storage_entrance_01
 --- !u!1001 &1097832161
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3777,10 +3729,57 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 398308800}
-  - {fileID: 930162569}
+  m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1121140032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1121140034}
+  - component: {fileID: 1121140033}
+  m_Layer: 0
+  m_Name: city_tavern
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1121140033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121140032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c45bbba88b1bad4dbdf124588dd17c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationLocation
+  _id: city_tavern
+  _anchors:
+  - _key: entrance_outer
+    _waypoint: {fileID: 1881954659}
+--- !u!4 &1121140034
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121140032}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.08041, y: 0, z: 28.15871}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1881954660}
+  m_Father: {fileID: 326909888}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1123781928
 PrefabInstance:
@@ -3934,6 +3933,56 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1126919421}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138597980
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1138597982}
+  - component: {fileID: 1138597981}
+  m_Layer: 0
+  m_Name: wp_storage_corner_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1138597981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138597980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_storage_corner_01
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 542452325}
+    _flags: 0
+--- !u!4 &1138597982
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138597980}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -11.54, y: 0, z: 6.73}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1276872065}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1143946280
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4058,6 +4107,58 @@ Transform:
   - {fileID: 686606138}
   m_Father: {fileID: 1708557757}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1166865191
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1166865193}
+  - component: {fileID: 1166865192}
+  m_Layer: 0
+  m_Name: wp_square_corner_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1166865192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166865191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_square_corner_01
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 2090973118}
+    _flags: 0
+  - _waypoint: {fileID: 1881954659}
+    _flags: 0
+--- !u!4 &1166865193
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166865191}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 13.83, y: 0, z: 8.81}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1605708846}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1184596959
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4152,6 +4253,66 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1184596959}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1276872063
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1276872065}
+  - component: {fileID: 1276872064}
+  m_Layer: 0
+  m_Name: city_storage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1276872064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276872063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c45bbba88b1bad4dbdf124588dd17c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationLocation
+  _id: city_storage
+  _anchors:
+  - _key: corner_01
+    _waypoint: {fileID: 1138597981}
+  - _key: corner_02
+    _waypoint: {fileID: 1450685962}
+  - _key: entrance_inner
+    _waypoint: {fileID: 542452325}
+  - _key: entrance_outer
+    _waypoint: {fileID: 2090973118}
+--- !u!4 &1276872065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276872063}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 35.08041, y: 0, z: -1.4212899}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1138597982}
+  - {fileID: 1450685963}
+  - {fileID: 542452324}
+  - {fileID: 2090973119}
+  - {fileID: 1747698009}
+  - {fileID: 450401404}
+  m_Father: {fileID: 326909888}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1284764987
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4860,51 +5021,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1386957864}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1398765110
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1398765111}
-  - component: {fileID: 1398765112}
-  m_Layer: 0
-  m_Name: city_bandit_escape_02
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1398765111
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1398765110}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.00000086426724, z: -0, w: 1}
-  m_LocalPosition: {x: 22, y: -1.75, z: -22.42}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 398308800}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1398765112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1398765110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: city_bandit_escape_02
 --- !u!1001 &1406587152
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5146,6 +5262,58 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd17687759887a0438ee021e51abc9d9, type: 3}
+--- !u!1 &1450685961
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1450685963}
+  - component: {fileID: 1450685962}
+  m_Layer: 0
+  m_Name: wp_storage_corner_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1450685962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450685961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_storage_corner_02
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 542452325}
+    _flags: 0
+  - _waypoint: {fileID: 1747698010}
+    _flags: 0
+--- !u!4 &1450685963
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450685961}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -11.540001, y: 0, z: -10.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1276872065}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1460749573 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2320371260222401683, guid: 1357d534d67e44349a4b7c67840165c7,
@@ -5231,51 +5399,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1460811846}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1462144396
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1462144397}
-  - component: {fileID: 1462144398}
-  m_Layer: 0
-  m_Name: city_marketplace_03
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1462144397
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1462144396}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -9.6, y: -1.75, z: 6.5900006}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 398308800}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &1462144398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1462144396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: city_marketplace_03
 --- !u!1001 &1466491850
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5842,6 +5965,125 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1582256239}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1605708844
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1605708846}
+  - component: {fileID: 1605708845}
+  m_Layer: 0
+  m_Name: city_central_square
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1605708845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605708844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c45bbba88b1bad4dbdf124588dd17c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationLocation
+  _id: city_central_square
+  _anchors:
+  - _key: spawn_01
+    _waypoint: {fileID: 1618011458}
+  - _key: spawn_02
+    _waypoint: {fileID: 2081629782}
+  - _key: spawn_03
+    _waypoint: {fileID: 1886716058}
+  - _key: spawn_04
+    _waypoint: {fileID: 279499815}
+  - _key: spawn_05
+    _waypoint: {fileID: 1737372631}
+  - _key: entrance
+    _waypoint: {fileID: 1798345304}
+--- !u!4 &1605708846
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605708844}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.3804102, y: 0, z: -0.22128963}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1166865193}
+  - {fileID: 1950380589}
+  - {fileID: 203561895}
+  - {fileID: 95235907}
+  - {fileID: 1618011459}
+  - {fileID: 2081629783}
+  - {fileID: 1886716059}
+  - {fileID: 279499816}
+  - {fileID: 1737372632}
+  - {fileID: 2088553868}
+  - {fileID: 1798345303}
+  m_Father: {fileID: 326909888}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1618011457
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1618011459}
+  - component: {fileID: 1618011458}
+  m_Layer: 0
+  m_Name: wp_spawn_storage_wall_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1618011458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618011457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_spawn_storage_wall_01
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 95235906}
+    _flags: 0
+--- !u!4 &1618011459
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618011457}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -17.84, y: 0, z: -8.34}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1605708846}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1633570436 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2141676431450117668, guid: cd17687759887a0438ee021e51abc9d9,
@@ -6097,7 +6339,7 @@ Transform:
   - {fileID: 877328310}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1695550894
+--- !u!1 &1690101758
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6105,43 +6347,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1695550895}
-  - component: {fileID: 1695550896}
+  - component: {fileID: 1690101760}
+  - component: {fileID: 1690101759}
   m_Layer: 0
-  m_Name: city_marketplace_02
+  m_Name: test_waypoint_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1695550895
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1695550894}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.2799997, y: -1.75, z: -5.2899995}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 398308800}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1695550896
+--- !u!114 &1690101759
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1695550894}
+  m_GameObject: {fileID: 1690101758}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: city_marketplace_02
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: test_waypoint_05
+  _radius: 0.3
+  _flags: 0
+  _neighbors:
+  - _waypoint: {fileID: 0}
+    _flags: 0
+--- !u!4 &1690101760
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690101758}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.14667419, z: -0, w: 0.9891849}
+  m_LocalPosition: {x: -3.13, y: -1.662, z: 32.13}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -16.868, z: 0}
 --- !u!1001 &1700471342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6360,6 +6607,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 174a61b94f1a1904c99eb2d7a88c2165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Etheria.Features.Campaign::Etheria.Features.Campaign.YarnDialoguePresenter
+--- !u!1 &1737372630
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1737372632}
+  - component: {fileID: 1737372631}
+  m_Layer: 0
+  m_Name: wp_spawn_tavern_wall_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1737372631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737372630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_spawn_tavern_wall_02
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 203561894}
+    _flags: 0
+--- !u!4 &1737372632
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737372630}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -20.41, y: 0, z: 8.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1605708846}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1747044258
 GameObject:
   m_ObjectHideFlags: 0
@@ -6400,6 +6697,56 @@ Transform:
   - {fileID: 1873351372}
   m_Father: {fileID: 1708557757}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1747698008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1747698009}
+  - component: {fileID: 1747698010}
+  m_Layer: 0
+  m_Name: bandit_escape_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1747698009
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1747698008}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.8004112, y: 0, z: -9.6587105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1276872065}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1747698010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1747698008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationWaypoint
+  _id: bandit_escape_01
+  _radius: 0.5
+  _flags: 0
+  _neighbors:
+  - _waypoint: {fileID: 450401405}
+    _flags: 0
 --- !u!1001 &1748147939
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6667,6 +7014,56 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1796017754}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1798345302
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1798345303}
+  - component: {fileID: 1798345304}
+  m_Layer: 0
+  m_Name: city_entrance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1798345303
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798345302}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -16.53041, y: 0, z: -25.79871}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1605708846}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1798345304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798345302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationWaypoint
+  _id: city_entrance
+  _radius: 0.5
+  _flags: 0
+  _neighbors:
+  - _waypoint: {fileID: 1886716058}
+    _flags: 0
 --- !u!1001 &1808141107
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6740,51 +7137,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd17687759887a0438ee021e51abc9d9, type: 3}
---- !u!1 &1809318046
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1809318047}
-  - component: {fileID: 1809318048}
-  m_Layer: 0
-  m_Name: city_wall_01
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1809318047
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1809318046}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000058114523}
-  m_LocalPosition: {x: -10.91, y: -1.75, z: 17.73}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 398308800}
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
---- !u!114 &1809318048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1809318046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: city_wall_01
 --- !u!4 &1810385472 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8660203859262875706, guid: 35af8bf2573f2d9458eb42510e2d6006,
@@ -6873,6 +7225,58 @@ Transform:
   - {fileID: 781321497}
   m_Father: {fileID: 1747044259}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1881954658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1881954660}
+  - component: {fileID: 1881954659}
+  m_Layer: 0
+  m_Name: wp_tavern_entrance_outer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1881954659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881954658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_tavern_entrance_outer
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 279499815}
+    _flags: 0
+  - _waypoint: {fileID: 1166865192}
+    _flags: 0
+--- !u!4 &1881954660
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881954658}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.46, y: 0, z: -26.13}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1121140034}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1886210869
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6946,6 +7350,58 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7566d85b04856b42a956c9b162ee747, type: 3}
+--- !u!1 &1886716057
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1886716059}
+  - component: {fileID: 1886716058}
+  m_Layer: 0
+  m_Name: wp_spawn_way_to_entrance_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1886716058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886716057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_spawn_way_to_entrance_03
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 95235906}
+    _flags: 0
+  - _waypoint: {fileID: 1798345304}
+    _flags: 256
+--- !u!4 &1886716059
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886716057}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -10.77, y: 0, z: -17.88}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1605708846}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1894911374
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7290,6 +7746,60 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1940897128}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1950380587
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1950380589}
+  - component: {fileID: 1950380588}
+  m_Layer: 0
+  m_Name: wp_square_corner_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1950380588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950380587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_square_corner_02
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 2090973118}
+    _flags: 0
+  - _waypoint: {fileID: 95235906}
+    _flags: 0
+  - _waypoint: {fileID: 2081629782}
+    _flags: 0
+--- !u!4 &1950380589
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950380587}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.14, y: 0, z: -8.76}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1605708846}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1964704986
 GameObject:
   m_ObjectHideFlags: 0
@@ -7646,51 +8156,6 @@ Transform:
   - {fileID: 941244710}
   m_Father: {fileID: 1747044259}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2027680808
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2027680810}
-  - component: {fileID: 2027680809}
-  m_Layer: 0
-  m_Name: city_bandit_escape_01
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2027680809
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2027680808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: city_bandit_escape_01
---- !u!4 &2027680810
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2027680808}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000058114523}
-  m_LocalPosition: {x: 22, y: -1.75, z: 3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 398308800}
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1 &2039571095
 GameObject:
   m_ObjectHideFlags: 0
@@ -7764,7 +8229,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -32}
   m_SizeDelta: {x: -64, y: 200}
   m_Pivot: {x: 0.5, y: 1}
---- !u!1 &2070351738
+--- !u!1 &2081629781
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7772,43 +8237,154 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2070351739}
-  - component: {fileID: 2070351740}
+  - component: {fileID: 2081629783}
+  - component: {fileID: 2081629782}
   m_Layer: 0
-  m_Name: city_guard_captain
+  m_Name: wp_spawn_storage_wall_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2070351739
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2070351738}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.529999, y: -1.75, z: -2.1199994}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 398308800}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2070351740
+--- !u!114 &2081629782
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2070351738}
+  m_GameObject: {fileID: 2081629781}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca64792520453b344adf9e27739748c8, type: 3}
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Game::Etheria.Game.World.WorldLocation
-  _id: city_guard_captain
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_spawn_storage_wall_02
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 1950380588}
+    _flags: 0
+  - _waypoint: {fileID: 2090973118}
+    _flags: 0
+--- !u!4 &2081629783
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2081629781}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 14.84, y: 0, z: -15.99}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1605708846}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2088553867
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2088553868}
+  - component: {fileID: 2088553869}
+  m_Layer: 0
+  m_Name: bandit_escape_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2088553868
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088553867}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 19.909592, y: 0, z: -25.77871}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1605708846}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2088553869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088553867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationWaypoint
+  _id: bandit_escape_03
+  _radius: 0.5
+  _flags: 0
+  _neighbors:
+  - _waypoint: {fileID: 1798345304}
+    _flags: 0
+--- !u!1 &2090973117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2090973119}
+  - component: {fileID: 2090973118}
+  m_Layer: 0
+  m_Name: wp_storage_entrance_outer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2090973118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090973117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
+  _id: wp_storage_entrance_outer
+  _radius: 0.5
+  _flags: 1
+  _neighbors:
+  - _waypoint: {fileID: 1166865192}
+    _flags: 0
+  - _waypoint: {fileID: 1950380588}
+    _flags: 0
+  - _waypoint: {fileID: 2081629782}
+    _flags: 0
+--- !u!4 &2090973119
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090973117}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -19.82, y: 0, z: -0.22999954}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1276872065}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2096865993
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8171,14 +8747,15 @@ MonoBehaviour:
   _scopeInstallers:
   - {fileID: 11400000, guid: 9435324e1ab933d4ab8de2ea90082cd2, type: 2}
   - {fileID: 11400000, guid: 0c3a8d64feffca744b41c8cfaa49bf07, type: 2}
+  - {fileID: 11400000, guid: 0705354ec39d8884787c39b9f19ac75e, type: 2}
   - {fileID: 11400000, guid: 4d2d8a64527c7764da43891b5677264f, type: 2}
   - {fileID: 11400000, guid: 747c9cda3a62cc947bf2e871d8b6f347, type: 2}
   - {fileID: 11400000, guid: ae0b044fb64d18046b198d73d96f6057, type: 2}
   - {fileID: 11400000, guid: 568e05ec6aa102047bae2e4097f3a1aa, type: 2}
   - {fileID: 11400000, guid: a86688bf4d1ac244aae3c9ca82e195e5, type: 2}
-  - {fileID: 11400000, guid: c16c743c69a3aed4c8f66a766d9febe0, type: 2}
   - {fileID: 11400000, guid: d5b8a757ba06e9d48a44b04f1c1546f8, type: 2}
-  - {fileID: 11400000, guid: 5e8074c69b2bf254cb8b410262935ce2, type: 2}
+  - {fileID: 11400000, guid: 691b2c49227303d48b49b0aae1ec89e2, type: 2}
+  - {fileID: 11400000, guid: 32c20d79fb6777d429b524bb6ca7aad8, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -8188,3 +8765,5 @@ SceneRoots:
   - {fileID: 1563471396}
   - {fileID: 1708557757}
   - {fileID: 1680119420}
+  - {fileID: 1690101760}
+  - {fileID: 326909888}

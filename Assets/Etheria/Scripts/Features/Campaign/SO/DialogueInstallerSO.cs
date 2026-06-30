@@ -19,7 +19,7 @@ namespace Etheria.Features.Campaign
         public override void Install(IContainerBuilder builder)
         {
             var questStageInteractables =
-                SceneComponentLookup.FindAll<QuestStageInteractable>(builder);
+                SceneComponentLookup.GetComponentsInScene<QuestStageInteractable>(builder);
 
             builder.RegisterComponentInHierarchy<DialogueRunner>();
 

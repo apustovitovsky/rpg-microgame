@@ -1,6 +1,6 @@
 using System;
+using Etheria.Game.World;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Etheria.Features.Character
 {
@@ -11,8 +11,10 @@ namespace Etheria.Features.Character
         public CharacterDefinitionSO Character { get; private set; }
 
         [field: SerializeField]
-        [field: FormerlySerializedAs("<SpawnPointId>k__BackingField")]
         public string LocationId { get; private set; }
+
+        [field: SerializeField]
+        public string AnchorKey { get; private set; } = NavigationAnchorKeys.Default;
 
         [field: SerializeField]
         public bool IsAlive { get; private set; } = true;

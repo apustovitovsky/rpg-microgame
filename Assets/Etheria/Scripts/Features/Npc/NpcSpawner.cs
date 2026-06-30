@@ -25,13 +25,9 @@ namespace Etheria.Npc
 
         public GameObject Spawn(
             string npcId,
-            Transform transform)
+            Vector3 position,
+            Quaternion rotation)
         {
-            if (transform == null)
-            {
-                throw new ArgumentNullException(nameof(transform));
-            }
-
             if (!_catalog.TryGet(npcId, out var definition))
             {
                 throw new InvalidOperationException(
@@ -45,11 +41,13 @@ namespace Etheria.Npc
             }
 
             using (LifetimeScope.EnqueueParent(_parentScope))
+            using (LifetimeScope.Enqueue(
+                       builder => builder.RegisterInstance(definition)))
             {
                 return UnityEngine.Object.Instantiate(
                     definition.Prefab,
-                    transform.position,
-                    transform.rotation,
+                    position,
+                    rotation,
                     _scopeContentRoot.Transform);
             }
         }

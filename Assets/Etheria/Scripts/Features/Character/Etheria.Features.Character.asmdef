@@ -6,6 +6,7 @@
         "Unity.Cinemachine",
         "VContainer",
         "Etheria.Core",
+        "Etheria.Npc",
         "Etheria.Game",
         "Etheria.Features",
         "Unity.TextMeshPro",

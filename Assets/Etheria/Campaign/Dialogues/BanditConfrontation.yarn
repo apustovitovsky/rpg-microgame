@@ -41,7 +41,7 @@ title: BanditRelease
 Тогда еще увидимся, благодарю.
 
 <<set_world_fact "bandit_released">>
-<<send_character_route "bandit" "city_bandit_escape_route_01">>
+<<run_quest_travel "clear_bandits" "bandit_escape">>
 <<set_quest_stage "clear_bandits" 30>>
 <<add_quest_log "clear_bandits" "clear_bandits.bandit_released">>
 ===

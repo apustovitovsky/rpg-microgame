@@ -50,19 +50,6 @@ namespace Etheria.Npc
             _agent.isStopped = true;
         }
 
-        public void TeleportTo(
-            Vector3 position,
-            Quaternion rotation)
-        {
-            if (IsOnNavMesh)
-                _agent.Warp(position);
-            else if (_agent != null)
-                _agent.transform.position = position;
-
-            if (_agent != null)
-                _agent.transform.rotation = rotation;
-        }
-
         public void SetRotation(Quaternion rotation)
         {
             if (_agent == null)
@@ -87,6 +74,15 @@ namespace Etheria.Npc
             }
 
             SetRotation(targetRotation);
+        }
+
+        public void SetStoppingDistance(
+            float stoppingDistance)
+        {
+            if (_agent == null)
+                return;
+
+            _agent.stoppingDistance = Mathf.Max(0f, stoppingDistance);
         }
 
         public void BeginManualRotation()

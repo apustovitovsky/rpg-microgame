@@ -5,7 +5,9 @@ using UnityEngine;
 
 namespace Etheria.Features.Campaign
 {
-    public sealed class QuestService : IQuestService
+    public sealed class QuestService :
+        IQuestService,
+        ICampaignQuestDefinitionProvider
     {
         private sealed class RuntimeQuestState
         {
@@ -30,6 +32,24 @@ namespace Etheria.Features.Campaign
             }
 
             return result.AsReadOnly();
+        }
+
+        public bool TryGetTravelInstruction(
+            string questId,
+            string instructionId,
+            out QuestTravelInstruction instruction)
+        {
+            instruction = null;
+
+            if (string.IsNullOrWhiteSpace(questId) ||
+                !_definitions.TryGetValue(questId, out var definition))
+            {
+                return false;
+            }
+
+            return definition.TryGetTravelInstruction(
+                instructionId,
+                out instruction);
         }
 
         public QuestService(QuestDefinitionSO[] definitions)

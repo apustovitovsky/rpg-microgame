@@ -3,6 +3,7 @@ using Etheria.Game.Targeting;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using Etheria.Npc;
 
 namespace Etheria.Features.Character
 {
@@ -29,7 +30,7 @@ namespace Etheria.Features.Character
             builder.RegisterEntryPoint<CharacterTargetingService>(Lifetime.Scoped)
                 .As<ITargetProvider>();
 
-            builder.RegisterEntryPoint<CharacterLabelPresenter>(Lifetime.Scoped);
+            builder.RegisterEntryPoint<NpcNameLabelPresenter>(Lifetime.Scoped);
         }
     }
 }

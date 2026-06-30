@@ -18,7 +18,7 @@ namespace Etheria.Features.Campaign
             builder.RegisterInstance(_questDefinitions);
 
             builder.Register<QuestService>(Lifetime.Singleton)
-                .As<IQuestService>();
+                .AsImplementedInterfaces();
 
             builder.Register<QuestTextProvider>(Lifetime.Singleton)
                 .As<IQuestTextProvider>();

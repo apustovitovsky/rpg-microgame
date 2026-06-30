@@ -8,7 +8,7 @@ namespace Etheria.Core.DI
 {
     public static class SceneComponentLookup
     {
-        public static IReadOnlyList<T> FindAll<T>(IContainerBuilder builder)
+        public static IReadOnlyList<T> GetComponentsInScene<T>(IContainerBuilder builder)
             where T : Component
         {
             if (builder.ApplicationOrigin is not LifetimeScope scope)

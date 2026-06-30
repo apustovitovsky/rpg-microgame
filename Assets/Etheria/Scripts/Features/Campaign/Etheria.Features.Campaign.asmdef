@@ -1,10 +1,11 @@
 {
-    "name": "Etheria.Features.Campaign",
-    "rootNamespace": "Etheria.Features.Campaign",
+    "name": "Etheria.Campaign",
+    "rootNamespace": "Etheria.Campaign",
     "references": [
         "VContainer",
         "Etheria.Core",
         "Etheria.Game",
+        "Etheria.Navigation",
         "UniTask",
         "YarnSpinner.Unity",
         "Unity.TextMeshPro",

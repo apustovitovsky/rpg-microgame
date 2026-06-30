@@ -1,0 +1,21 @@
+{
+    "name": "Etheria.Actor",
+    "rootNamespace": "Etheria.Actor",
+    "references": [
+        "UniTask",
+        "VContainer",
+        "Etheria.Core",
+        "Etheria.Game",
+        "Unity.TextMeshPro",
+        "Unity.Behavior"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

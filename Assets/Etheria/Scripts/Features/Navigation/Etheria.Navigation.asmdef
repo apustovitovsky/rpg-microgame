@@ -1,0 +1,19 @@
+{
+    "name": "Etheria.Navigation",
+    "rootNamespace": "Etheria.Navigation",
+    "references": [
+        "UniTask",
+        "VContainer",
+        "Etheria.Core",
+        "Etheria.Game"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
