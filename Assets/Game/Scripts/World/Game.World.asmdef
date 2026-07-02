@@ -1,0 +1,21 @@
+{
+    "name": "Game.World",
+    "rootNamespace": "",
+    "references": [
+        "VContainer",
+        "Etheria.Core",
+        "Etheria.Game",
+        "Game.Actor",
+        "Game.Player",
+        "Unity.Cinemachine"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

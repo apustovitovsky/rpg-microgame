@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a0c0eba4fd89d4da804c722e1dd2eb, type: 3}
+  m_Name: WorldActorManifest
+  m_EditorClassIdentifier: Game.World::Game.World.WorldActorManifestSO
+  _player:
+    _actorId: player
+    _prefab: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
+      type: 3}
+    _locationId: city_central_square
+    _anchorKey: spawn_01
+  _actors:
+  - _actorId: npc
+    _prefab: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
+      type: 3}
+    _locationId: city_central_square
+    _anchorKey: spawn_02
+  - _actorId: npc_2
+    _prefab: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
+      type: 3}
+    _locationId: city_central_square
+    _anchorKey: spawn_04

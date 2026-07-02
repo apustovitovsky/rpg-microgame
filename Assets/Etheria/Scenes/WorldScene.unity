@@ -6339,56 +6339,6 @@ Transform:
   - {fileID: 877328310}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1690101758
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1690101760}
-  - component: {fileID: 1690101759}
-  m_Layer: 0
-  m_Name: test_waypoint_05
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1690101759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1690101758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
-  _id: test_waypoint_05
-  _radius: 0.3
-  _flags: 0
-  _neighbors:
-  - _waypoint: {fileID: 0}
-    _flags: 0
---- !u!4 &1690101760
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1690101758}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.14667419, z: -0, w: 0.9891849}
-  m_LocalPosition: {x: -3.13, y: -1.662, z: 32.13}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -16.868, z: 0}
 --- !u!1001 &1700471342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8745,17 +8695,15 @@ MonoBehaviour:
   autoInjectGameObjects: []
   _contentRoot: {fileID: 1117279797}
   _scopeInstallers:
-  - {fileID: 11400000, guid: 9435324e1ab933d4ab8de2ea90082cd2, type: 2}
-  - {fileID: 11400000, guid: 0c3a8d64feffca744b41c8cfaa49bf07, type: 2}
-  - {fileID: 11400000, guid: 0705354ec39d8884787c39b9f19ac75e, type: 2}
   - {fileID: 11400000, guid: 4d2d8a64527c7764da43891b5677264f, type: 2}
   - {fileID: 11400000, guid: 747c9cda3a62cc947bf2e871d8b6f347, type: 2}
-  - {fileID: 11400000, guid: ae0b044fb64d18046b198d73d96f6057, type: 2}
   - {fileID: 11400000, guid: 568e05ec6aa102047bae2e4097f3a1aa, type: 2}
-  - {fileID: 11400000, guid: a86688bf4d1ac244aae3c9ca82e195e5, type: 2}
-  - {fileID: 11400000, guid: d5b8a757ba06e9d48a44b04f1c1546f8, type: 2}
   - {fileID: 11400000, guid: 691b2c49227303d48b49b0aae1ec89e2, type: 2}
   - {fileID: 11400000, guid: 32c20d79fb6777d429b524bb6ca7aad8, type: 2}
+  - {fileID: 11400000, guid: 02f4659f7202ba44d855f1dc09abbbb5, type: 2}
+  - {fileID: 11400000, guid: e130d74d49e9c3745887bfcd8520d450, type: 2}
+  - {fileID: 11400000, guid: df7bb53107971cc49b155381320e4fcc, type: 2}
+  - {fileID: 11400000, guid: a80cfe3a73aa86847944dd8de1cfd40c, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -8765,5 +8713,4 @@ SceneRoots:
   - {fileID: 1563471396}
   - {fileID: 1708557757}
   - {fileID: 1680119420}
-  - {fileID: 1690101760}
   - {fileID: 326909888}

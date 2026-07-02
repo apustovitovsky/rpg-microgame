@@ -1,6 +1,6 @@
 using Etheria.Core.DI;
 
-using Etheria.Features.Input;
+// using Etheria.Features.Input;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -14,8 +14,8 @@ namespace Etheria.Features
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<PlayerInputSource>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
+            // builder.Register<PlayerInputSource>(Lifetime.Singleton)
+            //     .AsImplementedInterfaces();
         }
     }
 }

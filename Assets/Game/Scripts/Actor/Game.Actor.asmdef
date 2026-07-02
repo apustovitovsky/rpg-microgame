@@ -1,0 +1,20 @@
+{
+    "name": "Game.Actor",
+    "rootNamespace": "",
+    "references": [
+        "UniTask",
+        "VContainer",
+        "Game.CommandSystem",
+        "Etheria.Core",
+        "Game.Input"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

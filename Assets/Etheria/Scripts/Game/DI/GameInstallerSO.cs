@@ -15,7 +15,7 @@ namespace Etheria.Game.DI
 
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<InputSystem_Actions>(Lifetime.Singleton);
+            // builder.Register<InputSystem_Actions>(Lifetime.Singleton);
 
             builder.Register<GameTimeProvider>(Lifetime.Singleton)
                 .As<IGameTimeProvider>();

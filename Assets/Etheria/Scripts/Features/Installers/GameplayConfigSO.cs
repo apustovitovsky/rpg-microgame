@@ -13,7 +13,7 @@ namespace Etheria.Features
         [field: SerializeField]
         [field: FormerlySerializedAs("<PlayerAvatarPrefab>k__BackingField")]
         public LifetimeScope PlayerCharacterPrefab { get; private set; }
-        
+
         [field: SerializeField, Min(0)]
         public int AdditionalPlayersCount { get; private set; } = 5;
 

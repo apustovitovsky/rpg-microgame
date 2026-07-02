@@ -1,0 +1,20 @@
+{
+    "name": "Game.Player",
+    "rootNamespace": "",
+    "references": [
+        "VContainer",
+        "Unity.InputSystem",
+        "Etheria.Core",
+        "Game.Actor",
+        "Game.Input"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

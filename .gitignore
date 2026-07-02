@@ -8,6 +8,8 @@
 !/[Aa]ssets/GAS.meta
 !/[Aa]ssets/FPS
 !/[Aa]ssets/FPS.meta
+!/[Aa]ssets/Game
+!/[Aa]ssets/Game.meta
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
