@@ -1,4 +1,5 @@
 using Game.Input;
+using Game.Targeting;
 using UnityEngine;
 
 namespace Game.Actor
@@ -6,39 +7,47 @@ namespace Game.Actor
     [DisallowMultipleComponent]
     public sealed class TargetingController : MonoBehaviour
     {
-        [SerializeField] private TargetingConfigSO _config;
-        [SerializeField] private PerceptionController _perception;
+        [SerializeField] private TargetPerception _perception;
         [SerializeField] private ActorLookController _look;
 
         [SerializeField] private float _distanceScoreWeight = 100f;
         [SerializeField] private float _angleScoreWeight = 40f;
 
         private IActorInput _input;
+        private ITargetSelector _selector;
 
-        public GameObject CurrentTarget { get; private set; }
+        public ITargetable CurrentTarget { get; private set; }
         public bool IsLocked { get; private set; }
+
+        private void Awake()
+        {
+            _selector = new TargetSelector(
+                new ITargetFilter[]
+                {
+                    new TargetableFilter()
+                },
+                new ITargetScorer[]
+                {
+                    new DistanceTargetScorer(_distanceScoreWeight),
+                    new AngleTargetScorer(_angleScoreWeight)
+                });
+        }
 
         public void Bind(IActorInput input)
         {
             if (_input != null)
-            {
                 _input.OnLockOnToggled -= ToggleLock;
-            }
 
             _input = input;
 
             if (_input != null)
-            {
                 _input.OnLockOnToggled += ToggleLock;
-            }
         }
 
         public void Unbind()
         {
             if (_input != null)
-            {
                 _input.OnLockOnToggled -= ToggleLock;
-            }
 
             _input = null;
         }
@@ -67,7 +76,7 @@ namespace Game.Actor
                 return;
             }
 
-            ApplyTarget(CurrentTarget.transform);
+            ApplyTarget(CurrentTarget);
         }
 
         public void ToggleLock()
@@ -92,16 +101,22 @@ namespace Game.Actor
             }
 
             IsLocked = true;
-            ApplyTarget(CurrentTarget.transform);
+            ApplyTarget(CurrentTarget);
         }
 
         public void Unlock()
         {
             IsLocked = false;
-            _look?.ClearTarget();
+
+            if (_look == null)
+            {
+                return;
+            }
+
+            _look.ClearTarget();
         }
 
-        private GameObject FindBestTarget()
+        private ITargetable FindBestTarget()
         {
             if (_perception == null ||
                 _perception.Candidates.Count == 0 ||
@@ -110,68 +125,33 @@ namespace Game.Actor
                 return null;
             }
 
-            GameObject bestTarget = null;
-            float bestScore = float.NegativeInfinity;
-
-            foreach (var candidate in _perception.Candidates)
-            {
-                if (candidate == null)
-                {
-                    continue;
-                }
-
-                float score = Evaluate(candidate);
-
-                if (score > bestScore)
-                {
-                    bestScore = score;
-                    bestTarget = candidate;
-                }
-            }
-
-            return bestTarget;
-        }
-
-        private float Evaluate(GameObject candidate)
-        {
-            float distance = Vector3.Distance(
-                _perception.Origin.position,
-                candidate.transform.position);
-
-            float distanceScore = DistanceScoreWeight / Mathf.Max(distance, 0.01f);
-
-            Vector3 targetDirection = candidate.transform.position - _look.Position;
-            float angleScore = Vector3.Dot(targetDirection.normalized, _look.Forward) * AngleScoreWeight;
-
-            return distanceScore + angleScore;
+            return _selector.SelectBest(
+                _perception.Candidates,
+                _look.Position,
+                _look.Forward);
         }
 
         private bool ContainsCurrentTarget()
         {
             foreach (var candidate in _perception.Candidates)
             {
-                if (candidate == CurrentTarget)
-                {
+                if (ReferenceEquals(candidate, CurrentTarget))
                     return true;
-                }
             }
 
             return false;
         }
 
-        private float DistanceScoreWeight =>
-            _config != null
-                ? _config.DistanceScoreWeight
-                : _distanceScoreWeight;
-
-        private float AngleScoreWeight =>
-            _config != null
-                ? _config.AngleScoreWeight
-                : _angleScoreWeight;
-
-        private void ApplyTarget(Transform target)
+        private void ApplyTarget(ITargetable target)
         {
-            _look.SetTarget(target);
+            if (target == null ||
+                target.TargetPoint == null)
+            {
+                Unlock();
+                return;
+            }
+
+            _look.SetTarget(target.TargetPoint);
         }
     }
 }

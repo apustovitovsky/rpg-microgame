@@ -1,13 +1,7 @@
 {
-    "name": "Game.Actor",
+    "name": "Game.Targeting",
     "rootNamespace": "",
     "references": [
-        "UniTask",
-        "VContainer",
-        "Etheria.Core",
-        "Game.CommandSystem",
-        "Game.Targeting",
-        "Game.Input"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
