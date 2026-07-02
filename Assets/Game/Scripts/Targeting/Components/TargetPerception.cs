@@ -5,7 +5,6 @@ namespace Game.Targeting
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(SphereCollider))]
-    [RequireComponent(typeof(Rigidbody))]
     public sealed class TargetPerception :
         MonoBehaviour
     {
@@ -29,8 +28,6 @@ namespace Game.Targeting
 
         private void OnTriggerEnter(Collider other)
         {
-
-
             if (!IsInMask(other.gameObject.layer))
                 return;
 
@@ -46,10 +43,6 @@ namespace Game.Targeting
             _overlapCounts.TryGetValue(target, out int count);
             _overlapCounts[target] = count + 1;
             _candidates.Add(target);
-
-            Debug.Log(
-                $"{gameObject.name} contains {_candidates.Count}",
-            this);
         }
 
         private void OnTriggerExit(Collider other)
@@ -73,10 +66,6 @@ namespace Game.Targeting
 
             _overlapCounts.Remove(target);
             _candidates.Remove(target);
-
-            Debug.Log(
-                $"{gameObject.name} contains {_candidates.Count}",
-            this);
         }
 
         private void OnDisable()

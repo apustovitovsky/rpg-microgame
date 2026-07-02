@@ -25,6 +25,12 @@ namespace Game.Actor
             Sprint
         }
 
+        private enum CrouchInputMode
+        {
+            Hold,
+            Toggle
+        }
+
         #endregion
 
         #region Animation Variable Hashes
@@ -73,7 +79,6 @@ namespace Game.Actor
         #region Actor Settings Variables
 
         #region Scripts/Objects
-
 
         [SerializeField]
         private ActorLookController _look;
@@ -134,8 +139,13 @@ namespace Game.Actor
         [SerializeField]
         private float _rotationSmoothing = 10f;
         [Tooltip("Offset from the current look direction.")]
+
         [SerializeField]
         private float _lookRotationOffset;
+
+        [Header("Crouch")]
+        [SerializeField]
+        private CrouchInputMode _crouchInputMode = CrouchInputMode.Toggle;
 
         #endregion
 
@@ -295,7 +305,7 @@ namespace Game.Actor
 
         private AnimationState _currentState = AnimationState.Base;
         private bool _cannotStandUp;
-        private bool _crouchKeyPressed;
+        private bool _crouchRequested;
         private bool _isFacing;
         private bool _isCrouching;
         private bool _isGrounded = true;
@@ -472,25 +482,73 @@ namespace Game.Actor
 
         private void ActivateCrouch()
         {
-            _crouchKeyPressed = true;
-
-            if (_isGrounded)
+            if (_crouchInputMode == CrouchInputMode.Toggle)
             {
-                CapsuleCrouchingSize(true);
-                DeactivateSprint();
-                _isCrouching = true;
+                _crouchRequested = !_crouchRequested;
             }
+            else
+            {
+                _crouchRequested = true;
+            }
+
+            ApplyCrouchRequest();
         }
 
         private void DeactivateCrouch()
         {
-            _crouchKeyPressed = false;
+            if (_crouchInputMode == CrouchInputMode.Toggle)
+                return;
 
-            if (!_cannotStandUp && !_isSliding)
+            _crouchRequested = false;
+            ApplyCrouchRequest();
+        }
+
+        private void ApplyCrouchRequest()
+        {
+            if (_crouchRequested)
             {
-                CapsuleCrouchingSize(false);
-                _isCrouching = false;
+                TryEnterCrouch();
             }
+            else
+            {
+                TryExitCrouch();
+            }
+        }
+
+        private bool TryEnterCrouch()
+        {
+            if (_isCrouching)
+                return true;
+
+            if (!_isGrounded)
+                return false;
+
+            CapsuleCrouchingSize(true);
+            DeactivateSprint();
+            _isCrouching = true;
+
+            return true;
+        }
+
+        private bool TryExitCrouch()
+        {
+            if (!_isCrouching)
+                return true;
+
+            if (_cannotStandUp || _isSliding)
+                return false;
+
+            CapsuleCrouchingSize(false);
+            _isCrouching = false;
+
+            return true;
+        }
+
+        private void ForceExitCrouch()
+        {
+            _crouchRequested = false;
+            CapsuleCrouchingSize(false);
+            _isCrouching = false;
         }
 
         public void ActivateSliding()
@@ -1295,15 +1353,18 @@ namespace Game.Actor
         {
             UpdateTargetingState();
             GroundedCheck();
+            ApplyCrouchRequest();
 
             if (!_isGrounded)
             {
                 SwitchState(AnimationState.Fall);
+                return;
             }
 
             if (_isCrouching)
             {
                 SwitchState(AnimationState.Crouch);
+                return;
             }
 
             CheckEnableTurns();
@@ -1376,7 +1437,7 @@ namespace Game.Actor
             ResetFallingDuration();
             _velocity.y = 0f;
 
-            DeactivateCrouch();
+            ForceExitCrouch();
             _isSliding = false;
         }
 
@@ -1419,23 +1480,18 @@ namespace Game.Actor
             GroundedCheck();
             if (!_isGrounded)
             {
-                DeactivateCrouch();
-                CapsuleCrouchingSize(false);
+                ForceExitCrouch();
                 SwitchState(AnimationState.Fall);
+                return;
             }
 
             CeilingHeightCheck();
-
-            if (!_crouchKeyPressed && !_cannotStandUp)
-            {
-                DeactivateCrouch();
-                SwitchToLocomotionState();
-            }
+            ApplyCrouchRequest();
 
             if (!_isCrouching)
             {
-                CapsuleCrouchingSize(false);
-                SwitchToLocomotionState();
+                SwitchState(AnimationState.Locomotion);
+                return;
             }
 
             CheckEnableTurns();
@@ -1460,17 +1516,19 @@ namespace Game.Actor
 
         private void CrouchToJumpState()
         {
-            if (!_cannotStandUp)
-            {
-                DeactivateCrouch();
-                SwitchState(AnimationState.Jump);
-            }
+            if (!TryExitCrouch())
+                return;
+
+            _crouchRequested = false;
+            SwitchState(AnimationState.Jump);
         }
 
         private void SwitchToLocomotionState()
         {
-            DeactivateCrouch();
-            SwitchState(AnimationState.Locomotion);
+            if (TryExitCrouch())
+            {
+                SwitchState(AnimationState.Locomotion);
+            }
         }
 
         #endregion

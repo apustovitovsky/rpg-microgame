@@ -129,7 +129,7 @@ namespace Game.Player
             }
             else if (context.canceled)
             {
-                // OnCrouchDeactivated?.Invoke();
+                OnCrouchDeactivated?.Invoke();
             }
         }
 
