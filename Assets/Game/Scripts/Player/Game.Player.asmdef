@@ -4,9 +4,10 @@
     "references": [
         "VContainer",
         "Unity.InputSystem",
-        "Etheria.Core",
+        "Game.Core",
         "Game.Actor",
-        "Game.Input"
+        "Game.Input",
+        "Game.Possession"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

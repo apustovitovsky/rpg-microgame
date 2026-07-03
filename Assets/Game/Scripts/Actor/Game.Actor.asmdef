@@ -5,9 +5,11 @@
         "UniTask",
         "VContainer",
         "Etheria.Core",
+        "Unity.TextMeshPro",
         "Game.CommandSystem",
         "Game.Targeting",
-        "Game.Input"
+        "Game.Input",
+        "Game.Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

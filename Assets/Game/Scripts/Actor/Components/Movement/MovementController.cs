@@ -1,6 +1,5 @@
 using Game.Input;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Game.Actor
 {

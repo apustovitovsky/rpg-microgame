@@ -1,3 +1,4 @@
+using System;
 using Game.Input;
 using Game.Targeting;
 using UnityEngine;
@@ -18,6 +19,8 @@ namespace Game.Actor
 
         public ITargetable CurrentTarget { get; private set; }
         public bool IsLocked { get; private set; }
+
+        public event Action<ITargetable> CurrentTargetChanged;
 
         private void Awake()
         {
@@ -55,6 +58,7 @@ namespace Game.Actor
         private void OnDisable()
         {
             Unlock();
+            SetCurrentTarget(null);
         }
 
         private void Update()
@@ -63,7 +67,7 @@ namespace Game.Actor
 
             if (!IsLocked)
             {
-                CurrentTarget = bestTarget;
+                SetCurrentTarget(bestTarget);
                 return;
             }
 
@@ -72,7 +76,7 @@ namespace Game.Actor
                 !ContainsCurrentTarget())
             {
                 Unlock();
-                CurrentTarget = bestTarget;
+                SetCurrentTarget(bestTarget);
                 return;
             }
 
@@ -92,7 +96,7 @@ namespace Game.Actor
 
         public void LockBestTarget()
         {
-            CurrentTarget = FindBestTarget();
+            SetCurrentTarget(FindBestTarget());
 
             if (CurrentTarget == null)
             {
@@ -109,9 +113,7 @@ namespace Game.Actor
             IsLocked = false;
 
             if (_look == null)
-            {
                 return;
-            }
 
             _look.ClearTarget();
         }
@@ -152,6 +154,15 @@ namespace Game.Actor
             }
 
             _look.SetTarget(target.TargetPoint);
+        }
+
+        private void SetCurrentTarget(ITargetable target)
+        {
+            if (ReferenceEquals(CurrentTarget, target))
+                return;
+
+            CurrentTarget = target;
+            CurrentTargetChanged?.Invoke(CurrentTarget);
         }
     }
 }

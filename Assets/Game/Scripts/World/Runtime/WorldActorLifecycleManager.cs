@@ -5,7 +5,6 @@ using Game.Actor;
 using Game.Player;
 using UnityEngine;
 using VContainer.Unity;
-using Unity.Cinemachine;
 
 namespace Game.World
 {
@@ -13,25 +12,24 @@ namespace Game.World
         IStartable,
         IDisposable
     {
-        private readonly WorldActorManifestSO _manifest;
+        private readonly WorldActorConfigSO _manifest;
         private readonly INavigationLocationResolver _locations;
         private readonly INavigationGraphProvider _graphProvider;
         private readonly IActorSpawner _actorSpawner;
         private readonly IPlayerActorSpawner _playerSpawner;
         private readonly IActorRegistryWriter _actorRegistry;
-        private readonly CinemachineCamera _camera;
+
 
         private readonly Dictionary<string, IActorView> _spawned =
             new(StringComparer.Ordinal);
 
         public WorldActorLifecycleManager(
-            WorldActorManifestSO manifest,
+            WorldActorConfigSO manifest,
             INavigationLocationResolver locations,
             INavigationGraphProvider graphProvider,
             IActorSpawner actorSpawner,
             IPlayerActorSpawner playerSpawner,
-            IActorRegistryWriter actorRegistry,
-            CinemachineCamera camera)
+            IActorRegistryWriter actorRegistry)
         {
             _manifest = manifest;
             _locations = locations;
@@ -39,7 +37,6 @@ namespace Game.World
             _actorSpawner = actorSpawner;
             _playerSpawner = playerSpawner;
             _actorRegistry = actorRegistry;
-            _camera = camera;
         }
 
         public void Start()
@@ -61,12 +58,11 @@ namespace Game.World
                 return;
             }
 
-            var view = Spawn(
+            Spawn(
                 player,
                 node,
                 usePlayerSpawner: true);
 
-            BindPlayerCamera(view);
         }
 
         private void SpawnActors()
@@ -90,7 +86,7 @@ namespace Game.World
         }
 
         private IActorView Spawn(
-            WorldActorManifestSO.ActorEntry entry,
+            WorldActorConfigSO.ActorEntry entry,
             NavigationNode node,
             bool usePlayerSpawner)
         {
@@ -138,23 +134,8 @@ namespace Game.World
             return view;
         }
 
-        private void BindPlayerCamera(IActorView player)
-        {
-            if (player == null)
-                return;
-
-            if (_camera == null)
-            {
-                Debug.LogWarning("Player camera was not bound: camera is missing.");
-                return;
-            }
-
-            _camera.Follow = player.CameraPivot;
-            _camera.LookAt = null;
-        }
-
         private bool TryResolveSpawnPoint(
-            WorldActorManifestSO.ActorEntry entry,
+            WorldActorConfigSO.ActorEntry entry,
             out NavigationNode node)
         {
             node = null;

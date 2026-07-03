@@ -1,6 +1,7 @@
 using System;
 using Game.Actor;
 using Game.Input;
+using Game.Possession;
 using UnityEngine;
 
 namespace Game.Player
@@ -9,13 +10,16 @@ namespace Game.Player
     {
         private readonly IActorSpawner _actorSpawner;
         private readonly IActorInput _input;
+        private readonly IPossessionService _possession;
 
         public PlayerActorSpawner(
             IActorSpawner actorSpawner,
-            IActorInput input)
+            IActorInput input,
+            IPossessionService possession)
         {
             _actorSpawner = actorSpawner;
             _input = input;
+            _possession = possession;
         }
 
         public IActorView Spawn(
@@ -51,6 +55,7 @@ namespace Game.Player
             look.Bind(_input);
             movement.Bind(_input);
             targeting.Bind(_input);
+            _possession.Possess(actor);
         }
 
         private static InvalidOperationException MissingCapability<T>(

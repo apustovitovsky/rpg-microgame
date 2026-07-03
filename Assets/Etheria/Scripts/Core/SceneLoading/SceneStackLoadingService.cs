@@ -100,22 +100,22 @@ namespace Etheria.Core.DI
             return scopes;
         }
 
-        private ModularScope FindSceneScope(
+        private LifetimeScope FindSceneScope(
             Scene scene,
             SceneDefinitionSO definition)
         {
-            var scopes = new List<ModularScope>();
+            var scopes = new List<LifetimeScope>();
 
             foreach (var root in scene.GetRootGameObjects())
             {
-                if (root.TryGetComponent<ModularScope>(out var rootScope))
+                if (root.TryGetComponent<LifetimeScope>(out var rootScope))
                     scopes.Add(rootScope);
             }
 
             if (scopes.Count != 1)
             {
                 throw new InvalidOperationException(
-                    $"Loaded scene must contain exactly one {nameof(ModularScope)}.\n" +
+                    $"Loaded scene must contain exactly one {nameof(LifetimeScope)}.\n" +
                     $"SceneDefinition: {definition.name}\n" +
                     $"ScenePath: {definition.ScenePath}\n" +
                     $"Found: {scopes.Count}");

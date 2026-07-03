@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using VContainer;
 
 namespace Game.Actor
 {
@@ -14,19 +13,26 @@ namespace Game.Actor
         private Transform _cameraPivot;
 
         [SerializeField]
+        private Transform _targetPoint;
+
+        [SerializeField]
         private Transform _uiAnchor;
 
         [SerializeField]
         private MonoBehaviour[] _capabilities = Array.Empty<MonoBehaviour>();
 
         private readonly Dictionary<Type, object> _cache = new();
-        private string _actorId = string.Empty;
+        private string _actorId = "Unknown";
         private bool _cacheBuilt;
 
         public string ActorId => _actorId;
 
         public Transform Root =>
             transform;
+
+        public Transform TargetPoint => _targetPoint != null
+            ? _targetPoint
+            : Root;
 
         public Transform CameraPivot => _cameraPivot != null
             ? _cameraPivot
@@ -36,10 +42,14 @@ namespace Game.Actor
             ? _uiAnchor
             : Root;
 
-        [Inject]
-        public void Construct(ActorSpawnContext context)
+        public void Initialize(string actorId)
         {
-            _actorId = context.ActorId;
+            actorId = actorId?.Trim() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(actorId))
+                throw new ArgumentException("Actor id is required.", nameof(actorId));
+
+            _actorId = actorId;
         }
 
         public bool TryGet<T>(out T capability)

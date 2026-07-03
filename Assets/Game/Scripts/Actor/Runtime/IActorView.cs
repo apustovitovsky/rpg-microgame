@@ -8,6 +8,7 @@ namespace Game.Actor
 
         Transform Root { get; }
         Transform CameraPivot { get; }
+        Transform TargetPoint { get; }
         Transform UiAnchor { get; }
 
         bool TryGet<T>(out T capability)

@@ -3,11 +3,13 @@
     "rootNamespace": "",
     "references": [
         "VContainer",
-        "Etheria.Core",
-        "Etheria.Game",
+        "Game.Core",
         "Game.Actor",
         "Game.Player",
-        "Unity.Cinemachine"
+        "Unity.Cinemachine",
+        "Etheria.Game",
+        "Etheria.Navigation",
+        "Etheria.Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

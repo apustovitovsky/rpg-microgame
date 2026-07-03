@@ -1,0 +1,19 @@
+{
+    "name": "Game.AI",
+    "rootNamespace": "",
+    "references": [
+        "Game.Actor",
+        "Game.Input",
+        "Unity.AIModule",
+        "Unity.Behavior"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

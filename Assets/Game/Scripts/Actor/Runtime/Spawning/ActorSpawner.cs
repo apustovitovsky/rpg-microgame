@@ -1,7 +1,5 @@
 using System;
-using Etheria.Core.DI;
 using UnityEngine;
-using VContainer;
 using VContainer.Unity;
 
 namespace Game.Actor
@@ -9,14 +7,10 @@ namespace Game.Actor
     public sealed class ActorSpawner : IActorSpawner
     {
         private readonly LifetimeScope _parentScope;
-        private readonly ScopeRoot _scopeRoot;
 
-        public ActorSpawner(
-            LifetimeScope parentScope,
-            ScopeRoot scopeRoot)
+        public ActorSpawner(LifetimeScope parentScope)
         {
             _parentScope = parentScope;
-            _scopeRoot = scopeRoot;
         }
 
         public IActorView Spawn(
@@ -34,27 +28,26 @@ namespace Game.Actor
             if (prefab == null)
                 throw new ArgumentNullException(nameof(prefab));
 
-            if (!prefab.TryGetComponent<LifetimeScope>(out var prefabScope))
+            using (LifetimeScope.EnqueueParent(_parentScope))
             {
-                throw new InvalidOperationException(
-                    $"Actor prefab '{prefab.name}' must have {nameof(LifetimeScope)} on root.");
+                var instance = UnityEngine.Object.Instantiate(
+                    prefab,
+                    position,
+                    rotation,
+                    parent);
+
+                var view = instance.GetComponentInChildren<ActorView>(true);
+
+                if (view == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Actor prefab '{prefab.name}' has no {nameof(ActorView)}.");
+                }
+
+                view.Initialize(actorId);
+
+                return view;
             }
-
-            var context = new ActorSpawnContext(actorId);
-
-            var scope = _parentScope.CreateChildFromPrefab(
-                prefabScope,
-                builder => builder.RegisterInstance(context));
-
-            scope.transform.SetParent(
-                parent != null ? parent : _scopeRoot.Transform,
-                worldPositionStays: false);
-
-            scope.transform.SetPositionAndRotation(position, rotation);
-
-            return scope.GetComponentInChildren<IActorView>(true)
-                   ?? throw new InvalidOperationException(
-                       $"Actor prefab '{prefab.name}' has no {nameof(IActorView)}.");
         }
     }
 }
