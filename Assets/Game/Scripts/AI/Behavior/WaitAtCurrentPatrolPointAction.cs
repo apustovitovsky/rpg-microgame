@@ -21,6 +21,7 @@ namespace Game.AI.Behavior
         [SerializeReference] public BlackboardVariable<float> WaitSeconds = new(2f);
 
         private NavMeshActorInput _input;
+        private NavMeshPlannerEndpoint _navigation;
         private GameObject _point;
         private float _timer;
 
@@ -32,12 +33,13 @@ namespace Game.AI.Behavior
             if (!TryGetCurrentPoint(out _point))
                 return Status.Failure;
 
+            _navigation = Self.Value.GetComponentInParent<NavMeshPlannerEndpoint>();
             _input = Self.Value.GetComponentInParent<NavMeshActorInput>();
 
-            if (_input == null)
+            if (_navigation == null || _navigation.Planner == null || _input == null)
                 return Status.Failure;
 
-            _input.Stop();
+            _navigation.Planner.Stop();
             _input.SetFacing(_point.transform.forward);
 
             _timer = Mathf.Max(0f, WaitSeconds?.Value ?? 0f);

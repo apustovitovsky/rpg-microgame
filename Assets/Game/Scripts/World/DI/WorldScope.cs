@@ -8,6 +8,7 @@ namespace Game.Core
     public sealed class WorldScope : LifetimeScope
     {
         [Header("Build Configurations")]
+        [SerializeField] private BuildConfigurationSO _game;
         [SerializeField] private BuildConfigurationSO _input;
         [SerializeField] private BuildConfigurationSO _navigation;
         [SerializeField] private BuildConfigurationSO _actor;
@@ -18,6 +19,7 @@ namespace Game.Core
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.Configure(_game);
             builder.Configure(_input);
             builder.Configure(_navigation);
             builder.Configure(_actor);

@@ -23,9 +23,9 @@ MonoBehaviour:
     _prefab: {fileID: 2063428145734820200, guid: 205d6a229b20c97448b12e54804ee4c2,
       type: 3}
     _locationId: city_central_square
-    _anchorKey: spawn_02
+    _anchorKey: spawn_03
   - _actorId: npc_guard_02
     _prefab: {fileID: 2063428145734820200, guid: 205d6a229b20c97448b12e54804ee4c2,
       type: 3}
     _locationId: city_central_square
-    _anchorKey: spawn_03
+    _anchorKey: spawn_04

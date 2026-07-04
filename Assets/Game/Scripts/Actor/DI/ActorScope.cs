@@ -29,6 +29,7 @@ namespace Game.Actor
             builder.RegisterInstance(_view)
                 .AsImplementedInterfaces();
 
+
             builder.Configure(_core);
             builder.Configure(_movement);
             builder.Configure(_targeting);

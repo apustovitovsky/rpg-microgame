@@ -89,10 +89,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3723044361930362531}
-    - targetCorrespondingSourceObject: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: -6276925100042527788}
   m_SourcePrefab: {fileID: 100100000, guid: ff419830c249fdb43a317a78c972d9bd, type: 3}
 --- !u!1 &2063428145734820200 stripped
@@ -135,26 +131,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76b2fc898f7e1f4ab15dc3913960e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.AI::Game.AI.NavMeshActorInput
-  _agent: {fileID: 2303298478179744580}
   _look: {fileID: 2339733392456439438}
   _moveInputDeadZone: 0.05
-  _destinationRepathDistance: 0.25
   _facingCompleteAngle: 3
---- !u!114 &3723044361930362531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2063428145734820200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6703c935b2337b8428349f9179f6a0de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.AI::Game.AI.NavMeshActorInputBinder
-  _input: {fileID: 2341003461707643601}
-  _movement: {fileID: 8900731736853642273}
-  _look: {fileID: 2339733392456439438}
 --- !u!114 &-6276925100042527788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,15 +177,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 661207cbd4f531346b8bacb7185a364c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorLookController
---- !u!114 &8900731736853642273 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 535090416791697999, guid: ff419830c249fdb43a317a78c972d9bd,
-    type: 3}
-  m_PrefabInstance: {fileID: 9000661272712267374}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2063428145734820200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3b9d18ac8760584dbc1d1a5a5674d35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorMovementController

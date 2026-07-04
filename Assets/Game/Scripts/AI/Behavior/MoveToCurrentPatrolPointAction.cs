@@ -19,7 +19,7 @@ namespace Game.AI.Behavior
         [SerializeReference] public BlackboardVariable<List<GameObject>> PatrolPoints;
         [SerializeReference] public BlackboardVariable<int> PatrolIndex;
 
-        private NavMeshActorInput _input;
+        private NavMeshPlannerEndpoint _navigation;
         private GameObject _point;
 
         protected override Status OnStart()
@@ -30,23 +30,26 @@ namespace Game.AI.Behavior
             if (!TryGetCurrentPoint(out _point))
                 return Status.Failure;
 
-            _input = Self.Value.GetComponentInParent<NavMeshActorInput>();
+            _navigation = Self.Value.GetComponentInParent<NavMeshPlannerEndpoint>();
 
-            if (_input == null)
+            if (_navigation == null || _navigation.Planner == null)
                 return Status.Failure;
 
-            _input.ClearFacing();
-            _input.SetDestination(_point.transform.position);
+            _navigation.Planner.MoveTo(_point.transform.position);
 
             return Status.Running;
         }
 
         protected override Status OnUpdate()
         {
-            if (_input == null || _point == null)
+            if (_navigation == null ||
+                _navigation.Planner == null ||
+                _point == null)
+            {
                 return Status.Failure;
+            }
 
-            return _input.HasArrived
+            return _navigation.Planner.HasArrived
                 ? Status.Success
                 : Status.Running;
         }

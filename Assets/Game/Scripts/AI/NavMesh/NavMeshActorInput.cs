@@ -2,21 +2,19 @@ using System;
 using Game.Actor;
 using Game.Input;
 using UnityEngine;
-using UnityEngine.AI;
+using VContainer;
 
 namespace Game.AI
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(NavMeshAgent))]
     public sealed class NavMeshActorInput :
         MonoBehaviour,
         IActorInput
     {
-        [SerializeField] private NavMeshAgent _agent;
+        private INavMeshPlanner _planner;
         [SerializeField] private ActorLookController _look;
 
         [SerializeField] private float _moveInputDeadZone = 0.05f;
-        [SerializeField] private float _destinationRepathDistance = 0.25f;
 
         [SerializeField] private float _facingCompleteAngle = 3f;
 
@@ -24,11 +22,20 @@ namespace Game.AI
         private bool _hasFacingDirection;
         private bool _aimHeld;
 
-        public bool HasDestination => _hasDestination;
+        public bool HasDestination =>
+            _planner != null && _planner.HasDestination;
 
-        public bool HasArrived => CanNavigate() && CheckArrived();
+        public bool HasArrived =>
+            _planner != null && _planner.HasArrived;
 
-        public bool IsNavigating => CanNavigate() && !CheckArrived();
+        public bool IsNavigating =>
+            _planner != null && _planner.IsNavigating;
+
+        [Inject]
+        public void Construct(INavMeshPlanner planner)
+        {
+            _planner = planner;
+        }
 
         public bool IsFacingComplete
         {
@@ -92,22 +99,6 @@ namespace Game.AI
                 OnAimDeactivated?.Invoke();
         }
 
-        private bool CheckArrived()
-        {
-            if (_agent.pathPending)
-                return false;
-
-            float stoppingDistance = Mathf.Max(
-                _agent.stoppingDistance,
-                0.05f);
-
-            return !_agent.hasPath ||
-                _agent.remainingDistance <= stoppingDistance;
-        }
-
-        private Vector3 _destination;
-        private bool _hasDestination;
-
         public Vector2 LookDelta => Vector2.zero;
 
         public Vector2 MoveComposite { get; private set; }
@@ -127,124 +118,26 @@ namespace Game.AI
         public event Action OnSprintDeactivated;
         public event Action OnWalkToggled;
 
-        private void Awake()
-        {
-            if (_agent == null)
-                _agent = GetComponent<NavMeshAgent>();
-
-            if (_agent != null)
-            {
-                _agent.updatePosition = false;
-                _agent.updateRotation = false;
-            }
-        }
-
         private void Update()
         {
-            if (!CanNavigate())
-            {
-                MoveComposite = Vector2.zero;
-                return;
-            }
+            MoveComposite = Vector2.zero;
 
-            _agent.nextPosition = transform.position;
-
-            if (_agent.pathPending)
+            if (_planner == null || !_planner.IsNavigating)
                 return;
 
-            if (CheckArrived())
-            {
-                MoveComposite = Vector2.zero;
-                return;
-            }
-
-            Vector3 desiredDirection = GetDesiredWorldDirection();
+            Vector3 desiredDirection = _planner.DesiredWorldDirection;
 
             if (desiredDirection.sqrMagnitude <= 0.0001f)
                 return;
-
-            if (_look != null)
-                _look.SetWorldDirection(desiredDirection);
 
             MoveComposite = ToLookRelativeInput(desiredDirection);
             MovementInputDuration += Time.deltaTime;
         }
 
-        private void LateUpdate()
-        {
-            if (_agent != null &&
-                _agent.enabled &&
-                _agent.isOnNavMesh)
-            {
-                _agent.nextPosition = transform.position;
-            }
-        }
-
-        public void SetDestination(Vector3 destination)
-        {
-            if (_agent == null ||
-                !_agent.enabled ||
-                !_agent.isOnNavMesh)
-            {
-                return;
-            }
-
-            bool shouldRepath =
-                !_hasDestination ||
-                Vector3.Distance(_destination, destination) >= _destinationRepathDistance;
-
-            _destination = destination;
-            _hasDestination = true;
-
-            if (!shouldRepath)
-                return;
-
-            _agent.isStopped = false;
-            _agent.SetDestination(destination);
-        }
-
         public void Stop()
         {
-            _hasDestination = false;
             MoveComposite = Vector2.zero;
             MovementInputDuration = 0f;
-
-            if (_agent == null ||
-                !_agent.enabled ||
-                !_agent.isOnNavMesh)
-            {
-                return;
-            }
-
-            _agent.isStopped = true;
-            _agent.ResetPath();
-            _agent.nextPosition = transform.position;
-        }
-
-        private bool CanNavigate()
-        {
-            return _hasDestination &&
-                _agent != null &&
-                _agent.enabled &&
-                _agent.isOnNavMesh;
-        }
-
-
-        private Vector3 GetDesiredWorldDirection()
-        {
-            Vector3 desiredVelocity = _agent.desiredVelocity;
-            desiredVelocity.y = 0f;
-
-            if (desiredVelocity.sqrMagnitude > 0.0001f)
-                return desiredVelocity.normalized;
-
-            Vector3 toSteeringTarget = _agent.steeringTarget - transform.position;
-            toSteeringTarget.y = 0f;
-
-            if (toSteeringTarget.sqrMagnitude > 0.0001f)
-                return toSteeringTarget.normalized;
-
-            return Vector3.zero;
         }
 
         private Vector2 ToLookRelativeInput(Vector3 worldDirection)

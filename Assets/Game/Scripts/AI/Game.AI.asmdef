@@ -2,8 +2,10 @@
     "name": "Game.AI",
     "rootNamespace": "",
     "references": [
+        "VContainer",
         "Game.Actor",
         "Game.Input",
+        "Game.Core",
         "Unity.AIModule",
         "Unity.Behavior"
     ],
