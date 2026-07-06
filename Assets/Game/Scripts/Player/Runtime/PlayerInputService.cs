@@ -9,6 +9,7 @@ namespace Game.Player
         InputActions_Generated.IPlayerActions,
         InputActions_Generated.IUIActions,
         IActorInput,
+        IPlayerInteractionInput,
         IDisposable
     {
         private readonly InputActions_Generated _input;
@@ -17,6 +18,7 @@ namespace Game.Player
         public event Action ToggleJournalPerformed;
         public event Action UiSubmitPerformed;
         public event Action UiCancelPerformed;
+        public event Action PossessPerformed;
 
         public PlayerInputService(
             InputActions_Generated input)
@@ -175,6 +177,10 @@ namespace Game.Player
 
         public void OnNext(InputAction.CallbackContext context)
         {
+            if (!context.performed)
+                return;
+
+            PossessPerformed?.Invoke();
         }
 
         public void OnFire(InputAction.CallbackContext context)

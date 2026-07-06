@@ -1,0 +1,18 @@
+{
+    "name": "Game.Pickup",
+    "rootNamespace": "",
+    "references": [
+        "VContainer",
+        "Game.Core",
+        "Game.Targeting"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

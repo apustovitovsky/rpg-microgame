@@ -1,12 +1,14 @@
+using Game.World;
+
 namespace Game.Actor
 {
     public interface IActorIdentity
     {
-        string InstanceId { get; }
-        string DefinitionId { get; }
+        WorldId WorldId { get; }
+        string DisplayName { get; }
 
         void Initialize(
-            string instanceId,
-            string definitionId);
+            WorldId worldId,
+            string displayName);
     }
 }

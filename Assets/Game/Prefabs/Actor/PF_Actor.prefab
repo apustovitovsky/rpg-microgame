@@ -278,7 +278,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6769934990369498367}
-  - component: {fileID: 4971627234746884421}
+  - component: {fileID: 8547825589139076706}
   m_Layer: 0
   m_Name: Dialogue
   m_TagString: Untagged
@@ -301,7 +301,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8538305375040021554}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4971627234746884421
+--- !u!114 &8547825589139076706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -310,10 +310,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2649709327502031680}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a31ae5a126b4b674c8212ce1ca52f83d, type: 3}
+  m_Script: {fileID: 11500000, guid: 3fb58b0a3f3b05343a878b3dcb7d1b1d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorDialoguePort
-  _handler: {fileID: 0}
+  m_EditorClassIdentifier: Game.Actor::Game.Actor.DialogueInteraction
 --- !u!1 &3683214080218915046
 GameObject:
   m_ObjectHideFlags: 0

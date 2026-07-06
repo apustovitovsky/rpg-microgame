@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14723716f42333b49bff28473f681c21, type: 3}
+  m_Script: {fileID: 11500000, guid: fb1a5ba9bf56d0a40be9b62ec4a3294f, type: 3}
   m_Name: WorldConfigurator
-  m_EditorClassIdentifier: Game.World::Game.World.WorldActorInstallerSO
-  _config: {fileID: 11400000, guid: a7a7955319c19304cb7fae09219ba1d1, type: 2}
+  m_EditorClassIdentifier: Game.Gameplay::Game.World.WorldConfiguratorSO

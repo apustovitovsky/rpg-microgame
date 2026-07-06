@@ -1,4 +1,5 @@
 using Game.Targeting;
+using Game.World;
 using UnityEngine;
 using VContainer;
 
@@ -15,9 +16,9 @@ namespace Game.Actor
 
         private IActorIdentity _identity;
 
-        public string TargetId => _identity != null
-            ? _identity.InstanceId
-            : string.Empty;
+        public WorldId WorldId => _identity != null
+            ? _identity.WorldId
+            : default;
 
         public Transform Root => _root != null
             ? _root
@@ -29,7 +30,7 @@ namespace Game.Actor
 
         public bool IsTargetable =>
             _isTargetable &&
-            !string.IsNullOrWhiteSpace(TargetId);
+            !WorldId.IsEmpty;
 
         [Inject]
         public void Construct(IActorIdentity identity)

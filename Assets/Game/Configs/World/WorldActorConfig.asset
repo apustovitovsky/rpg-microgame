@@ -13,23 +13,23 @@ MonoBehaviour:
   m_Name: WorldActorConfig
   m_EditorClassIdentifier: Game.World::Game.World.WorldActorConfigSO
   _player:
-    _definitionId: player
+    _displayName: Player
     _prefab: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
       type: 3}
     _locationId: city_storage
     _anchorKey: entrance_outer
   _actors:
-  - _definitionId: npc_bandit
+  - _displayName: npc_01
     _prefab: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
       type: 3}
     _locationId: city_storage
     _anchorKey: entrance_inner
-  - _definitionId: npc_bandit
+  - _displayName: npc_02
     _prefab: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
       type: 3}
     _locationId: city_storage
     _anchorKey: corner_01
-  - _definitionId: npc_bandit
+  - _displayName: npc_03
     _prefab: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
       type: 3}
     _locationId: city_storage

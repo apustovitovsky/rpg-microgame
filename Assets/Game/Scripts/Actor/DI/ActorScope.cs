@@ -25,7 +25,7 @@ namespace Game.Actor
 
             builder.RegisterInstance(new ScopeRoot(root));
 
-            builder.Register<ActorInstanceFactory>(Lifetime.Scoped);
+            builder.Register<WorldActorFactory>(Lifetime.Scoped);
 
             builder.Register<ActorInputBinder>(Lifetime.Scoped)
                 .AsImplementedInterfaces();

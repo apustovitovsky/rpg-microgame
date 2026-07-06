@@ -383,6 +383,12 @@ namespace Game.Actor
             _input.OnAimActivated += ActivateFacing;
             _input.OnAimDeactivated += DeactivateFacing;
 
+            if (_currentState == AnimationState.Locomotion)
+                _input.OnJumpPerformed += LocomotionToJumpState;
+
+            if (_currentState == AnimationState.Crouch)
+                _input.OnJumpPerformed += CrouchToJumpState;
+
             _inputBound = true;
         }
 
@@ -400,6 +406,9 @@ namespace Game.Actor
             _input.OnCrouchDeactivated -= DeactivateCrouch;
             _input.OnAimActivated -= ActivateFacing;
             _input.OnAimDeactivated -= DeactivateFacing;
+
+            _input.OnJumpPerformed -= LocomotionToJumpState;
+            _input.OnJumpPerformed -= CrouchToJumpState;
 
             _inputBound = false;
         }

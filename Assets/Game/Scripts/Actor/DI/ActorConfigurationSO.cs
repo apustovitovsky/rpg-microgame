@@ -11,9 +11,6 @@ namespace Game.Actor
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<ActorRegistry>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
             builder.Register<ActorSpawner>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }

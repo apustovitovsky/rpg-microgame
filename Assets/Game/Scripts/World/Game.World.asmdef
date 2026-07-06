@@ -1,16 +1,7 @@
 {
     "name": "Game.World",
     "rootNamespace": "",
-    "references": [
-        "VContainer",
-        "Game.Core",
-        "Game.Actor",
-        "Game.Player",
-        "Unity.Cinemachine",
-        "Etheria.Game",
-        "Etheria.Navigation",
-        "Etheria.Core"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

@@ -71,7 +71,7 @@ namespace Game.Player
             if (target == null ||
                 !target.IsTargetable ||
                 target.TargetPoint == null ||
-                string.IsNullOrWhiteSpace(target.TargetId))
+                target.WorldId.IsEmpty)
             {
                 ReleaseCurrent();
                 return;
@@ -80,7 +80,7 @@ namespace Game.Player
             var currentActor = _player.CurrentActor;
 
             if (currentActor != null &&
-                target.TargetId == currentActor.InstanceId)
+                target.WorldId == currentActor.WorldId)
             {
                 ReleaseCurrent();
                 return;
@@ -102,7 +102,7 @@ namespace Game.Player
             _currentTarget = target;
             _currentView = _pool.Get(
                 target.TargetPoint,
-                target.TargetId,
+                target.WorldId.ToString(),
                 camera);
         }
 

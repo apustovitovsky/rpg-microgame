@@ -27,6 +27,9 @@ namespace Game.Actor
                 .AsSelf()
                 .AsImplementedInterfaces();
 
+            builder.RegisterComponentInScope<DialogueInteraction>()
+                .AsImplementedInterfaces();
+
             builder.RegisterComponentInScope<ActorTargetable>()
                 .AsSelf()
                 .AsImplementedInterfaces();

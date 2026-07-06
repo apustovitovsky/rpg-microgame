@@ -1,0 +1,26 @@
+{
+    "name": "Game.Gameplay",
+    "rootNamespace": "",
+    "references": [
+        "VContainer",
+        "Game.Core",
+        "Game.World",
+        "Game.Actor",
+        "Game.Player",
+        "Game.Interaction",
+        "Game.Navigation",
+        "Unity.Cinemachine",
+        "Etheria.Game",
+        "Etheria.Navigation",
+        "Etheria.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

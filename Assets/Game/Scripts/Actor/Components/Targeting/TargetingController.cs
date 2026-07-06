@@ -13,8 +13,8 @@ namespace Game.Actor
         [SerializeField] private TargetPerception _perception;
         [SerializeField] private ActorLookController _look;
 
-        [SerializeField] private float _distanceScoreWeight = 100f;
-        [SerializeField] private float _angleScoreWeight = 40f;
+        [SerializeField] private float _distanceScoreWeight = 0f;
+        [SerializeField] private float _angleScoreWeight = 100f;
 
         private IActorInput _input;
         private ITargetSelector _selector;

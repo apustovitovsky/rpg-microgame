@@ -30,6 +30,12 @@ namespace Game.Player
             builder.RegisterComponentInNewPrefab(
                 _virtualCameraPrefab,
                 Lifetime.Singleton);
+
+            builder.RegisterEntryPoint<PlayerTargetControlBinder>(
+                Lifetime.Singleton);
+
+            builder.RegisterEntryPoint<PlayerInteractionController>(
+                Lifetime.Singleton);
         }
     }
 }

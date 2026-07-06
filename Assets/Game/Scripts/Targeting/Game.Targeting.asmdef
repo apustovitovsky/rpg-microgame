@@ -1,7 +1,9 @@
 {
     "name": "Game.Targeting",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "Game.World"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

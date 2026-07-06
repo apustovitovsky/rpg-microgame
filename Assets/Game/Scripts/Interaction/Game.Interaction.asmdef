@@ -1,0 +1,19 @@
+{
+    "name": "Game.Interaction",
+    "rootNamespace": "",
+    "references": [
+        "UniTask",
+        "VContainer",
+        "Game.Core",
+        "Game.World"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

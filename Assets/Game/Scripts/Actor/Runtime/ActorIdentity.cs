@@ -1,31 +1,30 @@
 using System;
+using Game.World;
 
 namespace Game.Actor
 {
     public sealed class ActorIdentity :
         IActorIdentity
     {
-        private string _instanceId = string.Empty;
-        private string _definitionId = string.Empty;
+        private WorldId _worldId;
+        private string _displayName = string.Empty;
 
-        public string InstanceId => _instanceId;
-        public string DefinitionId => _definitionId;
+        public WorldId WorldId => _worldId;
+        public string DisplayName => _displayName;
 
         public void Initialize(
-            string instanceId,
-            string definitionId)
+            WorldId worldId,
+            string displayName)
         {
-            instanceId = instanceId?.Trim() ?? string.Empty;
-            definitionId = definitionId?.Trim() ?? string.Empty;
+            displayName = displayName?.Trim() ?? string.Empty;
 
-            if (string.IsNullOrWhiteSpace(instanceId))
-                throw new ArgumentException("Actor instance id is required.", nameof(instanceId));
+            if (worldId.IsEmpty)
+                throw new ArgumentException("Actor world id is required.", nameof(worldId));
 
-            if (string.IsNullOrWhiteSpace(definitionId))
-                throw new ArgumentException("Actor definition id is required.", nameof(definitionId));
-
-            _instanceId = instanceId;
-            _definitionId = definitionId;
+            _worldId = worldId;
+            _displayName = string.IsNullOrWhiteSpace(displayName)
+                ? worldId.ToString()
+                : displayName;
         }
     }
 }
