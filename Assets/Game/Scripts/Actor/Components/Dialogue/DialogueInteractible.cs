@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Game.Actor
 {
-    public sealed class DialogueInteraction :
+    public sealed class DialogueInteractible :
         MonoBehaviour,
         IInteractable,
         IActorDialogueEndpoint

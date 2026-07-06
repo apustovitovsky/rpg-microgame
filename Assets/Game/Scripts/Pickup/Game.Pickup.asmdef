@@ -4,7 +4,10 @@
     "references": [
         "VContainer",
         "Game.Core",
-        "Game.Targeting"
+        "Game.World",
+        "Game.Targeting",
+        "Game.Interaction",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,4 +1,5 @@
 using Game.Interaction;
+using Game.Pickup;
 using Game.Targeting;
 using Game.World;
 using UnityEngine;
@@ -15,7 +16,8 @@ namespace Game.Actor
             ITargetProvider targetProvider = null,
             IActorInputBinder inputBinder = null,
             IActorDialogueEndpoint dialogue = null,
-            IInteractable interaction = null)
+            IInteractable interaction = null,
+            IPickupCollector pickupCollector = null)
         {
             WorldId = worldId;
             DisplayName = string.IsNullOrWhiteSpace(displayName)
@@ -28,6 +30,7 @@ namespace Game.Actor
             InputBinder = inputBinder;
             Dialogue = dialogue;
             Interaction = interaction;
+            PickupCollector = pickupCollector;
         }
 
         public WorldId WorldId { get; }
@@ -41,6 +44,7 @@ namespace Game.Actor
         public IActorInputBinder InputBinder { get; }
         public IActorDialogueEndpoint Dialogue { get; }
         public IInteractable Interaction { get; }
+        public IPickupCollector PickupCollector { get; }
 
         public bool TryGet<TEndpoint>(out TEndpoint endpoint)
             where TEndpoint : class
@@ -61,6 +65,8 @@ namespace Game.Actor
                 endpoint = dialogue;
             else if (Interaction is TEndpoint interaction)
                 endpoint = interaction;
+            else if (PickupCollector is TEndpoint pickupCollector)
+                endpoint = pickupCollector;
 
             return endpoint != null;
         }

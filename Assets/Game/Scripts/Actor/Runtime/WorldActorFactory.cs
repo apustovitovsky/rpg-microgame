@@ -1,4 +1,5 @@
 using Game.Interaction;
+using Game.Pickup;
 using Game.Targeting;
 using Game.World;
 using VContainer;
@@ -35,6 +36,9 @@ namespace Game.Actor
             _resolver.TryResolve<IActorInputBinder>(
                 out var inputBinder);
 
+            _resolver.TryResolve<IPickupCollector>(
+                out var pickupCollector);
+
             return new(
                 worldId,
                 displayName,
@@ -43,7 +47,8 @@ namespace Game.Actor
                 targetProvider,
                 inputBinder,
                 dialogue,
-                interaction);
+                interaction,
+                pickupCollector);
         }
     }
 }

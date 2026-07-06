@@ -18,6 +18,7 @@ namespace Game.Gameplay
         [SerializeField] private BuildConfiguratorSO _player;
         [SerializeField] private BuildConfiguratorSO _actorNameplates;
         [SerializeField] private BuildConfiguratorSO _gameplay;
+        [SerializeField] private BuildConfiguratorSO _pickup;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -30,6 +31,7 @@ namespace Game.Gameplay
             builder.Configure(_player);
             builder.Configure(_actorNameplates);
             builder.Configure(_gameplay);
+            builder.Configure(_pickup);
         }
     }
 }

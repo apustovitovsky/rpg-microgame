@@ -27,11 +27,14 @@ namespace Game.Actor
                 .AsSelf()
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInScope<DialogueInteraction>()
+            builder.RegisterComponentInScope<DialogueInteractible>()
                 .AsImplementedInterfaces();
 
             builder.RegisterComponentInScope<ActorTargetable>()
                 .AsSelf()
+                .AsImplementedInterfaces();
+
+            builder.Register<ActorPickupCollector>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
         }
     }

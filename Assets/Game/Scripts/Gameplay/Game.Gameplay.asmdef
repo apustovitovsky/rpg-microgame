@@ -7,6 +7,8 @@
         "Game.World",
         "Game.Actor",
         "Game.Player",
+        "Game.Pickup",
+        "Game.Targeting",
         "Game.Interaction",
         "Game.Navigation",
         "Unity.Cinemachine",

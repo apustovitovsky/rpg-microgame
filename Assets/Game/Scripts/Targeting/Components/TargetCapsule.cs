@@ -1,16 +1,15 @@
-using Game.Targeting;
 using UnityEngine;
 
-namespace Game.Actor
+namespace Game.Targeting
 {
     [DisallowMultipleComponent]
     public sealed class TargetCapsule : MonoBehaviour
     {
-        [SerializeField] private ActorTargetable _targetable;
+        [SerializeField] private MonoBehaviour _targetable;
 
         public bool TryGetTarget(out ITargetable target)
         {
-            target = _targetable;
+            target = _targetable as ITargetable;
             return target != null && target.IsTargetable;
         }
     }
