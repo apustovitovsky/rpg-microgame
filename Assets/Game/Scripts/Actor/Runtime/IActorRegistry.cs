@@ -4,13 +4,13 @@ namespace Game.Actor
     {
         bool TryGet(
             string actorId,
-            out IActorView actor);
+            out ActorInstance actor);
     }
 
     public interface IActorRegistryWriter
     {
-        void Register(IActorView actor);
+        void Register(ActorInstance actor);
 
-        void Unregister(IActorView actor);
+        void Unregister(ActorInstance actor);
     }
 }

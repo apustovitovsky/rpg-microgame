@@ -112,12 +112,17 @@ namespace Game.AI
             if (_agent.pathPending)
                 return false;
 
+            if (!_agent.hasPath)
+                return false;
+
+            if (_agent.pathStatus == NavMeshPathStatus.PathInvalid)
+                return false;
+
             float stoppingDistance = Mathf.Max(
                 _agent.stoppingDistance,
                 0.05f);
 
-            return !_agent.hasPath ||
-                _agent.remainingDistance <= stoppingDistance;
+            return _agent.remainingDistance <= stoppingDistance;
         }
 
         private Vector3 GetDesiredWorldDirection()

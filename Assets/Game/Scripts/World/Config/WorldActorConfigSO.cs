@@ -30,19 +30,19 @@ namespace Game.World
         [Serializable]
         public sealed class ActorEntry
         {
-            [SerializeField] private string _actorId;
+            [SerializeField] private string _definitionId;
             [SerializeField] private GameObject _prefab;
             [SerializeField] private string _locationId;
             [SerializeField] private string _anchorKey = NavigationAnchorKeys.Default;
 
-            public string ActorId => _actorId;
+            public string DefinitionId => _definitionId;
             public GameObject Prefab => _prefab;
             public string LocationId => _locationId;
             public string AnchorKey => _anchorKey;
 
             public void Normalize()
             {
-                _actorId = _actorId?.Trim();
+                _definitionId = _definitionId?.Trim();
                 _locationId = _locationId?.Trim();
 
                 _anchorKey = string.IsNullOrWhiteSpace(_anchorKey)

@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.84313726}
@@ -471,7 +471,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_square_corner_04
   _radius: 0.5
@@ -824,7 +824,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_square_corner_03
   _radius: 0.5
@@ -863,296 +863,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 119948940}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &256065007
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_Graph
-      value: 
-      objectReference: {fileID: -3468402590788453328, guid: 7420687fc27b0d54d975491ba3ef87c8,
-        type: 2}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786101]'
-      value: 'Unity.Behavior Unity.Behavior.BlackboardVariable`1[[UnityEngine.GameObject,
-        UnityEngine.CoreModule]]'
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786274]'
-      value: 'Unity.Behavior Unity.Behavior.BlackboardVariable`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject,
-        UnityEngine.CoreModule]], mscorlib]]'
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786275]'
-      value: 'Unity.Behavior Unity.Behavior.BlackboardVariable`1[[System.Single,
-        mscorlib]]'
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786278]'
-      value: 'Unity.Behavior Unity.Behavior.BlackboardVariable`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject,
-        UnityEngine.CoreModule]], mscorlib]]'
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786279]'
-      value: 'Unity.Behavior Unity.Behavior.BlackboardVariable`1[[System.Single,
-        mscorlib]]'
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786101].Name
-      value: Self
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786274].Name
-      value: PatrolPoints
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786275].Name
-      value: WaitSeconds
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786278].Name
-      value: PatrolPoints
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786279].Name
-      value: WaitSeconds
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_BlackboardVariableOverridesList.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786101].m_Value
-      value: 
-      objectReference: {fileID: 494231793}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786275].m_Value
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786279].m_Value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'm_BlackboardVariableOverridesList.Array.data[1]'
-      value: 1610865965199786278
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'm_BlackboardVariableOverridesList.Array.data[2]'
-      value: 1610865965199786279
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786101].GUID.m_Value0
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786101].GUID.m_Value1
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786274].GUID.m_Value0
-      value: 8672281711449366984
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786274].GUID.m_Value1
-      value: 6750591388080236019
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786275].GUID.m_Value0
-      value: 17240883339117282112
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786275].GUID.m_Value1
-      value: 11279371331295021019
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786278].GUID.m_Value0
-      value: 8672281711449366984
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786278].GUID.m_Value1
-      value: 6750591388080236019
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786279].GUID.m_Value0
-      value: 17240883339117282112
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786279].GUID.m_Value1
-      value: 11279371331295021019
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786274].m_Value.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: managedReferences[1610865965199786278].m_Value.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786274].m_Value.Array.data[0]'
-      value: 
-      objectReference: {fileID: 1138597980}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786274].m_Value.Array.data[1]'
-      value: 
-      objectReference: {fileID: 542452323}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786274].m_Value.Array.data[2]'
-      value: 
-      objectReference: {fileID: 2090973117}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786274].m_Value.Array.data[3]'
-      value: 
-      objectReference: {fileID: 542452323}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786278].m_Value.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2090973117}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786278].m_Value.Array.data[1]'
-      value: 
-      objectReference: {fileID: 542452323}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786278].m_Value.Array.data[2]'
-      value: 
-      objectReference: {fileID: 1450685961}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786278].m_Value.Array.data[3]'
-      value: 
-      objectReference: {fileID: 1747698008}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786278].m_Value.Array.data[4]'
-      value: 
-      objectReference: {fileID: 450401403}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786278].m_Value.Array.data[5]'
-      value: 
-      objectReference: {fileID: 2088553867}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786278].m_Value.Array.data[6]'
-      value: 
-      objectReference: {fileID: 2081629781}
-    - target: {fileID: -6276925100042527788, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: 'managedReferences[1610865965199786278].m_Value.Array.data[7]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 663617147780847983, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: parentReference.TypeName
-      value: Game.Core.WorldScope
-      objectReference: {fileID: 0}
-    - target: {fileID: 763045939592094300, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -7.36
-      objectReference: {fileID: 0}
-    - target: {fileID: 763045939592094300, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 763045939592094300, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.24
-      objectReference: {fileID: 0}
-    - target: {fileID: 763045939592094300, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 763045939592094300, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 763045939592094300, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 763045939592094300, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 763045939592094300, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 763045939592094300, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 763045939592094300, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2063428145734820200, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_Npc
-      objectReference: {fileID: 0}
-    - target: {fileID: 8900731736853642273, guid: 205d6a229b20c97448b12e54804ee4c2,
-        type: 3}
-      propertyPath: _alwaysStrafe
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3723044361930362531, guid: 205d6a229b20c97448b12e54804ee4c2, type: 3}
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 205d6a229b20c97448b12e54804ee4c2, type: 3}
 --- !u!1 &279499814
 GameObject:
   m_ObjectHideFlags: 0
@@ -1180,7 +890,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_spawn_tavern_wall_01
   _radius: 0.5
@@ -1709,7 +1419,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationWaypoint
   _id: bandit_escape_02
   _radius: 0.5
@@ -1790,12 +1500,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd17687759887a0438ee021e51abc9d9, type: 3}
---- !u!1 &494231793 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2063428145734820200, guid: 205d6a229b20c97448b12e54804ee4c2,
-    type: 3}
-  m_PrefabInstance: {fileID: 256065007}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &499976351
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2063,7 +1767,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_storage_entrance_inner
   _radius: 0.5
@@ -2123,7 +1827,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 288460eda6ada354d8f3df025b1d87e6, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorLabelPoolHost
   _activeRoot: {fileID: 896810830}
   _inactiveRoot: {fileID: 2039571096}
@@ -2270,7 +1974,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 0
   m_VerticalFit: 2
@@ -2284,7 +1988,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
   m_Padding:
     m_Left: 0
@@ -2633,7 +2337,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
   m_IgnoreReversedGraphics: 1
   m_BlockingObjects: 0
@@ -2650,7 +2354,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
   m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
@@ -2850,7 +2554,7 @@ PrefabInstance:
     - target: {fileID: 5035642871225371316, guid: a7566d85b04856b42a956c9b162ee747,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value: 
+      value:
       objectReference: {fileID: 2100000, guid: 79c0d93b237b09b41aa23121f5b9599c, type: 2}
     - target: {fileID: 5035642871227140182, guid: a7566d85b04856b42a956c9b162ee747,
         type: 3}
@@ -2976,7 +2680,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.UI.InputSystemUIInputModule
   m_SendPointerHoverToParent: 1
   m_MoveRepeatDelay: 0.5
@@ -3018,7 +2722,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventSystem
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
@@ -3072,7 +2776,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
   m_IgnoreReversedGraphics: 1
   m_BlockingObjects: 0
@@ -3089,7 +2793,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
@@ -3173,7 +2877,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.5882353}
@@ -3248,7 +2952,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.6}
@@ -4054,7 +3758,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1c45bbba88b1bad4dbdf124588dd17c9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationLocation
   _id: city_tavern
   _anchors:
@@ -4255,7 +3959,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_storage_corner_01
   _radius: 0.5
@@ -4429,7 +4133,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_square_corner_01
   _radius: 0.5
@@ -4575,7 +4279,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1c45bbba88b1bad4dbdf124588dd17c9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationLocation
   _id: city_storage
   _anchors:
@@ -4734,7 +4438,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5015,7 +4719,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5213,7 +4917,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -5466,12 +5170,12 @@ PrefabInstance:
     - target: {fileID: 5054831612180206923, guid: 509d754db50222f46b673c4778f267e4,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value: 
+      value:
       objectReference: {fileID: 2100000, guid: 807df0a3bd5fb484687907be1b8246c0, type: 2}
     - target: {fileID: 5054831612180206923, guid: 509d754db50222f46b673c4778f267e4,
         type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
-      value: 
+      value:
       objectReference: {fileID: 2100000, guid: 1151f4057e77ab5429143caedba0a672, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5584,7 +5288,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_storage_corner_02
   _radius: 0.5
@@ -6060,7 +5764,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
   m_SerializedVersion: 0
   m_AgentTypeID: 0
@@ -6287,7 +5991,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1c45bbba88b1bad4dbdf124588dd17c9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationLocation
   _id: city_central_square
   _anchors:
@@ -6356,7 +6060,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_spawn_storage_wall_01
   _radius: 0.5
@@ -6510,7 +6214,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -6739,8 +6443,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eec9f03de17857a48ac47c6ae8577551, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   CombineParents: []
   UseGrid: 0
   GridCenter: {x: 0, y: 0, z: 0}
@@ -6817,7 +6521,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0a027c7beba4fd42a3e352a002f6da3, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Features.Campaign::Etheria.Features.Campaign.DialogueView
   _canvasGroup: {fileID: 1726909397}
   _speakerContainer: {fileID: 858676986}
@@ -6850,7 +6554,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 174a61b94f1a1904c99eb2d7a88c2165, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Features.Campaign::Etheria.Features.Campaign.YarnDialoguePresenter
 --- !u!1 &1737372630
 GameObject:
@@ -6879,7 +6583,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_spawn_tavern_wall_02
   _radius: 0.5
@@ -6984,7 +6688,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationWaypoint
   _id: bandit_escape_01
   _radius: 0.5
@@ -7301,7 +7005,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationWaypoint
   _id: city_entrance
   _radius: 0.5
@@ -7497,7 +7201,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_tavern_entrance_outer
   _radius: 0.5
@@ -7622,7 +7326,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_spawn_way_to_entrance_03
   _radius: 0.5
@@ -8018,7 +7722,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_square_corner_02
   _radius: 0.5
@@ -8092,7 +7796,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf1affa4ae240214e8c692ad8bb00d06, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Features.Campaign::Etheria.Features.Campaign.QuestJournalView
   _content: {fileID: 25708460}
   _titleText: {fileID: 1654448919}
@@ -8223,7 +7927,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -8501,7 +8205,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_spawn_storage_wall_02
   _radius: 0.5
@@ -8568,7 +8272,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.NavigationWaypoint
   _id: bandit_escape_03
   _radius: 0.5
@@ -8605,7 +8309,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc6759182e476da43bafb1dfd6463c8e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_storage_entrance_outer
   _radius: 0.5
@@ -8625,13 +8329,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2090973117}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.46119758, z: -0, w: 0.8872975}
+  m_LocalRotation: {x: -0, y: 0.99782157, z: -0, w: 0.06597087}
   m_LocalPosition: {x: -19.82, y: 0, z: -0.22999954}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1276872065}
-  m_LocalEulerAnglesHint: {x: 0, y: -54.929, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 172.435, z: 0}
 --- !u!1001 &2096865993
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8838,8 +8542,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a968ef973edc54520b248fa3113ae925, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   palette: {fileID: 11400000, guid: 6df01bf68e01943908f9e625c3b0bbc6, type: 2}
   lineProvider: {fileID: 0}
 --- !u!114 &3859336324387009415
@@ -8852,8 +8556,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0901fdc59460943b682c5c4000c44a0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   lineProvider: {fileID: 0}
 --- !u!1 &7262066350024004755
 GameObject:
@@ -8899,8 +8603,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bec29c0a230741bdac901dba8da47ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   yarnProject: {fileID: 7545569452688597077, guid: 3e08001e711a9be4db3bb4a0e837d99c,
     type: 3}
   variableStorage: {fileID: 8635081094086089977}
@@ -8938,8 +8642,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 610c541718d694070a21327d1ae62e75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   showDebug: 0
   debugTextView: {fileID: 0}
 --- !u!1 &9100000000000000001
@@ -8984,10 +8688,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 575e7334b4db0ac42be0378201604cf7, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.World::Game.Core.WorldScope
   parentReference:
-    TypeName: 
+    TypeName:
   autoRun: 1
   autoInjectGameObjects: []
   _game: {fileID: 11400000, guid: 4d3e7eca3c1041b4b97e2009b739a078, type: 2}
@@ -8995,7 +8699,6 @@ MonoBehaviour:
   _navigation: {fileID: 11400000, guid: 75613f041580a9d47b8c00ab14aaf6f0, type: 2}
   _actor: {fileID: 11400000, guid: 02f4659f7202ba44d855f1dc09abbbb5, type: 2}
   _player: {fileID: 11400000, guid: a80cfe3a73aa86847944dd8de1cfd40c, type: 2}
-  _possession: {fileID: 11400000, guid: 7353d7d992ab44b4a8f953ae0558fa93, type: 2}
   _actorNameplates: {fileID: 11400000, guid: d8138af95a1bbf1458e552e82a20113e, type: 2}
   _world: {fileID: 11400000, guid: e130d74d49e9c3745887bfcd8520d450, type: 2}
 --- !u!1660057539 &9223372036854775807
@@ -9008,4 +8711,3 @@ SceneRoots:
   - {fileID: 1708557757}
   - {fileID: 1680119420}
   - {fileID: 326909888}
-  - {fileID: 256065007}

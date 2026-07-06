@@ -8,29 +8,29 @@ namespace Game.Actor
     [DisallowMultipleComponent]
     public sealed class ActorScope : LifetimeScope
     {
-        [Header("Extra Registrations")]
-        [SerializeField] private ActorView _view;
+        [SerializeField] private Transform _actorRoot;
 
         [Header("Build Configurations")]
-        [SerializeField] private BuildConfigurationSO _core;
-        [SerializeField] private BuildConfigurationSO _movement;
-        [SerializeField] private BuildConfigurationSO _targeting;
-        [SerializeField] private BuildConfigurationSO _combat;
-        [SerializeField] private BuildConfigurationSO _ai;
+        [SerializeField] private BuildConfiguratorSO _identity;
+        [SerializeField] private BuildConfiguratorSO _movement;
+        [SerializeField] private BuildConfiguratorSO _targeting;
+        [SerializeField] private BuildConfiguratorSO _combat;
+        [SerializeField] private BuildConfiguratorSO _ai;
 
         protected override void Configure(IContainerBuilder builder)
         {
-            if (_view == null)
-            {
-                Debug.LogError($"{nameof(ActorScope)} requires assigned {nameof(ActorView)}.", this);
-                return;
-            }
+            var root = _actorRoot != null
+                ? _actorRoot
+                : transform;
 
-            builder.RegisterInstance(_view)
+            builder.RegisterInstance(new ScopeRoot(root));
+
+            builder.Register<ActorInstanceFactory>(Lifetime.Scoped);
+
+            builder.Register<ActorInputBinder>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
-
-            builder.Configure(_core);
+            builder.Configure(_identity);
             builder.Configure(_movement);
             builder.Configure(_targeting);
             builder.Configure(_combat);

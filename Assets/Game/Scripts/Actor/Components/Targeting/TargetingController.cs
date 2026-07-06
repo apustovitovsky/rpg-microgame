@@ -6,7 +6,9 @@ using UnityEngine;
 namespace Game.Actor
 {
     [DisallowMultipleComponent]
-    public sealed class TargetingController : MonoBehaviour
+    public sealed class TargetingController :
+        MonoBehaviour,
+        ITargetProvider
     {
         [SerializeField] private TargetPerception _perception;
         [SerializeField] private ActorLookController _look;

@@ -19,9 +19,10 @@ namespace Game.World
         private readonly IPlayerActorSpawner _playerSpawner;
         private readonly IActorRegistryWriter _actorRegistry;
 
-
-        private readonly Dictionary<string, IActorView> _spawned =
+        private readonly Dictionary<string, ActorInstance> _spawned =
             new(StringComparer.Ordinal);
+
+        private int _nextActorInstanceIndex;
 
         public WorldActorLifecycleManager(
             WorldActorConfigSO manifest,
@@ -62,7 +63,6 @@ namespace Game.World
                 player,
                 node,
                 usePlayerSpawner: true);
-
         }
 
         private void SpawnActors()
@@ -74,7 +74,7 @@ namespace Game.World
                         out var node))
                 {
                     Debug.LogWarning(
-                        $"Actor '{actor?.ActorId}' was not spawned: spawn point could not be resolved.");
+                        $"Actor '{actor?.DefinitionId}' was not spawned: spawn point could not be resolved.");
                     continue;
                 }
 
@@ -85,7 +85,7 @@ namespace Game.World
             }
         }
 
-        private IActorView Spawn(
+        private ActorInstance Spawn(
             WorldActorConfigSO.ActorEntry entry,
             NavigationNode node,
             bool usePlayerSpawner)
@@ -93,45 +93,57 @@ namespace Game.World
             if (entry == null)
                 return null;
 
-            if (string.IsNullOrWhiteSpace(entry.ActorId))
-            {
-                Debug.LogWarning("Actor was not spawned: actor id is empty.");
-                return null;
-            }
+            var definitionId = entry.DefinitionId?.Trim() ?? string.Empty;
 
-            if (_spawned.ContainsKey(entry.ActorId))
+            if (string.IsNullOrWhiteSpace(definitionId))
             {
-                Debug.LogWarning(
-                    $"Actor '{entry.ActorId}' was not spawned: actor is already spawned.");
+                Debug.LogWarning("Actor was not spawned: actor definition id is empty.");
                 return null;
             }
 
             if (entry.Prefab == null)
             {
                 Debug.LogWarning(
-                    $"Actor '{entry.ActorId}' was not spawned: prefab is missing.");
+                    $"Actor '{definitionId}' was not spawned: prefab is missing.");
                 return null;
             }
 
-            var view = usePlayerSpawner
+            var instanceId = CreateInstanceId(definitionId);
+
+            if (_spawned.ContainsKey(instanceId))
+            {
+                Debug.LogWarning(
+                    $"Actor '{instanceId}' was not spawned: actor instance is already spawned.");
+                return null;
+            }
+
+            var actor = usePlayerSpawner
                 ? _playerSpawner.Spawn(
-                    entry.ActorId,
+                    instanceId,
+                    definitionId,
                     entry.Prefab,
                     node.Position,
                     node.Rotation)
                 : _actorSpawner.Spawn(
-                    entry.ActorId,
+                    instanceId,
+                    definitionId,
                     entry.Prefab,
                     node.Position,
                     node.Rotation);
 
-            _actorRegistry.Register(view);
+            _actorRegistry.Register(actor);
 
             _spawned.Add(
-                entry.ActorId,
-                view);
+                instanceId,
+                actor);
 
-            return view;
+            return actor;
+        }
+
+        private string CreateInstanceId(string definitionId)
+        {
+            _nextActorInstanceIndex++;
+            return $"{definitionId}_{_nextActorInstanceIndex:0000}";
         }
 
         private bool TryResolveSpawnPoint(
@@ -170,24 +182,24 @@ namespace Game.World
             DespawnAll();
         }
 
-        public bool Despawn(string actorId)
+        public bool Despawn(string instanceId)
         {
-            actorId = actorId?.Trim() ?? string.Empty;
+            instanceId = instanceId?.Trim() ?? string.Empty;
 
-            if (string.IsNullOrWhiteSpace(actorId))
+            if (string.IsNullOrWhiteSpace(instanceId))
                 return false;
 
-            if (!_spawned.TryGetValue(actorId, out var actor))
+            if (!_spawned.TryGetValue(instanceId, out var actor))
                 return false;
 
-            _spawned.Remove(actorId);
+            _spawned.Remove(instanceId);
 
             if (actor == null)
                 return false;
 
             _actorRegistry.Unregister(actor);
 
-            if (actor is Component component && component != null)
+            if (actor.View is Component component && component != null)
             {
                 UnityEngine.Object.Destroy(component.gameObject);
             }
@@ -197,10 +209,10 @@ namespace Game.World
 
         private void DespawnAll()
         {
-            var actorIds = new List<string>(_spawned.Keys);
+            var instanceIds = new List<string>(_spawned.Keys);
 
-            foreach (var actorId in actorIds)
-                Despawn(actorId);
+            foreach (var instanceId in instanceIds)
+                Despawn(instanceId);
 
             _spawned.Clear();
         }

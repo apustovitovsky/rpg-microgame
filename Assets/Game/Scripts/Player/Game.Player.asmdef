@@ -6,8 +6,9 @@
         "Unity.InputSystem",
         "Game.Core",
         "Game.Actor",
+        "Game.Targeting",
         "Game.Input",
-        "Game.Possession"
+        "Unity.Cinemachine"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -6,7 +6,7 @@ namespace Game.Actor
     [DisallowMultipleComponent]
     public sealed class TargetCapsule : MonoBehaviour
     {
-        [SerializeField] private Targetable _targetable;
+        [SerializeField] private ActorTargetable _targetable;
 
         public bool TryGetTarget(out ITargetable target)
         {

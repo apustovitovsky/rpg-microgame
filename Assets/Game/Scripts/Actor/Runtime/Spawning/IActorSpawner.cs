@@ -4,8 +4,9 @@ namespace Game.Actor
 {
     public interface IActorSpawner
     {
-        IActorView Spawn(
-            string actorId,
+        ActorInstance Spawn(
+            string instanceId,
+            string definitionId,
             GameObject prefab,
             Vector3 position,
             Quaternion rotation,

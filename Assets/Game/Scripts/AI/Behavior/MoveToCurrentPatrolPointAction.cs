@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Unity.Behavior;
 using Unity.Properties;
 using UnityEngine;
@@ -9,47 +11,40 @@ namespace Game.AI.Behavior
     [Serializable, GeneratePropertyBag]
     [NodeDescription(
         name: "Move To Current Patrol Point",
-        story: "[Self] moves to patrol point [PatrolIndex] from [PatrolPoints]",
+        story: "[Navigation] moves to patrol point [PatrolIndex] from [PatrolPoints]",
         category: "Game/AI/Navigation",
         id: "0d99690f0dc0487a8b3d9942da1187b1")]
     public partial class MoveToCurrentPatrolPointAction :
         Unity.Behavior.Action
     {
-        [SerializeReference] public BlackboardVariable<GameObject> Self;
+        [SerializeReference] public BlackboardVariable<NavMeshTravelEndpoint> Navigation;
         [SerializeReference] public BlackboardVariable<List<GameObject>> PatrolPoints;
         [SerializeReference] public BlackboardVariable<int> PatrolIndex;
 
-        private NavMeshPlannerEndpoint _navigation;
         private GameObject _point;
+
 
         protected override Status OnStart()
         {
-            if (Self?.Value == null)
+            if (Navigation?.Value == null)
                 return Status.Failure;
 
             if (!TryGetCurrentPoint(out _point))
                 return Status.Failure;
 
-            _navigation = Self.Value.GetComponentInParent<NavMeshPlannerEndpoint>();
-
-            if (_navigation == null || _navigation.Planner == null)
-                return Status.Failure;
-
-            _navigation.Planner.MoveTo(_point.transform.position);
+            Navigation.Value.MoveToPositionAsync(
+                _point.transform.position,
+                CancellationToken.None).Forget();
 
             return Status.Running;
         }
 
         protected override Status OnUpdate()
         {
-            if (_navigation == null ||
-                _navigation.Planner == null ||
-                _point == null)
-            {
+            if (Navigation?.Value == null || _point == null)
                 return Status.Failure;
-            }
 
-            return _navigation.Planner.HasArrived
+            return Navigation.Value.HasArrived
                 ? Status.Success
                 : Status.Running;
         }

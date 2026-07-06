@@ -9,10 +9,9 @@ namespace Game.World
     [CreateAssetMenu(
         fileName = "WorldConfiguration",
         menuName = "Game/World/World Configuration")]
-    public sealed class WorldConfigurationSO : BuildConfigurationSO
+    public sealed class WorldConfigurationSO : BuildConfiguratorSO
     {
         [SerializeField] private WorldActorConfigSO _config;
-
         public override void Install(IContainerBuilder builder)
         {
             if (_config == null)

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using VContainer;
 using VContainer.Unity;
 
 namespace Game.Actor
@@ -13,17 +14,22 @@ namespace Game.Actor
             _parentScope = parentScope;
         }
 
-        public IActorView Spawn(
-            string actorId,
+        public ActorInstance Spawn(
+            string instanceId,
+            string definitionId,
             GameObject prefab,
             Vector3 position,
             Quaternion rotation,
             Transform parent = null)
         {
-            actorId = actorId?.Trim() ?? string.Empty;
+            instanceId = instanceId?.Trim() ?? string.Empty;
+            definitionId = definitionId?.Trim() ?? string.Empty;
 
-            if (string.IsNullOrWhiteSpace(actorId))
-                throw new ArgumentException("Actor id is required.", nameof(actorId));
+            if (string.IsNullOrWhiteSpace(instanceId))
+                throw new ArgumentException("Actor instance id is required.", nameof(instanceId));
+
+            if (string.IsNullOrWhiteSpace(definitionId))
+                throw new ArgumentException("Actor definition id is required.", nameof(definitionId));
 
             if (prefab == null)
                 throw new ArgumentNullException(nameof(prefab));
@@ -36,17 +42,33 @@ namespace Game.Actor
                     rotation,
                     parent);
 
-                var view = instance.GetComponentInChildren<ActorView>(true);
+                instance.name = $"{definitionId} ({instanceId})";
 
-                if (view == null)
+                var scope = instance.GetComponentInChildren<ActorScope>(true);
+
+                if (scope == null)
                 {
                     throw new InvalidOperationException(
-                        $"Actor prefab '{prefab.name}' has no {nameof(ActorView)}.");
+                        $"Actor prefab '{prefab.name}' has no {nameof(ActorScope)}.");
                 }
 
-                view.Initialize(actorId);
+                if (scope.Container == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Actor prefab '{prefab.name}' has no built VContainer scope.");
+                }
 
-                return view;
+                var identity = scope.Container.Resolve<IActorIdentity>()
+                    ?? throw new InvalidOperationException(
+                        $"Actor prefab '{prefab.name}' has no {nameof(IActorIdentity)}.");
+
+                identity.Initialize(instanceId, definitionId);
+
+                var factory = scope.Container.Resolve<ActorInstanceFactory>()
+                    ?? throw new InvalidOperationException(
+                        $"Actor prefab '{prefab.name}' has no {nameof(ActorInstanceFactory)}.");
+
+                return factory.Create(instanceId, definitionId);
             }
         }
     }

@@ -8,12 +8,12 @@ namespace Game.Actor
         IActorRegistry,
         IActorRegistryWriter
     {
-        private readonly Dictionary<string, IActorView> _actors =
+        private readonly Dictionary<string, ActorInstance> _actors =
             new(StringComparer.Ordinal);
 
         public bool TryGet(
             string actorId,
-            out IActorView actor)
+            out ActorInstance actor)
         {
             actor = null;
 
@@ -31,45 +31,45 @@ namespace Game.Actor
             return false;
         }
 
-        public void Register(IActorView actor)
+        public void Register(ActorInstance actor)
         {
             if (actor == null ||
-                string.IsNullOrWhiteSpace(actor.ActorId))
+                string.IsNullOrWhiteSpace(actor.InstanceId))
             {
                 return;
             }
 
-            if (_actors.TryGetValue(actor.ActorId, out var existing) &&
+            if (_actors.TryGetValue(actor.InstanceId, out var existing) &&
                 !ReferenceEquals(existing, actor))
             {
                 Debug.LogWarning(
-                    $"Actor id '{actor.ActorId}' is already registered. New registration will replace previous one.");
+                    $"Actor instance id '{actor.InstanceId}' is already registered. New registration will replace previous one.");
             }
 
-            _actors[actor.ActorId] = actor;
+            _actors[actor.InstanceId] = actor;
         }
 
-        public void Unregister(IActorView actor)
+        public void Unregister(ActorInstance actor)
         {
             if (actor == null ||
-                string.IsNullOrWhiteSpace(actor.ActorId))
+                string.IsNullOrWhiteSpace(actor.InstanceId))
             {
                 return;
             }
 
-            if (_actors.TryGetValue(actor.ActorId, out var existing) &&
+            if (_actors.TryGetValue(actor.InstanceId, out var existing) &&
                 ReferenceEquals(existing, actor))
             {
-                _actors.Remove(actor.ActorId);
+                _actors.Remove(actor.InstanceId);
             }
         }
 
-        private static bool IsAlive(IActorView actor)
+        private static bool IsAlive(ActorInstance actor)
         {
-            if (actor == null)
+            if (actor?.View == null)
                 return false;
 
-            if (actor is UnityEngine.Object unityObject)
+            if (actor.View is UnityEngine.Object unityObject)
                 return unityObject != null;
 
             return true;

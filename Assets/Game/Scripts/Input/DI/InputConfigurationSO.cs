@@ -7,7 +7,7 @@ namespace Game.Input
     [CreateAssetMenu(
         fileName = "InputConfiguration",
         menuName = "Game/Input/Input Configuration")]
-    public sealed class InputConfigurationSO : BuildConfigurationSO
+    public sealed class InputConfigurationSO : BuildConfiguratorSO
     {
         public override void Install(IContainerBuilder builder)
         {

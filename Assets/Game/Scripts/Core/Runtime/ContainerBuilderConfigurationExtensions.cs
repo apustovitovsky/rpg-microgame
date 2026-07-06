@@ -1,12 +1,13 @@
+using UnityEngine;
 using VContainer;
 
 namespace Game.Core
 {
-    public static class ContainerBuilderConfigurationExtensions
+    public static class ContainerBuilderConfiguratorExtensions
     {
         public static void Configure(
             this IContainerBuilder builder,
-            BuildConfigurationSO configuration)
+            BuildConfiguratorSO configuration)
         {
             if (configuration == null)
                 return;

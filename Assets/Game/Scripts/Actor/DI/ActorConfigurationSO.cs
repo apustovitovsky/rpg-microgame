@@ -1,4 +1,3 @@
-using Game.CommandSystem;
 using Game.Core;
 using UnityEngine;
 using VContainer;
@@ -6,28 +5,13 @@ using VContainer;
 namespace Game.Actor
 {
     [CreateAssetMenu(
-        fileName = "ActorConfiguration",
-        menuName = "Game/Actor/Actor Configuration")]
-    public sealed class ActorConfigurationSO : BuildConfigurationSO
+        fileName = "ActorConfigurator",
+        menuName = "Game/Actor/Actor Configurator")]
+    public sealed class ActorConfiguratorSO : BuildConfiguratorSO
     {
         public override void Install(IContainerBuilder builder)
         {
             builder.Register<ActorRegistry>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<ActionGate>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<CommandService>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<StartDialogueCommandHandler>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<AttackCommandHandler>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<MoveToLocationCommandHandler>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
             builder.Register<ActorSpawner>(Lifetime.Singleton)

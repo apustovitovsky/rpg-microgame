@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6764066207046100429}
-  - component: {fileID: 9057562335725747918}
+  - component: {fileID: 575635675722254507}
   m_Layer: 0
-  m_Name: Travel
+  m_Name: Navigation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8538305375040021554}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9057562335725747918
+--- !u!114 &575635675722254507
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,10 +41,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 578757560754122290}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f734cedac2e67e340876c46729f3a792, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b5a78ac5d0394b40b602d6d96f64c1a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorTravelPort
-  _handler: {fileID: 0}
+  m_EditorClassIdentifier: Game.AI::Game.AI.NavMeshTravelEndpoint
 --- !u!1 &1535966379978350454
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +106,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d429d1611d04dcc4ea746b9067889ca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Targeting::Game.Targeting.Targetable
-  _actorView: {fileID: 4929817489287041568}
+  _root: {fileID: 8538305375040021554}
+  _targetPoint: {fileID: 4572070285593981700}
+  _isTargetable: 1
 --- !u!1 &1781962995865054892
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,8 +362,8 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  _view: {fileID: 4929817489287041568}
-  _core: {fileID: 0}
+  _actorRoot: {fileID: 8538305375040021554}
+  _identity: {fileID: 11400000, guid: 3fad7c24c1e6eb748877ff02d7425018, type: 2}
   _movement: {fileID: 0}
   _targeting: {fileID: 0}
   _combat: {fileID: 0}
@@ -630,8 +631,9 @@ GameObject:
   - component: {fileID: 4929817489287041568}
   - component: {fileID: 691123616913121196}
   - component: {fileID: 535090416791697999}
-  - component: {fileID: 5575830870823020405}
   - component: {fileID: 6320987743397312848}
+  - component: {fileID: 5842623703354476941}
+  - component: {fileID: 2755038198008224742}
   m_Layer: 0
   m_Name: PF_Actor
   m_TagString: Untagged
@@ -680,12 +682,6 @@ MonoBehaviour:
   _cameraPivot: {fileID: 2416931173838807167}
   _targetPoint: {fileID: 4572070285593981700}
   _uiAnchor: {fileID: 4363193191726351544}
-  _capabilities:
-  - {fileID: 9057562335725747918}
-  - {fileID: 4971627234746884421}
-  - {fileID: 6670009868325032160}
-  - {fileID: 535090416791697999}
-  - {fileID: 9105987983110174402}
 --- !u!143 &691123616913121196
 CharacterController:
   m_ObjectHideFlags: 0
@@ -842,7 +838,19 @@ MonoBehaviour:
   _animationClipEnd: 0
   _turnInPlaceThreshold: 5
   _turnInPlaceSpeed: 120
---- !u!195 &5575830870823020405
+--- !u!114 &6320987743397312848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6938359593822086918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad242fe7d2cd18448a70355fd21ae60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.AI::Game.AI.NavMeshPlannerEndpoint
+--- !u!195 &5842623703354476941
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -864,7 +872,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6320987743397312848
+--- !u!114 &2755038198008224742
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -873,9 +881,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6938359593822086918}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ad242fe7d2cd18448a70355fd21ae60, type: 3}
+  m_Script: {fileID: 11500000, guid: c76b2fc898f7e1f4ab15dc3913960e72, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Game.AI::Game.AI.NavMeshPlannerEndpoint
+  m_EditorClassIdentifier: Game.AI::Game.AI.NavMeshActorInput
+  _look: {fileID: 0}
+  _moveInputDeadZone: 0.05
+  _facingCompleteAngle: 7
 --- !u!1 &7583298266897560319
 GameObject:
   m_ObjectHideFlags: 0
