@@ -5,7 +5,7 @@ namespace Game.Actor
 {
     public interface IActorSpawner
     {
-        WorldActor Spawn(
+        IWorldObject Spawn(
             WorldId worldId,
             string displayName,
             GameObject prefab,

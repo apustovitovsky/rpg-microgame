@@ -49,9 +49,7 @@ namespace Game.Player
             if (actor == null)
                 return;
 
-            _targetProvider = actor.TargetProvider;
-
-            if (_targetProvider == null)
+            if (!actor.TryGet(out _targetProvider))
                 return;
 
             _targetProvider.CurrentTargetChanged += OnCurrentTargetChanged;

@@ -50,7 +50,7 @@ namespace Game.Pickup
                 if (effect == null)
                     continue;
 
-                if (!handlerProvider.TryGetHandler(
+                if (!handlerProvider.TryGet(
                         effect.GetType(),
                         out var handler))
                 {
@@ -76,7 +76,7 @@ namespace Game.Pickup
                     if (effect == null)
                         continue;
 
-                    if (!handlerProvider.TryGetHandler(
+                    if (!handlerProvider.TryGet(
                             effect.GetType(),
                             out var handler))
                     {

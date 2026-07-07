@@ -39,20 +39,18 @@ namespace Game.Gameplay
                     if (pickup.TryGetComponent<PickupInteract>(out var interaction))
                         container.Inject(interaction);
 
-                    var target = pickup.GetComponentInChildren<PickupTarget>();
-
-                    var root = target != null
-                        ? target.Root
-                        : pickup.transform;
-
-                    var worldPickup = new WorldPickup(
-                        worldId,
-                        pickup.DisplayName,
-                        root,
+                    var capabilities = new IWorldCapability[]
+                    {
                         pickup,
-                        interaction);
+                        interaction
+                    };
 
-                    registry.Register(worldPickup);
+                    var worldObject = new WorldObject(
+                        worldId,
+                        pickup.gameObject,
+                        new WorldCapabilityProvider(capabilities));
+
+                    registry.Register(worldObject);
                 }
             });
         }

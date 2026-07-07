@@ -1,39 +1,34 @@
 using System;
 using System.Collections.Generic;
+using Game.World;
 
 namespace Game.Pickup
 {
     public interface IPickupEffectHandlerProvider
     {
-        bool TryGetHandler(
+        bool TryGet(
             Type effectType,
             out IPickupEffectHandler handler);
     }
 
     public sealed class PickupEffectHandlerProvider :
-        IPickupEffectHandlerProvider
+        IPickupEffectHandlerProvider,
+        IWorldCapability
     {
-        private readonly Dictionary<Type, IPickupEffectHandler> _handlers;
+        private readonly Dictionary<Type, IPickupEffectHandler> _handlers = new();
 
         public PickupEffectHandlerProvider(
             IEnumerable<IPickupEffectHandler> handlers)
         {
-            _handlers = new Dictionary<Type, IPickupEffectHandler>();
-
             foreach (var handler in handlers)
-            {
-                if (handler == null)
-                    continue;
-
-                if (!_handlers.TryAdd(handler.EffectType, handler))
-                {
-                    throw new InvalidOperationException(
-                        $"Duplicate pickup effect handler for '{handler.EffectType.Name}'.");
-                }
-            }
+                Register(handler);
+        }
+        public IEnumerable<Type> PublishedTypes
+        {
+            get { yield return typeof(IPickupEffectHandlerProvider); }
         }
 
-        public bool TryGetHandler(
+        public bool TryGet(
             Type effectType,
             out IPickupEffectHandler handler)
         {
@@ -44,6 +39,28 @@ namespace Game.Pickup
             }
 
             return _handlers.TryGetValue(effectType, out handler);
+        }
+
+        private void Register(IPickupEffectHandler handler)
+        {
+            if (handler == null)
+                return;
+
+            Register(handler.EffectType, handler);
+        }
+
+        private void Register(
+            Type effectType,
+            IPickupEffectHandler handler)
+        {
+            if (effectType == null)
+                return;
+
+            if (!_handlers.TryAdd(effectType, handler))
+            {
+                throw new InvalidOperationException(
+                    $"Duplicate pickup effect handler for '{effectType.Name}'.");
+            }
         }
     }
 }

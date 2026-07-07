@@ -5,6 +5,9 @@ namespace Game.World
     public interface IWorldObject
     {
         WorldId WorldId { get; }
+
+        GameObject GameObject { get; }
+
         Transform Root { get; }
 
         bool TryGet<TEndpoint>(out TEndpoint endpoint)

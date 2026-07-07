@@ -1,4 +1,3 @@
-using Game.Actor;
 using Game.World;
 using UnityEngine;
 
@@ -6,7 +5,7 @@ namespace Game.Player
 {
     public interface IPlayerActorSpawner
     {
-        WorldActor Spawn(
+        IWorldObject Spawn(
             WorldId worldId,
             string displayName,
             GameObject prefab,

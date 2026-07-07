@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Interaction;
+using Game.Targeting;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -51,12 +52,12 @@ namespace Game.Player
             var currentActor = _player.CurrentActor;
 
             if (currentActor == null ||
-                currentActor.TargetProvider == null)
+                !currentActor.TryGet<ITargetProvider>(out var targetProvider))
             {
                 return;
             }
 
-            var target = currentActor.TargetProvider.CurrentTarget;
+            var target = targetProvider.CurrentTarget;
 
             if (target == null ||
                 target.WorldId.IsEmpty)

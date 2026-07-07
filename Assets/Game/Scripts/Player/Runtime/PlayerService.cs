@@ -1,6 +1,7 @@
 using System;
 using Game.Actor;
 using Game.Input;
+using Game.World;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -19,11 +20,11 @@ namespace Game.Player
             _input = input;
         }
 
-        public WorldActor CurrentActor { get; private set; }
+        public IWorldObject CurrentActor { get; private set; }
 
         public event Action CurrentActorChanged;
 
-        public void BindActor(WorldActor actor)
+        public void BindActor(IWorldObject actor)
         {
             if (actor == null ||
                 ReferenceEquals(CurrentActor, actor))
@@ -31,7 +32,7 @@ namespace Game.Player
                 return;
             }
 
-            if (actor.InputBinder == null)
+            if (!actor.TryGet<IActorInputBinder>(out var inputBinder))
             {
                 Debug.LogWarning(
                     $"Player cannot bind actor '{actor.WorldId}': input binder is missing.");
@@ -39,28 +40,34 @@ namespace Game.Player
                 return;
             }
 
-            CurrentActor?.InputBinder?.Unbind();
+            if (CurrentActor != null &&
+                CurrentActor.TryGet<IActorInputBinder>(out var currentInputBinder))
+            {
+                currentInputBinder.Unbind();
+            }
 
             CurrentActor = actor;
-            CurrentActor.InputBinder.Bind(_input);
+            inputBinder.Bind(_input);
 
             BindCamera(actor);
             CurrentActorChanged?.Invoke();
         }
 
-        public void UnbindActor(WorldActor actor)
+        public void UnbindActor(IWorldObject actor)
         {
             if (!ReferenceEquals(CurrentActor, actor))
                 return;
 
-            CurrentActor.InputBinder?.Unbind();
+            if (CurrentActor.TryGet<IActorInputBinder>(out var inputBinder))
+                inputBinder.Unbind();
+
             CurrentActor = null;
 
             BindCamera(null);
             CurrentActorChanged?.Invoke();
         }
 
-        private void BindCamera(WorldActor actor)
+        private void BindCamera(IWorldObject actor)
         {
             if (_camera == null)
             {
@@ -68,7 +75,16 @@ namespace Game.Player
                 return;
             }
 
-            _camera.Follow = actor?.View.CameraPivot;
+            if (actor != null &&
+                actor.TryGet<IActorView>(out var view))
+            {
+                _camera.Follow = view.CameraPivot;
+            }
+            else
+            {
+                _camera.Follow = null;
+            }
+
             _camera.LookAt = null;
         }
     }

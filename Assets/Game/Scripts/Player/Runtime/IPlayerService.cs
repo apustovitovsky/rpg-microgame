@@ -1,15 +1,16 @@
 using System;
-using Game.Actor;
+using Game.World;
 
 namespace Game.Player
 {
     public interface IPlayerService
     {
-        WorldActor CurrentActor { get; }
+        IWorldObject CurrentActor { get; }
 
         event Action CurrentActorChanged;
 
-        void BindActor(WorldActor actor);
-        void UnbindActor(WorldActor actor);
+        void BindActor(IWorldObject actor);
+
+        void UnbindActor(IWorldObject actor);
     }
 }

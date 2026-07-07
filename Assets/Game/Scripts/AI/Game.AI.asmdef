@@ -5,6 +5,7 @@
         "VContainer",
         "Game.Actor",
         "Game.Input",
+        "Game.World",
         "Game.Core",
         "Unity.AIModule",
         "Unity.Behavior",

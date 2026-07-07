@@ -15,7 +15,7 @@ namespace Game.Actor
             _parentScope = parentScope;
         }
 
-        public WorldActor Spawn(
+        public IWorldObject Spawn(
             WorldId worldId,
             string displayName,
             GameObject prefab,
@@ -65,13 +65,11 @@ namespace Game.Actor
                     worldId,
                     displayName);
 
-                var factory = scope.Container.Resolve<WorldActorFactory>()
+                var factory = scope.Container.Resolve<ActorWorldObjectFactory>()
                     ?? throw new InvalidOperationException(
-                        $"Actor prefab '{prefab.name}' has no {nameof(WorldActorFactory)}.");
+                        $"Actor prefab '{prefab.name}' has no {nameof(ActorWorldObjectFactory)}.");
 
-                return factory.Create(
-                    worldId,
-                    displayName);
+                return factory.Create(worldId);
             }
         }
     }

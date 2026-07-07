@@ -20,7 +20,7 @@ namespace Game.Gameplay
         private readonly IPlayerActorSpawner _playerSpawner;
         private readonly IWorldObjectRegistryWriter _worldObjects;
 
-        private readonly Dictionary<WorldId, WorldActor> _spawned = new();
+        private readonly Dictionary<WorldId, IWorldObject> _spawned = new();
 
         private int _nextWorldIdIndex;
 
@@ -85,7 +85,7 @@ namespace Game.Gameplay
             }
         }
 
-        private WorldActor Spawn(
+        private IWorldObject Spawn(
             GameplayActorConfigSO.ActorEntry entry,
             NavigationNode node,
             bool usePlayerSpawner)
@@ -211,8 +211,8 @@ namespace Game.Gameplay
 
             _worldObjects.Unregister(actor);
 
-            if (actor.View is Component component && component != null)
-                UnityEngine.Object.Destroy(component.gameObject);
+            if (actor.GameObject != null)
+                UnityEngine.Object.Destroy(actor.GameObject);
 
             return true;
         }

@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Interaction;
+using Game.World;
 using UnityEngine;
 using VContainer;
 
@@ -9,12 +12,18 @@ namespace Game.Pickup
     [DisallowMultipleComponent]
     public sealed class PickupInteract :
         MonoBehaviour,
-        IInteractable
+        IInteractable,
+        IWorldCapability
     {
         [SerializeField] private PickupComponent _pickup;
 
         [field: SerializeField]
         public float MaxRange { get; private set; } = 5f;
+
+        public IEnumerable<Type> PublishedTypes
+        {
+            get { yield return typeof(IInteractable); }
+        }
 
         private IPickupService _pickupService;
 

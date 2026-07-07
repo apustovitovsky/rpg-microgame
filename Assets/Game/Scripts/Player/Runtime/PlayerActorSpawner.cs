@@ -17,7 +17,7 @@ namespace Game.Player
             _player = player;
         }
 
-        public WorldActor Spawn(
+        public IWorldObject Spawn(
             WorldId worldId,
             string displayName,
             GameObject prefab,

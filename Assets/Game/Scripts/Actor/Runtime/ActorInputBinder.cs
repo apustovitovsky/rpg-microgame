@@ -1,8 +1,13 @@
+using System;
+using System.Collections.Generic;
 using Game.Input;
+using Game.World;
 
 namespace Game.Actor
 {
-    public sealed class ActorInputBinder : IActorInputBinder
+    public sealed class ActorInputBinder :
+        IActorInputBinder,
+        IWorldCapability
     {
         private readonly ActorLookController _look;
         private readonly MovementController _movement;
@@ -16,6 +21,11 @@ namespace Game.Actor
             _look = look;
             _movement = movement;
             _targeting = targeting;
+        }
+
+        public IEnumerable<Type> PublishedTypes
+        {
+            get { yield return typeof(IActorInputBinder); }
         }
 
         public void Bind(IActorInput input)

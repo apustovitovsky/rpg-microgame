@@ -1,5 +1,6 @@
 using System;
 using Game.Actor;
+using Game.Targeting;
 using Game.World;
 using UnityEngine;
 using VContainer.Unity;
@@ -39,12 +40,12 @@ namespace Game.Player
             var currentActor = _player.CurrentActor;
 
             if (currentActor == null ||
-                currentActor.TargetProvider == null)
+                !currentActor.TryGet<ITargetProvider>(out var targetProvider))
             {
                 return;
             }
 
-            var target = currentActor.TargetProvider.CurrentTarget;
+            var target = targetProvider.CurrentTarget;
 
             if (target == null ||
                 target.WorldId.IsEmpty)
@@ -55,9 +56,17 @@ namespace Game.Player
             if (target.WorldId == currentActor.WorldId)
                 return;
 
-            if (!_worldObjects.TryGetEndpoint<WorldActor>(
+            if (!_worldObjects.TryGet(
                     target.WorldId,
-                    out var targetActor))
+                    out var targetObject))
+            {
+                Debug.LogWarning(
+                    $"Target '{target.WorldId}' is not registered.");
+
+                return;
+            }
+
+            if (!targetObject.TryGet<IActorInputBinder>(out _))
             {
                 Debug.LogWarning(
                     $"Target '{target.WorldId}' is not a controllable actor.");
@@ -65,7 +74,7 @@ namespace Game.Player
                 return;
             }
 
-            _player.BindActor(targetActor);
+            _player.BindActor(targetObject);
         }
     }
 }
