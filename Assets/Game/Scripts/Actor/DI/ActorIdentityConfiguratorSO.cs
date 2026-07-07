@@ -1,7 +1,8 @@
 using Game.Core;
+using Game.Pickup;
 using UnityEngine;
 using VContainer;
-using VContainer.Unity;
+
 
 namespace Game.Actor
 {
@@ -27,14 +28,17 @@ namespace Game.Actor
                 .AsSelf()
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInScope<DialogueInteractible>()
+            builder.RegisterComponentInScope<DialogueInteractable>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInScope<ActorTargetable>()
+            builder.RegisterComponentInScope<ActorTarget>()
                 .AsSelf()
                 .AsImplementedInterfaces();
 
-            builder.Register<ActorPickupCollector>(Lifetime.Scoped)
+            builder.Register<DebugActorViewPickupEffectHandler>(Lifetime.Scoped)
+                .AsImplementedInterfaces();
+
+            builder.Register<PickupEffectHandlerProvider>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
         }
     }

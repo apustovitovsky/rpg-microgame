@@ -1,6 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.World;
+using UnityEngine;
 
 namespace Game.Interaction
 {
@@ -33,6 +34,13 @@ namespace Game.Interaction
 
             if (!target.TryGet<IInteractable>(
                     out var interactable))
+            {
+                return false;
+            }
+
+            if (Vector3.Distance(
+                interactor.Root.position,
+                target.Root.position) > interactable.MaxRange)
             {
                 return false;
             }

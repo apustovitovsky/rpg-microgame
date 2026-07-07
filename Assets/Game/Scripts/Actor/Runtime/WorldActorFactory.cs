@@ -36,8 +36,8 @@ namespace Game.Actor
             _resolver.TryResolve<IActorInputBinder>(
                 out var inputBinder);
 
-            _resolver.TryResolve<IPickupCollector>(
-                out var pickupCollector);
+            _resolver.TryResolve<IPickupEffectHandlerProvider>(
+                out var pickupEffectHandlerProvider);
 
             return new(
                 worldId,
@@ -48,7 +48,7 @@ namespace Game.Actor
                 inputBinder,
                 dialogue,
                 interaction,
-                pickupCollector);
+                pickupEffectHandlerProvider);
         }
     }
 }

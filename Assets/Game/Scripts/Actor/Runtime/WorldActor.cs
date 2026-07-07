@@ -17,7 +17,7 @@ namespace Game.Actor
             IActorInputBinder inputBinder = null,
             IActorDialogueEndpoint dialogue = null,
             IInteractable interaction = null,
-            IPickupCollector pickupCollector = null)
+            IPickupEffectHandlerProvider pickupEffectHandlerProvider = null)
         {
             WorldId = worldId;
             DisplayName = string.IsNullOrWhiteSpace(displayName)
@@ -30,21 +30,28 @@ namespace Game.Actor
             InputBinder = inputBinder;
             Dialogue = dialogue;
             Interaction = interaction;
-            PickupCollector = pickupCollector;
+            PickupEffectHandlerProvider = pickupEffectHandlerProvider;
         }
 
         public WorldId WorldId { get; }
+
         public string DisplayName { get; }
 
         public Transform Root => View.Root;
 
         public IActorView View { get; }
+
         public IActorTravelEndpoint Travel { get; }
+
         public ITargetProvider TargetProvider { get; }
+
         public IActorInputBinder InputBinder { get; }
+
         public IActorDialogueEndpoint Dialogue { get; }
+
         public IInteractable Interaction { get; }
-        public IPickupCollector PickupCollector { get; }
+
+        public IPickupEffectHandlerProvider PickupEffectHandlerProvider { get; }
 
         public bool TryGet<TEndpoint>(out TEndpoint endpoint)
             where TEndpoint : class
@@ -65,8 +72,8 @@ namespace Game.Actor
                 endpoint = dialogue;
             else if (Interaction is TEndpoint interaction)
                 endpoint = interaction;
-            else if (PickupCollector is TEndpoint pickupCollector)
-                endpoint = pickupCollector;
+            else if (PickupEffectHandlerProvider is TEndpoint pickupEffectHandlerProvider)
+                endpoint = pickupEffectHandlerProvider;
 
             return endpoint != null;
         }

@@ -13,7 +13,7 @@ namespace Game.Actor
         private LayerMask _layerMask = ~0;
 
         [SerializeField]
-        private ActorTargetable _self;
+        private ActorTarget _self;
 
         private readonly Dictionary<ITargetable, int> _overlapCounts = new();
         private readonly HashSet<ITargetable> _candidates = new();

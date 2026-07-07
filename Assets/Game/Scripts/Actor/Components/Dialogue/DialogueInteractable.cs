@@ -7,11 +7,14 @@ using UnityEngine;
 
 namespace Game.Actor
 {
-    public sealed class DialogueInteractible :
+    public sealed class DialogueInteractable :
         MonoBehaviour,
         IInteractable,
         IActorDialogueEndpoint
     {
+
+        [field: SerializeField] public float MaxRange { get; private set; } = 5f;
+
         public bool CanInteract(InteractionContext context)
         {
             return context.Interactor != null &&

@@ -24,6 +24,9 @@ namespace Game.World
     public interface IWorldObjectRegistryWriter
     {
         void Register(IWorldObject obj);
+
         void Unregister(IWorldObject obj);
+
+        bool Unregister(WorldId id);
     }
 }

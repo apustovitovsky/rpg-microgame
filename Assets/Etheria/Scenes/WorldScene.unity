@@ -8157,6 +8157,7 @@ GameObject:
   - component: {fileID: 2025679143}
   - component: {fileID: 2025679146}
   - component: {fileID: 2025679145}
+  - component: {fileID: 2025679147}
   m_Layer: 3
   m_Name: item_coin
   m_TagString: Untagged
@@ -8194,6 +8195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupInteractible
   _pickup: {fileID: 2025679144}
+  <MaxRange>k__BackingField: 5
 --- !u!114 &2025679144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8206,10 +8208,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20783af2800621d428aeb68471614137, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupComponent
+  _definition: {fileID: 11400000, guid: ee2f125f67e0e7741abfa33bcc67404d, type: 2}
   _displayName: Ancient Coin
-  _root: {fileID: 9100000000000000002}
-  _targetPoint: {fileID: 881969257}
-  _isTargetable: 1
 --- !u!114 &2025679145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8222,7 +8222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc69222aa8068a843904ba188c226e39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Targeting::Game.Targeting.TargetCapsule
-  _targetable: {fileID: 2025679144}
+  _targetable: {fileID: 2025679147}
 --- !u!65 &2025679146
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8244,6 +8244,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2025679147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025679141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2425c7ed732d29d429c25158bbecf606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupTarget
+  _pickup: {fileID: 2025679144}
+  _root: {fileID: 2025679142}
+  _targetPoint: {fileID: 2025679142}
+  _isTargetable: 1
 --- !u!1 &2027138653
 GameObject:
   m_ObjectHideFlags: 0

@@ -58,5 +58,13 @@ namespace Game.World
                 _objects.Remove(obj.WorldId);
             }
         }
+
+        public bool Unregister(WorldId id)
+        {
+            if (id.IsEmpty)
+                return false;
+
+            return _objects.Remove(id);
+        }
     }
 }

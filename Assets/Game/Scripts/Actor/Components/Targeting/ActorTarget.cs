@@ -6,7 +6,7 @@ using VContainer;
 namespace Game.Actor
 {
     [DisallowMultipleComponent]
-    public sealed class ActorTargetable :
+    public sealed class ActorTarget :
         MonoBehaviour,
         ITargetable
     {

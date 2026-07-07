@@ -1,25 +1,14 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.World;
 
 namespace Game.Pickup
 {
     public interface IPickup
     {
-        bool CanCollect(PickupContext context);
+        bool IsCollectable { get; }
 
-        UniTask CollectAsync(
-            PickupContext context,
-            CancellationToken token);
-    }
+        PickupDefinition Definition { get; }
 
-    public readonly struct PickupContext
-    {
-        public PickupContext(IPickup pickup)
-        {
-            Pickup = pickup;
-        }
-
-        public IPickup Pickup { get; }
+        UniTask MarkCollectedAsync(CancellationToken token);
     }
 }

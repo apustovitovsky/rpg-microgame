@@ -1,5 +1,4 @@
 using Game.Core;
-using Game.Interaction;
 using Game.Pickup;
 using Game.World;
 using UnityEngine;
@@ -14,6 +13,9 @@ namespace Game.Gameplay
     {
         public override void Install(IContainerBuilder builder)
         {
+            builder.Register<WorldPickupService>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
             builder.RegisterBuildCallback(container =>
             {
                 var registry = container.Resolve<IWorldObjectRegistryWriter>();
@@ -34,12 +36,19 @@ namespace Game.Gameplay
 
                     pickup.Initialize(worldId);
 
-                    var interaction = pickup.GetComponent<PickupInteractible>();
+                    if (pickup.TryGetComponent<PickupInteract>(out var interaction))
+                        container.Inject(interaction);
+
+                    var target = pickup.GetComponentInChildren<PickupTarget>();
+
+                    var root = target != null
+                        ? target.Root
+                        : pickup.transform;
 
                     var worldPickup = new WorldPickup(
                         worldId,
                         pickup.DisplayName,
-                        pickup.Root,
+                        root,
                         pickup,
                         interaction);
 
