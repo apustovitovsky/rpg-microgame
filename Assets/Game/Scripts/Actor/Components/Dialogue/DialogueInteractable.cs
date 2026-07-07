@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.CommandSystem;
@@ -12,20 +10,10 @@ namespace Game.Actor
     public sealed class DialogueInteractable :
         MonoBehaviour,
         IInteractable,
-        IActorDialogueEndpoint,
-        IWorldCapability
+        IActorDialogueEndpoint
     {
 
         [field: SerializeField] public float MaxRange { get; private set; } = 5f;
-
-        public IEnumerable<Type> PublishedTypes
-        {
-            get
-            {
-                yield return typeof(IInteractable);
-                yield return typeof(IActorDialogueEndpoint);
-            }
-        }
 
         public bool CanInteract(InteractionContext context)
         {

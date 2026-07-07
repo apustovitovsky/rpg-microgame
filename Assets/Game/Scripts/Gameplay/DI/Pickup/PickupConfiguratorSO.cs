@@ -1,4 +1,5 @@
 using Game.Core;
+using Game.Interaction;
 using Game.Pickup;
 using Game.World;
 using UnityEngine;
@@ -39,16 +40,15 @@ namespace Game.Gameplay
                     if (pickup.TryGetComponent<PickupInteract>(out var interaction))
                         container.Inject(interaction);
 
-                    var capabilities = new IWorldCapability[]
-                    {
-                        pickup,
-                        interaction
-                    };
+                    var builder = new WorldObjectBuilder()
+                        .Add<IPickup>(pickup);
 
-                    var worldObject = new WorldObject(
+                    if (interaction != null)
+                        builder.Add<IInteractable>(interaction);
+
+                    var worldObject = builder.Build(
                         worldId,
-                        pickup.gameObject,
-                        new WorldCapabilityProvider(capabilities));
+                        pickup.gameObject);
 
                     registry.Register(worldObject);
                 }

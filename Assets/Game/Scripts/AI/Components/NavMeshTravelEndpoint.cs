@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Actor;
-using Game.World;
 using UnityEngine;
 using VContainer;
 
@@ -12,8 +9,7 @@ namespace Game.AI
     [DisallowMultipleComponent]
     public sealed class NavMeshTravelEndpoint :
         MonoBehaviour,
-        IActorTravelEndpoint,
-        IWorldCapability
+        IActorTravelEndpoint
     {
         private INavMeshPlanner _planner;
         private NavMeshActorInput _input;
@@ -27,10 +23,6 @@ namespace Game.AI
         public bool IsFacingComplete =>
             _input == null || _input.IsFacingComplete;
 
-        public IEnumerable<Type> PublishedTypes
-        {
-            get { yield return typeof(IActorTravelEndpoint); }
-        }
 
         [Inject]
         public void Construct(

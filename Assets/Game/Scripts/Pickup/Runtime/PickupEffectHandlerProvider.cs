@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Game.World;
 
 namespace Game.Pickup
 {
@@ -12,8 +11,7 @@ namespace Game.Pickup
     }
 
     public sealed class PickupEffectHandlerProvider :
-        IPickupEffectHandlerProvider,
-        IWorldCapability
+        IPickupEffectHandlerProvider
     {
         private readonly Dictionary<Type, IPickupEffectHandler> _handlers = new();
 
@@ -22,10 +20,6 @@ namespace Game.Pickup
         {
             foreach (var handler in handlers)
                 Register(handler);
-        }
-        public IEnumerable<Type> PublishedTypes
-        {
-            get { yield return typeof(IPickupEffectHandlerProvider); }
         }
 
         public bool TryGet(

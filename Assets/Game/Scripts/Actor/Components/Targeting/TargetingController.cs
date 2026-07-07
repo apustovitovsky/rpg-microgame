@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using Game.Input;
 using Game.Targeting;
-using Game.World;
+
 using UnityEngine;
 
 namespace Game.Actor
@@ -10,8 +9,7 @@ namespace Game.Actor
     [DisallowMultipleComponent]
     public sealed class TargetingController :
         MonoBehaviour,
-        ITargetProvider,
-        IWorldCapability
+        ITargetProvider
     {
         [SerializeField] private TargetPerception _perception;
         [SerializeField] private ActorLookController _look;
@@ -24,11 +22,6 @@ namespace Game.Actor
 
         public ITargetable CurrentTarget { get; private set; }
         public bool IsLocked { get; private set; }
-
-        public IEnumerable<Type> PublishedTypes
-        {
-            get { yield return typeof(ITargetProvider); }
-        }
 
         public event Action<ITargetable> CurrentTargetChanged;
 

@@ -1,19 +1,21 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.World
 {
     public sealed class WorldObject : IWorldObject
     {
-        private readonly IWorldCapabilityProvider _capabilities;
+        private readonly IReadOnlyDictionary<Type, object> _endpoints;
 
         public WorldObject(
             WorldId worldId,
             GameObject gameObject,
-            IWorldCapabilityProvider capabilities)
+            IReadOnlyDictionary<Type, object> endpoints)
         {
             WorldId = worldId;
             GameObject = gameObject;
-            _capabilities = capabilities;
+            _endpoints = endpoints ?? new Dictionary<Type, object>();
         }
 
         public WorldId WorldId { get; }
@@ -22,16 +24,18 @@ namespace Game.World
 
         public Transform Root => GameObject.transform;
 
-        public bool TryGet<TCapability>(out TCapability capability)
-            where TCapability : class
+        public bool TryGet<TEndpoint>(out TEndpoint endpoint)
+            where TEndpoint : class
         {
-            if (_capabilities == null)
+            if (_endpoints.TryGetValue(typeof(TEndpoint), out var value) &&
+                value is TEndpoint typed)
             {
-                capability = null;
-                return false;
+                endpoint = typed;
+                return true;
             }
 
-            return _capabilities.TryGet(out capability);
+            endpoint = null;
+            return false;
         }
     }
 }

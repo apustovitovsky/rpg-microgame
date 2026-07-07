@@ -1,6 +1,3 @@
-
-using System;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.World;
@@ -11,8 +8,7 @@ namespace Game.Pickup
     [DisallowMultipleComponent]
     public sealed class PickupComponent :
         MonoBehaviour,
-        IPickup,
-        IWorldCapability
+        IPickup
     {
         [SerializeField] private PickupDefinition _definition;
         [SerializeField] private string _displayName = "Pickup";
@@ -31,11 +27,6 @@ namespace Game.Pickup
             isActiveAndEnabled &&
             gameObject.activeInHierarchy &&
             !WorldId.IsEmpty;
-
-        public IEnumerable<Type> PublishedTypes
-        {
-            get { yield return typeof(IPickup); }
-        }
 
         public void Initialize(WorldId worldId)
         {
