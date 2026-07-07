@@ -9,16 +9,16 @@ namespace Game.Gameplay
     public sealed class GameplayScope : LifetimeScope
     {
         [Header("Build Configurations")]
-        [SerializeField] private BuildConfiguratorSO _game;
-        [SerializeField] private BuildConfiguratorSO _world;
-        [SerializeField] private BuildConfiguratorSO _input;
-        [SerializeField] private BuildConfiguratorSO _navigation;
-        [SerializeField] private BuildConfiguratorSO _interaction;
-        [SerializeField] private BuildConfiguratorSO _actor;
-        [SerializeField] private BuildConfiguratorSO _player;
-        [SerializeField] private BuildConfiguratorSO _actorNameplates;
-        [SerializeField] private BuildConfiguratorSO _gameplay;
-        [SerializeField] private BuildConfiguratorSO _pickup;
+        [SerializeField] private BuildConfigurator _game;
+        [SerializeField] private BuildConfigurator _world;
+        [SerializeField] private BuildConfigurator _input;
+        [SerializeField] private BuildConfigurator _navigation;
+        [SerializeField] private BuildConfigurator _interaction;
+        [SerializeField] private BuildConfigurator _actor;
+        [SerializeField] private BuildConfigurator _player;
+        [SerializeField] private BuildConfigurator _actorNameplates;
+        [SerializeField] private BuildConfigurator _gameplay;
+        [SerializeField] private BuildConfigurator _pickup;
 
         protected override void Configure(IContainerBuilder builder)
         {

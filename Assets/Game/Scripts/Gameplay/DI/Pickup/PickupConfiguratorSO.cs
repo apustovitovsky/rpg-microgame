@@ -10,7 +10,7 @@ namespace Game.Gameplay
     [CreateAssetMenu(
         fileName = "PickupConfigurator",
         menuName = "Game/Gameplay/Pickup Configurator")]
-    public sealed class PickupConfiguratorSO : BuildConfiguratorSO
+    public sealed class PickupConfiguratorSO : BuildConfigurator
     {
         public override void Install(IContainerBuilder builder)
         {
@@ -19,9 +19,9 @@ namespace Game.Gameplay
 
             builder.RegisterBuildCallback(container =>
             {
-                var registry = container.Resolve<IWorldObjectRegistryWriter>();
+                var world = container.Resolve<IWorldManager>();
 
-                var pickups = FindObjectsByType<PickupComponent>(
+                var pickups = FindObjectsByType<WorldPickup>(
                     FindObjectsInactive.Exclude);
 
                 for (var i = 0; i < pickups.Length; i++)
@@ -50,13 +50,18 @@ namespace Game.Gameplay
                         worldId,
                         pickup.gameObject);
 
-                    registry.Register(worldObject);
+                    if (!world.Register(worldObject))
+                    {
+                        Debug.LogWarning(
+                            $"Pickup '{worldId}' was built but could not be registered.",
+                            pickup);
+                    }
                 }
             });
         }
 
         private static WorldId CreateWorldId(
-            PickupComponent pickup,
+            WorldPickup pickup,
             int index)
         {
             var prefix = !string.IsNullOrWhiteSpace(pickup.DisplayName)

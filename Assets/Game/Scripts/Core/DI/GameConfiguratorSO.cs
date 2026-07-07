@@ -6,7 +6,7 @@ namespace Game.Core
     [CreateAssetMenu(
         fileName = "GameConfigurator",
         menuName = "Game/Core/Game Configurator")]
-    public sealed class GameConfiguratorSO : BuildConfiguratorSO
+    public sealed class GameConfiguratorSO : BuildConfigurator
     {
         public override void Install(IContainerBuilder builder)
         {

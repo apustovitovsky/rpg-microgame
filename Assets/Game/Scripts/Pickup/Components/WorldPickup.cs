@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Game.Pickup
 {
     [DisallowMultipleComponent]
-    public sealed class PickupComponent :
+    public sealed class WorldPickup :
         MonoBehaviour,
         IPickup
     {
@@ -17,6 +17,8 @@ namespace Game.Pickup
 
         public WorldId WorldId => _worldId;
 
+        private bool _isCollected;
+
         public PickupDefinition Definition => _definition;
 
         public string DisplayName => string.IsNullOrWhiteSpace(_displayName)
@@ -24,6 +26,7 @@ namespace Game.Pickup
             : _displayName.Trim();
 
         public bool IsCollectable =>
+            !_isCollected &&
             isActiveAndEnabled &&
             gameObject.activeInHierarchy &&
             !WorldId.IsEmpty;
@@ -33,10 +36,9 @@ namespace Game.Pickup
             _worldId = worldId;
         }
 
-        public UniTask MarkCollectedAsync(CancellationToken token)
+        public UniTask SetCollectedAsync(CancellationToken token)
         {
-            gameObject.SetActive(false);
-            Destroy(gameObject);
+            _isCollected = true;
 
             return UniTask.CompletedTask;
         }

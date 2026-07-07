@@ -9,7 +9,7 @@ namespace Game.Gameplay
     [CreateAssetMenu(
         fileName = "GameplayConfiguration",
         menuName = "Game/Gameplay/Gameplay Configuration")]
-    public sealed class GameplayConfigurationSO : BuildConfiguratorSO
+    public sealed class GameplayConfigurationSO : BuildConfigurator
     {
         [SerializeField] private GameplayActorConfigSO _config;
         public override void Install(IContainerBuilder builder)

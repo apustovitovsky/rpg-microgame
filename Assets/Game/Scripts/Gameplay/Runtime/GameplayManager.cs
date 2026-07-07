@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Etheria.Game.World;
 using Game.Actor;
 using Game.Player;
@@ -16,11 +15,10 @@ namespace Game.Gameplay
         private readonly GameplayActorConfigSO _manifest;
         private readonly INavigationLocationResolver _locations;
         private readonly INavigationGraphProvider _graphProvider;
-        private readonly IActorSpawner _actorSpawner;
-        private readonly IPlayerActorSpawner _playerSpawner;
-        private readonly IWorldObjectRegistryWriter _worldObjects;
-
-        private readonly Dictionary<WorldId, IWorldObject> _spawned = new();
+        private readonly IWorldSpawner _worldSpawner;
+        private readonly IWorldObjectFactory<ActorSpawnRequest> _actorFactory;
+        private readonly IPlayerService _player;
+        private readonly IWorldManager _world;
 
         private int _nextWorldIdIndex;
 
@@ -28,16 +26,18 @@ namespace Game.Gameplay
             GameplayActorConfigSO manifest,
             INavigationLocationResolver locations,
             INavigationGraphProvider graphProvider,
-            IActorSpawner actorSpawner,
-            IPlayerActorSpawner playerSpawner,
-            IWorldObjectRegistryWriter worldObjects)
+            IWorldSpawner worldSpawner,
+            IWorldManager world,
+            IWorldObjectFactory<ActorSpawnRequest> actorFactory,
+            IPlayerService player)
         {
             _manifest = manifest;
             _locations = locations;
             _graphProvider = graphProvider;
-            _actorSpawner = actorSpawner;
-            _playerSpawner = playerSpawner;
-            _worldObjects = worldObjects;
+            _worldSpawner = worldSpawner;
+            _world = world;
+            _actorFactory = actorFactory;
+            _player = player;
         }
 
         public void Start()
@@ -62,7 +62,7 @@ namespace Game.Gameplay
             Spawn(
                 player,
                 node,
-                usePlayerSpawner: true);
+                bindPlayer: true);
         }
 
         private void SpawnActors()
@@ -81,14 +81,14 @@ namespace Game.Gameplay
                 Spawn(
                     actor,
                     node,
-                    usePlayerSpawner: false);
+                    bindPlayer: false);
             }
         }
 
         private IWorldObject Spawn(
             GameplayActorConfigSO.ActorEntry entry,
             NavigationNode node,
-            bool usePlayerSpawner)
+            bool bindPlayer)
         {
             if (entry == null)
                 return null;
@@ -102,32 +102,27 @@ namespace Game.Gameplay
 
             var worldId = CreateWorldId(entry);
 
-            if (_spawned.ContainsKey(worldId))
+            var request = new ActorSpawnRequest(
+                worldId,
+                entry.DisplayName,
+                entry.Prefab,
+                node.Position,
+                node.Rotation);
+
+            var actor = _worldSpawner.Spawn(
+                request,
+                _actorFactory);
+
+            if (actor == null)
             {
                 Debug.LogWarning(
-                    $"Actor '{worldId}' was not spawned: world id is already spawned.");
+                    $"Actor '{worldId}' was not spawned.");
+
                 return null;
             }
 
-            var actor = usePlayerSpawner
-                ? _playerSpawner.Spawn(
-                    worldId,
-                    entry.DisplayName,
-                    entry.Prefab,
-                    node.Position,
-                    node.Rotation)
-                : _actorSpawner.Spawn(
-                    worldId,
-                    entry.DisplayName,
-                    entry.Prefab,
-                    node.Position,
-                    node.Rotation);
-
-            _worldObjects.Register(actor);
-
-            _spawned.Add(
-                worldId,
-                actor);
+            if (bindPlayer)
+                _player.BindActor(actor);
 
             return actor;
         }
@@ -193,38 +188,7 @@ namespace Game.Gameplay
 
         public void Dispose()
         {
-            DespawnAll();
-        }
-
-        public bool Despawn(WorldId worldId)
-        {
-            if (worldId.IsEmpty)
-                return false;
-
-            if (!_spawned.TryGetValue(worldId, out var actor))
-                return false;
-
-            _spawned.Remove(worldId);
-
-            if (actor == null)
-                return false;
-
-            _worldObjects.Unregister(actor);
-
-            if (actor.GameObject != null)
-                UnityEngine.Object.Destroy(actor.GameObject);
-
-            return true;
-        }
-
-        private void DespawnAll()
-        {
-            var worldIds = new List<WorldId>(_spawned.Keys);
-
-            foreach (var worldId in worldIds)
-                Despawn(worldId);
-
-            _spawned.Clear();
+            _world.DespawnAll();
         }
     }
 }

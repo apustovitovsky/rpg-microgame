@@ -9,7 +9,7 @@ namespace Game.Actor
     [CreateAssetMenu(
         fileName = "ActorIdentityConfigurator",
         menuName = "Game/Actor/Actor Identity Configurator")]
-    public sealed class ActorIdentityConfiguratorSO : BuildConfiguratorSO
+    public sealed class ActorIdentityConfiguratorSO : BuildConfigurator
     {
         public override void Install(
             IContainerBuilder builder)

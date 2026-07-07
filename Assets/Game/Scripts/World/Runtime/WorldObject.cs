@@ -4,6 +4,18 @@ using UnityEngine;
 
 namespace Game.World
 {
+    public interface IWorldObject
+    {
+        WorldId WorldId { get; }
+
+        GameObject GameObject { get; }
+
+        Transform Root { get; }
+
+        bool TryGet<TEndpoint>(out TEndpoint endpoint)
+            where TEndpoint : class;
+    }
+    
     public sealed class WorldObject : IWorldObject
     {
         private readonly IReadOnlyDictionary<Type, object> _endpoints;

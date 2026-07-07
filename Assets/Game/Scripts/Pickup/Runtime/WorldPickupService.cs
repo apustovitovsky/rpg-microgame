@@ -8,14 +8,14 @@ namespace Game.Pickup
     public sealed class WorldPickupService : IPickupService
     {
         private readonly IWorldObjectRegistry _worldObjects;
-        private readonly IWorldObjectRegistryWriter _worldObjectWriter;
+        private readonly IWorldManager _world;
 
         public WorldPickupService(
             IWorldObjectRegistry worldObjects,
-            IWorldObjectRegistryWriter worldObjectWriter)
+            IWorldManager world)
         {
             _worldObjects = worldObjects;
-            _worldObjectWriter = worldObjectWriter;
+            _world = world;
         }
 
         public async UniTask<PickupResult> CollectAsync(
@@ -89,9 +89,9 @@ namespace Game.Pickup
                     await handler.ApplyAsync(effect, pickup, token);
                 }
 
-                await pickup.MarkCollectedAsync(token);
+                await pickup.SetCollectedAsync(token);
 
-                _worldObjectWriter.Unregister(pickupId);
+                _world.Despawn(pickupId);
 
                 return PickupResult.Succeeded;
             }

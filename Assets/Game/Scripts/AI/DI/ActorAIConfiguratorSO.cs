@@ -10,7 +10,7 @@ namespace Game.AI
     [CreateAssetMenu(
         fileName = "ActorAIConfigurator",
         menuName = "Game/AI/Actor AI Configurator")]
-    public sealed class ActorAIConfiguratorSO : BuildConfiguratorSO
+    public sealed class ActorAIConfiguratorSO : BuildConfigurator
     {
         public override void Install(IContainerBuilder builder)
         {

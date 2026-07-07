@@ -8,11 +8,17 @@ namespace Game.Gameplay
     [CreateAssetMenu(
         fileName = "WorldConfigurator",
         menuName = "Game/World/World Configurator")]
-    public sealed class WorldConfiguratorSO : BuildConfiguratorSO
+    public sealed class WorldConfiguratorSO : BuildConfigurator
     {
         public override void Install(IContainerBuilder builder)
         {
             builder.Register<WorldObjectRegistry>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
+            builder.Register<WorldManager>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
+            builder.Register<WorldSpawner>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

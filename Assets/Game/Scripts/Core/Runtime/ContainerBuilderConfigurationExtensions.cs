@@ -7,7 +7,7 @@ namespace Game.Core
     {
         public static void Configure(
             this IContainerBuilder builder,
-            BuildConfiguratorSO configuration)
+            BuildConfigurator configuration)
         {
             if (configuration == null)
                 return;

@@ -8,7 +8,7 @@ namespace Game.Gameplay
     [CreateAssetMenu(
         fileName = "InteractionConfigurator",
         menuName = "Game/Gameplay/Interaction Configurator")]
-    public sealed class InteractionConfiguratorSO : BuildConfiguratorSO
+    public sealed class InteractionConfiguratorSO : BuildConfigurator
     {
         public override void Install(IContainerBuilder builder)
         {

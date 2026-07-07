@@ -11,7 +11,7 @@ namespace Game.Pickup
         MonoBehaviour,
         IInteractable
     {
-        [SerializeField] private PickupComponent _pickup;
+        [SerializeField] private WorldPickup _pickup;
 
         [field: SerializeField]
         public float MaxRange { get; private set; } = 5f;

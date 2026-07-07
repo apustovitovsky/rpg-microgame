@@ -1,48 +1,95 @@
+using System;
 using Game.Interaction;
 using Game.Pickup;
 using Game.Targeting;
 using Game.World;
+using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Game.Actor
 {
-    public sealed class ActorWorldObjectFactory
+    public sealed class ActorWorldObjectFactory :
+        IWorldObjectFactory<ActorSpawnRequest>
     {
-        private readonly IObjectResolver _resolver;
+        private readonly LifetimeScope _parentScope;
 
-        public ActorWorldObjectFactory(IObjectResolver resolver)
+        public ActorWorldObjectFactory(LifetimeScope parentScope)
         {
-            _resolver = resolver;
+            _parentScope = parentScope;
         }
 
-        public IWorldObject Create(WorldId worldId)
+        public IWorldObject Create(ActorSpawnRequest request)
         {
-            var view = _resolver.Resolve<IActorView>();
+            var displayName = request.DisplayName?.Trim() ?? string.Empty;
 
-            var builder = new WorldObjectBuilder()
-                .Add<IActorView>(view);
+            if (request.WorldId.IsEmpty)
+                throw new ArgumentException("Actor world id is required.", nameof(request));
 
-            if (_resolver.TryResolve<IActorInputBinder>(out var inputBinder))
-                builder.Add<IActorInputBinder>(inputBinder);
+            if (request.Prefab == null)
+                throw new ArgumentNullException(nameof(request.Prefab));
 
-            if (_resolver.TryResolve<ITargetProvider>(out var targetProvider))
-                builder.Add<ITargetProvider>(targetProvider);
+            using (LifetimeScope.EnqueueParent(_parentScope))
+            {
+                var instance = UnityEngine.Object.Instantiate(
+                    request.Prefab,
+                    request.Position,
+                    request.Rotation,
+                    request.Parent);
 
-            if (_resolver.TryResolve<IInteractable>(out var interaction))
-                builder.Add<IInteractable>(interaction);
+                instance.name = string.IsNullOrWhiteSpace(displayName)
+                    ? request.WorldId.ToString()
+                    : $"{displayName} ({request.WorldId})";
 
-            if (_resolver.TryResolve<IActorDialogueEndpoint>(out var dialogue))
-                builder.Add<IActorDialogueEndpoint>(dialogue);
+                var scope = instance.GetComponentInChildren<ActorScope>(true);
 
-            if (_resolver.TryResolve<IActorTravelEndpoint>(out var travel))
-                builder.Add<IActorTravelEndpoint>(travel);
+                if (scope == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Actor prefab '{request.Prefab.name}' has no {nameof(ActorScope)}.");
+                }
 
-            if (_resolver.TryResolve<IPickupEffectHandlerProvider>(out var pickupEffects))
-                builder.Add<IPickupEffectHandlerProvider>(pickupEffects);
+                if (scope.Container == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Actor prefab '{request.Prefab.name}' has no built VContainer scope.");
+                }
 
-            return builder.Build(
-                worldId,
-                view.Root.gameObject);
+                var identity = scope.Container.Resolve<IActorIdentity>()
+                    ?? throw new InvalidOperationException(
+                        $"Actor prefab '{request.Prefab.name}' has no {nameof(IActorIdentity)}.");
+
+                identity.Initialize(
+                    request.WorldId,
+                    displayName);
+
+                var view = scope.Container.Resolve<IActorView>();
+
+                var builder = new WorldObjectBuilder()
+                    .Add<IActorView>(view);
+
+                if (scope.Container.TryResolve<IActorInputBinder>(out var inputBinder))
+                    builder.Add<IActorInputBinder>(inputBinder);
+
+                if (scope.Container.TryResolve<ITargetProvider>(out var targetProvider))
+                    builder.Add<ITargetProvider>(targetProvider);
+
+                if (scope.Container.TryResolve<IInteractable>(out var interaction))
+                    builder.Add<IInteractable>(interaction);
+
+                if (scope.Container.TryResolve<IActorDialogueEndpoint>(out var dialogue))
+                    builder.Add<IActorDialogueEndpoint>(dialogue);
+
+                if (scope.Container.TryResolve<IActorTravelEndpoint>(out var travel))
+                    builder.Add<IActorTravelEndpoint>(travel);
+
+                if (scope.Container.TryResolve<IPickupEffectHandlerProvider>(out var pickupEffects))
+                    builder.Add<IPickupEffectHandlerProvider>(pickupEffects);
+
+                return builder.Build(
+                    request.WorldId,
+                    view.Root.gameObject);
+            }
         }
     }
 }

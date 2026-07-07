@@ -9,6 +9,6 @@ namespace Game.Pickup
 
         PickupDefinition Definition { get; }
 
-        UniTask MarkCollectedAsync(CancellationToken token);
+        UniTask SetCollectedAsync(CancellationToken token);
     }
 }

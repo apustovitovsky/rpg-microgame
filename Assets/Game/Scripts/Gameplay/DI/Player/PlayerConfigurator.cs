@@ -8,8 +8,8 @@ namespace Game.Player
 {
     [CreateAssetMenu(
         fileName = "PlayerConfigurator",
-        menuName = "Game/Player/Player Configurator")]
-    public sealed class PlayerConfiguratorSO : BuildConfiguratorSO
+        menuName = "Game/Gameplay/Player Configurator")]
+    public sealed class PlayerConfigurator : BuildConfigurator
     {
         [SerializeField] private CinemachineCamera _virtualCameraPrefab;
 
@@ -19,9 +19,6 @@ namespace Game.Player
                 .AsImplementedInterfaces();
 
             builder.Register<PlayerService>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<PlayerActorSpawner>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
             builder.RegisterEntryPoint<PlayerTargetNameplatePresenter>(

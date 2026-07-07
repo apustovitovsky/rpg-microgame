@@ -8,7 +8,7 @@ namespace Game.Actor
     [CreateAssetMenu(
         fileName = "ActorNameplateConfigurator",
         menuName = "Game/Actor/Actor Nameplate Configurator")]
-    public sealed class ActorNameplateConfiguratorSO : BuildConfiguratorSO
+    public sealed class ActorNameplateConfiguratorSO : BuildConfigurator
     {
         [SerializeField] private ActorNameplateView _labelPrefab;
 

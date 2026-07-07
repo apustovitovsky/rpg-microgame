@@ -9,7 +9,7 @@ namespace Game.Pickup
         MonoBehaviour,
         ITargetable
     {
-        [SerializeField] private PickupComponent _pickup;
+        [SerializeField] private WorldPickup _pickup;
         [SerializeField] private Transform _root;
         [SerializeField] private Transform _targetPoint;
         [SerializeField] private bool _isTargetable = true;

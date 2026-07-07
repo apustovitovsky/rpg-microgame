@@ -6,12 +6,12 @@ namespace Game.Actor
 {
     [CreateAssetMenu(
         fileName = "ActorConfigurator",
-        menuName = "Game/Actor/Actor Configurator")]
-    public sealed class ActorConfiguratorSO : BuildConfiguratorSO
+        menuName = "Game/Gameplay/Actor Configurator")]
+    public sealed class ActorConfigurator : BuildConfigurator
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<ActorSpawner>(Lifetime.Singleton)
+            builder.Register<ActorWorldObjectFactory>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }
