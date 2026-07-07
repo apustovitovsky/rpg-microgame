@@ -297,6 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fb58b0a3f3b05343a878b3dcb7d1b1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Actor::Game.Actor.DialogueInteraction
+  <MaxRange>k__BackingField: 5
 --- !u!1 &3683214080218915046
 GameObject:
   m_ObjectHideFlags: 0
@@ -761,7 +762,7 @@ MonoBehaviour:
   _speedChangeDamping: 10
   _rotationSmoothing: 10
   _lookRotationOffset: 0
-  _crouchInputMode: 1
+  _crouchInputMode: 0
   _buttonHoldThreshold: 0.15
   _shuffleDirectionX: 0
   _shuffleDirectionZ: 0

@@ -8,7 +8,7 @@ namespace Game.Pickup
     [DisallowMultipleComponent]
     public sealed class WorldPickup :
         MonoBehaviour,
-        IPickup
+        IWorldPickup
     {
         [SerializeField] private PickupDefinition _definition;
         [SerializeField] private string _displayName = "Pickup";

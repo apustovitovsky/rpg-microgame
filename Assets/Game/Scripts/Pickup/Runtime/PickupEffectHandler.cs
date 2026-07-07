@@ -8,11 +8,11 @@ namespace Game.Pickup
     {
         Type EffectType { get; }
 
-        bool CanApply(PickupEffect effect, IPickup pickup);
+        bool CanApply(PickupEffect effect, IWorldPickup pickup);
 
         UniTask ApplyAsync(
             PickupEffect effect,
-            IPickup pickup,
+            IWorldPickup pickup,
             CancellationToken token);
     }
 
@@ -21,7 +21,7 @@ namespace Game.Pickup
     {
         public Type EffectType => typeof(TEffect);
 
-        public bool CanApply(PickupEffect effect, IPickup pickup)
+        public bool CanApply(PickupEffect effect, IWorldPickup pickup)
         {
             return effect is TEffect typed &&
                    CanApply(typed, pickup);
@@ -29,7 +29,7 @@ namespace Game.Pickup
 
         public UniTask ApplyAsync(
             PickupEffect effect,
-            IPickup pickup,
+            IWorldPickup pickup,
             CancellationToken token)
         {
             if (effect is not TEffect typed)
@@ -40,11 +40,11 @@ namespace Game.Pickup
 
         protected abstract bool CanApply(
             TEffect effect,
-            IPickup pickup);
+            IWorldPickup pickup);
 
         protected abstract UniTask ApplyAsync(
             TEffect effect,
-            IPickup pickup,
+            IWorldPickup pickup,
             CancellationToken token);
     }
 }

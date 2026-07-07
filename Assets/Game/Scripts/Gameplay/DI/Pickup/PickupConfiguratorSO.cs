@@ -41,7 +41,7 @@ namespace Game.Gameplay
                         container.Inject(interaction);
 
                     var builder = new WorldObjectBuilder()
-                        .Add<IPickup>(pickup);
+                        .Add<IWorldPickup>(pickup);
 
                     if (interaction != null)
                         builder.Add<IInteractable>(interaction);

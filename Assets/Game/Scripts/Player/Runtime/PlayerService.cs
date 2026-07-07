@@ -76,7 +76,7 @@ namespace Game.Player
             }
 
             if (actor != null &&
-                actor.TryGet<IActorView>(out var view))
+                actor.TryGet<IWorldActor>(out var view))
             {
                 _camera.Follow = view.CameraPivot;
             }

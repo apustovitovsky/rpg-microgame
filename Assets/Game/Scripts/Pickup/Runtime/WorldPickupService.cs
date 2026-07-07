@@ -30,7 +30,7 @@ namespace Game.Pickup
                 return PickupResult.HandlerProviderNotFound;
             }
 
-            if (!_worldObjects.TryGetEndpoint<IPickup>(
+            if (!_worldObjects.TryGetEndpoint<IWorldPickup>(
                     pickupId,
                     out var pickup))
             {

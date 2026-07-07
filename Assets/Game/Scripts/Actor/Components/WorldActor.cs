@@ -3,9 +3,9 @@ using UnityEngine;
 namespace Game.Actor
 {
     [DisallowMultipleComponent]
-    public sealed class ActorView :
+    public sealed class WorldActor :
         MonoBehaviour,
-        IActorView
+        IWorldActor
     {
         [SerializeField] private Transform _cameraPivot;
         [SerializeField] private Transform _targetPoint;

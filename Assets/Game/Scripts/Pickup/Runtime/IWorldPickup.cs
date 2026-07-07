@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.Pickup
 {
-    public interface IPickup
+    public interface IWorldPickup
     {
         bool IsCollectable { get; }
 

@@ -17,7 +17,7 @@ namespace Game.Actor
             builder.Register<ActorIdentity>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInScope<ActorView>()
+            builder.RegisterComponentInScope<WorldActor>()
                 .AsImplementedInterfaces();
 
             builder.RegisterComponentInScope<ActorLookController>();

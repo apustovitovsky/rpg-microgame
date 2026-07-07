@@ -3,7 +3,6 @@ using Game.Interaction;
 using Game.Pickup;
 using Game.Targeting;
 using Game.World;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -63,10 +62,10 @@ namespace Game.Actor
                     request.WorldId,
                     displayName);
 
-                var view = scope.Container.Resolve<IActorView>();
+                var view = scope.Container.Resolve<IWorldActor>();
 
                 var builder = new WorldObjectBuilder()
-                    .Add<IActorView>(view);
+                    .Add<IWorldActor>(view);
 
                 if (scope.Container.TryResolve<IActorInputBinder>(out var inputBinder))
                     builder.Add<IActorInputBinder>(inputBinder);
