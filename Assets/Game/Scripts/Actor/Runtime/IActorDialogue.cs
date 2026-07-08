@@ -5,7 +5,7 @@ using Game.World;
 
 namespace Game.Actor
 {
-    public interface IActorDialogueEndpoint
+    public interface IActorDialogue
     {
         UniTask<CommandStatus> StartDialogueAsync(
             WorldId interactorWorldId,

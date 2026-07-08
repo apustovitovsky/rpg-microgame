@@ -7,12 +7,12 @@ namespace Game.Pickup
     public sealed class PickupWorldRegistrar
     {
         private readonly IWorldRegistry<IWorldPickup> _pickups;
-        private readonly IWorldRegistry<IDisplayInfo> _displayInfos;
+        private readonly IWorldRegistry<IDisplayable> _displayInfos;
         private readonly IWorldRegistry<IInteractable> _interactions;
 
         public PickupWorldRegistrar(
             IWorldRegistry<IWorldPickup> pickups,
-            IWorldRegistry<IDisplayInfo> displayInfos,
+            IWorldRegistry<IDisplayable> displayInfos,
             IWorldRegistry<IInteractable> interactions)
         {
             _pickups = pickups;

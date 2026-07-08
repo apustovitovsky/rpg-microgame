@@ -5,9 +5,9 @@ using VContainer;
 namespace Game.Input
 {
     [CreateAssetMenu(
-        fileName = "InputConfiguration",
-        menuName = "Game/Input/Input Configuration")]
-    public sealed class InputConfigurationSO : ModuleBuilder
+        fileName = "InputModuleBuilder",
+        menuName = "Game/Input/Input Module Builder")]
+    public sealed class InputModuleBuilder : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)
         {

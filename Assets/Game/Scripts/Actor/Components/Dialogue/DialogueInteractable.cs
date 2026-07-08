@@ -10,7 +10,7 @@ namespace Game.Actor
     public sealed class DialogueInteractable :
         MonoBehaviour,
         IInteractable,
-        IActorDialogueEndpoint
+        IActorDialogue
     {
         [SerializeField] private Transform _interactionPoint;
 

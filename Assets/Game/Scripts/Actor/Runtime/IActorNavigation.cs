@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Actor
 {
-    public interface IActorTravelEndpoint
+    public interface IActorNavigation
     {
         bool HasArrived { get; }
         bool IsMoving { get; }

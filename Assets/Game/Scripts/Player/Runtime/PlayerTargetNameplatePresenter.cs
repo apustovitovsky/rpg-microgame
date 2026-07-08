@@ -14,7 +14,7 @@ namespace Game.Player
         private readonly IPlayerService _player;
         private readonly ActorNameplatePool _pool;
         private readonly IWorldRegistry<ITargetProvider> _targetProviders;
-        private readonly IWorldRegistry<IDisplayInfo> _displayInfos;
+        private readonly IWorldRegistry<IDisplayable> _displayInfos;
 
         private ITargetProvider _targetProvider;
         private ActorNameplateView _currentView;
@@ -25,7 +25,7 @@ namespace Game.Player
             IPlayerService player,
             ActorNameplatePool pool,
             IWorldRegistry<ITargetProvider> targetProviders,
-            IWorldRegistry<IDisplayInfo> displayInfos)
+            IWorldRegistry<IDisplayable> displayInfos)
         {
             _player = player;
             _pool = pool;

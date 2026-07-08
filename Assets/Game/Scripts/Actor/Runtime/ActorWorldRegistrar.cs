@@ -10,25 +10,25 @@ namespace Game.Actor
     {
         private readonly IWorldRegistry<IWorldActor> _actors;
         private readonly IWorldRegistry<IActorView> _view;
-        private readonly IWorldRegistry<IDisplayInfo> _displayInfos;
+        private readonly IWorldRegistry<IDisplayable> _displayInfos;
         private readonly IWorldRegistry<IInteractor> _interactors;
         private readonly IWorldRegistry<IActorInputBinder> _inputBinders;
         private readonly IWorldRegistry<ITargetProvider> _targetProviders;
         private readonly IWorldRegistry<IInteractable> _interactions;
-        private readonly IWorldRegistry<IActorDialogueEndpoint> _dialogues;
-        private readonly IWorldRegistry<IActorTravelEndpoint> _travels;
+        private readonly IWorldRegistry<IActorDialogue> _dialogues;
+        private readonly IWorldRegistry<IActorNavigation> _travels;
         private readonly IWorldRegistry<IPickupEffectHandlerProvider> _pickupEffectHandlers;
 
         public ActorWorldRegistrar(
             IWorldRegistry<IWorldActor> actors,
             IWorldRegistry<IActorView> view,
-            IWorldRegistry<IDisplayInfo> displayInfos,
+            IWorldRegistry<IDisplayable> displayInfos,
             IWorldRegistry<IInteractor> interactors,
             IWorldRegistry<IActorInputBinder> inputBinders,
             IWorldRegistry<ITargetProvider> targetProviders,
             IWorldRegistry<IInteractable> interactions,
-            IWorldRegistry<IActorDialogueEndpoint> dialogues,
-            IWorldRegistry<IActorTravelEndpoint> travels,
+            IWorldRegistry<IActorDialogue> dialogues,
+            IWorldRegistry<IActorNavigation> travels,
             IWorldRegistry<IPickupEffectHandlerProvider> pickupEffectHandlers)
         {
             _actors = actors;

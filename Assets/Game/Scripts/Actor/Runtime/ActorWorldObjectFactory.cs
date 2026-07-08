@@ -62,8 +62,8 @@ namespace Game.Actor
                 scope.Container.TryResolve<IActorInputBinder>(out var inputBinder);
                 scope.Container.TryResolve<ITargetProvider>(out var targetProvider);
                 scope.Container.TryResolve<IInteractable>(out var interaction);
-                scope.Container.TryResolve<IActorDialogueEndpoint>(out var dialogue);
-                scope.Container.TryResolve<IActorTravelEndpoint>(out var travel);
+                scope.Container.TryResolve<IActorDialogue>(out var dialogue);
+                scope.Container.TryResolve<IActorNavigation>(out var travel);
                 scope.Container.TryResolve<IPickupEffectHandlerProvider>(out var pickupEffects);
                 scope.Container.TryResolve<IInteractor>(out var interactor);
 

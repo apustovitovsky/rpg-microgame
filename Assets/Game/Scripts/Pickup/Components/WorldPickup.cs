@@ -9,7 +9,7 @@ namespace Game.Pickup
     public sealed class WorldPickup :
         MonoBehaviour,
         IWorldPickup,
-        IDisplayInfo
+        IDisplayable
     {
         private bool _isCollected;
 

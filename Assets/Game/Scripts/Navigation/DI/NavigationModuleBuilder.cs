@@ -8,9 +8,9 @@ using VContainer;
 namespace Game.Navigation
 {
     [CreateAssetMenu(
-        fileName = "NavigationConfiguration",
-        menuName = "Game/Navigation/Navigation Configuration")]
-    public sealed class NavigationConfigurationSO : ModuleBuilder
+        fileName = "NavigationModuleBuilder",
+        menuName = "Game/Navigation/Navigation Module Builder")]
+    public sealed class NavigationModuleBuilder : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)
         {

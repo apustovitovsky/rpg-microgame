@@ -1,6 +1,6 @@
 namespace Game.World
 {
-    public interface IDisplayInfo
+    public interface IDisplayable
     {
         string DisplayName { get; }
     }

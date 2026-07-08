@@ -26,10 +26,10 @@ namespace Game.Actor
             builder.Register<WorldRegistry<ITargetProvider>>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<WorldRegistry<IActorDialogueEndpoint>>(Lifetime.Singleton)
+            builder.Register<WorldRegistry<IActorDialogue>>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<WorldRegistry<IActorTravelEndpoint>>(Lifetime.Singleton)
+            builder.Register<WorldRegistry<IActorNavigation>>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
             builder.Register<WorldRegistry<IPickupEffectHandlerProvider>>(Lifetime.Singleton)

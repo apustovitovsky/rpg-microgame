@@ -12,18 +12,18 @@ namespace Game.Player
         private readonly CinemachineCamera _camera;
         private readonly IActorInput _input;
         private readonly IWorldRegistry<IActorInputBinder> _inputBinders;
-        private readonly IWorldRegistry<IActorView> _anchors;
+        private readonly IWorldRegistry<IActorView> _views;
 
         public PlayerService(
             CinemachineCamera camera,
             IActorInput input,
             IWorldRegistry<IActorInputBinder> inputBinders,
-            IWorldRegistry<IActorView> anchors)
+            IWorldRegistry<IActorView> views)
         {
             _camera = camera;
             _input = input;
             _inputBinders = inputBinders;
-            _anchors = anchors;
+            _views = views;
         }
 
         public WorldId CurrentActor { get; private set; }
@@ -82,7 +82,7 @@ namespace Game.Player
             }
 
             if (!actorWorldId.IsEmpty &&
-                _anchors.TryGet(actorWorldId, out var anchors))
+                _views.TryGet(actorWorldId, out var anchors))
             {
                 _camera.Follow = anchors.CameraPivot;
             }

@@ -6,6 +6,7 @@
         "Game.Core",
         "Game.World",
         "Game.Actor",
+        "Game.Input",
         "Game.Player",
         "Game.Pickup",
         "Game.Targeting",
@@ -14,7 +15,8 @@
         "Unity.Cinemachine",
         "Etheria.Game",
         "Etheria.Navigation",
-        "Etheria.Core"
+        "Etheria.Core",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

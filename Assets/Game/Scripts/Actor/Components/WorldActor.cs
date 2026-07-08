@@ -8,7 +8,7 @@ namespace Game.Actor
         MonoBehaviour,
         IWorldActor,
         IActorView,
-        IDisplayInfo
+        IDisplayable
     {
         [SerializeField] private Transform _cameraPivot;
         [SerializeField] private Transform _targetPoint;

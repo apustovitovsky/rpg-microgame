@@ -11,13 +11,13 @@ namespace Game.Actor
             WorldId worldId,
             IWorldActor actor,
             IActorView view,
-            IDisplayInfo displayInfo,
+            IDisplayable displayInfo,
             IInteractor interactor,
             IActorInputBinder inputBinder,
             ITargetProvider targetProvider,
             IInteractable interaction,
-            IActorDialogueEndpoint dialogue,
-            IActorTravelEndpoint travel,
+            IActorDialogue dialogue,
+            IActorNavigation travel,
             IPickupEffectHandlerProvider pickupEffectHandlerProvider)
         {
             WorldId = worldId;
@@ -39,7 +39,7 @@ namespace Game.Actor
 
         public IActorView View { get; }
 
-        public IDisplayInfo DisplayInfo { get; }
+        public IDisplayable DisplayInfo { get; }
 
         public IInteractor Interactor { get; }
 
@@ -49,9 +49,9 @@ namespace Game.Actor
 
         public IInteractable Interaction { get; }
 
-        public IActorDialogueEndpoint Dialogue { get; }
+        public IActorDialogue Dialogue { get; }
 
-        public IActorTravelEndpoint Travel { get; }
+        public IActorNavigation Travel { get; }
 
         public IPickupEffectHandlerProvider PickupEffectHandlerProvider { get; }
     }

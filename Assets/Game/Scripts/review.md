@@ -1,189 +1,489 @@
-﻿Я бы **не делал `ITargetable` registry ради distance check** и **не дублировал именно `TargetPoint` в `IInteractable`**.
-
-Лучший вариант: ввести **interaction-specific spatial данные**, потому что `TargetPoint` и “точка взаимодействия” — не одно и то же.
-
-Сейчас у тебя:
-
-```csharp
-ITargetable
-  WorldId
-  Root
-  TargetPoint
-  IsTargetable
-```
-
-а `IInteractable` хранит только `MaxRange`, `CanInteract`, `InteractAsync`. `IWorldSpatial` — это просто `Vector3 Position`. ([GitHub][1])
-
-## Почему не `ITargetable registry`
-
-`ITargetable` — это endpoint для **выбора/наведения/lock-on**.
-
-```text
-TargetPoint = куда смотреть / куда вешать UI / куда целиться
-```
-
-`IInteractable` — endpoint для **use/interact**.
-
-```text
-InteractionPoint = откуда считать дистанцию взаимодействия
-```
-
-У pickup они могут совпадать. У NPC/сундука/двери — не обязательно.
-
-Например:
-
-```text
-NPC TargetPoint = голова/грудь
-NPC InteractionPoint = root / точка перед NPC
-
-Chest TargetPoint = центр сундука
-Chest InteractionPoint = точка у крышки/перед сундуком
-
-Door TargetPoint = центр двери
-Door InteractionPoint = ручка или trigger-zone
-```
-
-Поэтому `TargetPoint` не надо превращать в универсальную точку взаимодействия.
-
-## Что лучше сделать
-
-Я бы добавил два interaction endpoint-а:
-
-```csharp
-public interface IInteractor
-{
-    WorldId WorldId { get; }
-
-    Vector3 InteractionOrigin { get; }
-}
-```
-
-```csharp
-public interface IInteractable
-{
-    WorldId WorldId { get; }
-
-    Vector3 InteractionPosition { get; }
-
-    float MaxRange { get; }
-
-    bool CanInteract(InteractionContext context);
-
-    UniTask InteractAsync(
-        InteractionContext context,
-        CancellationToken token);
-}
-```
-
-Тогда `InteractionService` зависит от:
-
-```csharp
-private readonly IWorldRegistry<IInteractor> _interactors;
-private readonly IWorldRegistry<IInteractable> _interactables;
-```
-
-И проверка становится честной:
-
-```csharp
-if (!_interactors.TryGet(interactorWorldId, out var interactor))
-    return false;
-
-if (!_interactables.TryGet(targetWorldId, out var interactable))
-    return false;
-
-if (Vector3.Distance(
-        interactor.InteractionOrigin,
-        interactable.InteractionPosition) > interactable.MaxRange)
-{
-    return false;
-}
-```
-
-## Почему это лучше, чем `IWorldSpatial`
-
-`IWorldSpatial` слишком общий:
-
-```text
-IWorldSpatial.Position
-```
-
-Непонятно, что это за позиция:
-
-```text
-root?
-center?
-feet?
-head?
-interaction point?
-target point?
-bounds center?
-```
-
-Для distance check в interaction тебе нужна не “позиция объекта вообще”, а именно:
-
-```text
-позиция того, кто взаимодействует
-позиция точки взаимодействия цели
-```
-
-Поэтому лучше не универсальный `IWorldSpatial`, а более точные интерфейсы:
-
-```text
-IInteractor.InteractionOrigin
-IInteractable.InteractionPosition
-```
-
-## Где хранить `Transform`
-
-В конкретных MonoBehaviour можно хранить serialized transform:
-
-```csharp
-[SerializeField] private Transform _interactionPoint;
-```
-
-но наружу лучше отдавать `Vector3`:
-
-```csharp
-public Vector3 InteractionPosition =>
-    _interactionPoint != null
-        ? _interactionPoint.position
-        : transform.position;
-```
+﻿Да, это даже хороший ход: **`WorldActor` лучше сделать plain C# runtime-сущностью**, а `MonoBehaviour` оставить только как Unity-view/adapters.
 
 То есть не так:
 
-```csharp
-IInteractable.TargetPoint
+```text id="nf9src"
+WorldActor : MonoBehaviour
+  Initialize(...)
 ```
 
 а так:
 
-```csharp
-IInteractable.InteractionPosition
+```text id="7zyrll"
+WorldActor = чистая runtime-сущность
+ActorView / ActorTarget / ActorInteractable = MonoBehaviour adapters
+ActorFactory = собирает всё вместе
+```
+
+## Как это выглядит
+
+```csharp id="9oh6sd"
+public sealed class WorldActor : IWorldActor
+{
+    public WorldActor(
+        WorldId worldId,
+        ActorDefinition definition,
+        IActorView view,
+        IActorInputBinder inputBinder,
+        IActorTravelEndpoint travel,
+        IActorDialogueEndpoint dialogue)
+    {
+        WorldId = worldId;
+        Definition = definition;
+        View = view;
+        InputBinder = inputBinder;
+        Travel = travel;
+        Dialogue = dialogue;
+    }
+
+    public WorldId WorldId { get; }
+
+    public ActorDefinition Definition { get; }
+
+    public IActorView View { get; }
+
+    public IActorInputBinder InputBinder { get; }
+
+    public IActorTravelEndpoint Travel { get; }
+
+    public IActorDialogueEndpoint Dialogue { get; }
+}
+```
+
+Плюс: объект нельзя создать в “полуживом” состоянии. Не нужен `Initialize`, нет риска забыть вызвать его.
+
+## Что остается MonoBehaviour
+
+Например:
+
+```text id="f5ld25"
+ActorView : MonoBehaviour, IActorView
+ActorTarget : MonoBehaviour, ITargetable
+ActorInteractable : MonoBehaviour, IInteractable
+ActorInputBinder : MonoBehaviour, IActorInputBinder
+ActorTravelEndpoint : plain class или MonoBehaviour
+```
+
+`ActorView` может хранить Unity-ссылки:
+
+```csharp id="fyv54f"
+public sealed class ActorView : MonoBehaviour, IActorView
+{
+    [SerializeField] private Transform _root;
+    [SerializeField] private Transform _cameraPivot;
+    [SerializeField] private Transform _targetPoint;
+    [SerializeField] private Transform _uiAnchor;
+
+    public Transform Root => _root != null ? _root : transform;
+    public Transform CameraPivot => _cameraPivot;
+    public Transform TargetPoint => _targetPoint;
+    public Transform UiAnchor => _uiAnchor;
+}
+```
+
+## Кто создает `WorldActor`
+
+Фабрика.
+
+```csharp id="z0jq5h"
+var instance = Object.Instantiate(
+    request.Definition.Prefab,
+    request.Position,
+    request.Rotation,
+    request.Parent);
+
+var view = instance.GetComponentInChildren<IActorView>();
+var inputBinder = instance.GetComponentInChildren<IActorInputBinder>();
+var travel = instance.GetComponentInChildren<IActorTravelEndpoint>();
+var dialogue = instance.GetComponentInChildren<IActorDialogueEndpoint>();
+var interactable = instance.GetComponentInChildren<IInteractable>();
+
+var actor = new WorldActor(
+    request.WorldId,
+    request.Definition,
+    view,
+    inputBinder,
+    travel,
+    dialogue);
+```
+
+Потом registrar:
+
+```csharp id="d48sw0"
+var lifetime = new WorldLifetime(
+    request.WorldId,
+    view.Root.gameObject);
+
+lifetime.Add(_actors.Register(request.WorldId, actor));
+lifetime.Add(_interactables.Register(request.WorldId, interactable));
+lifetime.Add(_displayables.Register(request.WorldId, actor));
+lifetime.Add(_possessables.Register(request.WorldId, actorPossessable));
+
+_worldManager.Track(lifetime);
+```
+
+## Куда деть `WorldId` у MonoBehaviour компонентов
+
+Есть два варианта.
+
+### Вариант A — MonoBehaviour не знают `WorldId`
+
+Лучше для чистоты.
+
+`WorldActor` знает `WorldId`, а target/interactable получают `WorldId` через context/constructor/binder.
+
+Но в Unity это не всегда удобно, особенно если `ITargetable` должен отдавать `WorldId`.
+
+### Вариант B — один маленький `ActorIdentity` MonoBehaviour
+
+Практичнее:
+
+```csharp id="4pqjti"
+public sealed class ActorIdentity : MonoBehaviour
+{
+    public WorldId WorldId { get; private set; }
+
+    public void Set(WorldId worldId)
+    {
+        WorldId = worldId;
+    }
+}
+```
+
+Фабрика после instantiate:
+
+```csharp id="a2p8uf"
+identity.Set(request.WorldId);
+```
+
+А `ActorTarget`, `ActorInteractable` читают id из `ActorIdentity`.
+
+Это не “грязный Initialize WorldActor”. Это просто установка runtime identity на Unity-side adapters.
+
+## Главное правило
+
+`WorldActor` — pure runtime model.
+
+`MonoBehaviour` — Unity-порты:
+
+```text id="mn9vim"
+view
+colliders
+target point
+camera pivot
+animation
+interaction trigger
+navigation adapters
+```
+
+Фабрика соединяет их.
+
+## Стоит ли так делать?
+
+Да, если тебя раздражает, что `WorldActor : MonoBehaviour` одновременно:
+
+```text id="nw6i90"
+сущность
+Unity component
+display info
+spatial
+runtime state
+registration endpoint
+```
+
+Тогда plain `WorldActor` сильно очищает модель.
+
+## Минус
+
+Фабрика станет немного ответственнее: она должна собрать `WorldActor` из prefab components.
+
+Но это нормальная ответственность фабрики:
+
+```text id="2bpjhz"
+prefab = Unity representation
+WorldActor = runtime entity
+factory = assembly point
 ```
 
 ## Итог
 
-Я бы сделал так:
+Да, я бы сделал так:
 
-```text
-Убрать из InteractionService:
-  IWorldRegistry<IWorldSpatial>
-
-Не добавлять:
-  IWorldRegistry<ITargetable> ради дистанции
-
-Добавить:
-  IWorldRegistry<IInteractor>
-  IWorldRegistry<IInteractable>
-
-В IInteractable добавить:
-  Vector3 InteractionPosition
-
-В actor/player добавить:
-  IInteractor с InteractionOrigin
+```text id="g2up2w"
+WorldActor — plain C# class, без MonoBehaviour и Initialize
+ActorView/Target/Interactable/InputBinder — MonoBehaviour adapters
+ActorFactory — instantiate prefab + собрать WorldActor
+ActorRegistrar — зарегистрировать WorldActor и внешние роли
+WorldLifetime — Dispose registrations + Destroy prefab instance
 ```
 
-Коротко: **`TargetPoint` — для targeting/UI/look. `InteractionPosition` — для interaction range. Не смешивай их.**
+Это заметно чище, чем `WorldActor : MonoBehaviour`, особенно если ты хочешь нормальные runtime-сущности, а не Unity-компоненты, притворяющиеся доменной моделью.
+Я бы **не клал `WorldActor` внутрь `WorldLifetime` и не клал `WorldLifetime` внутрь `WorldActor`**.
 
-[1]: https://raw.githubusercontent.com/apustovitovsky/rpg-microgame/main/Assets/Game/Scripts/Interaction/Runtime/IInteractable.cs "raw.githubusercontent.com"
+Это разные оси:
+
+```text
+WorldActor
+  = игровая runtime-сущность
+
+WorldLifetime
+  = технический cleanup/despawn handle
+```
+
+Связывать их напрямую — значит опять смешать domain model и infrastructure.
+
+## Как правильно
+
+Связь должна быть только через `WorldId` и через composition root/factory:
+
+```text
+ActorFactory
+  создает prefab
+  собирает WorldActor
+  создает WorldLifetime
+  регистрирует WorldActor / роли
+  добавляет registration tokens в WorldLifetime
+  отдает WorldLifetime в WorldManager
+```
+
+То есть factory знает обоих, но они **не знают друг о друге**.
+
+## Не так
+
+```csharp
+public sealed class WorldActor
+{
+    public WorldLifetime Lifetime { get; }
+}
+```
+
+Плохо, потому что actor начинает знать, как он удаляется из сцены.
+
+И не так:
+
+```csharp
+public sealed class WorldLifetime
+{
+    public IWorldActor Actor { get; }
+}
+```
+
+Плохо, потому что lifetime начинает знать доменную сущность.
+
+## Правильная модель
+
+```csharp
+public sealed class WorldActor : IWorldActor
+{
+    public WorldActor(
+        WorldId worldId,
+        ActorDefinition definition,
+        IActorView view,
+        IActorInputBinder inputBinder,
+        IActorTravelEndpoint travel,
+        IActorDialogueEndpoint dialogue)
+    {
+        WorldId = worldId;
+        Definition = definition;
+        View = view;
+        InputBinder = inputBinder;
+        Travel = travel;
+        Dialogue = dialogue;
+    }
+
+    public WorldId WorldId { get; }
+    public ActorDefinition Definition { get; }
+    public IActorView View { get; }
+    public IActorInputBinder InputBinder { get; }
+    public IActorTravelEndpoint Travel { get; }
+    public IActorDialogueEndpoint Dialogue { get; }
+}
+```
+
+```csharp
+public sealed class WorldLifetime : IDisposable
+{
+    private readonly CompositeRegistration _registrations = new();
+    private readonly GameObject _root;
+    private bool _disposed;
+
+    public WorldLifetime(WorldId worldId, GameObject root)
+    {
+        WorldId = worldId;
+        _root = root;
+    }
+
+    public WorldId WorldId { get; }
+
+    public void Add(IRegistrationToken token)
+    {
+        if (_disposed)
+        {
+            token.Dispose();
+            return;
+        }
+
+        _registrations.Add(token);
+    }
+
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
+
+        _disposed = true;
+
+        _registrations.Dispose();
+
+        if (_root != null)
+            Object.Destroy(_root);
+    }
+}
+```
+
+## Где они встречаются
+
+Во временной сборочной структуре, не в runtime model:
+
+```csharp
+public readonly struct SpawnedActor
+{
+    public SpawnedActor(
+        WorldActor actor,
+        WorldLifetime lifetime)
+    {
+        Actor = actor;
+        Lifetime = lifetime;
+    }
+
+    public WorldActor Actor { get; }
+    public WorldLifetime Lifetime { get; }
+}
+```
+
+Но `SpawnedActor` — это **только результат фабрики**, его не надо хранить в игре как сущность.
+
+## Что еще можно оптимизировать
+
+### 1. Убрать `ActorSpawnedObject` как огромный мешок
+
+Если `WorldActor` содержит actor-specific endpoints:
+
+```csharp
+actor.View
+actor.InputBinder
+actor.Travel
+actor.Dialogue
+```
+
+то `ActorSpawnedObject` больше не нужен.
+
+Фабрика может сразу создать:
+
+```text
+WorldActor
+WorldLifetime
+external roles
+```
+
+### 2. Регистрировать только крупные сущности и внешние роли
+
+Для actor достаточно примерно:
+
+```csharp
+lifetime.Add(_actors.Register(id, actor));
+lifetime.Add(_interactors.Register(id, actorInteractor));
+lifetime.Add(_interactables.Register(id, actorInteractable));
+lifetime.Add(_displayables.Register(id, actorDisplayable));
+lifetime.Add(_possessables.Register(id, actorPossessable));
+```
+
+Не надо глобально регистрировать:
+
+```text
+IActorView
+IActorTravelEndpoint
+IActorDialogueEndpoint
+IActorInputBinder
+```
+
+Они доступны через `IWorldActor`.
+
+### 3. Не давать actor-у `Despawn()`
+
+Если actor умер, не надо:
+
+```csharp
+actor.Lifetime.Dispose();
+```
+
+Лучше:
+
+```text
+HealthSystem / DeathSystem
+  -> WorldManager.Despawn(actor.WorldId)
+```
+
+Или actor raises event:
+
+```csharp
+actor.Died += id => _worldManager.Despawn(id);
+```
+
+Сущность сообщает факт, infrastructure удаляет объект.
+
+### 4. `WorldManager` должен хранить только lifetime
+
+```csharp
+private readonly Dictionary<WorldId, IWorldLifetime> _lifetimes;
+```
+
+Ему не нужен `WorldActor`, `WorldPickup`, `IInteractable`.
+
+### 5. `WorldLifetime` может сам удаляться из `WorldManager`
+
+При `Track` добавь self-unregister token:
+
+```csharp
+public bool Track(IWorldLifetime lifetime)
+{
+    if (!_lifetimes.TryAdd(lifetime.WorldId, lifetime))
+    {
+        lifetime.Dispose();
+        return false;
+    }
+
+    lifetime.Add(new RegistrationToken(() =>
+    {
+        _lifetimes.Remove(lifetime.WorldId);
+    }));
+
+    return true;
+}
+```
+
+Тогда даже прямой `lifetime.Dispose()` не оставит stale-запись.
+
+## Итоговая форма
+
+```text
+WorldActor
+  доменная runtime-сущность
+
+WorldPickup
+  доменная runtime-сущность
+
+WorldLifetime
+  cleanup: unregister + destroy GameObject
+
+WorldManager
+  WorldId -> WorldLifetime
+
+ActorFactory
+  собирает actor + roles + lifetime
+
+ActorRegistrar или factory-section
+  добавляет registration tokens в lifetime
+```
+
+Самое важное: **не делай двустороннюю связь `WorldActor <-> WorldLifetime`**. Они должны быть собраны рядом, но не владеть друг другом.

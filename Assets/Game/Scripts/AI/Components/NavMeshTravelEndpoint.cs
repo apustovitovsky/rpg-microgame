@@ -9,7 +9,7 @@ namespace Game.AI
     [DisallowMultipleComponent]
     public sealed class NavMeshTravelEndpoint :
         MonoBehaviour,
-        IActorTravelEndpoint
+        IActorNavigation
     {
         private INavMeshPlanner _planner;
         private NavMeshActorInput _input;
