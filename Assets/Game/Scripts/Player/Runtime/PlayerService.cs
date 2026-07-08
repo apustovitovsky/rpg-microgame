@@ -11,13 +11,19 @@ namespace Game.Player
     {
         private readonly CinemachineCamera _camera;
         private readonly IActorInput _input;
+        private readonly IWorldRegistry<IActorInputBinder> _inputBinders;
+        private readonly IWorldRegistry<IWorldActor> _actors;
 
         public PlayerService(
             CinemachineCamera camera,
-            IActorInput input)
+            IActorInput input,
+            IWorldRegistry<IActorInputBinder> inputBinders,
+            IWorldRegistry<IWorldActor> actors)
         {
             _camera = camera;
             _input = input;
+            _inputBinders = inputBinders;
+            _actors = actors;
         }
 
         public IWorldObject CurrentActor { get; private set; }
@@ -32,7 +38,7 @@ namespace Game.Player
                 return;
             }
 
-            if (!actor.TryGet<IActorInputBinder>(out var inputBinder))
+            if (!_inputBinders.TryGet(actor.WorldId, out var inputBinder))
             {
                 Debug.LogWarning(
                     $"Player cannot bind actor '{actor.WorldId}': input binder is missing.");
@@ -41,7 +47,7 @@ namespace Game.Player
             }
 
             if (CurrentActor != null &&
-                CurrentActor.TryGet<IActorInputBinder>(out var currentInputBinder))
+                _inputBinders.TryGet(CurrentActor.WorldId, out var currentInputBinder))
             {
                 currentInputBinder.Unbind();
             }
@@ -58,7 +64,7 @@ namespace Game.Player
             if (!ReferenceEquals(CurrentActor, actor))
                 return;
 
-            if (CurrentActor.TryGet<IActorInputBinder>(out var inputBinder))
+            if (_inputBinders.TryGet(CurrentActor.WorldId, out var inputBinder))
                 inputBinder.Unbind();
 
             CurrentActor = null;
@@ -76,7 +82,7 @@ namespace Game.Player
             }
 
             if (actor != null &&
-                actor.TryGet<IWorldActor>(out var view))
+                _actors.TryGet(actor.WorldId, out var view))
             {
                 _camera.Follow = view.CameraPivot;
             }

@@ -14,12 +14,18 @@ namespace Game.Gameplay
     {
         public override void Install(IContainerBuilder builder)
         {
+            builder.Register<WorldRegistry<IWorldPickup>>(Lifetime.Singleton)
+                .As<IWorldRegistry<IWorldPickup>>();
+
             builder.Register<WorldPickupService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
             builder.RegisterBuildCallback(container =>
             {
                 var world = container.Resolve<IWorldManager>();
+                var worldObjects = container.Resolve<IWorldRegistry<IWorldObject>>();
+                var pickupsRegistry = container.Resolve<IWorldRegistry<IWorldPickup>>();
+                var interactions = container.Resolve<IWorldRegistry<IInteractable>>();
 
                 var pickups = FindObjectsByType<WorldPickup>(
                     FindObjectsInactive.Exclude);
@@ -40,20 +46,21 @@ namespace Game.Gameplay
                     if (pickup.TryGetComponent<PickupInteract>(out var interaction))
                         container.Inject(interaction);
 
-                    var builder = new WorldObjectBuilder()
-                        .Add<IWorldPickup>(pickup);
-
-                    if (interaction != null)
-                        builder.Add<IInteractable>(interaction);
-
-                    var worldObject = builder.Build(
+                    var worldObject = new WorldObject(
                         worldId,
                         pickup.gameObject);
 
-                    if (!world.Register(worldObject))
+                    var lifetime = new CompositeRegistration();
+                    lifetime.Add(worldObjects.Register(worldId, worldObject));
+                    lifetime.Add(pickupsRegistry.Register(worldId, pickup));
+
+                    if (interaction != null)
+                        lifetime.Add(interactions.Register(worldId, interaction));
+
+                    if (!world.Track(worldObject, lifetime))
                     {
                         Debug.LogWarning(
-                            $"Pickup '{worldId}' was built but could not be registered.",
+                            $"Pickup '{worldId}' was built but could not be tracked.",
                             pickup);
                     }
                 }

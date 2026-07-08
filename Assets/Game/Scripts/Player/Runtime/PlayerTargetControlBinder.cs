@@ -12,17 +12,23 @@ namespace Game.Player
         IDisposable
     {
         private readonly IPlayerService _player;
-        private readonly IWorldObjectRegistry _worldObjects;
+        private readonly IWorldRegistry<IWorldObject> _worldObjects;
+        private readonly IWorldRegistry<IActorInputBinder> _inputBinders;
+        private readonly IWorldRegistry<ITargetProvider> _targetProviders;
         private readonly IPlayerInteractionInput _input;
 
         public PlayerTargetControlBinder(
             IPlayerInteractionInput input,
             IPlayerService player,
-            IWorldObjectRegistry worldObjects)
+            IWorldRegistry<IWorldObject> worldObjects,
+            IWorldRegistry<IActorInputBinder> inputBinders,
+            IWorldRegistry<ITargetProvider> targetProviders)
         {
             _input = input;
             _player = player;
             _worldObjects = worldObjects;
+            _inputBinders = inputBinders;
+            _targetProviders = targetProviders;
         }
 
         public void Start()
@@ -40,7 +46,7 @@ namespace Game.Player
             var currentActor = _player.CurrentActor;
 
             if (currentActor == null ||
-                !currentActor.TryGet<ITargetProvider>(out var targetProvider))
+                !_targetProviders.TryGet(currentActor.WorldId, out var targetProvider))
             {
                 return;
             }
@@ -56,9 +62,7 @@ namespace Game.Player
             if (target.WorldId == currentActor.WorldId)
                 return;
 
-            if (!_worldObjects.TryGet(
-                    target.WorldId,
-                    out var targetObject))
+            if (!_worldObjects.TryGet(target.WorldId, out var targetObject))
             {
                 Debug.LogWarning(
                     $"Target '{target.WorldId}' is not registered.");
@@ -66,7 +70,7 @@ namespace Game.Player
                 return;
             }
 
-            if (!targetObject.TryGet<IActorInputBinder>(out _))
+            if (!_inputBinders.Contains(target.WorldId))
             {
                 Debug.LogWarning(
                     $"Target '{target.WorldId}' is not a controllable actor.");

@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Interaction;
 using Game.Targeting;
+using Game.World;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -15,17 +16,20 @@ namespace Game.Player
         private readonly IPlayerInteractionInput _input;
         private readonly IPlayerService _player;
         private readonly IInteractionService _interactions;
+        private readonly IWorldRegistry<ITargetProvider> _targetProviders;
 
         private CancellationTokenSource _interactionCts;
 
         public PlayerInteractionController(
             IPlayerInteractionInput input,
             IPlayerService player,
-            IInteractionService interactions)
+            IInteractionService interactions,
+            IWorldRegistry<ITargetProvider> targetProviders)
         {
             _input = input;
             _player = player;
             _interactions = interactions;
+            _targetProviders = targetProviders;
         }
 
         public void Start()
@@ -52,7 +56,7 @@ namespace Game.Player
             var currentActor = _player.CurrentActor;
 
             if (currentActor == null ||
-                !currentActor.TryGet<ITargetProvider>(out var targetProvider))
+                !_targetProviders.TryGet(currentActor.WorldId, out var targetProvider))
             {
                 return;
             }

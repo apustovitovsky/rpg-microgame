@@ -1,6 +1,7 @@
 using System;
 using Game.Actor;
 using Game.Targeting;
+using Game.World;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -12,6 +13,7 @@ namespace Game.Player
     {
         private readonly IPlayerService _player;
         private readonly ActorNameplatePool _pool;
+        private readonly IWorldRegistry<ITargetProvider> _targetProviders;
 
         private ITargetProvider _targetProvider;
         private ActorNameplateView _currentView;
@@ -20,10 +22,12 @@ namespace Game.Player
 
         public PlayerTargetNameplatePresenter(
             IPlayerService player,
-            ActorNameplatePool pool)
+            ActorNameplatePool pool,
+            IWorldRegistry<ITargetProvider> targetProviders)
         {
             _player = player;
             _pool = pool;
+            _targetProviders = targetProviders;
         }
 
         public void Start()
@@ -49,7 +53,7 @@ namespace Game.Player
             if (actor == null)
                 return;
 
-            if (!actor.TryGet(out _targetProvider))
+            if (!_targetProviders.TryGet(actor.WorldId, out _targetProvider))
                 return;
 
             _targetProvider.CurrentTargetChanged += OnCurrentTargetChanged;

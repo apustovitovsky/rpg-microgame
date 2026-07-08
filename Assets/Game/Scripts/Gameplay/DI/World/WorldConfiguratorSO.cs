@@ -12,7 +12,7 @@ namespace Game.Gameplay
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<WorldObjectRegistry>(Lifetime.Singleton)
+            builder.Register<WorldRegistry<IWorldObject>>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
             builder.Register<WorldManager>(Lifetime.Singleton)

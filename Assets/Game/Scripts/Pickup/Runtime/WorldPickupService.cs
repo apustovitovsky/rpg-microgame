@@ -7,14 +7,17 @@ namespace Game.Pickup
 {
     public sealed class WorldPickupService : IPickupService
     {
-        private readonly IWorldObjectRegistry _worldObjects;
+        private readonly IWorldRegistry<IWorldPickup> _pickups;
+        private readonly IWorldRegistry<IPickupEffectHandlerProvider> _handlerProviders;
         private readonly IWorldManager _world;
 
         public WorldPickupService(
-            IWorldObjectRegistry worldObjects,
+            IWorldRegistry<IWorldPickup> pickups,
+            IWorldRegistry<IPickupEffectHandlerProvider> handlerProviders,
             IWorldManager world)
         {
-            _worldObjects = worldObjects;
+            _pickups = pickups;
+            _handlerProviders = handlerProviders;
             _world = world;
         }
 
@@ -23,14 +26,14 @@ namespace Game.Pickup
             WorldId pickupId,
             CancellationToken token)
         {
-            if (!_worldObjects.TryGetEndpoint<IPickupEffectHandlerProvider>(
+            if (!_handlerProviders.TryGet(
                     collectorId,
                     out var handlerProvider))
             {
                 return PickupResult.HandlerProviderNotFound;
             }
 
-            if (!_worldObjects.TryGetEndpoint<IWorldPickup>(
+            if (!_pickups.TryGet(
                     pickupId,
                     out var pickup))
             {

@@ -1,42 +1,45 @@
 using System.Collections.Generic;
-using UnityEngine;
+
 
 namespace Game.World
 {
     public interface IWorldManager
     {
-        bool Register(IWorldObject worldObject);
+        bool Track(
+            IWorldObject worldObject,
+            IRegistrationToken lifetime);
 
         bool Despawn(WorldId worldId);
+
         void DespawnAll();
     }
-    
+
     public sealed class WorldManager : IWorldManager
     {
-        private readonly IWorldObjectRegistryWriter _registry;
-        private readonly Dictionary<WorldId, IWorldObject> _objects = new();
+        private readonly Dictionary<WorldId, WorldEntry> _entries = new();
 
-        public WorldManager(IWorldObjectRegistryWriter registry)
-        {
-            _registry = registry;
-        }
-
-        public bool Register(IWorldObject worldObject)
+        public bool Track(
+            IWorldObject worldObject,
+            IRegistrationToken lifetime)
         {
             if (worldObject == null ||
                 worldObject.WorldId.IsEmpty)
             {
+                lifetime?.Dispose();
                 return false;
             }
 
-            if (_objects.ContainsKey(worldObject.WorldId))
+            if (_entries.ContainsKey(worldObject.WorldId))
+            {
+                lifetime?.Dispose();
                 return false;
+            }
 
-            _objects.Add(
+            _entries.Add(
                 worldObject.WorldId,
-                worldObject);
-
-            _registry.Register(worldObject);
+                new WorldEntry(
+                    worldObject,
+                    lifetime));
 
             return true;
         }
@@ -46,26 +49,38 @@ namespace Game.World
             if (worldId.IsEmpty)
                 return false;
 
-            if (!_objects.TryGetValue(worldId, out var worldObject))
+            if (!_entries.Remove(worldId, out var entry))
                 return false;
 
-            _objects.Remove(worldId);
-            _registry.Unregister(worldObject);
+            entry.Lifetime?.Dispose();
 
-            if (worldObject.GameObject != null)
-                Object.Destroy(worldObject.GameObject);
+            if (entry.WorldObject.GameObject != null)
+                UnityEngine.Object.Destroy(entry.WorldObject.GameObject);
 
             return true;
         }
 
         public void DespawnAll()
         {
-            var worldIds = new List<WorldId>(_objects.Keys);
+            var worldIds = new List<WorldId>(_entries.Keys);
 
             foreach (var worldId in worldIds)
                 Despawn(worldId);
+        }
 
-            _objects.Clear();
+        private readonly struct WorldEntry
+        {
+            public WorldEntry(
+                IWorldObject worldObject,
+                IRegistrationToken lifetime)
+            {
+                WorldObject = worldObject;
+                Lifetime = lifetime;
+            }
+
+            public IWorldObject WorldObject { get; }
+
+            public IRegistrationToken Lifetime { get; }
         }
     }
 }

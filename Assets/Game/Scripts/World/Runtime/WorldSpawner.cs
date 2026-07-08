@@ -23,18 +23,22 @@ namespace Game.World
             if (factory == null)
                 return null;
 
-            var worldObject = factory.Create(request);
+            var result = factory.Create(request);
 
-            if (worldObject == null)
-                return null;
-
-            if (!_world.Register(worldObject))
+            if (!result.IsValid)
             {
-                _world.Despawn(worldObject.WorldId);
+                result.Lifetime?.Dispose();
                 return null;
             }
 
-            return worldObject;
+            if (!_world.Track(
+                    result.WorldObject,
+                    result.Lifetime))
+            {
+                return null;
+            }
+
+            return result.WorldObject;
         }
     }
 }
