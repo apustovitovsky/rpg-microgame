@@ -6,9 +6,9 @@ using VContainer.Unity;
 namespace Game.Actor
 {
     [CreateAssetMenu(
-        fileName = "ActorNameplateConfigurator",
-        menuName = "Game/Actor/Actor Nameplate Configurator")]
-    public sealed class ActorNameplateConfiguratorSO : BuildConfigurator
+        fileName = "ActorNameplateModuleBuilder",
+        menuName = "Game/Actor/Actor Nameplate Module Builder")]
+    public sealed class ActorNameplateModuleBuilder : ModuleBuilder
     {
         [SerializeField] private ActorNameplateView _labelPrefab;
 
@@ -17,7 +17,7 @@ namespace Game.Actor
             if (_labelPrefab == null)
             {
                 Debug.LogError(
-                    $"{nameof(ActorNameplateConfiguratorSO)} requires assigned actor label prefab.");
+                    $"{nameof(ActorNameplateModuleBuilder)} requires assigned actor label prefab.");
 
                 return;
             }

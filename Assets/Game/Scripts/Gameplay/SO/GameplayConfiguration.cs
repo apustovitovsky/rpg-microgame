@@ -9,7 +9,7 @@ namespace Game.Gameplay
     [CreateAssetMenu(
         fileName = "GameplayConfiguration",
         menuName = "Game/Gameplay/Gameplay Configuration")]
-    public sealed class GameplayConfiguration : BuildConfigurator
+    public sealed class GameplayConfiguration : ModuleBuilder
     {
         [SerializeField] private ActorSpawnCatalog _actors;
         [SerializeField] private PickupSpawnCatalog _pickups;
@@ -26,6 +26,9 @@ namespace Game.Gameplay
 
             builder.RegisterInstance(_actors);
             builder.RegisterInstance(_pickups);
+
+            builder.Register<SpawnPointResolver>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
 
             builder.RegisterEntryPoint<GameplayManager>(
                 Lifetime.Singleton);

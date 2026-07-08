@@ -7,9 +7,9 @@ using VContainer.Unity;
 namespace Game.Player
 {
     [CreateAssetMenu(
-        fileName = "PlayerConfigurator",
-        menuName = "Game/Gameplay/Player Configurator")]
-    public sealed class PlayerConfigurator : BuildConfigurator
+        fileName = "PlayerModuleBuilder",
+        menuName = "Game/Gameplay/Player Module Builder")]
+    public sealed class PlayerModuleBuilder : ModuleBuilder
     {
         [SerializeField] private CinemachineCamera _virtualCameraPrefab;
 

@@ -5,13 +5,13 @@ namespace Game.Core
 {
     public static class ContainerBuilderComponentExtensions
     {
-        public static ComponentRegistrationBuilder RegisterComponentInScope<T>(
+        public static ComponentRegistrationBuilder RegisterComponentInModuleRoot<T>(
             this IContainerBuilder builder)
         {
             return builder
                 .RegisterComponentInHierarchy<T>()
                 .UnderTransform(resolver =>
-                    resolver.Resolve<ScopeRoot>().Transform);
+                    resolver.Resolve<ModuleRoot>().Transform);
         }
     }
 }

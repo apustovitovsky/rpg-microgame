@@ -8,9 +8,9 @@ using VContainer;
 namespace Game.Actor
 {
     [CreateAssetMenu(
-        fileName = "ActorConfigurator",
-        menuName = "Game/Gameplay/Actor Configurator")]
-    public sealed class ActorConfigurator : BuildConfigurator
+        fileName = "ActorModuleBuilder",
+        menuName = "Game/Gameplay/Actor Module Builder")]
+    public sealed class ActorModuleBuilder : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)
         {
@@ -35,7 +35,11 @@ namespace Game.Actor
             builder.Register<WorldRegistry<IPickupEffectHandlerProvider>>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<ActorWorldObjectFactory>(Lifetime.Singleton)
+            builder.Register<ActorWorldRegistrar>(Lifetime.Singleton);
+
+            builder.Register<ActorWorldObjectFactory>(Lifetime.Singleton);
+
+            builder.Register<ActorSpawner>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

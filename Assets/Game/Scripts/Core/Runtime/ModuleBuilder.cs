@@ -4,7 +4,7 @@ using VContainer.Unity;
 
 namespace Game.Core
 {
-    public abstract class BuildConfigurator :
+    public abstract class ModuleBuilder :
         ScriptableObject,
         IInstaller
     {

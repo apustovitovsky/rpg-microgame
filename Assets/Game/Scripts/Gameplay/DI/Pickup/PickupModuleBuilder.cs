@@ -8,9 +8,9 @@ using VContainer;
 namespace Game.Gameplay
 {
     [CreateAssetMenu(
-        fileName = "PickupConfigurator",
-        menuName = "Game/Gameplay/Pickup Configurator")]
-    public sealed class PickupConfiguratorSO : BuildConfigurator
+        fileName = "PickupModuleBuilder",
+        menuName = "Game/Gameplay/Pickup ModuleBuilder")]
+    public sealed class PickupModuleBuilder : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)
         {
@@ -23,7 +23,11 @@ namespace Game.Gameplay
             builder.Register<WorldPickupService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<PickupWorldObjectFactory>(Lifetime.Singleton)
+            builder.Register<PickupWorldRegistrar>(Lifetime.Singleton);
+
+            builder.Register<PickupWorldObjectFactory>(Lifetime.Singleton);
+
+            builder.Register<PickupSpawner>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

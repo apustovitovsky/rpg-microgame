@@ -8,42 +8,18 @@ using VContainer.Unity;
 
 namespace Game.Actor
 {
-    public sealed class ActorWorldObjectFactory :
-        IWorldObjectFactory<ActorSpawnRequest>
+    public sealed class ActorWorldObjectFactory
     {
         private readonly LifetimeScope _parentScope;
-        private readonly IWorldRegistry<IWorldObject> _worldObjects;
-        private readonly IWorldRegistry<IWorldActor> _actors;
-        private readonly IWorldRegistry<IActorAnchors> _anchors;
-        private readonly IWorldRegistry<IActorInputBinder> _inputBinders;
-        private readonly IWorldRegistry<ITargetProvider> _targetProviders;
-        private readonly IWorldRegistry<IInteractable> _interactions;
-        private readonly IWorldRegistry<IActorDialogueEndpoint> _dialogues;
-        private readonly IWorldRegistry<IActorTravelEndpoint> _travels;
-        private readonly IWorldRegistry<IPickupEffectHandlerProvider> _pickupEffectHandlers;
+        private readonly ActorWorldRegistrar _registrar;
+
 
         public ActorWorldObjectFactory(
             LifetimeScope parentScope,
-            IWorldRegistry<IWorldObject> worldObjects,
-            IWorldRegistry<IWorldActor> actors,
-            IWorldRegistry<IActorAnchors> anchors,
-            IWorldRegistry<IActorInputBinder> inputBinders,
-            IWorldRegistry<ITargetProvider> targetProviders,
-            IWorldRegistry<IInteractable> interactions,
-            IWorldRegistry<IActorDialogueEndpoint> dialogues,
-            IWorldRegistry<IActorTravelEndpoint> travels,
-            IWorldRegistry<IPickupEffectHandlerProvider> pickupEffectHandlers)
+            ActorWorldRegistrar registrar)
         {
             _parentScope = parentScope;
-            _worldObjects = worldObjects;
-            _actors = actors;
-            _anchors = anchors;
-            _inputBinders = inputBinders;
-            _targetProviders = targetProviders;
-            _interactions = interactions;
-            _dialogues = dialogues;
-            _travels = travels;
-            _pickupEffectHandlers = pickupEffectHandlers;
+            _registrar = registrar;
         }
 
         public WorldSpawnResult Create(ActorSpawnRequest request)
@@ -88,33 +64,29 @@ namespace Game.Actor
                     request.WorldId,
                     anchors.Root.gameObject);
 
-                var lifetime = new CompositeRegistration();
+                scope.Container.TryResolve<IActorInputBinder>(out var inputBinder);
+                scope.Container.TryResolve<ITargetProvider>(out var targetProvider);
+                scope.Container.TryResolve<IInteractable>(out var interaction);
+                scope.Container.TryResolve<IActorDialogueEndpoint>(out var dialogue);
+                scope.Container.TryResolve<IActorTravelEndpoint>(out var travel);
+                scope.Container.TryResolve<IPickupEffectHandlerProvider>(out var pickupEffects);
 
-                lifetime.Add(_worldObjects.Register(request.WorldId, worldObject));
-                lifetime.Add(_actors.Register(request.WorldId, actor));
-                lifetime.Add(_anchors.Register(request.WorldId, anchors));
-
-                if (scope.Container.TryResolve<IActorInputBinder>(out var inputBinder))
-                    lifetime.Add(_inputBinders.Register(request.WorldId, inputBinder));
-
-                if (scope.Container.TryResolve<ITargetProvider>(out var targetProvider))
-                    lifetime.Add(_targetProviders.Register(request.WorldId, targetProvider));
-
-                if (scope.Container.TryResolve<IInteractable>(out var interaction))
-                    lifetime.Add(_interactions.Register(request.WorldId, interaction));
-
-                if (scope.Container.TryResolve<IActorDialogueEndpoint>(out var dialogue))
-                    lifetime.Add(_dialogues.Register(request.WorldId, dialogue));
-
-                if (scope.Container.TryResolve<IActorTravelEndpoint>(out var travel))
-                    lifetime.Add(_travels.Register(request.WorldId, travel));
-
-                if (scope.Container.TryResolve<IPickupEffectHandlerProvider>(out var pickupEffects))
-                    lifetime.Add(_pickupEffectHandlers.Register(request.WorldId, pickupEffects));
+                var spawnedActor = new ActorSpawnedObject(
+                    worldObject,
+                    actor,
+                    anchors,
+                    actor,
+                    actor,
+                    inputBinder,
+                    targetProvider,
+                    interaction,
+                    dialogue,
+                    travel,
+                    pickupEffects);
 
                 return new WorldSpawnResult(
                     worldObject,
-                    lifetime);
+                    _registrar.Register(spawnedActor));
             }
         }
     }

@@ -10,18 +10,18 @@ namespace Game.AI
     [CreateAssetMenu(
         fileName = "ActorAIConfigurator",
         menuName = "Game/AI/Actor AI Configurator")]
-    public sealed class ActorAIConfiguratorSO : BuildConfigurator
+    public sealed class ActorAIConfiguratorSO : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.RegisterComponentInScope<NavMeshAgent>();
+            builder.RegisterComponentInModuleRoot<NavMeshAgent>();
 
             builder.RegisterEntryPoint<NavMeshPlanner>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInScope<NavMeshActorInput>();
+            builder.RegisterComponentInModuleRoot<NavMeshActorInput>();
 
-            builder.RegisterComponentInScope<NavMeshTravelEndpoint>()
+            builder.RegisterComponentInModuleRoot<NavMeshTravelEndpoint>()
 
                 .AsImplementedInterfaces();
 

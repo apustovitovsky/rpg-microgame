@@ -1,6 +1,5 @@
 using System;
 using Game.Actor;
-using Game.Pickup;
 using Game.Targeting;
 using Game.World;
 using UnityEngine;
@@ -15,8 +14,7 @@ namespace Game.Player
         private readonly IPlayerService _player;
         private readonly ActorNameplatePool _pool;
         private readonly IWorldRegistry<ITargetProvider> _targetProviders;
-        private readonly IWorldRegistry<IWorldActor> _actors;
-        private readonly IWorldRegistry<IWorldPickup> _pickups;
+        private readonly IWorldRegistry<IDisplayInfo> _displayInfos;
 
         private ITargetProvider _targetProvider;
         private ActorNameplateView _currentView;
@@ -27,14 +25,12 @@ namespace Game.Player
             IPlayerService player,
             ActorNameplatePool pool,
             IWorldRegistry<ITargetProvider> targetProviders,
-            IWorldRegistry<IWorldActor> actors,
-            IWorldRegistry<IWorldPickup> pickups)
+            IWorldRegistry<IDisplayInfo> displayInfos)
         {
             _player = player;
             _pool = pool;
             _targetProviders = targetProviders;
-            _actors = actors;
-            _pickups = pickups;
+            _displayInfos = displayInfos;
         }
 
         public void Start()
@@ -117,18 +113,10 @@ namespace Game.Player
 
         private string ResolveTargetName(WorldId worldId)
         {
-            if (_actors.TryGet(worldId, out var actor) &&
-                actor.Definition != null &&
-                !string.IsNullOrWhiteSpace(actor.Definition.DisplayName))
+            if (_displayInfos.TryGet(worldId, out var displayInfo) &&
+                !string.IsNullOrWhiteSpace(displayInfo.DisplayName))
             {
-                return actor.Definition.DisplayName;
-            }
-
-            if (_pickups.TryGet(worldId, out var pickup) &&
-                pickup.Definition != null &&
-                !string.IsNullOrWhiteSpace(pickup.Definition.DisplayName))
-            {
-                return pickup.Definition.DisplayName;
+                return displayInfo.DisplayName;
             }
 
             return worldId.ToString();

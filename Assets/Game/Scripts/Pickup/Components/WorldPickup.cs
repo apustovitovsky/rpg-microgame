@@ -8,7 +8,9 @@ namespace Game.Pickup
     [DisallowMultipleComponent]
     public sealed class WorldPickup :
         MonoBehaviour,
-        IWorldPickup
+        IWorldPickup,
+        IDisplayInfo,
+        IWorldSpatial
     {
         private bool _isCollected;
 
@@ -22,6 +24,13 @@ namespace Game.Pickup
             gameObject.activeInHierarchy &&
             !WorldId.IsEmpty &&
             Definition != null;
+
+        public string DisplayName =>
+            Definition != null && !string.IsNullOrWhiteSpace(Definition.DisplayName)
+                ? Definition.DisplayName
+                : WorldId.ToString();
+
+        public Vector3 Position => transform.position;
 
         public void Initialize(
             WorldId worldId,

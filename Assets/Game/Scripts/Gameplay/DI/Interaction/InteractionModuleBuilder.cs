@@ -7,9 +7,9 @@ using VContainer;
 namespace Game.Gameplay
 {
     [CreateAssetMenu(
-        fileName = "InteractionConfigurator",
-        menuName = "Game/Gameplay/Interaction Configurator")]
-    public sealed class InteractionConfiguratorSO : BuildConfigurator
+        fileName = "InteractionModuleBuilder",
+        menuName = "Game/Gameplay/Interaction Module Builder")]
+    public sealed class InteractionModuleBuilder : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)
         {

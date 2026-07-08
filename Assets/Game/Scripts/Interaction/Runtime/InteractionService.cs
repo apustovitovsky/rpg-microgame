@@ -7,14 +7,14 @@ namespace Game.Interaction
 {
     public sealed class InteractionService : IInteractionService
     {
-        private readonly IWorldRegistry<IWorldObject> _worldObjects;
+        private readonly IWorldRegistry<IWorldSpatial> _spatials;
         private readonly IWorldRegistry<IInteractable> _interactions;
 
         public InteractionService(
-            IWorldRegistry<IWorldObject> worldObjects,
+            IWorldRegistry<IWorldSpatial> spatials,
             IWorldRegistry<IInteractable> interactions)
         {
-            _worldObjects = worldObjects;
+            _spatials = spatials;
             _interactions = interactions;
         }
 
@@ -29,22 +29,25 @@ namespace Game.Interaction
                 return false;
             }
 
-            if (!_worldObjects.TryGet(targetWorldId, out var target))
+            if (!_spatials.TryGet(interactor.WorldId, out var interactorSpatial))
+                return false;
+
+            if (!_spatials.TryGet(targetWorldId, out var targetSpatial))
                 return false;
 
             if (!_interactions.TryGet(targetWorldId, out var interactable))
                 return false;
 
             if (Vector3.Distance(
-                    interactor.Root.position,
-                    target.Root.position) > interactable.MaxRange)
+                    interactorSpatial.Position,
+                    targetSpatial.Position) > interactable.MaxRange)
             {
                 return false;
             }
 
             var context = new InteractionContext(
                 interactor,
-                target);
+                targetWorldId);
 
             if (!interactable.CanInteract(context))
                 return false;

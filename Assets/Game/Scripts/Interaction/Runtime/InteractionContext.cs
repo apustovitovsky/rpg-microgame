@@ -6,13 +6,14 @@ namespace Game.Interaction
     {
         public InteractionContext(
             IWorldObject interactor,
-            IWorldObject target)
+            WorldId targetWorldId)
         {
             Interactor = interactor;
-            Target = target;
+            TargetWorldId = targetWorldId;
         }
 
         public IWorldObject Interactor { get; }
-        public IWorldObject Target { get; }
+
+        public WorldId TargetWorldId { get; }
     }
 }

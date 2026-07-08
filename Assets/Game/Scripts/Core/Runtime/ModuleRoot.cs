@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace Game.Core
 {
-    public sealed class ScopeRoot
+    public sealed class ModuleRoot
     {
-        public ScopeRoot(Transform transform)
+        public ModuleRoot(Transform transform)
         {
             Transform = transform;
         }

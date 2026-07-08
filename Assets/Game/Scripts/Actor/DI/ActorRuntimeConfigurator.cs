@@ -8,26 +8,26 @@ namespace Game.Actor
     [CreateAssetMenu(
         fileName = "ActorRuntimeConfigurator",
         menuName = "Game/Actor/Actor Runtime Configurator")]
-    public sealed class ActorRuntimeConfigurator : BuildConfigurator
+    public sealed class ActorRuntimeConfigurator : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.RegisterComponentInScope<WorldActor>()
+            builder.RegisterComponentInModuleRoot<WorldActor>()
                 .AsSelf()
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInScope<ActorLookController>();
+            builder.RegisterComponentInModuleRoot<ActorLookController>();
 
-            builder.RegisterComponentInScope<MovementController>();
+            builder.RegisterComponentInModuleRoot<MovementController>();
 
-            builder.RegisterComponentInScope<TargetingController>()
+            builder.RegisterComponentInModuleRoot<TargetingController>()
                 .AsSelf()
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInScope<DialogueInteractable>()
+            builder.RegisterComponentInModuleRoot<DialogueInteractable>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInScope<ActorTarget>()
+            builder.RegisterComponentInModuleRoot<ActorTarget>()
                 .AsSelf()
                 .AsImplementedInterfaces();
 

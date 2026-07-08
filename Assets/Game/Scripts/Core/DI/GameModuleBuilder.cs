@@ -4,9 +4,9 @@ using VContainer;
 namespace Game.Core
 {
     [CreateAssetMenu(
-        fileName = "GameConfigurator",
-        menuName = "Game/Core/Game Configurator")]
-    public sealed class GameConfiguratorSO : BuildConfigurator
+        fileName = "GameModuleBuilder",
+        menuName = "Game/Core/Game Module Builder")]
+    public sealed class GameModuleBuilder : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)
         {

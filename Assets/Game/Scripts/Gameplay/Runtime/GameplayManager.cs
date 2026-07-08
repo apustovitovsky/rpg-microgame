@@ -15,36 +15,31 @@ namespace Game.Gameplay
     {
         private readonly ActorSpawnCatalog _actors;
         private readonly PickupSpawnCatalog _pickups;
-        private readonly INavigationLocationResolver _locations;
-        private readonly INavigationGraphProvider _graphProvider;
-        private readonly IWorldSpawner _worldSpawner;
-        private readonly IWorldObjectFactory<ActorSpawnRequest> _actorFactory;
-        private readonly IWorldObjectFactory<PickupSpawnRequest> _pickupFactory;
         private readonly IPlayerService _player;
         private readonly IWorldManager _world;
-
-        private int _nextWorldIdIndex;
+        private readonly IWorldIdFactory _worldIds;
+        private readonly IActorSpawner _actorSpawner;
+        private readonly IPickupSpawner _pickupSpawner;
+        private readonly ISpawnPointResolver _spawnPoints;
 
         public GameplayManager(
             ActorSpawnCatalog actors,
             PickupSpawnCatalog pickups,
-            INavigationLocationResolver locations,
-            INavigationGraphProvider graphProvider,
-            IWorldSpawner worldSpawner,
+            IWorldIdFactory worldIds,
+            ISpawnPointResolver spawnPoints,
             IWorldManager world,
-            IWorldObjectFactory<ActorSpawnRequest> actorFactory,
-            IWorldObjectFactory<PickupSpawnRequest> pickupFactory,
+            IActorSpawner actorSpawner,
+            IPickupSpawner pickupSpawner,
             IPlayerService player)
         {
             _actors = actors;
             _pickups = pickups;
-            _locations = locations;
-            _graphProvider = graphProvider;
-            _worldSpawner = worldSpawner;
+            _worldIds = worldIds;
             _world = world;
-            _actorFactory = actorFactory;
-            _pickupFactory = pickupFactory;
+            _actorSpawner = actorSpawner;
+            _pickupSpawner = pickupSpawner;
             _player = player;
+            _spawnPoints = spawnPoints;
         }
 
         public void Start()
@@ -58,7 +53,7 @@ namespace Game.Gameplay
         {
             var player = _actors.Player;
 
-            if (!TryResolveSpawnPoint(
+            if (!_spawnPoints.TryResolve(
                     player.LocationId,
                     player.AnchorKey,
                     out var node))
@@ -78,7 +73,7 @@ namespace Game.Gameplay
         {
             foreach (var actor in _actors.Actors)
             {
-                if (!TryResolveSpawnPoint(
+                if (!_spawnPoints.TryResolve(
                         actor.LocationId,
                         actor.AnchorKey,
                         out var node))
@@ -99,7 +94,7 @@ namespace Game.Gameplay
         {
             foreach (var pickup in _pickups.Pickups)
             {
-                if (!TryResolveSpawnPoint(
+                if (!_spawnPoints.TryResolve(
                         pickup.LocationId,
                         pickup.AnchorKey,
                         out var node))
@@ -137,7 +132,7 @@ namespace Game.Gameplay
                 return null;
             }
 
-            var worldId = CreateWorldId(entry.Definition.DisplayName);
+            var worldId = _worldIds.Create(entry.Definition.DisplayName);
 
             var request = new ActorSpawnRequest(
                 worldId,
@@ -145,9 +140,7 @@ namespace Game.Gameplay
                 node.Position,
                 node.Rotation);
 
-            var actor = _worldSpawner.Spawn(
-                request,
-                _actorFactory);
+            var actor = _actorSpawner.Spawn(request);
 
             if (actor == null)
             {
@@ -184,7 +177,7 @@ namespace Game.Gameplay
                 return null;
             }
 
-            var worldId = CreateWorldId(entry.Definition.DisplayName);
+            var worldId = _worldIds.Create(entry.Definition.DisplayName);
 
             var request = new PickupSpawnRequest(
                 worldId,
@@ -192,9 +185,7 @@ namespace Game.Gameplay
                 node.Position,
                 node.Rotation);
 
-            var pickup = _worldSpawner.Spawn(
-                request,
-                _pickupFactory);
+            var pickup = _pickupSpawner.Spawn(request);
 
             if (pickup == null)
             {
@@ -203,61 +194,6 @@ namespace Game.Gameplay
             }
 
             return pickup;
-        }
-
-        private WorldId CreateWorldId(string prefix)
-        {
-            _nextWorldIdIndex++;
-
-            return new WorldId(
-                $"{NormalizeWorldIdPrefix(prefix)}_{_nextWorldIdIndex:000}");
-        }
-
-        private static string NormalizeWorldIdPrefix(string value)
-        {
-            value = value?.Trim().ToLowerInvariant() ?? "world_object";
-
-            if (string.IsNullOrWhiteSpace(value))
-                return "world_object";
-
-            var chars = value.ToCharArray();
-
-            for (var i = 0; i < chars.Length; i++)
-            {
-                if (!char.IsLetterOrDigit(chars[i]))
-                    chars[i] = '_';
-            }
-
-            return new string(chars);
-        }
-
-        private bool TryResolveSpawnPoint(
-            string locationId,
-            string anchorKey,
-            out NavigationNode node)
-        {
-            node = null;
-
-            if (string.IsNullOrWhiteSpace(locationId) ||
-                string.IsNullOrWhiteSpace(anchorKey))
-            {
-                return false;
-            }
-
-            if (_graphProvider.Graph == null)
-                return false;
-
-            if (!_locations.TryResolveAnchorNodeId(
-                    locationId,
-                    anchorKey,
-                    out var nodeId))
-            {
-                return false;
-            }
-
-            return _graphProvider.Graph.TryGetNode(
-                nodeId,
-                out node);
         }
 
         public void Dispose()

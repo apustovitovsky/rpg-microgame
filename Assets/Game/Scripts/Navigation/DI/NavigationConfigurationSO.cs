@@ -10,7 +10,7 @@ namespace Game.Navigation
     [CreateAssetMenu(
         fileName = "NavigationConfiguration",
         menuName = "Game/Navigation/Navigation Configuration")]
-    public sealed class NavigationConfigurationSO : BuildConfigurator
+    public sealed class NavigationConfigurationSO : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)
         {

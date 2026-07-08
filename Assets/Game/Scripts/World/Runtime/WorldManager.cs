@@ -9,6 +9,10 @@ namespace Game.World
             IWorldObject worldObject,
             IRegistrationToken lifetime);
 
+        bool TryGetObject(
+            WorldId worldId,
+            out IWorldObject worldObject);
+
         bool Despawn(WorldId worldId);
 
         void DespawnAll();
@@ -44,6 +48,22 @@ namespace Game.World
             return true;
         }
 
+        public bool TryGetObject(
+            WorldId worldId,
+            out IWorldObject worldObject)
+        {
+            worldObject = null;
+
+            if (worldId.IsEmpty)
+                return false;
+
+            if (!_entries.TryGetValue(worldId, out var entry))
+                return false;
+
+            worldObject = entry.WorldObject;
+            return true;
+        }
+        
         public bool Despawn(WorldId worldId)
         {
             if (worldId.IsEmpty)

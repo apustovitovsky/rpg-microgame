@@ -1,4 +1,4 @@
-## Naming
+﻿## Naming
 Use the `SO` suffix only when a ScriptableObject name would conflict with a runtime type.
 
 ## VContainer

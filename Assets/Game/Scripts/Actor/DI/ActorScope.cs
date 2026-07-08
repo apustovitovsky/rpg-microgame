@@ -11,11 +11,11 @@ namespace Game.Actor
         [SerializeField] private Transform _actorRoot;
 
         [Header("Build Configurations")]
-        [SerializeField] private BuildConfigurator _identity;
-        [SerializeField] private BuildConfigurator _movement;
-        [SerializeField] private BuildConfigurator _targeting;
-        [SerializeField] private BuildConfigurator _combat;
-        [SerializeField] private BuildConfigurator _ai;
+        [SerializeField] private ModuleBuilder _identity;
+        [SerializeField] private ModuleBuilder _movement;
+        [SerializeField] private ModuleBuilder _targeting;
+        [SerializeField] private ModuleBuilder _combat;
+        [SerializeField] private ModuleBuilder _ai;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -23,7 +23,7 @@ namespace Game.Actor
                 ? _actorRoot
                 : transform;
 
-            builder.RegisterInstance(new ScopeRoot(root));
+            builder.RegisterInstance(new ModuleRoot(root));
 
             builder.Register<ActorInputBinder>(Lifetime.Scoped)
                 .AsImplementedInterfaces();

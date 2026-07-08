@@ -2,36 +2,25 @@ using System;
 using Game.Interaction;
 using Game.Targeting;
 using Game.World;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
 namespace Game.Pickup
 {
-    public sealed class PickupWorldObjectFactory :
-        IWorldObjectFactory<PickupSpawnRequest>
+    public sealed class PickupWorldObjectFactory
     {
         private readonly LifetimeScope _parentScope;
         private readonly IObjectResolver _resolver;
-        private readonly IWorldRegistry<IWorldObject> _worldObjects;
-        private readonly IWorldRegistry<IWorldPickup> _pickups;
-        private readonly IWorldRegistry<IInteractable> _interactions;
-        private readonly IWorldRegistry<ITargetable> _targets;
+        private readonly PickupWorldRegistrar _registrar;
 
         public PickupWorldObjectFactory(
             LifetimeScope parentScope,
             IObjectResolver resolver,
-            IWorldRegistry<IWorldObject> worldObjects,
-            IWorldRegistry<IWorldPickup> pickups,
-            IWorldRegistry<IInteractable> interactions,
-            IWorldRegistry<ITargetable> targets)
+            PickupWorldRegistrar registrar)
         {
             _parentScope = parentScope;
             _resolver = resolver;
-            _worldObjects = worldObjects;
-            _pickups = pickups;
-            _interactions = interactions;
-            _targets = targets;
+            _registrar = registrar;
         }
 
         public WorldSpawnResult Create(PickupSpawnRequest request)
@@ -72,20 +61,20 @@ namespace Game.Pickup
                     request.WorldId,
                     pickup.gameObject);
 
-                var lifetime = new CompositeRegistration();
+                pickup.TryGetComponent<IInteractable>(out var interactable);
+                pickup.TryGetComponent<ITargetable>(out var targetable);
 
-                lifetime.Add(_worldObjects.Register(request.WorldId, worldObject));
-                lifetime.Add(_pickups.Register(request.WorldId, pickup));
-
-                if (pickup.TryGetComponent<IInteractable>(out var interactable))
-                    lifetime.Add(_interactions.Register(request.WorldId, interactable));
-
-                if (pickup.TryGetComponent<ITargetable>(out var targetable))
-                    lifetime.Add(_targets.Register(request.WorldId, targetable));
+                var spawnedPickup = new PickupSpawnedObject(
+                    worldObject,
+                    pickup,
+                    pickup,
+                    pickup,
+                    interactable,
+                    targetable);
 
                 return new WorldSpawnResult(
                     worldObject,
-                    lifetime);
+                    _registrar.Register(spawnedPickup));
             }
         }
     }

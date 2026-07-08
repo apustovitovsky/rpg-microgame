@@ -12,7 +12,7 @@ namespace Game.Player
         IDisposable
     {
         private readonly IPlayerService _player;
-        private readonly IWorldRegistry<IWorldObject> _worldObjects;
+        private readonly IWorldManager _world;
         private readonly IWorldRegistry<IActorInputBinder> _inputBinders;
         private readonly IWorldRegistry<ITargetProvider> _targetProviders;
         private readonly IPlayerInteractionInput _input;
@@ -20,13 +20,13 @@ namespace Game.Player
         public PlayerTargetControlBinder(
             IPlayerInteractionInput input,
             IPlayerService player,
-            IWorldRegistry<IWorldObject> worldObjects,
+            IWorldManager world,
             IWorldRegistry<IActorInputBinder> inputBinders,
             IWorldRegistry<ITargetProvider> targetProviders)
         {
             _input = input;
             _player = player;
-            _worldObjects = worldObjects;
+            _world = world;
             _inputBinders = inputBinders;
             _targetProviders = targetProviders;
         }
@@ -62,10 +62,10 @@ namespace Game.Player
             if (target.WorldId == currentActor.WorldId)
                 return;
 
-            if (!_worldObjects.TryGet(target.WorldId, out var targetObject))
+            if (!_world.TryGetObject(target.WorldId, out var targetObject))
             {
                 Debug.LogWarning(
-                    $"Target '{target.WorldId}' is not registered.");
+                    $"Target '{target.WorldId}' is not tracked.");
 
                 return;
             }
