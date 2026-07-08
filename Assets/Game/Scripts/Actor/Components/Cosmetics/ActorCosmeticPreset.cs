@@ -5,7 +5,7 @@ namespace Game.Actor
     [CreateAssetMenu(
         fileName = "ActorCosmeticPreset",
         menuName = "Game/Actor/Actor Cosmetic Preset")]
-    public sealed class ActorCosmeticPresetSO : ScriptableObject
+    public sealed class ActorCosmeticPreset : ScriptableObject
     {
         [field: SerializeField] public bool Sword { get; private set; }
         [field: SerializeField] public bool Dagger { get; private set; }

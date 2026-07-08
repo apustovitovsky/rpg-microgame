@@ -8,9 +8,9 @@ namespace Game.Actor
     public sealed class DebugActorViewPickupEffectHandler :
         PickupEffectHandler<DebugActorViewPickupEffect>
     {
-        private readonly IActorAnchors _anchors;
+        private readonly IActorView _anchors;
 
-        public DebugActorViewPickupEffectHandler(IActorAnchors anchors)
+        public DebugActorViewPickupEffectHandler(IActorView anchors)
         {
             _anchors = anchors;
         }

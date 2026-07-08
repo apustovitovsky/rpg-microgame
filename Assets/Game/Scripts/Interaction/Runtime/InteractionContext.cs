@@ -5,14 +5,14 @@ namespace Game.Interaction
     public readonly struct InteractionContext
     {
         public InteractionContext(
-            IWorldHandle interactor,
+            WorldId interactorWorldId,
             WorldId targetWorldId)
         {
-            Interactor = interactor;
+            InteractorWorldId = interactorWorldId;
             TargetWorldId = targetWorldId;
         }
 
-        public IWorldHandle Interactor { get; }
+        public WorldId InteractorWorldId { get; }
 
         public WorldId TargetWorldId { get; }
     }

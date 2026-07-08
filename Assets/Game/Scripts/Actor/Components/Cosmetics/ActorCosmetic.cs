@@ -29,7 +29,7 @@ namespace Game.Actor
             [SerializeField] private GameObject _object;
             [SerializeField] private bool _visible;
 
-            public void Apply(ActorCosmeticPresetSO preset)
+            public void Apply(ActorCosmeticPreset preset)
             {
                 bool visible = preset != null
                     ? preset.IsVisible(_slot)
@@ -40,7 +40,7 @@ namespace Game.Actor
             }
         }
 
-        [SerializeField] private ActorCosmeticPresetSO _preset;
+        [SerializeField] private ActorCosmeticPreset _preset;
         [SerializeField] private Item[] _cosmetics;
 
         private void Awake()

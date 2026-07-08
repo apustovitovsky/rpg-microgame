@@ -8,11 +8,11 @@ namespace Game.Actor
     public sealed class ActorSpawnedObject
     {
         public ActorSpawnedObject(
-            IWorldHandle handle,
+            WorldId worldId,
             IWorldActor actor,
-            IActorAnchors anchors,
+            IActorView view,
             IDisplayInfo displayInfo,
-            IWorldSpatial spatial,
+            IInteractor interactor,
             IActorInputBinder inputBinder,
             ITargetProvider targetProvider,
             IInteractable interaction,
@@ -20,11 +20,11 @@ namespace Game.Actor
             IActorTravelEndpoint travel,
             IPickupEffectHandlerProvider pickupEffectHandlerProvider)
         {
-            Handle = handle;
+            WorldId = worldId;
             Actor = actor;
-            Anchors = anchors;
+            View = view;
             DisplayInfo = displayInfo;
-            Spatial = spatial;
+            Interactor = interactor;
             InputBinder = inputBinder;
             TargetProvider = targetProvider;
             Interaction = interaction;
@@ -33,17 +33,15 @@ namespace Game.Actor
             PickupEffectHandlerProvider = pickupEffectHandlerProvider;
         }
 
-        public WorldId WorldId => Handle.WorldId;
-
-        public IWorldHandle Handle { get; }
+        public WorldId WorldId { get; }
 
         public IWorldActor Actor { get; }
 
-        public IActorAnchors Anchors { get; }
+        public IActorView View { get; }
 
         public IDisplayInfo DisplayInfo { get; }
 
-        public IWorldSpatial Spatial { get; }
+        public IInteractor Interactor { get; }
 
         public IActorInputBinder InputBinder { get; }
 

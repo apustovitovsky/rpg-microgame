@@ -1,5 +1,4 @@
 using Game.Interaction;
-using Game.Targeting;
 using Game.World;
 
 namespace Game.Pickup
@@ -7,33 +6,23 @@ namespace Game.Pickup
     public sealed class PickupSpawnedObject
     {
         public PickupSpawnedObject(
-            IWorldHandle handle,
+            WorldId worldId,
             IWorldPickup pickup,
             IDisplayInfo displayInfo,
-            IWorldSpatial spatial,
-            IInteractable interaction,
-            ITargetable target)
+            IInteractable interaction)
         {
-            Handle = handle;
+            WorldId = worldId;
             Pickup = pickup;
             DisplayInfo = displayInfo;
-            Spatial = spatial;
             Interaction = interaction;
-            Target = target;
         }
 
-        public WorldId WorldId => Handle.WorldId;
-
-        public IWorldHandle Handle { get; }
+        public WorldId WorldId { get; }
 
         public IWorldPickup Pickup { get; }
 
         public IDisplayInfo DisplayInfo { get; }
 
-        public IWorldSpatial Spatial { get; }
-
         public IInteractable Interaction { get; }
-
-        public ITargetable Target { get; }
     }
 }

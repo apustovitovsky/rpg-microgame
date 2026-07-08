@@ -55,8 +55,8 @@ namespace Game.Player
         {
             var currentActor = _player.CurrentActor;
 
-            if (currentActor == null ||
-                !_targetProviders.TryGet(currentActor.WorldId, out var targetProvider))
+            if (currentActor.IsEmpty ||
+                !_targetProviders.TryGet(currentActor, out var targetProvider))
             {
                 return;
             }
@@ -73,15 +73,16 @@ namespace Game.Player
             _interactionCts?.Dispose();
             _interactionCts = new CancellationTokenSource();
 
-            var interacted = await _interactions.TryInteractAsync(
+            var result = await _interactions.TryInteractAsync(
                 currentActor,
                 target.WorldId,
                 _interactionCts.Token);
 
-            if (!interacted)
+            if (result != InteractionResult.Succeeded)
             {
                 Debug.Log(
-                    $"Target '{target.WorldId}' is not interactable.");
+                    $"Interaction with '{target.WorldId}' failed: {result}.",
+                    target.Root);
             }
         }
     }

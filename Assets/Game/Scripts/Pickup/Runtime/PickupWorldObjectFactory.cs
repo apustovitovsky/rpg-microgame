@@ -1,6 +1,5 @@
 using System;
 using Game.Interaction;
-using Game.Targeting;
 using Game.World;
 using VContainer;
 using VContainer.Unity;
@@ -54,27 +53,24 @@ namespace Game.Pickup
                     request.WorldId,
                     request.Definition);
 
-                if (pickup.TryGetComponent<PickupInteract>(out var pickupInteract))
+                if (pickup.TryGetComponent<PickupInteractable>(out var pickupInteract))
                     _resolver.Inject(pickupInteract);
 
-                var handle = new WorldHandle(
+                pickup.TryGetComponent<IInteractable>(out var interactable);
+
+                var spawnedPickup = new PickupSpawnedObject(
+                    request.WorldId,
+                    pickup,
+                    pickup,
+                    interactable);
+
+                var lifetime = new WorldLifetime(
                     request.WorldId,
                     pickup.gameObject);
 
-                pickup.TryGetComponent<IInteractable>(out var interactable);
-                pickup.TryGetComponent<ITargetable>(out var targetable);
+                lifetime.Add(_registrar.Register(spawnedPickup));
 
-                var spawnedPickup = new PickupSpawnedObject(
-                    handle,
-                    pickup,
-                    pickup,
-                    pickup,
-                    interactable,
-                    targetable);
-
-                return new WorldSpawnResult(
-                    handle,
-                    _registrar.Register(spawnedPickup));
+                return new WorldSpawnResult(lifetime);
             }
         }
     }

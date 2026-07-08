@@ -2,20 +2,18 @@ namespace Game.World
 {
     public readonly struct WorldSpawnResult
     {
-        public WorldSpawnResult(
-            IWorldHandle handle,
-            IRegistrationToken lifetime)
+        public WorldSpawnResult(IWorldLifetime lifetime)
         {
-            Handle = handle;
             Lifetime = lifetime;
         }
 
-        public IWorldHandle Handle { get; }
+        public IWorldLifetime Lifetime { get; }
 
-        public IRegistrationToken Lifetime { get; }
+        public WorldId WorldId => Lifetime?.WorldId ?? default;
 
         public bool IsValid =>
-            Handle != null &&
-            !Handle.WorldId.IsEmpty;
+            Lifetime != null &&
+            !Lifetime.WorldId.IsEmpty &&
+            !Lifetime.IsDisposed;
     }
 }

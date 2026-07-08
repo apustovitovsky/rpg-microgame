@@ -4,40 +4,36 @@ namespace Game.Pickup
 {
     public interface IPickupSpawner
     {
-        IWorldHandle Spawn(PickupSpawnRequest request);
+        WorldId Spawn(PickupSpawnRequest request);
     }
 
     public sealed class PickupSpawner : IPickupSpawner
     {
         private readonly PickupWorldObjectFactory _factory;
-        private readonly IWorldManager _world;
+        private readonly IWorldLifetimeManager _world;
 
         public PickupSpawner(
             PickupWorldObjectFactory factory,
-            IWorldManager world)
+            IWorldLifetimeManager world)
         {
             _factory = factory;
             _world = world;
         }
 
-        public IWorldHandle Spawn(PickupSpawnRequest request)
+        public WorldId Spawn(PickupSpawnRequest request)
         {
             var result = _factory.Create(request);
 
             if (!result.IsValid)
             {
                 result.Lifetime?.Dispose();
-                return null;
+                return default;
             }
 
-            if (!_world.Track(
-                    result.Handle,
-                    result.Lifetime))
-            {
-                return null;
-            }
+            if (!_world.Track(result.Lifetime))
+                return default;
 
-            return result.Handle;
+            return result.WorldId;
         }
     }
 }

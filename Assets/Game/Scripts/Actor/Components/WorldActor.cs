@@ -7,9 +7,8 @@ namespace Game.Actor
     public sealed class WorldActor :
         MonoBehaviour,
         IWorldActor,
-        IActorAnchors,
-        IDisplayInfo,
-        IWorldSpatial
+        IActorView,
+        IDisplayInfo
     {
         [SerializeField] private Transform _cameraPivot;
         [SerializeField] private Transform _targetPoint;
@@ -37,8 +36,6 @@ namespace Game.Actor
             Definition != null && !string.IsNullOrWhiteSpace(Definition.DisplayName)
                 ? Definition.DisplayName
                 : WorldId.ToString();
-
-        public Vector3 Position => Root.position;
 
         public void Initialize(
             WorldId worldId,

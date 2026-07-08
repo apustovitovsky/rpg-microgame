@@ -17,9 +17,6 @@ namespace Game.Gameplay
             builder.Register<WorldRegistry<IWorldPickup>>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<WorldRegistry<ITargetable>>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
             builder.Register<WorldPickupService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 

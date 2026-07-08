@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game.Actor
 {
-    public interface IActorAnchors
+    public interface IActorView
     {
         Transform Root { get; }
 

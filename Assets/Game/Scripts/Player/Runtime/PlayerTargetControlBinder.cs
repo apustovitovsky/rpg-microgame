@@ -12,7 +12,6 @@ namespace Game.Player
         IDisposable
     {
         private readonly IPlayerService _player;
-        private readonly IWorldManager _world;
         private readonly IWorldRegistry<IActorInputBinder> _inputBinders;
         private readonly IWorldRegistry<ITargetProvider> _targetProviders;
         private readonly IPlayerInteractionInput _input;
@@ -20,13 +19,11 @@ namespace Game.Player
         public PlayerTargetControlBinder(
             IPlayerInteractionInput input,
             IPlayerService player,
-            IWorldManager world,
             IWorldRegistry<IActorInputBinder> inputBinders,
             IWorldRegistry<ITargetProvider> targetProviders)
         {
             _input = input;
             _player = player;
-            _world = world;
             _inputBinders = inputBinders;
             _targetProviders = targetProviders;
         }
@@ -45,8 +42,8 @@ namespace Game.Player
         {
             var currentActor = _player.CurrentActor;
 
-            if (currentActor == null ||
-                !_targetProviders.TryGet(currentActor.WorldId, out var targetProvider))
+            if (currentActor.IsEmpty ||
+                !_targetProviders.TryGet(currentActor, out var targetProvider))
             {
                 return;
             }
@@ -59,16 +56,8 @@ namespace Game.Player
                 return;
             }
 
-            if (target.WorldId == currentActor.WorldId)
+            if (target.WorldId == currentActor)
                 return;
-
-            if (!_world.TryGetHandle(target.WorldId, out var targetHandle))
-            {
-                Debug.LogWarning(
-                    $"Target '{target.WorldId}' is not tracked.");
-
-                return;
-            }
 
             if (!_inputBinders.Contains(target.WorldId))
             {
@@ -78,7 +67,7 @@ namespace Game.Player
                 return;
             }
 
-            _player.BindActor(targetHandle);
+            _player.BindActor(target.WorldId);
         }
     }
 }

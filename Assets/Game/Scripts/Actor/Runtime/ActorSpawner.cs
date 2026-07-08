@@ -4,40 +4,36 @@ namespace Game.Actor
 {
     public interface IActorSpawner
     {
-        IWorldHandle Spawn(ActorSpawnRequest request);
+        WorldId Spawn(ActorSpawnRequest request);
     }
 
     public sealed class ActorSpawner : IActorSpawner
     {
         private readonly ActorWorldObjectFactory _factory;
-        private readonly IWorldManager _world;
+        private readonly IWorldLifetimeManager _world;
 
         public ActorSpawner(
             ActorWorldObjectFactory factory,
-            IWorldManager world)
+            IWorldLifetimeManager world)
         {
             _factory = factory;
             _world = world;
         }
 
-        public IWorldHandle Spawn(ActorSpawnRequest request)
+        public WorldId Spawn(ActorSpawnRequest request)
         {
             var result = _factory.Create(request);
 
             if (!result.IsValid)
             {
                 result.Lifetime?.Dispose();
-                return null;
+                return default;
             }
 
-            if (!_world.Track(
-                    result.Handle,
-                    result.Lifetime))
-            {
-                return null;
-            }
+            if (!_world.Track(result.Lifetime))
+                return default;
 
-            return result.Handle;
+            return result.WorldId;
         }
     }
 }

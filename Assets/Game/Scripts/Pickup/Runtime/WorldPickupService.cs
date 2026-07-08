@@ -9,12 +9,12 @@ namespace Game.Pickup
     {
         private readonly IWorldRegistry<IWorldPickup> _pickups;
         private readonly IWorldRegistry<IPickupEffectHandlerProvider> _handlerProviders;
-        private readonly IWorldManager _world;
+        private readonly IWorldLifetimeManager _world;
 
         public WorldPickupService(
             IWorldRegistry<IWorldPickup> pickups,
             IWorldRegistry<IPickupEffectHandlerProvider> handlerProviders,
-            IWorldManager world)
+            IWorldLifetimeManager world)
         {
             _pickups = pickups;
             _handlerProviders = handlerProviders;

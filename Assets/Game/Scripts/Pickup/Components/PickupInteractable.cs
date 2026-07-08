@@ -7,16 +7,22 @@ using VContainer;
 namespace Game.Pickup
 {
     [DisallowMultipleComponent]
-    public sealed class PickupInteract :
+    public sealed class PickupInteractable :
         MonoBehaviour,
         IInteractable
     {
         [SerializeField] private WorldPickup _pickup;
+        [SerializeField] private Transform _interactionPoint;
 
         [field: SerializeField]
         public float MaxRange { get; private set; } = 5f;
 
         private IPickupService _pickupService;
+
+        public Vector3 InteractionPosition =>
+            _interactionPoint != null
+                ? _interactionPoint.position
+                : transform.position;
 
         [Inject]
         public void Construct(IPickupService pickupService)
@@ -28,7 +34,7 @@ namespace Game.Pickup
         {
             return _pickupService != null &&
                    _pickup != null &&
-                   context.Interactor != null &&
+                   !context.InteractorWorldId.IsEmpty &&
                    !_pickup.WorldId.IsEmpty;
         }
 
@@ -40,7 +46,7 @@ namespace Game.Pickup
                 return;
 
             var result = await _pickupService.CollectAsync(
-                context.Interactor.WorldId,
+                context.InteractorWorldId,
                 _pickup.WorldId,
                 token);
 

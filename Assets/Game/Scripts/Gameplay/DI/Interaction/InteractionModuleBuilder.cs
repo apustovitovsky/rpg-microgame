@@ -16,6 +16,9 @@ namespace Game.Gameplay
             builder.Register<InteractionService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
+            builder.Register<WorldRegistry<IInteractor>>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
             builder.Register<WorldRegistry<IInteractable>>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }

@@ -57,11 +57,7 @@ namespace Game.Actor
                     request.WorldId,
                     request.Definition);
 
-                var anchors = scope.Container.Resolve<IActorAnchors>();
-
-                var handle = new WorldHandle(
-                    request.WorldId,
-                    anchors.Root.gameObject);
+                var view = scope.Container.Resolve<IActorView>();
 
                 scope.Container.TryResolve<IActorInputBinder>(out var inputBinder);
                 scope.Container.TryResolve<ITargetProvider>(out var targetProvider);
@@ -69,13 +65,14 @@ namespace Game.Actor
                 scope.Container.TryResolve<IActorDialogueEndpoint>(out var dialogue);
                 scope.Container.TryResolve<IActorTravelEndpoint>(out var travel);
                 scope.Container.TryResolve<IPickupEffectHandlerProvider>(out var pickupEffects);
+                scope.Container.TryResolve<IInteractor>(out var interactor);
 
                 var spawnedActor = new ActorSpawnedObject(
-                    handle,
+                    request.WorldId,
                     actor,
-                    anchors,
+                    view,
                     actor,
-                    actor,
+                    interactor,
                     inputBinder,
                     targetProvider,
                     interaction,
@@ -83,9 +80,13 @@ namespace Game.Actor
                     travel,
                     pickupEffects);
 
-                return new WorldSpawnResult(
-                    handle,
-                    _registrar.Register(spawnedActor));
+                var lifetime = new WorldLifetime(
+                    request.WorldId,
+                    view.Root.gameObject);
+
+                lifetime.Add(_registrar.Register(spawnedActor));
+
+                return new WorldSpawnResult(lifetime);
             }
         }
     }

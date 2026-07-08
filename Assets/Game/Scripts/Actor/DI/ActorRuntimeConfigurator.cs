@@ -16,6 +16,9 @@ namespace Game.Actor
                 .AsSelf()
                 .AsImplementedInterfaces();
 
+            builder.RegisterComponentInModuleRoot<ActorInteractor>()
+                .AsImplementedInterfaces();
+
             builder.RegisterComponentInModuleRoot<ActorLookController>();
 
             builder.RegisterComponentInModuleRoot<MovementController>();

@@ -51,12 +51,12 @@ namespace Game.Player
             UnbindTargetProvider();
             ReleaseCurrent();
 
-            var actor = _player.CurrentActor;
+            var actorWorldId = _player.CurrentActor;
 
-            if (actor == null)
+            if (actorWorldId.IsEmpty)
                 return;
 
-            if (!_targetProviders.TryGet(actor.WorldId, out _targetProvider))
+            if (!_targetProviders.TryGet(actorWorldId, out _targetProvider))
                 return;
 
             _targetProvider.CurrentTargetChanged += OnCurrentTargetChanged;
@@ -84,8 +84,8 @@ namespace Game.Player
 
             var currentActor = _player.CurrentActor;
 
-            if (currentActor != null &&
-                target.WorldId == currentActor.WorldId)
+            if (!currentActor.IsEmpty &&
+                target.WorldId == currentActor)
             {
                 ReleaseCurrent();
                 return;

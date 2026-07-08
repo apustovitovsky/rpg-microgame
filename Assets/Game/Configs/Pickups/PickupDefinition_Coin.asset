@@ -12,19 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66b8237ad99c76245b619954befcbdbb, type: 3}
   m_Name: PickupDefinition_Coin
   m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupDefinition
-  <LocalizedName>k__BackingField:
-    m_TableReference:
-      m_TableCollectionName: GUID:598fa95b447bdca419c83b135657cea0
-    m_TableEntryReference:
-      m_KeyId: 434683942219776
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
+  _displayName: 
   <Prefab>k__BackingField: {fileID: 2440724634624028458, guid: 995871178727ef74eb5dbb722422677c,
     type: 3}
   _effects:
   - {fileID: 11400000, guid: fe6dcfde046d39048ba4bf16a2895ccf, type: 2}
-  references:
-    version: 2
-    RefIds: []

@@ -7,56 +7,52 @@ namespace Game.Interaction
 {
     public sealed class InteractionService : IInteractionService
     {
-        private readonly IWorldRegistry<IWorldSpatial> _spatials;
-        private readonly IWorldRegistry<IInteractable> _interactions;
+        private readonly IWorldRegistry<IInteractor> _interactors;
+        private readonly IWorldRegistry<IInteractable> _interactables;
 
         public InteractionService(
-            IWorldRegistry<IWorldSpatial> spatials,
-            IWorldRegistry<IInteractable> interactions)
+            IWorldRegistry<IInteractor> interactors,
+            IWorldRegistry<IInteractable> interactables)
         {
-            _spatials = spatials;
-            _interactions = interactions;
+            _interactors = interactors;
+            _interactables = interactables;
         }
 
-        public async UniTask<bool> TryInteractAsync(
-            IWorldHandle interactor,
+        public async UniTask<InteractionResult> TryInteractAsync(
+            WorldId interactorWorldId,
             WorldId targetWorldId,
             CancellationToken token)
         {
-            if (interactor == null ||
-                targetWorldId.IsEmpty)
-            {
-                return false;
-            }
+            if (!_interactors.TryGet(interactorWorldId, out var interactor))
+                return InteractionResult.InteractorNotFound;
 
-            if (!_spatials.TryGet(interactor.WorldId, out var interactorSpatial))
-                return false;
+            if (!_interactables.TryGet(targetWorldId, out var interactable))
+                return InteractionResult.InteractableNotFound;
 
-            if (!_spatials.TryGet(targetWorldId, out var targetSpatial))
-                return false;
+            var distance = Vector3.Distance(
+                interactor.InteractionOrigin,
+                interactable.InteractionPosition);
 
-            if (!_interactions.TryGet(targetWorldId, out var interactable))
-                return false;
-
-            if (Vector3.Distance(
-                    interactorSpatial.Position,
-                    targetSpatial.Position) > interactable.MaxRange)
-            {
-                return false;
-            }
+            if (distance > interactable.MaxRange)
+                return InteractionResult.OutOfRange;
 
             var context = new InteractionContext(
-                interactor,
+                interactorWorldId,
                 targetWorldId);
 
             if (!interactable.CanInteract(context))
-                return false;
+                return InteractionResult.Rejected;
+
+            if (token.IsCancellationRequested)
+                return InteractionResult.Cancelled;
 
             await interactable.InteractAsync(
                 context,
                 token);
 
-            return true;
+            return token.IsCancellationRequested
+                ? InteractionResult.Cancelled
+                : InteractionResult.Succeeded;
         }
     }
 }

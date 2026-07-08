@@ -9,8 +9,7 @@ namespace Game.Pickup
     public sealed class WorldPickup :
         MonoBehaviour,
         IWorldPickup,
-        IDisplayInfo,
-        IWorldSpatial
+        IDisplayInfo
     {
         private bool _isCollected;
 
@@ -29,8 +28,6 @@ namespace Game.Pickup
             Definition != null && !string.IsNullOrWhiteSpace(Definition.DisplayName)
                 ? Definition.DisplayName
                 : WorldId.ToString();
-
-        public Vector3 Position => transform.position;
 
         public void Initialize(
             WorldId worldId,

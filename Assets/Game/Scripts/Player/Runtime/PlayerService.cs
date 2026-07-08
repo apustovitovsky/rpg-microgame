@@ -12,13 +12,13 @@ namespace Game.Player
         private readonly CinemachineCamera _camera;
         private readonly IActorInput _input;
         private readonly IWorldRegistry<IActorInputBinder> _inputBinders;
-        private readonly IWorldRegistry<IActorAnchors> _anchors;
+        private readonly IWorldRegistry<IActorView> _anchors;
 
         public PlayerService(
             CinemachineCamera camera,
             IActorInput input,
             IWorldRegistry<IActorInputBinder> inputBinders,
-            IWorldRegistry<IActorAnchors> anchors)
+            IWorldRegistry<IActorView> anchors)
         {
             _camera = camera;
             _input = input;
@@ -26,54 +26,54 @@ namespace Game.Player
             _anchors = anchors;
         }
 
-        public IWorldHandle CurrentActor { get; private set; }
+        public WorldId CurrentActor { get; private set; }
 
         public event Action CurrentActorChanged;
 
-        public void BindActor(IWorldHandle actor)
+        public void BindActor(WorldId actorWorldId)
         {
-            if (actor == null ||
-                ReferenceEquals(CurrentActor, actor))
+            if (actorWorldId.IsEmpty ||
+                CurrentActor == actorWorldId)
             {
                 return;
             }
 
-            if (!_inputBinders.TryGet(actor.WorldId, out var inputBinder))
+            if (!_inputBinders.TryGet(actorWorldId, out var inputBinder))
             {
                 Debug.LogWarning(
-                    $"Player cannot bind actor '{actor.WorldId}': input binder is missing.");
+                    $"Player cannot bind actor '{actorWorldId}': input binder is missing.");
 
                 return;
             }
 
-            if (CurrentActor != null &&
-                _inputBinders.TryGet(CurrentActor.WorldId, out var currentInputBinder))
+            if (!CurrentActor.IsEmpty &&
+                _inputBinders.TryGet(CurrentActor, out var currentInputBinder))
             {
                 currentInputBinder.Unbind();
             }
 
-            CurrentActor = actor;
+            CurrentActor = actorWorldId;
             inputBinder.Bind(_input);
 
-            BindCamera(actor);
+            BindCamera(actorWorldId);
             CurrentActorChanged?.Invoke();
         }
 
-        public void UnbindActor(IWorldHandle actor)
+        public void UnbindActor(WorldId actorWorldId)
         {
-            if (!ReferenceEquals(CurrentActor, actor))
+            if (CurrentActor != actorWorldId)
                 return;
 
-            if (_inputBinders.TryGet(CurrentActor.WorldId, out var inputBinder))
+            if (_inputBinders.TryGet(CurrentActor, out var inputBinder))
                 inputBinder.Unbind();
 
-            CurrentActor = null;
+            CurrentActor = default;
 
-            BindCamera(null);
+            BindCamera(default);
             CurrentActorChanged?.Invoke();
         }
 
-        private void BindCamera(IWorldHandle actor)
+        private void BindCamera(WorldId actorWorldId)
         {
             if (_camera == null)
             {
@@ -81,8 +81,8 @@ namespace Game.Player
                 return;
             }
 
-            if (actor != null &&
-                _anchors.TryGet(actor.WorldId, out var anchors))
+            if (!actorWorldId.IsEmpty &&
+                _anchors.TryGet(actorWorldId, out var anchors))
             {
                 _camera.Follow = anchors.CameraPivot;
             }

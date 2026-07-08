@@ -9,9 +9,9 @@ namespace Game.Actor
     public sealed class ActorWorldRegistrar
     {
         private readonly IWorldRegistry<IWorldActor> _actors;
-        private readonly IWorldRegistry<IActorAnchors> _anchors;
+        private readonly IWorldRegistry<IActorView> _view;
         private readonly IWorldRegistry<IDisplayInfo> _displayInfos;
-        private readonly IWorldRegistry<IWorldSpatial> _spatials;
+        private readonly IWorldRegistry<IInteractor> _interactors;
         private readonly IWorldRegistry<IActorInputBinder> _inputBinders;
         private readonly IWorldRegistry<ITargetProvider> _targetProviders;
         private readonly IWorldRegistry<IInteractable> _interactions;
@@ -21,9 +21,9 @@ namespace Game.Actor
 
         public ActorWorldRegistrar(
             IWorldRegistry<IWorldActor> actors,
-            IWorldRegistry<IActorAnchors> anchors,
+            IWorldRegistry<IActorView> view,
             IWorldRegistry<IDisplayInfo> displayInfos,
-            IWorldRegistry<IWorldSpatial> spatials,
+            IWorldRegistry<IInteractor> interactors,
             IWorldRegistry<IActorInputBinder> inputBinders,
             IWorldRegistry<ITargetProvider> targetProviders,
             IWorldRegistry<IInteractable> interactions,
@@ -32,9 +32,9 @@ namespace Game.Actor
             IWorldRegistry<IPickupEffectHandlerProvider> pickupEffectHandlers)
         {
             _actors = actors;
-            _anchors = anchors;
+            _view = view;
             _displayInfos = displayInfos;
-            _spatials = spatials;
+            _interactors = interactors;
             _inputBinders = inputBinders;
             _targetProviders = targetProviders;
             _interactions = interactions;
@@ -51,9 +51,11 @@ namespace Game.Actor
             var lifetime = new CompositeRegistration();
 
             lifetime.Add(_actors.Register(actor.WorldId, actor.Actor));
-            lifetime.Add(_anchors.Register(actor.WorldId, actor.Anchors));
+            lifetime.Add(_view.Register(actor.WorldId, actor.View));
             lifetime.Add(_displayInfos.Register(actor.WorldId, actor.DisplayInfo));
-            lifetime.Add(_spatials.Register(actor.WorldId, actor.Spatial));
+
+            if (actor.Interactor != null)
+                lifetime.Add(_interactors.Register(actor.WorldId, actor.Interactor));
 
             if (actor.InputBinder != null)
                 lifetime.Add(_inputBinders.Register(actor.WorldId, actor.InputBinder));

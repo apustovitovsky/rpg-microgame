@@ -12,17 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4857ddcb480a7894391b5fc7418f1619, type: 3}
   m_Name: ActorDefinition_Player
   m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorDefinition
-  <LocalizedName>k__BackingField:
-    m_TableReference:
-      m_TableCollectionName: GUID:598fa95b447bdca419c83b135657cea0
-    m_TableEntryReference:
-      m_KeyId: 45218769874944
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
+  _displayName: 
   <Prefab>k__BackingField: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
     type: 3}
-  references:
-    version: 2
-    RefIds: []

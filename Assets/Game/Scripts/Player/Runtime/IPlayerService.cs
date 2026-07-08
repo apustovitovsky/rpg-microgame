@@ -5,12 +5,12 @@ namespace Game.Player
 {
     public interface IPlayerService
     {
-        IWorldHandle CurrentActor { get; }
+        WorldId CurrentActor { get; }
 
         event Action CurrentActorChanged;
 
-        void BindActor(IWorldHandle actor);
+        void BindActor(WorldId actorWorldId);
 
-        void UnbindActor(IWorldHandle actor);
+        void UnbindActor(WorldId actorWorldId);
     }
 }

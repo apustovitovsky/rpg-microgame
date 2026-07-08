@@ -16,7 +16,7 @@ namespace Game.Gameplay
         private readonly ActorSpawnCatalog _actors;
         private readonly PickupSpawnCatalog _pickups;
         private readonly IPlayerService _player;
-        private readonly IWorldManager _world;
+        private readonly IWorldLifetimeManager _world;
         private readonly IWorldIdFactory _worldIds;
         private readonly IActorSpawner _actorSpawner;
         private readonly IPickupSpawner _pickupSpawner;
@@ -27,7 +27,7 @@ namespace Game.Gameplay
             PickupSpawnCatalog pickups,
             IWorldIdFactory worldIds,
             ISpawnPointResolver spawnPoints,
-            IWorldManager world,
+            IWorldLifetimeManager world,
             IActorSpawner actorSpawner,
             IPickupSpawner pickupSpawner,
             IPlayerService player)
@@ -110,26 +110,26 @@ namespace Game.Gameplay
             }
         }
 
-        private IWorldHandle SpawnActor(
+        private WorldId SpawnActor(
             ActorSpawnCatalog.ActorEntry entry,
             NavigationNode node,
             bool bindPlayer)
         {
             if (entry == null)
-                return null;
+                return default;
 
             if (entry.Definition == null)
             {
                 Debug.LogWarning(
                     "Actor was not spawned: definition is missing.");
-                return null;
+                return default;
             }
 
             if (entry.Definition.Prefab == null)
             {
                 Debug.LogWarning(
                     $"Actor '{entry.Definition.name}' was not spawned: prefab is missing.");
-                return null;
+                return default;
             }
 
             var worldId = _worldIds.Create(entry.Definition.DisplayName);
@@ -140,41 +140,41 @@ namespace Game.Gameplay
                 node.Position,
                 node.Rotation);
 
-            var actor = _actorSpawner.Spawn(request);
+            var actorWorldId = _actorSpawner.Spawn(request);
 
-            if (actor == null)
+            if (actorWorldId.IsEmpty)
             {
                 Debug.LogWarning(
                     $"Actor '{worldId}' was not spawned.");
 
-                return null;
+                return default;
             }
 
             if (bindPlayer)
-                _player.BindActor(actor);
+                _player.BindActor(actorWorldId);
 
-            return actor;
+            return actorWorldId;
         }
 
-        private IWorldHandle SpawnPickup(
+        private WorldId SpawnPickup(
             PickupSpawnCatalog.PickupEntry entry,
             NavigationNode node)
         {
             if (entry == null)
-                return null;
+                return default;
 
             if (entry.Definition == null)
             {
                 Debug.LogWarning(
                     "Pickup was not spawned: definition is missing.");
-                return null;
+                return default;
             }
 
             if (entry.Definition.Prefab == null)
             {
                 Debug.LogWarning(
                     $"Pickup '{entry.Definition.name}' was not spawned: prefab is missing.");
-                return null;
+                return default;
             }
 
             var worldId = _worldIds.Create(entry.Definition.DisplayName);
@@ -185,15 +185,15 @@ namespace Game.Gameplay
                 node.Position,
                 node.Rotation);
 
-            var pickup = _pickupSpawner.Spawn(request);
+            var pickupWorldId = _pickupSpawner.Spawn(request);
 
-            if (pickup == null)
+            if (pickupWorldId.IsEmpty)
             {
                 Debug.LogWarning(
                     $"Pickup '{worldId}' was not spawned.");
             }
 
-            return pickup;
+            return pickupWorldId;
         }
 
         public void Dispose()
