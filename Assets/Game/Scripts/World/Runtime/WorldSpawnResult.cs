@@ -3,19 +3,19 @@ namespace Game.World
     public readonly struct WorldSpawnResult
     {
         public WorldSpawnResult(
-            IWorldObject worldObject,
+            IWorldHandle handle,
             IRegistrationToken lifetime)
         {
-            WorldObject = worldObject;
+            Handle = handle;
             Lifetime = lifetime;
         }
 
-        public IWorldObject WorldObject { get; }
+        public IWorldHandle Handle { get; }
 
         public IRegistrationToken Lifetime { get; }
 
         public bool IsValid =>
-            WorldObject != null &&
-            !WorldObject.WorldId.IsEmpty;
+            Handle != null &&
+            !Handle.WorldId.IsEmpty;
     }
 }

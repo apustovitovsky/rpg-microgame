@@ -57,7 +57,7 @@ namespace Game.Pickup
                 if (pickup.TryGetComponent<PickupInteract>(out var pickupInteract))
                     _resolver.Inject(pickupInteract);
 
-                var worldObject = new WorldObject(
+                var handle = new WorldHandle(
                     request.WorldId,
                     pickup.gameObject);
 
@@ -65,7 +65,7 @@ namespace Game.Pickup
                 pickup.TryGetComponent<ITargetable>(out var targetable);
 
                 var spawnedPickup = new PickupSpawnedObject(
-                    worldObject,
+                    handle,
                     pickup,
                     pickup,
                     pickup,
@@ -73,7 +73,7 @@ namespace Game.Pickup
                     targetable);
 
                 return new WorldSpawnResult(
-                    worldObject,
+                    handle,
                     _registrar.Register(spawnedPickup));
             }
         }

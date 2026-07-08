@@ -7,14 +7,14 @@ namespace Game.Pickup
     public sealed class PickupSpawnedObject
     {
         public PickupSpawnedObject(
-            IWorldObject worldObject,
+            IWorldHandle handle,
             IWorldPickup pickup,
             IDisplayInfo displayInfo,
             IWorldSpatial spatial,
             IInteractable interaction,
             ITargetable target)
         {
-            WorldObject = worldObject;
+            Handle = handle;
             Pickup = pickup;
             DisplayInfo = displayInfo;
             Spatial = spatial;
@@ -22,9 +22,9 @@ namespace Game.Pickup
             Target = target;
         }
 
-        public WorldId WorldId => WorldObject.WorldId;
+        public WorldId WorldId => Handle.WorldId;
 
-        public IWorldObject WorldObject { get; }
+        public IWorldHandle Handle { get; }
 
         public IWorldPickup Pickup { get; }
 

@@ -110,7 +110,7 @@ namespace Game.Gameplay
             }
         }
 
-        private IWorldObject SpawnActor(
+        private IWorldHandle SpawnActor(
             ActorSpawnCatalog.ActorEntry entry,
             NavigationNode node,
             bool bindPlayer)
@@ -156,7 +156,7 @@ namespace Game.Gameplay
             return actor;
         }
 
-        private IWorldObject SpawnPickup(
+        private IWorldHandle SpawnPickup(
             PickupSpawnCatalog.PickupEntry entry,
             NavigationNode node)
         {

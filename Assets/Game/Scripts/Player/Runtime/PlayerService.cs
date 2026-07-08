@@ -12,7 +12,6 @@ namespace Game.Player
         private readonly CinemachineCamera _camera;
         private readonly IActorInput _input;
         private readonly IWorldRegistry<IActorInputBinder> _inputBinders;
-        private readonly IWorldRegistry<IWorldActor> _actors;
         private readonly IWorldRegistry<IActorAnchors> _anchors;
 
         public PlayerService(
@@ -27,11 +26,11 @@ namespace Game.Player
             _anchors = anchors;
         }
 
-        public IWorldObject CurrentActor { get; private set; }
+        public IWorldHandle CurrentActor { get; private set; }
 
         public event Action CurrentActorChanged;
 
-        public void BindActor(IWorldObject actor)
+        public void BindActor(IWorldHandle actor)
         {
             if (actor == null ||
                 ReferenceEquals(CurrentActor, actor))
@@ -60,7 +59,7 @@ namespace Game.Player
             CurrentActorChanged?.Invoke();
         }
 
-        public void UnbindActor(IWorldObject actor)
+        public void UnbindActor(IWorldHandle actor)
         {
             if (!ReferenceEquals(CurrentActor, actor))
                 return;
@@ -74,14 +73,14 @@ namespace Game.Player
             CurrentActorChanged?.Invoke();
         }
 
-        private void BindCamera(IWorldObject actor)
+        private void BindCamera(IWorldHandle actor)
         {
             if (_camera == null)
             {
                 Debug.LogWarning("Player camera is null.");
                 return;
             }
-            
+
             if (actor != null &&
                 _anchors.TryGet(actor.WorldId, out var anchors))
             {

@@ -4,7 +4,7 @@ namespace Game.Pickup
 {
     public interface IPickupSpawner
     {
-        IWorldObject Spawn(PickupSpawnRequest request);
+        IWorldHandle Spawn(PickupSpawnRequest request);
     }
 
     public sealed class PickupSpawner : IPickupSpawner
@@ -20,7 +20,7 @@ namespace Game.Pickup
             _world = world;
         }
 
-        public IWorldObject Spawn(PickupSpawnRequest request)
+        public IWorldHandle Spawn(PickupSpawnRequest request)
         {
             var result = _factory.Create(request);
 
@@ -31,13 +31,13 @@ namespace Game.Pickup
             }
 
             if (!_world.Track(
-                    result.WorldObject,
+                    result.Handle,
                     result.Lifetime))
             {
                 return null;
             }
 
-            return result.WorldObject;
+            return result.Handle;
         }
     }
 }

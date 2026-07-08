@@ -7,7 +7,7 @@ namespace Game.Interaction
     public interface IInteractionService
     {
         UniTask<bool> TryInteractAsync(
-            IWorldObject interactor,
+            IWorldHandle interactor,
             WorldId targetWorldId,
             CancellationToken token);
     }

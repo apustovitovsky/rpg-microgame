@@ -2,18 +2,16 @@ using UnityEngine;
 
 namespace Game.World
 {
-    public interface IWorldObject
+    public interface IWorldHandle
     {
         WorldId WorldId { get; }
 
         GameObject GameObject { get; }
-
-        Transform Root { get; }
     }
 
-    public sealed class WorldObject : IWorldObject
+    public sealed class WorldHandle : IWorldHandle
     {
-        public WorldObject(
+        public WorldHandle(
             WorldId worldId,
             GameObject gameObject)
         {
@@ -24,7 +22,5 @@ namespace Game.World
         public WorldId WorldId { get; }
 
         public GameObject GameObject { get; }
-
-        public Transform Root => GameObject.transform;
     }
 }

@@ -62,7 +62,7 @@ namespace Game.Player
             if (target.WorldId == currentActor.WorldId)
                 return;
 
-            if (!_world.TryGetObject(target.WorldId, out var targetObject))
+            if (!_world.TryGetHandle(target.WorldId, out var targetHandle))
             {
                 Debug.LogWarning(
                     $"Target '{target.WorldId}' is not tracked.");
@@ -78,7 +78,7 @@ namespace Game.Player
                 return;
             }
 
-            _player.BindActor(targetObject);
+            _player.BindActor(targetHandle);
         }
     }
 }

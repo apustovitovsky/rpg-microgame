@@ -13,7 +13,6 @@ namespace Game.Actor
         private readonly LifetimeScope _parentScope;
         private readonly ActorWorldRegistrar _registrar;
 
-
         public ActorWorldObjectFactory(
             LifetimeScope parentScope,
             ActorWorldRegistrar registrar)
@@ -60,7 +59,7 @@ namespace Game.Actor
 
                 var anchors = scope.Container.Resolve<IActorAnchors>();
 
-                var worldObject = new WorldObject(
+                var handle = new WorldHandle(
                     request.WorldId,
                     anchors.Root.gameObject);
 
@@ -72,7 +71,7 @@ namespace Game.Actor
                 scope.Container.TryResolve<IPickupEffectHandlerProvider>(out var pickupEffects);
 
                 var spawnedActor = new ActorSpawnedObject(
-                    worldObject,
+                    handle,
                     actor,
                     anchors,
                     actor,
@@ -85,7 +84,7 @@ namespace Game.Actor
                     pickupEffects);
 
                 return new WorldSpawnResult(
-                    worldObject,
+                    handle,
                     _registrar.Register(spawnedActor));
             }
         }

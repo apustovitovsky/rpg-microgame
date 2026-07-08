@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 
-
 namespace Game.World
 {
     public interface IWorldManager
     {
         bool Track(
-            IWorldObject worldObject,
+            IWorldHandle handle,
             IRegistrationToken lifetime);
 
-        bool TryGetObject(
+        bool TryGetHandle(
             WorldId worldId,
-            out IWorldObject worldObject);
+            out IWorldHandle handle);
 
         bool Despawn(WorldId worldId);
 
@@ -23,36 +22,36 @@ namespace Game.World
         private readonly Dictionary<WorldId, WorldEntry> _entries = new();
 
         public bool Track(
-            IWorldObject worldObject,
+            IWorldHandle handle,
             IRegistrationToken lifetime)
         {
-            if (worldObject == null ||
-                worldObject.WorldId.IsEmpty)
+            if (handle == null ||
+                handle.WorldId.IsEmpty)
             {
                 lifetime?.Dispose();
                 return false;
             }
 
-            if (_entries.ContainsKey(worldObject.WorldId))
+            if (_entries.ContainsKey(handle.WorldId))
             {
                 lifetime?.Dispose();
                 return false;
             }
 
             _entries.Add(
-                worldObject.WorldId,
+                handle.WorldId,
                 new WorldEntry(
-                    worldObject,
+                    handle,
                     lifetime));
 
             return true;
         }
 
-        public bool TryGetObject(
+        public bool TryGetHandle(
             WorldId worldId,
-            out IWorldObject worldObject)
+            out IWorldHandle handle)
         {
-            worldObject = null;
+            handle = null;
 
             if (worldId.IsEmpty)
                 return false;
@@ -60,10 +59,10 @@ namespace Game.World
             if (!_entries.TryGetValue(worldId, out var entry))
                 return false;
 
-            worldObject = entry.WorldObject;
+            handle = entry.Handle;
             return true;
         }
-        
+
         public bool Despawn(WorldId worldId)
         {
             if (worldId.IsEmpty)
@@ -74,8 +73,8 @@ namespace Game.World
 
             entry.Lifetime?.Dispose();
 
-            if (entry.WorldObject.GameObject != null)
-                UnityEngine.Object.Destroy(entry.WorldObject.GameObject);
+            if (entry.Handle.GameObject != null)
+                UnityEngine.Object.Destroy(entry.Handle.GameObject);
 
             return true;
         }
@@ -91,14 +90,14 @@ namespace Game.World
         private readonly struct WorldEntry
         {
             public WorldEntry(
-                IWorldObject worldObject,
+                IWorldHandle handle,
                 IRegistrationToken lifetime)
             {
-                WorldObject = worldObject;
+                Handle = handle;
                 Lifetime = lifetime;
             }
 
-            public IWorldObject WorldObject { get; }
+            public IWorldHandle Handle { get; }
 
             public IRegistrationToken Lifetime { get; }
         }

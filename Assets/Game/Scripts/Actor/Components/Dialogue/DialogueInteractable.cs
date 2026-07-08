@@ -12,14 +12,13 @@ namespace Game.Actor
         IInteractable,
         IActorDialogueEndpoint
     {
-
         [field: SerializeField] public float MaxRange { get; private set; } = 5f;
 
         public bool CanInteract(InteractionContext context)
         {
             return context.Interactor != null &&
-                   context.Target != null &&
-                   context.Interactor.WorldId != context.Target.WorldId;
+                   !context.TargetWorldId.IsEmpty &&
+                   context.Interactor.WorldId != context.TargetWorldId;
         }
 
         public async UniTask InteractAsync(
@@ -27,7 +26,7 @@ namespace Game.Actor
             CancellationToken token)
         {
             await StartDialogueAsync(
-                context.Interactor.WorldId.ToString(),
+                context.Interactor.WorldId,
                 token);
         }
 

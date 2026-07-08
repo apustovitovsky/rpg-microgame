@@ -8,7 +8,7 @@ namespace Game.Actor
     public sealed class ActorSpawnedObject
     {
         public ActorSpawnedObject(
-            IWorldObject worldObject,
+            IWorldHandle handle,
             IWorldActor actor,
             IActorAnchors anchors,
             IDisplayInfo displayInfo,
@@ -20,7 +20,7 @@ namespace Game.Actor
             IActorTravelEndpoint travel,
             IPickupEffectHandlerProvider pickupEffectHandlerProvider)
         {
-            WorldObject = worldObject;
+            Handle = handle;
             Actor = actor;
             Anchors = anchors;
             DisplayInfo = displayInfo;
@@ -33,9 +33,9 @@ namespace Game.Actor
             PickupEffectHandlerProvider = pickupEffectHandlerProvider;
         }
 
-        public WorldId WorldId => WorldObject.WorldId;
+        public WorldId WorldId => Handle.WorldId;
 
-        public IWorldObject WorldObject { get; }
+        public IWorldHandle Handle { get; }
 
         public IWorldActor Actor { get; }
 

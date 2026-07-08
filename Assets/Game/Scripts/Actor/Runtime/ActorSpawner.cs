@@ -4,7 +4,7 @@ namespace Game.Actor
 {
     public interface IActorSpawner
     {
-        IWorldObject Spawn(ActorSpawnRequest request);
+        IWorldHandle Spawn(ActorSpawnRequest request);
     }
 
     public sealed class ActorSpawner : IActorSpawner
@@ -20,7 +20,7 @@ namespace Game.Actor
             _world = world;
         }
 
-        public IWorldObject Spawn(ActorSpawnRequest request)
+        public IWorldHandle Spawn(ActorSpawnRequest request)
         {
             var result = _factory.Create(request);
 
@@ -31,13 +31,13 @@ namespace Game.Actor
             }
 
             if (!_world.Track(
-                    result.WorldObject,
+                    result.Handle,
                     result.Lifetime))
             {
                 return null;
             }
 
-            return result.WorldObject;
+            return result.Handle;
         }
     }
 }

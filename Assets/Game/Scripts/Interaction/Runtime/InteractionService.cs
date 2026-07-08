@@ -19,7 +19,7 @@ namespace Game.Interaction
         }
 
         public async UniTask<bool> TryInteractAsync(
-            IWorldObject interactor,
+            IWorldHandle interactor,
             WorldId targetWorldId,
             CancellationToken token)
         {
