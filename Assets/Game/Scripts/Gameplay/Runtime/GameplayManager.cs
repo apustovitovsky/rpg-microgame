@@ -1,6 +1,7 @@
 using System;
 using Etheria.Game.World;
 using Game.Actor;
+using Game.Pickup;
 using Game.Player;
 using Game.World;
 using UnityEngine;
@@ -12,31 +13,37 @@ namespace Game.Gameplay
         IStartable,
         IDisposable
     {
-        private readonly GameplayActorConfigSO _manifest;
+        private readonly ActorSpawnCatalog _actors;
+        private readonly PickupSpawnCatalog _pickups;
         private readonly INavigationLocationResolver _locations;
         private readonly INavigationGraphProvider _graphProvider;
         private readonly IWorldSpawner _worldSpawner;
         private readonly IWorldObjectFactory<ActorSpawnRequest> _actorFactory;
+        private readonly IWorldObjectFactory<PickupSpawnRequest> _pickupFactory;
         private readonly IPlayerService _player;
         private readonly IWorldManager _world;
 
         private int _nextWorldIdIndex;
 
         public GameplayManager(
-            GameplayActorConfigSO manifest,
+            ActorSpawnCatalog actors,
+            PickupSpawnCatalog pickups,
             INavigationLocationResolver locations,
             INavigationGraphProvider graphProvider,
             IWorldSpawner worldSpawner,
             IWorldManager world,
             IWorldObjectFactory<ActorSpawnRequest> actorFactory,
+            IWorldObjectFactory<PickupSpawnRequest> pickupFactory,
             IPlayerService player)
         {
-            _manifest = manifest;
+            _actors = actors;
+            _pickups = pickups;
             _locations = locations;
             _graphProvider = graphProvider;
             _worldSpawner = worldSpawner;
             _world = world;
             _actorFactory = actorFactory;
+            _pickupFactory = pickupFactory;
             _player = player;
         }
 
@@ -44,14 +51,16 @@ namespace Game.Gameplay
         {
             SpawnPlayer();
             SpawnActors();
+            SpawnPickups();
         }
 
         private void SpawnPlayer()
         {
-            var player = _manifest.Player;
+            var player = _actors.Player;
 
             if (!TryResolveSpawnPoint(
-                    player,
+                    player.LocationId,
+                    player.AnchorKey,
                     out var node))
             {
                 Debug.LogWarning(
@@ -59,7 +68,7 @@ namespace Game.Gameplay
                 return;
             }
 
-            Spawn(
+            SpawnActor(
                 player,
                 node,
                 bindPlayer: true);
@@ -67,45 +76,72 @@ namespace Game.Gameplay
 
         private void SpawnActors()
         {
-            foreach (var actor in _manifest.Actors)
+            foreach (var actor in _actors.Actors)
             {
                 if (!TryResolveSpawnPoint(
-                        actor,
+                        actor.LocationId,
+                        actor.AnchorKey,
                         out var node))
                 {
                     Debug.LogWarning(
-                        $"Actor '{actor?.DisplayName}' was not spawned: spawn point could not be resolved.");
+                        $"Actor '{actor?.Definition?.name}' was not spawned: spawn point could not be resolved.");
                     continue;
                 }
 
-                Spawn(
+                SpawnActor(
                     actor,
                     node,
                     bindPlayer: false);
             }
         }
 
-        private IWorldObject Spawn(
-            GameplayActorConfigSO.ActorEntry entry,
+        private void SpawnPickups()
+        {
+            foreach (var pickup in _pickups.Pickups)
+            {
+                if (!TryResolveSpawnPoint(
+                        pickup.LocationId,
+                        pickup.AnchorKey,
+                        out var node))
+                {
+                    Debug.LogWarning(
+                        $"Pickup '{pickup?.Definition?.name}' was not spawned: spawn point could not be resolved.");
+                    continue;
+                }
+
+                SpawnPickup(
+                    pickup,
+                    node);
+            }
+        }
+
+        private IWorldObject SpawnActor(
+            ActorSpawnCatalog.ActorEntry entry,
             NavigationNode node,
             bool bindPlayer)
         {
             if (entry == null)
                 return null;
 
-            if (entry.Prefab == null)
+            if (entry.Definition == null)
             {
                 Debug.LogWarning(
-                    $"Actor '{entry.DisplayName}' was not spawned: prefab is missing.");
+                    "Actor was not spawned: definition is missing.");
                 return null;
             }
 
-            var worldId = CreateWorldId(entry);
+            if (entry.Definition.Prefab == null)
+            {
+                Debug.LogWarning(
+                    $"Actor '{entry.Definition.name}' was not spawned: prefab is missing.");
+                return null;
+            }
+
+            var worldId = CreateWorldId(entry.Definition.DisplayName);
 
             var request = new ActorSpawnRequest(
                 worldId,
-                entry.DisplayName,
-                entry.Prefab,
+                entry.Definition,
                 node.Position,
                 node.Rotation);
 
@@ -127,24 +163,62 @@ namespace Game.Gameplay
             return actor;
         }
 
-        private WorldId CreateWorldId(GameplayActorConfigSO.ActorEntry entry)
+        private IWorldObject SpawnPickup(
+            PickupSpawnCatalog.PickupEntry entry,
+            NavigationNode node)
+        {
+            if (entry == null)
+                return null;
+
+            if (entry.Definition == null)
+            {
+                Debug.LogWarning(
+                    "Pickup was not spawned: definition is missing.");
+                return null;
+            }
+
+            if (entry.Definition.Prefab == null)
+            {
+                Debug.LogWarning(
+                    $"Pickup '{entry.Definition.name}' was not spawned: prefab is missing.");
+                return null;
+            }
+
+            var worldId = CreateWorldId(entry.Definition.DisplayName);
+
+            var request = new PickupSpawnRequest(
+                worldId,
+                entry.Definition,
+                node.Position,
+                node.Rotation);
+
+            var pickup = _worldSpawner.Spawn(
+                request,
+                _pickupFactory);
+
+            if (pickup == null)
+            {
+                Debug.LogWarning(
+                    $"Pickup '{worldId}' was not spawned.");
+            }
+
+            return pickup;
+        }
+
+        private WorldId CreateWorldId(string prefix)
         {
             _nextWorldIdIndex++;
 
-            var prefix = !string.IsNullOrWhiteSpace(entry.DisplayName)
-                ? entry.DisplayName
-                : entry.Prefab.name;
-
             return new WorldId(
-                $"{NormalizeWorldIdPrefix(prefix)}_{_nextWorldIdIndex:0000}");
+                $"{NormalizeWorldIdPrefix(prefix)}_{_nextWorldIdIndex:000}");
         }
 
         private static string NormalizeWorldIdPrefix(string value)
         {
-            value = value?.Trim().ToLowerInvariant() ?? "actor";
+            value = value?.Trim().ToLowerInvariant() ?? "world_object";
 
             if (string.IsNullOrWhiteSpace(value))
-                return "actor";
+                return "world_object";
 
             var chars = value.ToCharArray();
 
@@ -158,14 +232,14 @@ namespace Game.Gameplay
         }
 
         private bool TryResolveSpawnPoint(
-            GameplayActorConfigSO.ActorEntry entry,
+            string locationId,
+            string anchorKey,
             out NavigationNode node)
         {
             node = null;
 
-            if (entry == null ||
-                string.IsNullOrWhiteSpace(entry.LocationId) ||
-                string.IsNullOrWhiteSpace(entry.AnchorKey))
+            if (string.IsNullOrWhiteSpace(locationId) ||
+                string.IsNullOrWhiteSpace(anchorKey))
             {
                 return false;
             }
@@ -174,8 +248,8 @@ namespace Game.Gameplay
                 return false;
 
             if (!_locations.TryResolveAnchorNodeId(
-                    entry.LocationId,
-                    entry.AnchorKey,
+                    locationId,
+                    anchorKey,
                     out var nodeId))
             {
                 return false;

@@ -14,6 +14,7 @@ namespace Game.Actor
         private readonly LifetimeScope _parentScope;
         private readonly IWorldRegistry<IWorldObject> _worldObjects;
         private readonly IWorldRegistry<IWorldActor> _actors;
+        private readonly IWorldRegistry<IActorAnchors> _anchors;
         private readonly IWorldRegistry<IActorInputBinder> _inputBinders;
         private readonly IWorldRegistry<ITargetProvider> _targetProviders;
         private readonly IWorldRegistry<IInteractable> _interactions;
@@ -25,6 +26,7 @@ namespace Game.Actor
             LifetimeScope parentScope,
             IWorldRegistry<IWorldObject> worldObjects,
             IWorldRegistry<IWorldActor> actors,
+            IWorldRegistry<IActorAnchors> anchors,
             IWorldRegistry<IActorInputBinder> inputBinders,
             IWorldRegistry<ITargetProvider> targetProviders,
             IWorldRegistry<IInteractable> interactions,
@@ -35,6 +37,7 @@ namespace Game.Actor
             _parentScope = parentScope;
             _worldObjects = worldObjects;
             _actors = actors;
+            _anchors = anchors;
             _inputBinders = inputBinders;
             _targetProviders = targetProviders;
             _interactions = interactions;
@@ -45,54 +48,51 @@ namespace Game.Actor
 
         public WorldSpawnResult Create(ActorSpawnRequest request)
         {
-            var displayName = request.DisplayName?.Trim() ?? string.Empty;
-
             if (request.WorldId.IsEmpty)
                 throw new ArgumentException("Actor world id is required.", nameof(request));
 
-            if (request.Prefab == null)
-                throw new ArgumentNullException(nameof(request.Prefab));
+            if (request.Definition == null)
+                throw new ArgumentNullException(nameof(request.Definition));
+
+            if (request.Definition.Prefab == null)
+                throw new ArgumentNullException(nameof(request.Definition.Prefab));
 
             using (LifetimeScope.EnqueueParent(_parentScope))
             {
                 var instance = UnityEngine.Object.Instantiate(
-                    request.Prefab,
+                    request.Definition.Prefab,
                     request.Position,
                     request.Rotation,
                     request.Parent);
 
-                instance.name = string.IsNullOrWhiteSpace(displayName)
-                    ? request.WorldId.ToString()
-                    : $"{displayName} ({request.WorldId})";
+                instance.name = $"{request.Definition.DisplayName} ({request.WorldId})";
 
                 var scope = instance.GetComponentInChildren<ActorScope>(true);
 
                 if (scope == null)
                     throw new InvalidOperationException(
-                        $"Actor prefab '{request.Prefab.name}' has no {nameof(ActorScope)}.");
+                        $"Actor prefab '{request.Definition.Prefab.name}' has no {nameof(ActorScope)}.");
 
                 if (scope.Container == null)
                     throw new InvalidOperationException(
-                        $"Actor prefab '{request.Prefab.name}' has no built VContainer scope.");
+                        $"Actor prefab '{request.Definition.Prefab.name}' has no built VContainer scope.");
 
-                var identity = scope.Container.Resolve<IActorIdentity>()
-                    ?? throw new InvalidOperationException(
-                        $"Actor prefab '{request.Prefab.name}' has no {nameof(IActorIdentity)}.");
-
-                identity.Initialize(
+                var actor = scope.Container.Resolve<WorldActor>();
+                actor.Initialize(
                     request.WorldId,
-                    displayName);
+                    request.Definition);
 
-                var view = scope.Container.Resolve<IWorldActor>();
+                var anchors = scope.Container.Resolve<IActorAnchors>();
 
                 var worldObject = new WorldObject(
                     request.WorldId,
-                    view.Root.gameObject);
+                    anchors.Root.gameObject);
 
                 var lifetime = new CompositeRegistration();
 
                 lifetime.Add(_worldObjects.Register(request.WorldId, worldObject));
-                lifetime.Add(_actors.Register(request.WorldId, view));
+                lifetime.Add(_actors.Register(request.WorldId, actor));
+                lifetime.Add(_anchors.Register(request.WorldId, anchors));
 
                 if (scope.Container.TryResolve<IActorInputBinder>(out var inputBinder))
                     lifetime.Add(_inputBinders.Register(request.WorldId, inputBinder));

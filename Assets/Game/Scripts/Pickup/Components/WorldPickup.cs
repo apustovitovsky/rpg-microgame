@@ -10,36 +10,31 @@ namespace Game.Pickup
         MonoBehaviour,
         IWorldPickup
     {
-        [SerializeField] private PickupDefinition _definition;
-        [SerializeField] private string _displayName = "Pickup";
-
-        private WorldId _worldId;
-
-        public WorldId WorldId => _worldId;
-
         private bool _isCollected;
 
-        public PickupDefinition Definition => _definition;
+        public WorldId WorldId { get; private set; }
 
-        public string DisplayName => string.IsNullOrWhiteSpace(_displayName)
-            ? WorldId.ToString()
-            : _displayName.Trim();
+        public PickupDefinition Definition { get; private set; }
 
         public bool IsCollectable =>
             !_isCollected &&
             isActiveAndEnabled &&
             gameObject.activeInHierarchy &&
-            !WorldId.IsEmpty;
+            !WorldId.IsEmpty &&
+            Definition != null;
 
-        public void Initialize(WorldId worldId)
+        public void Initialize(
+            WorldId worldId,
+            PickupDefinition definition)
         {
-            _worldId = worldId;
+            WorldId = worldId;
+            Definition = definition;
+            _isCollected = false;
         }
 
         public UniTask SetCollectedAsync(CancellationToken token)
         {
             _isCollected = true;
-
             return UniTask.CompletedTask;
         }
     }

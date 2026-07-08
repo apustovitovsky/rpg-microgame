@@ -11,7 +11,8 @@
         "Game.Targeting",
         "Game.Input",
         "Game.World",
-        "Unity.Cinemachine"
+        "Unity.Cinemachine",
+        "Game.Pickup"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

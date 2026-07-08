@@ -17,6 +17,9 @@ namespace Game.Actor
             builder.Register<WorldRegistry<IWorldActor>>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
+            builder.Register<WorldRegistry<IActorAnchors>>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
             builder.Register<WorldRegistry<IActorInputBinder>>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 

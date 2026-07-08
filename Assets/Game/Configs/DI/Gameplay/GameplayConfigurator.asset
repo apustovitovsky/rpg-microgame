@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14723716f42333b49bff28473f681c21, type: 3}
   m_Name: GameplayConfigurator
   m_EditorClassIdentifier: Game.World::Game.World.WorldActorInstallerSO
-  _config: {fileID: 11400000, guid: a7a7955319c19304cb7fae09219ba1d1, type: 2}
+  _actors: {fileID: 11400000, guid: a7a7955319c19304cb7fae09219ba1d1, type: 2}
+  _pickups: {fileID: 11400000, guid: 573d9218b88ae8d41985798349c01183, type: 2}

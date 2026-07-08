@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32ba29d32e810984f8db9b16ca106462, type: 3}
   m_Name: DebugActorViewPickupEffect
   m_EditorClassIdentifier: Game.Actor::Game.Actor.DebugActorViewPickupEffect
-  <Message>k__BackingField: Pickup effect applied
+  <Message>k__BackingField: Pickup effect applied!!!!!!!!!!!!!

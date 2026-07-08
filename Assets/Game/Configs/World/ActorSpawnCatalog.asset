@@ -10,27 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2a0c0eba4fd89d4da804c722e1dd2eb, type: 3}
-  m_Name: WorldActorConfig
+  m_Name: ActorSpawnCatalog
   m_EditorClassIdentifier: Game.World::Game.World.WorldActorConfigSO
   _player:
-    _displayName: Player
-    _prefab: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
-      type: 3}
+    _definition: {fileID: 11400000, guid: b090ace1adb625143a5c20e191bfb40b, type: 2}
     _locationId: city_storage
     _anchorKey: entrance_outer
   _actors:
-  - _displayName: npc_01
-    _prefab: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
-      type: 3}
+  - _definition: {fileID: 11400000, guid: b090ace1adb625143a5c20e191bfb40b, type: 2}
     _locationId: city_storage
     _anchorKey: entrance_inner
-  - _displayName: npc_02
-    _prefab: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
-      type: 3}
+  - _definition: {fileID: 11400000, guid: b090ace1adb625143a5c20e191bfb40b, type: 2}
     _locationId: city_storage
     _anchorKey: corner_01
-  - _displayName: npc_03
-    _prefab: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
-      type: 3}
+  - _definition: {fileID: 11400000, guid: b090ace1adb625143a5c20e191bfb40b, type: 2}
     _locationId: city_storage
     _anchorKey: corner_02

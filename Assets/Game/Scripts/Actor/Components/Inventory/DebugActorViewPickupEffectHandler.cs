@@ -8,11 +8,11 @@ namespace Game.Actor
     public sealed class DebugActorViewPickupEffectHandler :
         PickupEffectHandler<DebugActorViewPickupEffect>
     {
-        private readonly IWorldActor _view;
+        private readonly IActorAnchors _anchors;
 
-        public DebugActorViewPickupEffectHandler(IWorldActor view)
+        public DebugActorViewPickupEffectHandler(IActorAnchors anchors)
         {
-            _view = view;
+            _anchors = anchors;
         }
 
         protected override bool CanApply(
@@ -21,7 +21,7 @@ namespace Game.Actor
         {
             return effect != null &&
                    pickup != null &&
-                   _view != null;
+                   _anchors != null;
         }
 
         protected override UniTask ApplyAsync(
@@ -30,7 +30,7 @@ namespace Game.Actor
             CancellationToken token)
         {
             Debug.Log(
-                $"{effect.Message}. Actor: '{_view.Root.name}'. Pickup: '{pickup.Definition?.name}'.");
+                $"{effect.Message}. Actor: '{_anchors.Root.name}'. Pickup: '{pickup.Definition?.name}'.");
 
             return UniTask.CompletedTask;
         }

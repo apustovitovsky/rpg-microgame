@@ -3,21 +3,17 @@ using Game.Pickup;
 using UnityEngine;
 using VContainer;
 
-
 namespace Game.Actor
 {
     [CreateAssetMenu(
-        fileName = "ActorIdentityConfigurator",
-        menuName = "Game/Actor/Actor Identity Configurator")]
-    public sealed class ActorIdentityConfiguratorSO : BuildConfigurator
+        fileName = "ActorRuntimeConfigurator",
+        menuName = "Game/Actor/Actor Runtime Configurator")]
+    public sealed class ActorRuntimeConfigurator : BuildConfigurator
     {
-        public override void Install(
-            IContainerBuilder builder)
+        public override void Install(IContainerBuilder builder)
         {
-            builder.Register<ActorIdentity>(Lifetime.Scoped)
-                .AsImplementedInterfaces();
-
             builder.RegisterComponentInScope<WorldActor>()
+                .AsSelf()
                 .AsImplementedInterfaces();
 
             builder.RegisterComponentInScope<ActorLookController>();

@@ -1,13 +1,13 @@
 using Game.World;
 using UnityEngine;
 
-namespace Game.Actor
+namespace Game.Pickup
 {
-    public readonly struct ActorSpawnRequest
+    public readonly struct PickupSpawnRequest
     {
-        public ActorSpawnRequest(
+        public PickupSpawnRequest(
             WorldId worldId,
-            ActorDefinition definition,
+            PickupDefinition definition,
             Vector3 position,
             Quaternion rotation,
             Transform parent = null)
@@ -21,7 +21,7 @@ namespace Game.Actor
 
         public WorldId WorldId { get; }
 
-        public ActorDefinition Definition { get; }
+        public PickupDefinition Definition { get; }
 
         public Vector3 Position { get; }
 

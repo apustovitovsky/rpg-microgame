@@ -1,12 +1,11 @@
-using UnityEngine;
+using Game.World;
 
 namespace Game.Actor
 {
     public interface IWorldActor
     {
-        Transform Root { get; }
-        Transform CameraPivot { get; }
-        Transform TargetPoint { get; }
-        Transform UiAnchor { get; }
+        WorldId WorldId { get; }
+
+        ActorDefinition Definition { get; }
     }
 }

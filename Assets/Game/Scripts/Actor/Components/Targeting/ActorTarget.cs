@@ -14,10 +14,10 @@ namespace Game.Actor
         [SerializeField] private Transform _targetPoint;
         [SerializeField] private bool _isTargetable = true;
 
-        private IActorIdentity _identity;
+        private IWorldActor _actor;
 
-        public WorldId WorldId => _identity != null
-            ? _identity.WorldId
+        public WorldId WorldId => _actor != null
+            ? _actor.WorldId
             : default;
 
         public Transform Root => _root != null
@@ -33,9 +33,9 @@ namespace Game.Actor
             !WorldId.IsEmpty;
 
         [Inject]
-        public void Construct(IActorIdentity identity)
+        public void Construct(IWorldActor actor)
         {
-            _identity = identity;
+            _actor = actor;
         }
     }
 }

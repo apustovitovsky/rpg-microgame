@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using Etheria.Game.World;
-using Game.World;
+using Game.Actor;
 using UnityEngine;
 
 namespace Game.Gameplay
 {
     [CreateAssetMenu(
-        fileName = "GameplayActorConfig",
-        menuName = "Game/Gameplay/Gameplay Actor Config")]
-    public sealed class GameplayActorConfigSO : ScriptableObject
+        fileName = "ActorSpawnCatalog",
+        menuName = "Game/Gameplay/Actor Spawn Catalog")]
+    public sealed class ActorSpawnCatalog : ScriptableObject
     {
         [SerializeField] private ActorEntry _player = new();
         [SerializeField] private ActorEntry[] _actors = Array.Empty<ActorEntry>();
@@ -31,19 +31,16 @@ namespace Game.Gameplay
         [Serializable]
         public sealed class ActorEntry
         {
-            [SerializeField] private string _displayName;
-            [SerializeField] private GameObject _prefab;
+            [SerializeField] private ActorDefinition _definition;
             [SerializeField] private string _locationId;
             [SerializeField] private string _anchorKey = NavigationAnchorKeys.Default;
 
-            public string DisplayName => _displayName;
-            public GameObject Prefab => _prefab;
+            public ActorDefinition Definition => _definition;
             public string LocationId => _locationId;
             public string AnchorKey => _anchorKey;
 
             public void Normalize()
             {
-                _displayName = _displayName?.Trim();
                 _locationId = _locationId?.Trim();
 
                 _anchorKey = string.IsNullOrWhiteSpace(_anchorKey)
