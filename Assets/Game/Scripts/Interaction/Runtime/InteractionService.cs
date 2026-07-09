@@ -7,30 +7,34 @@ namespace Game.Interaction
 {
     public sealed class InteractionService : IInteractionService
     {
-        private readonly IWorldRegistry<IInteractor> _interactors;
         private readonly IWorldRegistry<IInteractable> _interactables;
 
         public InteractionService(
-            IWorldRegistry<IInteractor> interactors,
             IWorldRegistry<IInteractable> interactables)
         {
-            _interactors = interactors;
             _interactables = interactables;
         }
 
         public async UniTask<InteractionResult> TryInteractAsync(
             WorldId interactorWorldId,
+            Vector3 interactionOrigin,
             WorldId targetWorldId,
             CancellationToken token)
         {
-            if (!_interactors.TryGet(interactorWorldId, out var interactor))
-                return InteractionResult.InteractorNotFound;
+            if (interactorWorldId.IsEmpty)
+                return InteractionResult.InvalidInteractor;
+
+            if (targetWorldId.IsEmpty)
+                return InteractionResult.InvalidTarget;
+
+            if (interactorWorldId == targetWorldId)
+                return InteractionResult.SameObject;
 
             if (!_interactables.TryGet(targetWorldId, out var interactable))
                 return InteractionResult.InteractableNotFound;
 
             var distance = Vector3.Distance(
-                interactor.InteractionOrigin,
+                interactionOrigin,
                 interactable.InteractionPosition);
 
             if (distance > interactable.MaxRange)

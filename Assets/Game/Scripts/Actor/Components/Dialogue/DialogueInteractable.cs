@@ -1,6 +1,5 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.CommandSystem;
 using Game.Interaction;
 using Game.World;
 using UnityEngine;
@@ -38,7 +37,7 @@ namespace Game.Actor
                 token);
         }
 
-        public UniTask<CommandStatus> StartDialogueAsync(
+        public UniTask StartDialogueAsync(
             WorldId interactorWorldId,
             CancellationToken cancellationToken)
         {
@@ -46,7 +45,7 @@ namespace Game.Actor
                 $"Dialogue started by actor '{interactorWorldId}'.",
                 this);
 
-            return UniTask.FromResult(CommandStatus.Succeeded);
+            return UniTask.CompletedTask;
         }
     }
 }

@@ -8,12 +8,12 @@ namespace Game.Actor
     {
         private readonly ActorLookController _look;
         private readonly MovementController _movement;
-        private readonly TargetingController _targeting;
+        private readonly ActorTargetController _targeting;
 
         public ActorInputBinder(
             ActorLookController look,
             MovementController movement,
-            TargetingController targeting)
+            ActorTargetController targeting)
         {
             _look = look;
             _movement = movement;

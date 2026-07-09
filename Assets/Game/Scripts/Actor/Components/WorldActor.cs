@@ -1,48 +1,43 @@
 using Game.World;
-using UnityEngine;
+
 
 namespace Game.Actor
 {
-    [DisallowMultipleComponent]
     public sealed class WorldActor :
-        MonoBehaviour,
         IWorldActor,
-        IActorView,
         IDisplayable
     {
-        [SerializeField] private Transform _cameraPivot;
-        [SerializeField] private Transform _targetPoint;
-        [SerializeField] private Transform _uiAnchor;
+        public WorldActor(
+            WorldId worldId,
+            ActorDefinition definition,
+            IActorView view,
+            IActorNavigation navigation,
+            IActorDialogue dialogue,
+            IActorInputBinder inputBinder)
+        {
+            WorldId = worldId;
+            Definition = definition;
+            View = view;
+            InputBinder = inputBinder;
+            Navigation = navigation;
+            Dialogue = dialogue;
+        }
 
-        public WorldId WorldId { get; private set; }
+        public WorldId WorldId { get; }
 
-        public ActorDefinition Definition { get; private set; }
+        public ActorDefinition Definition { get; }
 
-        public Transform Root => transform;
+        public IActorView View { get; }
 
-        public Transform TargetPoint => _targetPoint != null
-            ? _targetPoint
-            : Root;
+        public IActorInputBinder InputBinder { get; }
 
-        public Transform CameraPivot => _cameraPivot != null
-            ? _cameraPivot
-            : Root;
+        public IActorNavigation Navigation { get; }
 
-        public Transform UiAnchor => _uiAnchor != null
-            ? _uiAnchor
-            : Root;
+        public IActorDialogue Dialogue { get; }
 
         public string DisplayName =>
             Definition != null && !string.IsNullOrWhiteSpace(Definition.DisplayName)
                 ? Definition.DisplayName
                 : WorldId.ToString();
-
-        public void Initialize(
-            WorldId worldId,
-            ActorDefinition definition)
-        {
-            WorldId = worldId;
-            Definition = definition;
-        }
     }
 }

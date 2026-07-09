@@ -7,11 +7,11 @@ using UnityEngine;
 namespace Game.Actor
 {
     [DisallowMultipleComponent]
-    public sealed class TargetingController :
+    public sealed class ActorTargetController :
         MonoBehaviour,
         ITargetProvider
     {
-        [SerializeField] private TargetPerception _perception;
+        [SerializeField] private ActorTargetSensor _perception;
         [SerializeField] private ActorLookController _look;
 
         [SerializeField] private float _distanceScoreWeight = 0f;

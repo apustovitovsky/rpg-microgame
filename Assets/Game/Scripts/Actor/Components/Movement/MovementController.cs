@@ -89,7 +89,7 @@ namespace Game.Actor
         private CharacterController _controller;
 
         [SerializeField]
-        private TargetingController _targeting;
+        private ActorTargetController _targeting;
 
         private IActorInput _input;
         private bool _inputBound;

@@ -12,19 +12,19 @@ namespace Game.Player
         IDisposable
     {
         private readonly IPlayerService _player;
-        private readonly IWorldRegistry<IActorInputBinder> _inputBinders;
+        private readonly IWorldRegistry<IWorldActor> _actors;
         private readonly IWorldRegistry<ITargetProvider> _targetProviders;
         private readonly IPlayerInteractionInput _input;
 
         public PlayerTargetControlBinder(
             IPlayerInteractionInput input,
             IPlayerService player,
-            IWorldRegistry<IActorInputBinder> inputBinders,
+            IWorldRegistry<IWorldActor> actors,
             IWorldRegistry<ITargetProvider> targetProviders)
         {
             _input = input;
             _player = player;
-            _inputBinders = inputBinders;
+            _actors = actors;
             _targetProviders = targetProviders;
         }
 
@@ -59,7 +59,8 @@ namespace Game.Player
             if (target.WorldId == currentActor)
                 return;
 
-            if (!_inputBinders.Contains(target.WorldId))
+            if (!_actors.TryGet(target.WorldId, out var actor) ||
+                actor.InputBinder == null)
             {
                 Debug.LogWarning(
                     $"Target '{target.WorldId}' is not a controllable actor.");

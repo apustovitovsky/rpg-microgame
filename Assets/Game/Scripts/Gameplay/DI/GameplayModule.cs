@@ -6,9 +6,8 @@ using VContainer.Unity;
 namespace Game.Gameplay
 {
     [DisallowMultipleComponent]
-    public sealed class GameplayScope : LifetimeScope
+    public sealed class GameplayModule : LifetimeScope
     {
-        [Header("Build Configurations")]
         [SerializeField] private ModuleBuilder _game;
         [SerializeField] private ModuleBuilder _world;
         [SerializeField] private ModuleBuilder _input;
@@ -18,7 +17,6 @@ namespace Game.Gameplay
         [SerializeField] private ModuleBuilder _player;
         [SerializeField] private ModuleBuilder _actorNameplates;
         [SerializeField] private ModuleBuilder _gameplay;
-        [SerializeField] private ModuleBuilder _pickup;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -31,7 +29,6 @@ namespace Game.Gameplay
             builder.Configure(_player);
             builder.Configure(_actorNameplates);
             builder.Configure(_gameplay);
-            builder.Configure(_pickup);
         }
     }
 }

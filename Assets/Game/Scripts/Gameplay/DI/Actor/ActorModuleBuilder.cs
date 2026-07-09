@@ -1,5 +1,4 @@
 using Game.Core;
-using Game.Pickup;
 using Game.Targeting;
 using Game.World;
 using UnityEngine;
@@ -17,25 +16,8 @@ namespace Game.Actor
             builder.Register<WorldRegistry<IWorldActor>>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<WorldRegistry<IActorView>>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<WorldRegistry<IActorInputBinder>>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
             builder.Register<WorldRegistry<ITargetProvider>>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
-
-            builder.Register<WorldRegistry<IActorDialogue>>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<WorldRegistry<IActorNavigation>>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<WorldRegistry<IPickupEffectHandlerProvider>>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<ActorWorldRegistrar>(Lifetime.Singleton);
 
             builder.Register<ActorWorldObjectFactory>(Lifetime.Singleton);
 

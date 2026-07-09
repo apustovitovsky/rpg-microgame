@@ -6,7 +6,6 @@
         "VContainer",
         "Etheria.Core",
         "Unity.TextMeshPro",
-        "Game.CommandSystem",
         "Game.World",
         "Game.Targeting",
         "Game.Interaction",

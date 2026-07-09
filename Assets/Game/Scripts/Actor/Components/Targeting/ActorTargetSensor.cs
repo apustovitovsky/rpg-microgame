@@ -6,7 +6,7 @@ namespace Game.Actor
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(SphereCollider))]
-    public sealed class TargetPerception :
+    public sealed class ActorTargetSensor :
         MonoBehaviour
     {
         [SerializeField]

@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Actor;
 using Game.Interaction;
 using Game.Targeting;
 using Game.World;
@@ -16,6 +17,7 @@ namespace Game.Player
         private readonly IPlayerInteractionInput _input;
         private readonly IPlayerService _player;
         private readonly IInteractionService _interactions;
+        private readonly IWorldRegistry<IWorldActor> _actors;
         private readonly IWorldRegistry<ITargetProvider> _targetProviders;
 
         private CancellationTokenSource _interactionCts;
@@ -24,11 +26,13 @@ namespace Game.Player
             IPlayerInteractionInput input,
             IPlayerService player,
             IInteractionService interactions,
+            IWorldRegistry<IWorldActor> actors,
             IWorldRegistry<ITargetProvider> targetProviders)
         {
             _input = input;
             _player = player;
             _interactions = interactions;
+            _actors = actors;
             _targetProviders = targetProviders;
         }
 
@@ -53,10 +57,12 @@ namespace Game.Player
 
         private async UniTaskVoid InteractCurrentTargetAsync()
         {
-            var currentActor = _player.CurrentActor;
+            var currentActorId = _player.CurrentActor;
 
-            if (currentActor.IsEmpty ||
-                !_targetProviders.TryGet(currentActor, out var targetProvider))
+            if (currentActorId.IsEmpty ||
+                !_actors.TryGet(currentActorId, out var currentActor) ||
+                currentActor.View == null ||
+                !_targetProviders.TryGet(currentActorId, out var targetProvider))
             {
                 return;
             }
@@ -74,7 +80,8 @@ namespace Game.Player
             _interactionCts = new CancellationTokenSource();
 
             var result = await _interactions.TryInteractAsync(
-                currentActor,
+                currentActorId,
+                currentActor.View.Root.position,
                 target.WorldId,
                 _interactionCts.Token);
 
