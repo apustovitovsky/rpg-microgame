@@ -1,8 +1,9 @@
 using System;
+using Game.Targeting;
 
-namespace Game.Targeting
+namespace Game.Actor
 {
-    public interface ITargetProvider
+    public interface IActorTargeting
     {
         ITargetable CurrentTarget { get; }
 

@@ -11,12 +11,12 @@ namespace Game.Player
     {
         private readonly CinemachineCamera _camera;
         private readonly IActorInput _input;
-        private readonly IWorldRegistry<IWorldActor> _actors;
+        private readonly IActorService _actors;
 
         public PlayerService(
             CinemachineCamera camera,
             IActorInput input,
-            IWorldRegistry<IWorldActor> actors)
+            IActorService actors)
         {
             _camera = camera;
             _input = input;
@@ -83,9 +83,9 @@ namespace Game.Player
                 return;
             }
 
-            if (actor?.View != null)
+            if (actor?.Transform != null)
             {
-                _camera.Follow = actor.View.CameraPivot;
+                _camera.Follow = actor.Transform.CameraPivot;
             }
             else
             {

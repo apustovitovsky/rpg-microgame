@@ -1,42 +1,31 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.World;
-using UnityEngine;
 
 namespace Game.Pickup
 {
-    [DisallowMultipleComponent]
-    public sealed class WorldPickup :
-        MonoBehaviour,
-        IWorldPickup,
-        IDisplayable
+    public sealed class WorldPickup : IWorldPickup
     {
         private bool _isCollected;
 
-        public WorldId WorldId { get; private set; }
+        public WorldPickup(
+            WorldInfo info,
+            PickupDefinition definition)
+        {
+            Info = info;
+            Definition = definition;
+        }
 
-        public PickupDefinition Definition { get; private set; }
+        public WorldInfo Info { get; }
+
+        public WorldId WorldId => Info.WorldId;
+
+        public PickupDefinition Definition { get; }
 
         public bool IsCollectable =>
             !_isCollected &&
-            isActiveAndEnabled &&
-            gameObject.activeInHierarchy &&
             !WorldId.IsEmpty &&
             Definition != null;
-
-        public string DisplayName =>
-            Definition != null && !string.IsNullOrWhiteSpace(Definition.DisplayName)
-                ? Definition.DisplayName
-                : WorldId.ToString();
-
-        public void Initialize(
-            WorldId worldId,
-            PickupDefinition definition)
-        {
-            WorldId = worldId;
-            Definition = definition;
-            _isCollected = false;
-        }
 
         public UniTask SetCollectedAsync(CancellationToken token)
         {

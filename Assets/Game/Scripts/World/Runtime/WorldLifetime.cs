@@ -7,33 +7,37 @@ namespace Game.World
     {
         WorldId WorldId { get; }
 
+        WorldInfo Info { get; }
+
         GameObject GameObject { get; }
 
         bool IsDisposed { get; }
 
-        void Add(IRegistrationToken registration);
+        void Add(IDisposable registration);
     }
 
     public sealed class WorldLifetime : IWorldLifetime
     {
-        private readonly CompositeRegistration _registrations = new();
+        private readonly CompositeLifetime _registrations = new();
         private bool _isDisposed;
 
         public WorldLifetime(
-            WorldId worldId,
-            GameObject gameObject)
+            GameObject gameObject,
+            WorldInfo info)
         {
-            WorldId = worldId;
             GameObject = gameObject;
+            Info = info;
         }
 
-        public WorldId WorldId { get; }
+        public WorldId WorldId => Info.WorldId;
+
+        public WorldInfo Info { get; }
 
         public GameObject GameObject { get; }
 
         public bool IsDisposed => _isDisposed;
 
-        public void Add(IRegistrationToken registration)
+        public void Add(IDisposable registration)
         {
             if (registration == null)
                 return;

@@ -11,7 +11,7 @@ namespace Game.Pickup
         MonoBehaviour,
         IInteractable
     {
-        [SerializeField] private WorldPickup _pickup;
+        [SerializeField] private PickupComponent _pickup;
         [SerializeField] private Transform _interactionPoint;
 
         [field: SerializeField]
@@ -34,6 +34,7 @@ namespace Game.Pickup
         {
             return _pickupService != null &&
                    _pickup != null &&
+                   _pickup.Pickup != null &&
                    !context.InteractorWorldId.IsEmpty &&
                    !_pickup.WorldId.IsEmpty;
         }

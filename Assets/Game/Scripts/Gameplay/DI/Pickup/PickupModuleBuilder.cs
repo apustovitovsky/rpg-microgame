@@ -1,7 +1,5 @@
 using Game.Core;
 using Game.Pickup;
-using Game.Targeting;
-using Game.World;
 using UnityEngine;
 using VContainer;
 
@@ -14,15 +12,10 @@ namespace Game.Gameplay
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<WorldRegistry<IWorldPickup>>(Lifetime.Singleton)
+            builder.Register<PickupService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<WorldPickupService>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<PickupWorldRegistrar>(Lifetime.Singleton);
-
-            builder.Register<PickupWorldObjectFactory>(Lifetime.Singleton);
+            builder.Register<PickupFactory>(Lifetime.Singleton);
 
             builder.Register<PickupSpawner>(Lifetime.Singleton)
                 .AsImplementedInterfaces();

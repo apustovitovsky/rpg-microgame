@@ -11,7 +11,7 @@ namespace Game.Actor
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.RegisterComponentInModuleRoot<ActorView>()
+            builder.RegisterComponentInModuleRoot<ActorTransform>()
                 .AsImplementedInterfaces();
 
             builder.RegisterComponentInModuleRoot<ActorLookController>();
@@ -22,12 +22,8 @@ namespace Game.Actor
                 .AsSelf()
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInModuleRoot<DialogueInteractable>()
+            builder.RegisterComponentInModuleRoot<ActorDialogue>()
                 .AsImplementedInterfaces();
-
-            // builder.RegisterComponentInModuleRoot<ActorTarget>()
-            //     .AsSelf()
-            //     .AsImplementedInterfaces();
         }
     }
 }

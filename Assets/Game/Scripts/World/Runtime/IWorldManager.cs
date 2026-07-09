@@ -2,8 +2,12 @@ using System.Collections.Generic;
 
 namespace Game.World
 {
-    public interface IWorldLifetimeManager
+    public interface IWorldManager
     {
+        bool TryGetInfo(
+            WorldId worldId,
+            out WorldInfo info);
+
         bool Track(IWorldLifetime lifetime);
 
         bool Despawn(WorldId worldId);
@@ -11,7 +15,7 @@ namespace Game.World
         void DespawnAll();
     }
 
-    public sealed class WorldLifetimeManager : IWorldLifetimeManager
+    public sealed class WorldManager : IWorldManager
     {
         private readonly Dictionary<WorldId, IWorldLifetime> _lifetimes = new();
 
@@ -35,7 +39,7 @@ namespace Game.World
                 lifetime.WorldId,
                 lifetime);
 
-            lifetime.Add(new RegistrationToken(() =>
+            lifetime.Add(new LifetimeToken(() =>
             {
                 _lifetimes.Remove(lifetime.WorldId);
             }));
@@ -61,6 +65,22 @@ namespace Game.World
 
             foreach (var worldId in worldIds)
                 Despawn(worldId);
+        }
+
+        public bool TryGetInfo(
+            WorldId worldId,
+            out WorldInfo info)
+        {
+            info = default;
+
+            if (worldId.IsEmpty)
+                return false;
+
+            if (!_lifetimes.TryGetValue(worldId, out var lifetime))
+                return false;
+
+            info = lifetime.Info;
+            return true;
         }
     }
 }

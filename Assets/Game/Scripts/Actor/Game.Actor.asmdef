@@ -8,10 +8,10 @@
         "Unity.TextMeshPro",
         "Game.World",
         "Game.Targeting",
-        "Game.Interaction",
         "Game.Pickup",
         "Game.Input",
-        "Game.Core"
+        "Game.Core",
+        "Game.Interaction"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -10,33 +10,30 @@ namespace Game.Actor
         MonoBehaviour,
         ITargetable
     {
-        [SerializeField] private Transform _root;
+        [SerializeField] private Transform _uiAnchor;
         [SerializeField] private Transform _targetPoint;
         [SerializeField] private bool _isTargetable = true;
 
-        public WorldId WorldId { get; private set; }
+        public WorldInfo Info { get; private set; }
 
-        public Transform Root => _root != null
-            ? _root
+        public WorldId WorldId => Info.WorldId;
+
+        public Transform UiAnchor => _uiAnchor != null
+            ? _uiAnchor
             : transform;
 
         public Transform TargetPoint => _targetPoint != null
             ? _targetPoint
-            : Root;
+            : transform;
 
         public bool IsTargetable =>
             _isTargetable &&
             !WorldId.IsEmpty;
 
-        // public void Initialize(WorldId worldId)
-        // {
-        //     WorldId = worldId;
-        // }
-
         [Inject]
-        public void Construct(WorldId worldId)
+        public void Construct(WorldInfo worldInfo)
         {
-            WorldId = worldId;
+            Info = worldInfo;
         }
     }
 }

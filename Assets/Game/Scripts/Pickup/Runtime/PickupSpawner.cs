@@ -9,12 +9,12 @@ namespace Game.Pickup
 
     public sealed class PickupSpawner : IPickupSpawner
     {
-        private readonly PickupWorldObjectFactory _factory;
-        private readonly IWorldLifetimeManager _world;
+        private readonly PickupFactory _factory;
+        private readonly IWorldManager _world;
 
         public PickupSpawner(
-            PickupWorldObjectFactory factory,
-            IWorldLifetimeManager world)
+            PickupFactory factory,
+            IWorldManager world)
         {
             _factory = factory;
             _world = world;
@@ -22,18 +22,20 @@ namespace Game.Pickup
 
         public WorldId Spawn(PickupSpawnRequest request)
         {
-            var result = _factory.Create(request);
+            var lifetime = _factory.Create(request);
 
-            if (!result.IsValid)
+            if (lifetime == null ||
+                lifetime.WorldId.IsEmpty ||
+                lifetime.IsDisposed)
             {
-                result.Lifetime?.Dispose();
+                lifetime?.Dispose();
                 return default;
             }
 
-            if (!_world.Track(result.Lifetime))
+            if (!_world.Track(lifetime))
                 return default;
 
-            return result.WorldId;
+            return lifetime.WorldId;
         }
     }
 }

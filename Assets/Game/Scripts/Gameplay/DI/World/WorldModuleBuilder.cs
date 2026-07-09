@@ -15,10 +15,7 @@ namespace Game.Gameplay
             builder.Register<WorldIdFactory>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<WorldLifetimeManager>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<WorldRegistry<IDisplayable>>(Lifetime.Singleton)
+            builder.Register<WorldManager>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

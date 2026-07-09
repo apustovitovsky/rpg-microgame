@@ -2,14 +2,9 @@ using UnityEngine;
 
 namespace Game.Actor
 {
-    public interface IActorView
+    public interface IActorTransform
     {
         Transform Root { get; }
-
         Transform CameraPivot { get; }
-
-        Transform TargetPoint { get; }
-
-        Transform UiAnchor { get; }
     }
 }

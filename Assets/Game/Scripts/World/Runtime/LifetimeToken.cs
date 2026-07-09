@@ -2,16 +2,12 @@ using System;
 
 namespace Game.World
 {
-    public interface IRegistrationToken : IDisposable
-    {
-    }
-
-    public sealed class RegistrationToken : IRegistrationToken
+    public sealed class LifetimeToken : IDisposable
     {
         private Action _onDispose;
         private bool _isDisposed;
 
-        public RegistrationToken(Action onDispose)
+        public LifetimeToken(Action onDispose)
         {
             _onDispose = onDispose;
         }

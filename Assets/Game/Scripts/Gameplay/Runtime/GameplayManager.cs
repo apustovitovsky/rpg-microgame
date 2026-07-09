@@ -14,7 +14,7 @@ namespace Game.Gameplay
     {
         private readonly ActorSpawnCatalog _actors;
         private readonly IPlayerService _player;
-        private readonly IWorldLifetimeManager _world;
+        private readonly IWorldManager _world;
         private readonly IWorldIdFactory _worldIds;
         private readonly IActorSpawner _actorSpawner;
         private readonly ISpawnPointResolver _spawnPoints;
@@ -23,7 +23,7 @@ namespace Game.Gameplay
             ActorSpawnCatalog actors,
             IWorldIdFactory worldIds,
             ISpawnPointResolver spawnPoints,
-            IWorldLifetimeManager world,
+            IWorldManager world,
             IActorSpawner actorSpawner,
             IPlayerService player)
         {

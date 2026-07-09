@@ -40,11 +40,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2127906321771726787}
-  - component: {fileID: 5770398678744338449}
   - component: {fileID: 2443304151321799375}
   - component: {fileID: 5025387519454983148}
   - component: {fileID: 2315288463687846862}
   - component: {fileID: 1522348729463143809}
+  - component: {fileID: 5316104281471738783}
   m_Layer: 3
   m_Name: item_coin
   m_TagString: Untagged
@@ -70,18 +70,6 @@ Transform:
   - {fileID: 8331168959086960302}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5770398678744338449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2440724634624028458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20783af2800621d428aeb68471614137, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupComponent
 --- !u!114 &2443304151321799375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,7 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3c7801e9208d0f499c15e28cad5fb7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupInteractible
-  _pickup: {fileID: 5770398678744338449}
+  _pickup: {fileID: 5316104281471738783}
   _interactionPoint: {fileID: 8331168959086960302}
   <MaxRange>k__BackingField: 5
 --- !u!65 &5025387519454983148
@@ -143,10 +131,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2425c7ed732d29d429c25158bbecf606, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupTarget
-  _pickup: {fileID: 5770398678744338449}
-  _root: {fileID: 2127906321771726787}
+  _pickup: {fileID: 5316104281471738783}
+  _uiAnchor: {fileID: 2313720167493599390}
   _targetPoint: {fileID: 2127906321771726787}
   _isTargetable: 1
+--- !u!114 &5316104281471738783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2440724634624028458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b33a8db3b894494f8022f8a853b3bc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupComponent
 --- !u!1 &2851780622898926234
 GameObject:
   m_ObjectHideFlags: 0

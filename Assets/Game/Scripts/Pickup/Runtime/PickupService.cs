@@ -5,20 +5,45 @@ using Game.World;
 
 namespace Game.Pickup
 {
-    public sealed class WorldPickupService : IPickupService
+    public sealed class PickupService :
+        IPickupService,
+        IPickupRegistrationService
     {
-        private readonly IWorldRegistry<IWorldPickup> _pickups;
-        private readonly IWorldRegistry<IPickupEffectHandlerProvider> _handlerProviders;
-        private readonly IWorldLifetimeManager _world;
+        private readonly WorldIndex<IWorldPickup> _pickups = new();
+        private readonly WorldIndex<IPickupEffectHandlerProvider> _handlerProviders = new();
+        private readonly IWorldManager _world;
 
-        public WorldPickupService(
-            IWorldRegistry<IWorldPickup> pickups,
-            IWorldRegistry<IPickupEffectHandlerProvider> handlerProviders,
-            IWorldLifetimeManager world)
+        public PickupService(IWorldManager world)
         {
-            _pickups = pickups;
-            _handlerProviders = handlerProviders;
             _world = world;
+        }
+
+        public IDisposable RegisterEffectHandlerProvider(
+            WorldId worldId,
+            IPickupEffectHandlerProvider provider)
+        {
+            return _handlerProviders.Register(
+                worldId,
+                provider);
+        }
+
+        public IDisposable Register(IWorldPickup pickup)
+        {
+            if (pickup == null)
+                throw new ArgumentNullException(nameof(pickup));
+
+            return _pickups.Register(
+                pickup.WorldId,
+                pickup);
+        }
+
+        public bool TryGet(
+            WorldId worldId,
+            out IWorldPickup pickup)
+        {
+            return _pickups.TryGet(
+                worldId,
+                out pickup);
         }
 
         public async UniTask<PickupResult> CollectAsync(
@@ -33,7 +58,7 @@ namespace Game.Pickup
                 return PickupResult.HandlerProviderNotFound;
             }
 
-            if (!_pickups.TryGet(
+            if (!TryGet(
                     pickupId,
                     out var pickup))
             {

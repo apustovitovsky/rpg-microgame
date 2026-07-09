@@ -9,25 +9,30 @@ namespace Game.Pickup
         MonoBehaviour,
         ITargetable
     {
-        [SerializeField] private WorldPickup _pickup;
-        [SerializeField] private Transform _root;
+        [SerializeField] private PickupComponent _pickup;
+        [SerializeField] private Transform _uiAnchor;
         [SerializeField] private Transform _targetPoint;
         [SerializeField] private bool _isTargetable = true;
 
-        public WorldId WorldId => _pickup != null
-            ? _pickup.WorldId
-            : default;
+        public WorldInfo Info =>
+            _pickup != null && _pickup.Pickup != null
+                ? _pickup.Pickup.Info
+                : default;
 
-        public Transform Root => _root != null
-            ? _root
+        public WorldId WorldId => Info.WorldId;
+
+        public Transform UiAnchor => _uiAnchor != null
+            ? _uiAnchor
             : transform;
 
         public Transform TargetPoint => _targetPoint != null
             ? _targetPoint
-            : Root;
+            : transform;
 
         public bool IsTargetable =>
             _isTargetable &&
-            _pickup != null;
+            _pickup != null &&
+            _pickup.Pickup != null &&
+            !WorldId.IsEmpty;
     }
 }

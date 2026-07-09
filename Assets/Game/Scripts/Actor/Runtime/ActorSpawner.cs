@@ -9,12 +9,12 @@ namespace Game.Actor
 
     public sealed class ActorSpawner : IActorSpawner
     {
-        private readonly ActorWorldObjectFactory _factory;
-        private readonly IWorldLifetimeManager _world;
+        private readonly ActorFactory _factory;
+        private readonly IWorldManager _world;
 
         public ActorSpawner(
-            ActorWorldObjectFactory factory,
-            IWorldLifetimeManager world)
+            ActorFactory factory,
+            IWorldManager world)
         {
             _factory = factory;
             _world = world;
@@ -22,18 +22,20 @@ namespace Game.Actor
 
         public WorldId Spawn(ActorSpawnRequest request)
         {
-            var result = _factory.Create(request);
+            var lifetime = _factory.Create(request);
 
-            if (!result.IsValid)
+            if (lifetime == null ||
+                lifetime.WorldId.IsEmpty ||
+                lifetime.IsDisposed)
             {
-                result.Lifetime?.Dispose();
+                lifetime?.Dispose();
                 return default;
             }
 
-            if (!_world.Track(result.Lifetime))
+            if (!_world.Track(lifetime))
                 return default;
 
-            return result.WorldId;
+            return lifetime.WorldId;
         }
     }
 }

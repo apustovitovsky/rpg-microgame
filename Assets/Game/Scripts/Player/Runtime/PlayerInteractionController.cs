@@ -3,8 +3,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Actor;
 using Game.Interaction;
-using Game.Targeting;
-using Game.World;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -17,8 +15,7 @@ namespace Game.Player
         private readonly IPlayerInteractionInput _input;
         private readonly IPlayerService _player;
         private readonly IInteractionService _interactions;
-        private readonly IWorldRegistry<IWorldActor> _actors;
-        private readonly IWorldRegistry<ITargetProvider> _targetProviders;
+        private readonly IActorService _actors;
 
         private CancellationTokenSource _interactionCts;
 
@@ -26,14 +23,12 @@ namespace Game.Player
             IPlayerInteractionInput input,
             IPlayerService player,
             IInteractionService interactions,
-            IWorldRegistry<IWorldActor> actors,
-            IWorldRegistry<ITargetProvider> targetProviders)
+            IActorService actors)
         {
             _input = input;
             _player = player;
             _interactions = interactions;
             _actors = actors;
-            _targetProviders = targetProviders;
         }
 
         public void Start()
@@ -61,13 +56,13 @@ namespace Game.Player
 
             if (currentActorId.IsEmpty ||
                 !_actors.TryGet(currentActorId, out var currentActor) ||
-                currentActor.View == null ||
-                !_targetProviders.TryGet(currentActorId, out var targetProvider))
+                currentActor.Transform == null ||
+                currentActor.Targeting == null)
             {
                 return;
             }
 
-            var target = targetProvider.CurrentTarget;
+            var target = currentActor.Targeting.CurrentTarget;
 
             if (target == null ||
                 target.WorldId.IsEmpty)
@@ -79,17 +74,20 @@ namespace Game.Player
             _interactionCts?.Dispose();
             _interactionCts = new CancellationTokenSource();
 
-            var result = await _interactions.TryInteractAsync(
+            var context = new InteractionContext(
                 currentActorId,
-                currentActor.View.Root.position,
-                target.WorldId,
+                currentActor.Transform.Root.position,
+                target.WorldId);
+
+            var result = await _interactions.TryInteractAsync(
+                context,
                 _interactionCts.Token);
 
             if (result != InteractionResult.Succeeded)
             {
                 Debug.Log(
-                    $"Interaction with '{target.WorldId}' failed: {result}.",
-                    target.Root);
+                    $"Interaction with '{target.Info.DisplayName}' failed: {result}.",
+                    target.TargetPoint);
             }
         }
     }

@@ -1,6 +1,4 @@
 using Game.Core;
-using Game.Targeting;
-using Game.World;
 using UnityEngine;
 using VContainer;
 
@@ -13,15 +11,12 @@ namespace Game.Actor
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<WorldRegistry<IWorldActor>>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<WorldRegistry<ITargetProvider>>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<ActorWorldObjectFactory>(Lifetime.Singleton);
+            builder.Register<ActorFactory>(Lifetime.Singleton);
 
             builder.Register<ActorSpawner>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
+            builder.Register<ActorService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

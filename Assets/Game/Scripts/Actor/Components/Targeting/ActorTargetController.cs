@@ -9,7 +9,7 @@ namespace Game.Actor
     [DisallowMultipleComponent]
     public sealed class ActorTargetController :
         MonoBehaviour,
-        ITargetProvider
+        IActorTargeting
     {
         [SerializeField] private ActorTargetSensor _perception;
         [SerializeField] private ActorLookController _look;

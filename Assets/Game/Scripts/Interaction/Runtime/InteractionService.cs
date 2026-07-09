@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.World;
@@ -5,44 +6,43 @@ using UnityEngine;
 
 namespace Game.Interaction
 {
-    public sealed class InteractionService : IInteractionService
+    public sealed class InteractionService :
+        IInteractionService,
+        IInteractionRegistrationService
     {
-        private readonly IWorldRegistry<IInteractable> _interactables;
+        private readonly WorldIndex<IInteractable> _interactables = new();
 
-        public InteractionService(
-            IWorldRegistry<IInteractable> interactables)
+        public IDisposable RegisterInteractable(
+            WorldId worldId,
+            IInteractable interactable)
         {
-            _interactables = interactables;
+            return _interactables.Register(
+                worldId,
+                interactable);
         }
 
         public async UniTask<InteractionResult> TryInteractAsync(
-            WorldId interactorWorldId,
-            Vector3 interactionOrigin,
-            WorldId targetWorldId,
+            InteractionContext context,
             CancellationToken token)
         {
-            if (interactorWorldId.IsEmpty)
+            if (context.InteractorWorldId.IsEmpty)
                 return InteractionResult.InvalidInteractor;
 
-            if (targetWorldId.IsEmpty)
+            if (context.TargetWorldId.IsEmpty)
                 return InteractionResult.InvalidTarget;
 
-            if (interactorWorldId == targetWorldId)
+            if (context.InteractorWorldId == context.TargetWorldId)
                 return InteractionResult.SameObject;
 
-            if (!_interactables.TryGet(targetWorldId, out var interactable))
+            if (!_interactables.TryGet(context.TargetWorldId, out var interactable))
                 return InteractionResult.InteractableNotFound;
 
             var distance = Vector3.Distance(
-                interactionOrigin,
+                context.Origin,
                 interactable.InteractionPosition);
 
             if (distance > interactable.MaxRange)
                 return InteractionResult.OutOfRange;
-
-            var context = new InteractionContext(
-                interactorWorldId,
-                targetWorldId);
 
             if (!interactable.CanInteract(context))
                 return InteractionResult.Rejected;

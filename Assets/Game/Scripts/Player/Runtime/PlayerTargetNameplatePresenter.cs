@@ -13,10 +13,10 @@ namespace Game.Player
     {
         private readonly IPlayerService _player;
         private readonly ActorNameplatePool _pool;
-        private readonly IWorldRegistry<ITargetProvider> _targetProviders;
-        private readonly IWorldRegistry<IDisplayable> _displayInfos;
+        private readonly IActorService _actors;
+        private readonly IWorldManager _world;
 
-        private ITargetProvider _targetProvider;
+        private IActorTargeting _targeting;
         private ActorNameplateView _currentView;
         private ITargetable _currentTarget;
         private Camera _camera;
@@ -24,13 +24,13 @@ namespace Game.Player
         public PlayerTargetNameplatePresenter(
             IPlayerService player,
             ActorNameplatePool pool,
-            IWorldRegistry<ITargetProvider> targetProviders,
-            IWorldRegistry<IDisplayable> displayInfos)
+            IActorService actors,
+            IWorldManager world)
         {
             _player = player;
             _pool = pool;
-            _targetProviders = targetProviders;
-            _displayInfos = displayInfos;
+            _actors = actors;
+            _world = world;
         }
 
         public void Start()
@@ -42,13 +42,13 @@ namespace Game.Player
         public void Dispose()
         {
             _player.CurrentActorChanged -= OnCurrentActorChanged;
-            UnbindTargetProvider();
+            UnbindTargeting();
             ReleaseCurrent();
         }
 
         private void OnCurrentActorChanged()
         {
-            UnbindTargetProvider();
+            UnbindTargeting();
             ReleaseCurrent();
 
             var actorWorldId = _player.CurrentActor;
@@ -56,26 +56,29 @@ namespace Game.Player
             if (actorWorldId.IsEmpty)
                 return;
 
-            if (!_targetProviders.TryGet(actorWorldId, out _targetProvider))
+            if (!_actors.TryGet(actorWorldId, out var actor) ||
+                actor.Targeting == null)
+            {
                 return;
+            }
 
-            _targetProvider.CurrentTargetChanged += OnCurrentTargetChanged;
-            OnCurrentTargetChanged(_targetProvider.CurrentTarget);
+            _targeting = actor.Targeting;
+            _targeting.CurrentTargetChanged += OnCurrentTargetChanged;
+            OnCurrentTargetChanged(_targeting.CurrentTarget);
         }
 
-        private void UnbindTargetProvider()
+        private void UnbindTargeting()
         {
-            if (_targetProvider != null)
-                _targetProvider.CurrentTargetChanged -= OnCurrentTargetChanged;
+            if (_targeting != null)
+                _targeting.CurrentTargetChanged -= OnCurrentTargetChanged;
 
-            _targetProvider = null;
+            _targeting = null;
         }
 
         private void OnCurrentTargetChanged(ITargetable target)
         {
             if (target == null ||
                 !target.IsTargetable ||
-                target.TargetPoint == null ||
                 target.WorldId.IsEmpty)
             {
                 ReleaseCurrent();
@@ -106,17 +109,17 @@ namespace Game.Player
 
             _currentTarget = target;
             _currentView = _pool.Get(
-                target.TargetPoint,
+                target.UiAnchor,
                 ResolveTargetName(target.WorldId),
                 camera);
         }
 
         private string ResolveTargetName(WorldId worldId)
         {
-            if (_displayInfos.TryGet(worldId, out var displayInfo) &&
-                !string.IsNullOrWhiteSpace(displayInfo.DisplayName))
+            if (_world.TryGetInfo(worldId, out var info) &&
+                !string.IsNullOrWhiteSpace(info.DisplayName))
             {
-                return displayInfo.DisplayName;
+                return info.DisplayName;
             }
 
             return worldId.ToString();

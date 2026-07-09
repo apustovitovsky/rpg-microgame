@@ -1,45 +1,30 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Game.World
 {
-    public interface IWorldRegistry<T>
-        where T : class
-    {
-        IRegistrationToken Register(
-            WorldId worldId,
-            T value);
-
-        bool TryGet(
-            WorldId worldId,
-            out T value);
-
-        bool Contains(WorldId worldId);
-    }
-
-    public sealed class WorldRegistry<T> : IWorldRegistry<T>
+    public sealed class WorldIndex<T>
         where T : class
     {
         private readonly Dictionary<WorldId, T> _items = new();
 
-        public IRegistrationToken Register(
+        public IDisposable Register(
             WorldId worldId,
             T value)
         {
             if (worldId.IsEmpty)
-                return new RegistrationToken(null);
+                throw new ArgumentException("World id is required.", nameof(worldId));
 
             if (value == null)
-                return new RegistrationToken(null);
+                throw new ArgumentNullException(nameof(value));
 
             if (!_items.TryAdd(worldId, value))
             {
                 throw new InvalidOperationException(
-                    $"World registry already contains '{worldId}' for '{typeof(T).Name}'.");
+                    $"World index already contains '{worldId}' for '{typeof(T).Name}'.");
             }
 
-            return new RegistrationToken(
+            return new LifetimeToken(
                 () => Remove(worldId, value));
         }
 
@@ -58,7 +43,7 @@ namespace Game.World
         public bool Contains(WorldId worldId)
         {
             return !worldId.IsEmpty &&
-                   _items.ContainsKey(worldId);
+                _items.ContainsKey(worldId);
         }
 
         private void Remove(
@@ -71,11 +56,7 @@ namespace Game.World
             if (_items.TryGetValue(worldId, out var existing) &&
                 ReferenceEquals(existing, value))
             {
-
                 _items.Remove(worldId);
-
-                Debug.Log(
-                    $"[WorldRegistry] Removed {typeof(T).Name}: {worldId}");
             }
         }
     }

@@ -1,7 +1,5 @@
 using System;
 using Game.Actor;
-using Game.Targeting;
-using Game.World;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -12,20 +10,17 @@ namespace Game.Player
         IDisposable
     {
         private readonly IPlayerService _player;
-        private readonly IWorldRegistry<IWorldActor> _actors;
-        private readonly IWorldRegistry<ITargetProvider> _targetProviders;
+        private readonly IActorService _actors;
         private readonly IPlayerInteractionInput _input;
 
         public PlayerTargetControlBinder(
             IPlayerInteractionInput input,
             IPlayerService player,
-            IWorldRegistry<IWorldActor> actors,
-            IWorldRegistry<ITargetProvider> targetProviders)
+            IActorService actors)
         {
             _input = input;
             _player = player;
             _actors = actors;
-            _targetProviders = targetProviders;
         }
 
         public void Start()
@@ -40,15 +35,16 @@ namespace Game.Player
 
         private void BindCurrentTarget()
         {
-            var currentActor = _player.CurrentActor;
+            var currentActorId = _player.CurrentActor;
 
-            if (currentActor.IsEmpty ||
-                !_targetProviders.TryGet(currentActor, out var targetProvider))
+            if (currentActorId.IsEmpty ||
+                !_actors.TryGet(currentActorId, out var currentActor) ||
+                currentActor.Targeting == null)
             {
                 return;
             }
 
-            var target = targetProvider.CurrentTarget;
+            var target = currentActor.Targeting.CurrentTarget;
 
             if (target == null ||
                 target.WorldId.IsEmpty)
@@ -56,7 +52,7 @@ namespace Game.Player
                 return;
             }
 
-            if (target.WorldId == currentActor)
+            if (target.WorldId == currentActorId)
                 return;
 
             if (!_actors.TryGet(target.WorldId, out var actor) ||

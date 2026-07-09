@@ -1,13 +1,14 @@
+using System;
 using System.Collections.Generic;
 
 namespace Game.World
 {
-    public sealed class CompositeRegistration : IRegistrationToken
+    public sealed class CompositeLifetime : IDisposable
     {
-        private readonly List<IRegistrationToken> _items = new();
+        private readonly List<IDisposable> _items = new();
         private bool _isDisposed;
 
-        public void Add(IRegistrationToken registration)
+        public void Add(IDisposable registration)
         {
             if (registration == null)
                 return;

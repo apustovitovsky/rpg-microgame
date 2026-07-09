@@ -1,309 +1,203 @@
-﻿Да, это даже хороший ход: **`WorldActor` лучше сделать plain C# runtime-сущностью**, а `MonoBehaviour` оставить только как Unity-view/adapters.
+﻿Да, это хорошая идея. Я бы даже сказал: **это лучше, чем глобально выставлять `IWorldRegistry<T>` наружу**.
 
-То есть не так:
+Тогда архитектура становится такой:
 
-```text id="nf9src"
-WorldActor : MonoBehaviour
-  Initialize(...)
+```text id="2fwc4y"
+InteractionService
+  внутри имеет registry/interactors/interactables
+
+DisplayService
+  внутри имеет registry/displayables
+
+PossessionService
+  внутри имеет registry/possessables
+
+WorldLifetime
+  хранит просто IDisposable cleanup actions
 ```
 
-а так:
-
-```text id="7zyrll"
-WorldActor = чистая runtime-сущность
-ActorView / ActorTarget / ActorInteractable = MonoBehaviour adapters
-ActorFactory = собирает всё вместе
-```
+То есть registry становится **implementation detail конкретного сервиса**, а не глобальной инфраструктурой.
 
 ## Как это выглядит
 
-```csharp id="9oh6sd"
-public sealed class WorldActor : IWorldActor
+Не так:
+
+```csharp id="11dxwn"
+public sealed class InteractionService
 {
-    public WorldActor(
-        WorldId worldId,
-        ActorDefinition definition,
-        IActorView view,
-        IActorInputBinder inputBinder,
-        IActorTravelEndpoint travel,
-        IActorDialogueEndpoint dialogue)
+    public InteractionService(
+        IWorldRegistry<IInteractor> interactors,
+        IWorldRegistry<IInteractable> interactables)
     {
-        WorldId = worldId;
-        Definition = definition;
-        View = view;
-        InputBinder = inputBinder;
-        Travel = travel;
-        Dialogue = dialogue;
-    }
-
-    public WorldId WorldId { get; }
-
-    public ActorDefinition Definition { get; }
-
-    public IActorView View { get; }
-
-    public IActorInputBinder InputBinder { get; }
-
-    public IActorTravelEndpoint Travel { get; }
-
-    public IActorDialogueEndpoint Dialogue { get; }
-}
-```
-
-Плюс: объект нельзя создать в “полуживом” состоянии. Не нужен `Initialize`, нет риска забыть вызвать его.
-
-## Что остается MonoBehaviour
-
-Например:
-
-```text id="f5ld25"
-ActorView : MonoBehaviour, IActorView
-ActorTarget : MonoBehaviour, ITargetable
-ActorInteractable : MonoBehaviour, IInteractable
-ActorInputBinder : MonoBehaviour, IActorInputBinder
-ActorTravelEndpoint : plain class или MonoBehaviour
-```
-
-`ActorView` может хранить Unity-ссылки:
-
-```csharp id="fyv54f"
-public sealed class ActorView : MonoBehaviour, IActorView
-{
-    [SerializeField] private Transform _root;
-    [SerializeField] private Transform _cameraPivot;
-    [SerializeField] private Transform _targetPoint;
-    [SerializeField] private Transform _uiAnchor;
-
-    public Transform Root => _root != null ? _root : transform;
-    public Transform CameraPivot => _cameraPivot;
-    public Transform TargetPoint => _targetPoint;
-    public Transform UiAnchor => _uiAnchor;
-}
-```
-
-## Кто создает `WorldActor`
-
-Фабрика.
-
-```csharp id="z0jq5h"
-var instance = Object.Instantiate(
-    request.Definition.Prefab,
-    request.Position,
-    request.Rotation,
-    request.Parent);
-
-var view = instance.GetComponentInChildren<IActorView>();
-var inputBinder = instance.GetComponentInChildren<IActorInputBinder>();
-var travel = instance.GetComponentInChildren<IActorTravelEndpoint>();
-var dialogue = instance.GetComponentInChildren<IActorDialogueEndpoint>();
-var interactable = instance.GetComponentInChildren<IInteractable>();
-
-var actor = new WorldActor(
-    request.WorldId,
-    request.Definition,
-    view,
-    inputBinder,
-    travel,
-    dialogue);
-```
-
-Потом registrar:
-
-```csharp id="d48sw0"
-var lifetime = new WorldLifetime(
-    request.WorldId,
-    view.Root.gameObject);
-
-lifetime.Add(_actors.Register(request.WorldId, actor));
-lifetime.Add(_interactables.Register(request.WorldId, interactable));
-lifetime.Add(_displayables.Register(request.WorldId, actor));
-lifetime.Add(_possessables.Register(request.WorldId, actorPossessable));
-
-_worldManager.Track(lifetime);
-```
-
-## Куда деть `WorldId` у MonoBehaviour компонентов
-
-Есть два варианта.
-
-### Вариант A — MonoBehaviour не знают `WorldId`
-
-Лучше для чистоты.
-
-`WorldActor` знает `WorldId`, а target/interactable получают `WorldId` через context/constructor/binder.
-
-Но в Unity это не всегда удобно, особенно если `ITargetable` должен отдавать `WorldId`.
-
-### Вариант B — один маленький `ActorIdentity` MonoBehaviour
-
-Практичнее:
-
-```csharp id="4pqjti"
-public sealed class ActorIdentity : MonoBehaviour
-{
-    public WorldId WorldId { get; private set; }
-
-    public void Set(WorldId worldId)
-    {
-        WorldId = worldId;
     }
 }
 ```
 
-Фабрика после instantiate:
+А так:
 
-```csharp id="a2p8uf"
-identity.Set(request.WorldId);
-```
-
-А `ActorTarget`, `ActorInteractable` читают id из `ActorIdentity`.
-
-Это не “грязный Initialize WorldActor”. Это просто установка runtime identity на Unity-side adapters.
-
-## Главное правило
-
-`WorldActor` — pure runtime model.
-
-`MonoBehaviour` — Unity-порты:
-
-```text id="mn9vim"
-view
-colliders
-target point
-camera pivot
-animation
-interaction trigger
-navigation adapters
-```
-
-Фабрика соединяет их.
-
-## Стоит ли так делать?
-
-Да, если тебя раздражает, что `WorldActor : MonoBehaviour` одновременно:
-
-```text id="nw6i90"
-сущность
-Unity component
-display info
-spatial
-runtime state
-registration endpoint
-```
-
-Тогда plain `WorldActor` сильно очищает модель.
-
-## Минус
-
-Фабрика станет немного ответственнее: она должна собрать `WorldActor` из prefab components.
-
-Но это нормальная ответственность фабрики:
-
-```text id="2bpjhz"
-prefab = Unity representation
-WorldActor = runtime entity
-factory = assembly point
-```
-
-## Итог
-
-Да, я бы сделал так:
-
-```text id="g2up2w"
-WorldActor — plain C# class, без MonoBehaviour и Initialize
-ActorView/Target/Interactable/InputBinder — MonoBehaviour adapters
-ActorFactory — instantiate prefab + собрать WorldActor
-ActorRegistrar — зарегистрировать WorldActor и внешние роли
-WorldLifetime — Dispose registrations + Destroy prefab instance
-```
-
-Это заметно чище, чем `WorldActor : MonoBehaviour`, особенно если ты хочешь нормальные runtime-сущности, а не Unity-компоненты, притворяющиеся доменной моделью.
-Я бы **не клал `WorldActor` внутрь `WorldLifetime` и не клал `WorldLifetime` внутрь `WorldActor`**.
-
-Это разные оси:
-
-```text
-WorldActor
-  = игровая runtime-сущность
-
-WorldLifetime
-  = технический cleanup/despawn handle
-```
-
-Связывать их напрямую — значит опять смешать domain model и infrastructure.
-
-## Как правильно
-
-Связь должна быть только через `WorldId` и через composition root/factory:
-
-```text
-ActorFactory
-  создает prefab
-  собирает WorldActor
-  создает WorldLifetime
-  регистрирует WorldActor / роли
-  добавляет registration tokens в WorldLifetime
-  отдает WorldLifetime в WorldManager
-```
-
-То есть factory знает обоих, но они **не знают друг о друге**.
-
-## Не так
-
-```csharp
-public sealed class WorldActor
+```csharp id="tv5ut9"
+public sealed class InteractionService :
+    IInteractionService,
+    IInteractionRegistration
 {
-    public WorldLifetime Lifetime { get; }
-}
-```
+    private readonly WorldIndex<IInteractor> _interactors = new();
+    private readonly WorldIndex<IInteractable> _interactables = new();
 
-Плохо, потому что actor начинает знать, как он удаляется из сцены.
-
-И не так:
-
-```csharp
-public sealed class WorldLifetime
-{
-    public IWorldActor Actor { get; }
-}
-```
-
-Плохо, потому что lifetime начинает знать доменную сущность.
-
-## Правильная модель
-
-```csharp
-public sealed class WorldActor : IWorldActor
-{
-    public WorldActor(
-        WorldId worldId,
-        ActorDefinition definition,
-        IActorView view,
-        IActorInputBinder inputBinder,
-        IActorTravelEndpoint travel,
-        IActorDialogueEndpoint dialogue)
+    public IDisposable RegisterInteractor(WorldId id, IInteractor interactor)
     {
-        WorldId = worldId;
-        Definition = definition;
-        View = view;
-        InputBinder = inputBinder;
-        Travel = travel;
-        Dialogue = dialogue;
+        return _interactors.Register(id, interactor);
     }
 
-    public WorldId WorldId { get; }
-    public ActorDefinition Definition { get; }
-    public IActorView View { get; }
-    public IActorInputBinder InputBinder { get; }
-    public IActorTravelEndpoint Travel { get; }
-    public IActorDialogueEndpoint Dialogue { get; }
+    public IDisposable RegisterInteractable(WorldId id, IInteractable interactable)
+    {
+        return _interactables.Register(id, interactable);
+    }
+
+    public bool CanInteract(WorldId interactorId, WorldId targetId)
+    {
+        return _interactors.TryGet(interactorId, out var interactor)
+            && _interactables.TryGet(targetId, out var interactable)
+            && interactable.CanInteract(interactor);
+    }
+
+    public UniTask InteractAsync(
+        WorldId interactorId,
+        WorldId targetId,
+        CancellationToken cancellationToken)
+    {
+        if (!_interactors.TryGet(interactorId, out var interactor))
+            return UniTask.CompletedTask;
+
+        if (!_interactables.TryGet(targetId, out var interactable))
+            return UniTask.CompletedTask;
+
+        return interactable.InteractAsync(interactor, cancellationToken);
+    }
 }
 ```
 
-```csharp
+## Главное — разделить service API и registration API
+
+Наружу для gameplay-кода:
+
+```csharp id="wkefcu"
+public interface IInteractionService
+{
+    bool CanInteract(WorldId interactorId, WorldId targetId);
+
+    UniTask InteractAsync(
+        WorldId interactorId,
+        WorldId targetId,
+        CancellationToken cancellationToken);
+}
+```
+
+А для factory/registrar/composition layer:
+
+```csharp id="50lptr"
+public interface IInteractionRegistration
+{
+    IDisposable RegisterInteractor(WorldId id, IInteractor interactor);
+
+    IDisposable RegisterInteractable(WorldId id, IInteractable interactable);
+}
+```
+
+То есть `InteractionService` физически один, но виден под разными интерфейсами.
+
+Gameplay-системы получают:
+
+```csharp id="sf059y"
+IInteractionService
+```
+
+А `ActorFactory` / `ActorRegistrar` получает:
+
+```csharp id="h5lqey"
+IInteractionRegistration
+```
+
+Это гораздо лучше, чем раздавать всем:
+
+```csharp id="2v27u2"
+IWorldRegistry<IInteractor>
+IWorldRegistry<IInteractable>
+```
+
+## Внутренний абстрактный registry
+
+Можно сделать маленький internal/helper класс:
+
+```csharp id="ec7tlq"
+internal sealed class WorldIndex<T> where T : class
+{
+    private readonly Dictionary<WorldId, T> _items = new();
+
+    public IDisposable Register(WorldId id, T item)
+    {
+        if (id.IsEmpty)
+            throw new ArgumentException("WorldId is empty.", nameof(id));
+
+        if (item == null)
+            throw new ArgumentNullException(nameof(item));
+
+        if (!_items.TryAdd(id, item))
+            throw new InvalidOperationException(
+                $"Item of type {typeof(T).Name} with id {id} is already registered.");
+
+        return new DisposableAction(() =>
+        {
+            if (_items.TryGetValue(id, out var current) &&
+                ReferenceEquals(current, item))
+            {
+                _items.Remove(id);
+            }
+        });
+    }
+
+    public bool TryGet(WorldId id, out T item)
+    {
+        return _items.TryGetValue(id, out item);
+    }
+}
+```
+
+И disposable token:
+
+```csharp id="hov5ry"
+public sealed class DisposableAction : IDisposable
+{
+    private Action _onDispose;
+    private bool _disposed;
+
+    public DisposableAction(Action onDispose)
+    {
+        _onDispose = onDispose;
+    }
+
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
+
+        _disposed = true;
+
+        var onDispose = _onDispose;
+        _onDispose = null;
+
+        onDispose?.Invoke();
+    }
+}
+```
+
+## Да, `IRegistrationToken` можно заменить на `IDisposable`
+
+В твоем случае можно спокойно сделать так:
+
+```csharp id="cj98aw"
 public sealed class WorldLifetime : IDisposable
 {
-    private readonly CompositeRegistration _registrations = new();
+    private readonly CompositeDisposable _disposables = new();
     private readonly GameObject _root;
     private bool _disposed;
 
@@ -315,15 +209,20 @@ public sealed class WorldLifetime : IDisposable
 
     public WorldId WorldId { get; }
 
-    public void Add(IRegistrationToken token)
+    public bool IsDisposed => _disposed;
+
+    public void Add(IDisposable disposable)
     {
+        if (disposable == null)
+            return;
+
         if (_disposed)
         {
-            token.Dispose();
+            disposable.Dispose();
             return;
         }
 
-        _registrations.Add(token);
+        _disposables.Add(disposable);
     }
 
     public void Dispose()
@@ -333,157 +232,456 @@ public sealed class WorldLifetime : IDisposable
 
         _disposed = true;
 
-        _registrations.Dispose();
+        _disposables.Dispose();
 
         if (_root != null)
-            Object.Destroy(_root);
+            UnityEngine.Object.Destroy(_root);
     }
 }
 ```
 
-## Где они встречаются
+Где `CompositeDisposable`:
 
-Во временной сборочной структуре, не в runtime model:
-
-```csharp
-public readonly struct SpawnedActor
+```csharp id="h0fycq"
+public sealed class CompositeDisposable : IDisposable
 {
-    public SpawnedActor(
-        WorldActor actor,
-        WorldLifetime lifetime)
+    private readonly List<IDisposable> _items = new();
+    private bool _disposed;
+
+    public void Add(IDisposable item)
+    {
+        if (item == null)
+            return;
+
+        if (_disposed)
+        {
+            item.Dispose();
+            return;
+        }
+
+        _items.Add(item);
+    }
+
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
+
+        _disposed = true;
+
+        for (var i = _items.Count - 1; i >= 0; i--)
+            _items[i].Dispose();
+
+        _items.Clear();
+    }
+}
+```
+
+`IRegistrationToken` можно оставить только если хочешь семантически показать:
+
+```text id="5hkl1m"
+это не любой IDisposable, а именно token регистрации
+```
+
+Но технически `IDisposable` достаточно.
+
+## Тогда actor registration выглядит так
+
+```csharp id="yqftmu"
+var lifetime = new WorldLifetime(id, root);
+
+lifetime.Add(_actorRegistration.Register(id, actor));
+lifetime.Add(_interactionRegistration.RegisterInteractor(id, actorInteractor));
+lifetime.Add(_interactionRegistration.RegisterInteractable(id, actorInteractable));
+lifetime.Add(_displayRegistration.Register(id, actorDisplayable));
+lifetime.Add(_possessionRegistration.Register(id, actorPossessable));
+
+_worldManager.Track(lifetime);
+```
+
+А pickup:
+
+```csharp id="pl7p2f"
+var lifetime = new WorldLifetime(id, root);
+
+lifetime.Add(_pickupRegistration.Register(id, pickup));
+lifetime.Add(_interactionRegistration.RegisterInteractable(id, pickupInteractable));
+lifetime.Add(_displayRegistration.Register(id, pickupDisplayable));
+
+_worldManager.Track(lifetime);
+```
+
+## Что получается в итоге
+
+Вместо глобальных registry:
+
+```text id="9v2l1o"
+IWorldRegistry<IInteractable>
+IWorldRegistry<IInteractor>
+IWorldRegistry<IDisplayable>
+IWorldRegistry<IPossessable>
+```
+
+у тебя feature-owned registries:
+
+```text id="qmdzhq"
+InteractionService
+  owns interactors/interactables
+
+DisplayService
+  owns displayables
+
+PossessionService
+  owns possessables
+
+ActorManager
+  owns actors
+
+PickupManager
+  owns pickups
+```
+
+И наружу они дают только нужные интерфейсы:
+
+```text id="mze59d"
+IInteractionService
+IInteractionRegistration
+
+IDisplayService
+IDisplayRegistration
+
+IPossessionService
+IPossessionRegistration
+
+IActorProvider / IActorRegistration
+IPickupProvider / IPickupRegistration
+```
+
+## Это лучше по смыслу
+
+Потому что `IInteractable` нужен не “миру вообще”, а конкретно `InteractionService`.
+
+`IDisplayable` нужен не “миру вообще”, а UI/display layer.
+
+`IPossessable` нужен не “миру вообще”, а possession/player-control layer.
+
+Значит пусть эти системы сами владеют своими индексами.
+
+## Самое важное правило
+
+```text id="w9n6kx"
+WorldLifetime не знает о реестрах.
+WorldManager не знает о реестрах.
+Feature service владеет своим registry.
+Factory/Registrar получает registration ports и кладет IDisposable tokens в WorldLifetime.
+```
+
+Это, на мой взгляд, чище, чем глобальный `IWorldRegistry<T>` как отдельная инфраструктура.
+
+
+Да, так можно. Это даже логичнее, чем держать наружу `WorldRegistry<IWorldActor>`.
+
+Но я бы формулировал не так:
+
+```text id="m02cbj"
+InteractionManager обращается к WorldActorManager
+```
+
+а так:
+
+```text id="h9ndv0"
+InteractionManager зависит от IActorProvider
+```
+
+То есть конкретный `WorldActorManager` скрывает registry, но наружу дает узкий интерфейс.
+
+## Нормальная схема
+
+```text id="6h2zcx"
+WorldActorManager
+  внутри:
+    WorldIndex<IWorldActor>
+
+  наружу:
+    IActorProvider
+    IActorRegistration
+```
+
+```csharp id="q8oxd9"
+public interface IActorProvider
+{
+    bool TryGet(WorldId id, out IWorldActor actor);
+}
+
+public interface IActorRegistration
+{
+    IDisposable Register(IWorldActor actor);
+}
+```
+
+```csharp id="hnk2rr"
+public sealed class WorldActorManager :
+    IActorProvider,
+    IActorRegistration
+{
+    private readonly WorldIndex<IWorldActor> _actors = new();
+
+    public IDisposable Register(IWorldActor actor)
+    {
+        return _actors.Register(actor.WorldId, actor);
+    }
+
+    public bool TryGet(WorldId id, out IWorldActor actor)
+    {
+        return _actors.TryGet(id, out actor);
+    }
+}
+```
+
+Теперь у тебя нет публичного:
+
+```csharp id="qo33q9"
+IWorldRegistry<IWorldActor>
+```
+
+Есть только actor-specific API.
+
+## InteractionManager может использовать actor provider
+
+Если `interactor` у тебя теперь всегда actor, то `IInteractor` реально можно убрать.
+
+Тогда:
+
+```csharp id="z0l51x"
+public sealed class InteractionManager :
+    IInteractionService,
+    IInteractionRegistration
+{
+    private readonly IActorProvider _actors;
+    private readonly WorldIndex<IInteractable> _interactables = new();
+
+    public InteractionManager(IActorProvider actors)
+    {
+        _actors = actors;
+    }
+
+    public IDisposable RegisterInteractable(WorldId id, IInteractable interactable)
+    {
+        return _interactables.Register(id, interactable);
+    }
+
+    public bool CanInteract(WorldId actorId, WorldId targetId)
+    {
+        if (!_actors.TryGet(actorId, out var actor))
+            return false;
+
+        if (!_interactables.TryGet(targetId, out var interactable))
+            return false;
+
+        var context = new InteractionContext(actor);
+
+        return interactable.CanInteract(context);
+    }
+
+    public UniTask InteractAsync(
+        WorldId actorId,
+        WorldId targetId,
+        CancellationToken cancellationToken)
+    {
+        if (!_actors.TryGet(actorId, out var actor))
+            return UniTask.CompletedTask;
+
+        if (!_interactables.TryGet(targetId, out var interactable))
+            return UniTask.CompletedTask;
+
+        var context = new InteractionContext(actor);
+
+        return interactable.InteractAsync(context, cancellationToken);
+    }
+}
+```
+
+То есть раньше было:
+
+```text id="bf9n53"
+InteractionManager
+  -> IInteractor registry
+  -> IInteractable registry
+```
+
+Теперь:
+
+```text id="90vb75"
+InteractionManager
+  -> IActorProvider
+  -> internal IInteractable index
+```
+
+Это нормально.
+
+## Тогда `InteractionContext`
+
+```csharp id="fytxuk"
+public readonly struct InteractionContext
+{
+    public InteractionContext(IWorldActor actor)
     {
         Actor = actor;
-        Lifetime = lifetime;
     }
 
-    public WorldActor Actor { get; }
-    public WorldLifetime Lifetime { get; }
+    public IWorldActor Actor { get; }
+
+    public WorldId ActorId => Actor.WorldId;
 }
 ```
 
-Но `SpawnedActor` — это **только результат фабрики**, его не надо хранить в игре как сущность.
+Если потом нужно добавить больше данных:
 
-## Что еще можно оптимизировать
-
-### 1. Убрать `ActorSpawnedObject` как огромный мешок
-
-Если `WorldActor` содержит actor-specific endpoints:
-
-```csharp
-actor.View
-actor.InputBinder
-actor.Travel
-actor.Dialogue
-```
-
-то `ActorSpawnedObject` больше не нужен.
-
-Фабрика может сразу создать:
-
-```text
-WorldActor
-WorldLifetime
-external roles
-```
-
-### 2. Регистрировать только крупные сущности и внешние роли
-
-Для actor достаточно примерно:
-
-```csharp
-lifetime.Add(_actors.Register(id, actor));
-lifetime.Add(_interactors.Register(id, actorInteractor));
-lifetime.Add(_interactables.Register(id, actorInteractable));
-lifetime.Add(_displayables.Register(id, actorDisplayable));
-lifetime.Add(_possessables.Register(id, actorPossessable));
-```
-
-Не надо глобально регистрировать:
-
-```text
-IActorView
-IActorTravelEndpoint
-IActorDialogueEndpoint
-IActorInputBinder
-```
-
-Они доступны через `IWorldActor`.
-
-### 3. Не давать actor-у `Despawn()`
-
-Если actor умер, не надо:
-
-```csharp
-actor.Lifetime.Dispose();
-```
-
-Лучше:
-
-```text
-HealthSystem / DeathSystem
-  -> WorldManager.Despawn(actor.WorldId)
-```
-
-Или actor raises event:
-
-```csharp
-actor.Died += id => _worldManager.Despawn(id);
-```
-
-Сущность сообщает факт, infrastructure удаляет объект.
-
-### 4. `WorldManager` должен хранить только lifetime
-
-```csharp
-private readonly Dictionary<WorldId, IWorldLifetime> _lifetimes;
-```
-
-Ему не нужен `WorldActor`, `WorldPickup`, `IInteractable`.
-
-### 5. `WorldLifetime` может сам удаляться из `WorldManager`
-
-При `Track` добавь self-unregister token:
-
-```csharp
-public bool Track(IWorldLifetime lifetime)
+```csharp id="3h1310"
+public readonly struct InteractionContext
 {
-    if (!_lifetimes.TryAdd(lifetime.WorldId, lifetime))
-    {
-        lifetime.Dispose();
-        return false;
-    }
-
-    lifetime.Add(new RegistrationToken(() =>
-    {
-        _lifetimes.Remove(lifetime.WorldId);
-    }));
-
-    return true;
+    public IWorldActor Actor { get; }
+    public Vector3 Origin => Actor.View.Root.position;
+    public ActorDefinition Definition => Actor.Definition;
 }
 ```
 
-Тогда даже прямой `lifetime.Dispose()` не оставит stale-запись.
+## Регистрация через `WorldLifetime`
 
-## Итоговая форма
+Actor spawn:
 
-```text
-WorldActor
-  доменная runtime-сущность
+```csharp id="wxclwu"
+var lifetime = new WorldLifetime(id, root);
 
-WorldPickup
-  доменная runtime-сущность
+lifetime.Add(_actorRegistration.Register(actor));
+lifetime.Add(_interactionRegistration.RegisterInteractable(id, actorInteractable));
+lifetime.Add(_displayRegistration.Register(id, actorDisplayable));
+lifetime.Add(_possessionRegistration.Register(id, actorPossessable));
 
-WorldLifetime
-  cleanup: unregister + destroy GameObject
+_worldManager.Track(lifetime);
+```
 
+Pickup spawn:
+
+```csharp id="vja4p6"
+var lifetime = new WorldLifetime(id, root);
+
+lifetime.Add(_pickupRegistration.Register(pickup));
+lifetime.Add(_interactionRegistration.RegisterInteractable(id, pickupInteractable));
+lifetime.Add(_displayRegistration.Register(id, pickupDisplayable));
+
+_worldManager.Track(lifetime);
+```
+
+`WorldLifetime` все еще один и тот же:
+
+```text id="dgvj7c"
+Dispose()
+  -> dispose all registration tokens
+  -> destroy GameObject
+```
+
+## Но осторожно с “взять обязанности других сервисов”
+
+`WorldActorManager` может делать больше, чем registry, но только **actor-domain обязанности**.
+
+Нормально:
+
+```text id="mefqxh"
+WorldActorManager:
+  register/unregister actors
+  TryGet actor
+  enumerate actors
+  actor spawned/despawned events
+  find actors by definition/faction/team
+  maybe find nearest actor
+```
+
+Опасно:
+
+```text id="7945ws"
+WorldActorManager:
+  start dialogue
+  perform interaction
+  pickup items
+  bind camera
+  control player input
+  update UI
+  despawn world objects
+```
+
+Это уже превращение в god manager.
+
+То есть он может быть **actor directory / actor domain service**, но не “главный сервис всего, что связано с актерами”.
+
+## Как я бы разложил
+
+```text id="9u9t11"
 WorldManager
   WorldId -> WorldLifetime
+  Despawn(id)
 
-ActorFactory
-  собирает actor + roles + lifetime
+WorldActorManager
+  WorldId -> IWorldActor
+  actor-specific queries/events
 
-ActorRegistrar или factory-section
-  добавляет registration tokens в lifetime
+PickupManager
+  WorldId -> IWorldPickup
+  pickup-specific queries/events
+
+InteractionManager
+  internal WorldId -> IInteractable
+  uses IActorProvider instead of IInteractor registry
+
+DisplayManager
+  internal WorldId -> IDisplayable
+
+PossessionManager
+  internal WorldId -> IPossessable
+  maybe uses IActorProvider too
 ```
 
-Самое важное: **не делай двустороннюю связь `WorldActor <-> WorldLifetime`**. Они должны быть собраны рядом, но не владеть друг другом.
+## Это лучше, чем голые реестры
+
+Вместо такого:
+
+```text id="ho03ie"
+IWorldRegistry<IWorldActor>
+IWorldRegistry<IWorldPickup>
+IWorldRegistry<IInteractable>
+IWorldRegistry<IDisplayable>
+```
+
+у тебя:
+
+```text id="e9cymd"
+IActorProvider / IActorRegistration
+IPickupProvider / IPickupRegistration
+IInteractionService / IInteractionRegistration
+IDisplayService / IDisplayRegistration
+```
+
+Реестры остаются внутри как низкоуровневая структура данных.
+
+## Итог
+
+Да:
+
+```text id="p2kbli"
+WorldRegistry<IWorldActor> скрыть внутри WorldActorManager — хорошо.
+IInteractor убрать, если interactor всегда actor — хорошо.
+InteractionManager может использовать IActorProvider — хорошо.
+```
+
+Но не делай `InteractionManager` зависимым от конкретного `WorldActorManager`. Дай ему узкий интерфейс:
+
+```csharp id="j42es3"
+IActorProvider
+```
+
+Тогда у тебя будет чистая связь:
+
+```text id="ugwtt6"
+InteractionManager не знает, где и как хранятся actors.
+Он просто умеет получить actor по WorldId.
+```
