@@ -19,7 +19,7 @@ namespace Game.Targeting
         {
             float distance = Vector3.Distance(
                 origin,
-                target.TargetPoint.position);
+                target.TargetAnchor.position);
 
             return _weight / Mathf.Max(distance, 0.01f);
         }

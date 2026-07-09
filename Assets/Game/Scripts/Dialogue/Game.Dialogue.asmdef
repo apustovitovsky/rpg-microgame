@@ -1,9 +1,13 @@
 {
-    "name": "Game.Targeting",
+    "name": "Game.Dialogue",
     "rootNamespace": "",
     "references": [
+        "VContainer",
+        "Game.Core",
         "Game.World",
-        "VContainer"
+        "Game.Targeting",
+        "Game.Interaction",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

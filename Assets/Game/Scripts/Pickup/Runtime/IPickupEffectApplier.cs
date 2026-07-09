@@ -4,9 +4,13 @@ using Game.World;
 
 namespace Game.Pickup
 {
-    public interface IPickupService
+    public interface IPickupEffectApplier
     {
-        UniTask<PickupResult> CollectAsync(
+        bool CanApplyAny(
+            WorldId collectorId,
+            IPickup pickup);
+
+        UniTask ApplyAllAsync(
             WorldId collectorId,
             IPickup pickup,
             CancellationToken token);

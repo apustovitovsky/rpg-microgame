@@ -6,9 +6,13 @@ namespace Game.Targeting
     public interface ITargetable
     {
         WorldInfo Info { get; }
+
         WorldId WorldId { get; }
-        Transform TargetPoint { get; }
+
+        Transform TargetAnchor { get; }
+
         Transform UiAnchor { get; }
+
         bool IsTargetable { get; }
     }
 }

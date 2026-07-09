@@ -39,7 +39,7 @@ namespace Game.Interaction
 
             var distance = Vector3.Distance(
                 context.Origin,
-                interactable.InteractionPosition);
+                interactable.InteractionPoint);
 
             if (distance > interactable.MaxRange)
                 return InteractionResult.OutOfRange;

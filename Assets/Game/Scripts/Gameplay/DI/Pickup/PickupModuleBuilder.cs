@@ -19,6 +19,12 @@ namespace Game.Gameplay
 
             builder.Register<PickupSpawner>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
+
+            builder.Register<DebugPickupEffectHandler>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
+            builder.Register<PickupEffectApplier>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
         }
     }
 }

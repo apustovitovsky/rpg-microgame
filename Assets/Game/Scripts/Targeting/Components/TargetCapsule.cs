@@ -5,11 +5,11 @@ namespace Game.Targeting
     [DisallowMultipleComponent]
     public sealed class TargetCapsule : MonoBehaviour
     {
-        [SerializeField] private MonoBehaviour _targetable;
+        [SerializeField] private Targetable _targetable;
 
         public bool TryGetTarget(out ITargetable target)
         {
-            target = _targetable as ITargetable;
+            target = _targetable;
             return target != null && target.IsTargetable;
         }
     }

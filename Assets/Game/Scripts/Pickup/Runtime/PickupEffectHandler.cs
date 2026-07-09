@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.World;
 
 namespace Game.Pickup
 {
@@ -8,11 +9,15 @@ namespace Game.Pickup
     {
         Type EffectType { get; }
 
-        bool CanApply(PickupEffect effect, IWorldPickup pickup);
+        bool CanApply(
+            WorldId collectorId,
+            PickupEffect effect,
+            IPickup pickup);
 
         UniTask ApplyAsync(
+            WorldId collectorId,
             PickupEffect effect,
-            IWorldPickup pickup,
+            IPickup pickup,
             CancellationToken token);
     }
 
@@ -21,30 +26,40 @@ namespace Game.Pickup
     {
         public Type EffectType => typeof(TEffect);
 
-        public bool CanApply(PickupEffect effect, IWorldPickup pickup)
+        public bool CanApply(
+            WorldId collectorId,
+            PickupEffect effect,
+            IPickup pickup)
         {
             return effect is TEffect typed &&
-                   CanApply(typed, pickup);
+                   CanApply(collectorId, typed, pickup);
         }
 
         public UniTask ApplyAsync(
+            WorldId collectorId,
             PickupEffect effect,
-            IWorldPickup pickup,
+            IPickup pickup,
             CancellationToken token)
         {
             if (effect is not TEffect typed)
                 return UniTask.CompletedTask;
 
-            return ApplyAsync(typed, pickup, token);
+            return ApplyAsync(
+                collectorId,
+                typed,
+                pickup,
+                token);
         }
 
         protected abstract bool CanApply(
+            WorldId collectorId,
             TEffect effect,
-            IWorldPickup pickup);
+            IPickup pickup);
 
         protected abstract UniTask ApplyAsync(
+            WorldId collectorId,
             TEffect effect,
-            IWorldPickup pickup,
+            IPickup pickup,
             CancellationToken token);
     }
 }

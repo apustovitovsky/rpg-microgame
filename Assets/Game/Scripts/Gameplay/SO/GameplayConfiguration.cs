@@ -12,6 +12,7 @@ namespace Game.Gameplay
     public sealed class GameplayConfiguration : ModuleBuilder
     {
         [SerializeField] private ActorSpawnCatalog _actors;
+        [SerializeField] private PickupSpawnCatalog _pickups;
 
         public override void Install(IContainerBuilder builder)
         {
@@ -19,7 +20,12 @@ namespace Game.Gameplay
                 throw new InvalidOperationException(
                     $"{nameof(GameplayConfiguration)} requires assigned {nameof(ActorSpawnCatalog)}.");
 
+            if (_pickups == null)
+                throw new InvalidOperationException(
+                    $"{nameof(GameplayConfiguration)} requires assigned {nameof(PickupSpawnCatalog)}.");
+
             builder.RegisterInstance(_actors);
+            builder.RegisterInstance(_pickups);
 
             builder.Register<SpawnPointResolver>(Lifetime.Singleton)
                 .AsImplementedInterfaces();

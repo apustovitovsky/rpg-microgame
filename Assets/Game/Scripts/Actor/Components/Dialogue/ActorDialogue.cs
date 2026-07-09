@@ -16,7 +16,7 @@ namespace Game.Actor
         [field: SerializeField]
         public float MaxRange { get; private set; } = 5f;
 
-        public Vector3 InteractionPosition =>
+        public Vector3 InteractionPoint =>
             _interactionPoint != null
                 ? _interactionPoint.position
                 : transform.position;

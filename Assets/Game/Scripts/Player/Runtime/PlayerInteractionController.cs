@@ -85,9 +85,9 @@ namespace Game.Player
 
             if (result != InteractionResult.Succeeded)
             {
-                Debug.Log(
-                    $"Interaction with '{target.Info.DisplayName}' failed: {result}.",
-                    target.TargetPoint);
+                // Debug.Log(
+                //     $"Interaction with '{target.WorldId}' failed: {result}.",
+                //     target.TargetPos);
             }
         }
     }

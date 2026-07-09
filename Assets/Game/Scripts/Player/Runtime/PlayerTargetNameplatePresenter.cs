@@ -14,7 +14,7 @@ namespace Game.Player
         private readonly IPlayerService _player;
         private readonly ActorNameplatePool _pool;
         private readonly IActorService _actors;
-        private readonly IWorldManager _world;
+        private readonly IWorldObjectRegistry _world;
 
         private IActorTargeting _targeting;
         private ActorNameplateView _currentView;
@@ -25,7 +25,7 @@ namespace Game.Player
             IPlayerService player,
             ActorNameplatePool pool,
             IActorService actors,
-            IWorldManager world)
+            IWorldObjectRegistry world)
         {
             _player = player;
             _pool = pool;

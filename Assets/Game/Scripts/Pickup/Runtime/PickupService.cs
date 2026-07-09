@@ -5,65 +5,29 @@ using Game.World;
 
 namespace Game.Pickup
 {
-    public sealed class PickupService :
-        IPickupService,
-        IPickupRegistrationService
+    public sealed class PickupService : IPickupService
     {
-        private readonly WorldIndex<IWorldPickup> _pickups = new();
-        private readonly WorldIndex<IPickupEffectHandlerProvider> _handlerProviders = new();
-        private readonly IWorldManager _world;
+        private readonly IPickupEffectApplier _effects;
+        private readonly IWorldObjectRegistry _world;
 
-        public PickupService(IWorldManager world)
+        public PickupService(
+            IPickupEffectApplier effects,
+            IWorldObjectRegistry world)
         {
+            _effects = effects;
             _world = world;
-        }
-
-        public IDisposable RegisterEffectHandlerProvider(
-            WorldId worldId,
-            IPickupEffectHandlerProvider provider)
-        {
-            return _handlerProviders.Register(
-                worldId,
-                provider);
-        }
-
-        public IDisposable Register(IWorldPickup pickup)
-        {
-            if (pickup == null)
-                throw new ArgumentNullException(nameof(pickup));
-
-            return _pickups.Register(
-                pickup.WorldId,
-                pickup);
-        }
-
-        public bool TryGet(
-            WorldId worldId,
-            out IWorldPickup pickup)
-        {
-            return _pickups.TryGet(
-                worldId,
-                out pickup);
         }
 
         public async UniTask<PickupResult> CollectAsync(
             WorldId collectorId,
-            WorldId pickupId,
+            IPickup pickup,
             CancellationToken token)
         {
-            if (!_handlerProviders.TryGet(
-                    collectorId,
-                    out var handlerProvider))
-            {
-                return PickupResult.HandlerProviderNotFound;
-            }
+            if (collectorId.IsEmpty)
+                return PickupResult.InvalidCollector;
 
-            if (!TryGet(
-                    pickupId,
-                    out var pickup))
-            {
+            if (pickup == null)
                 return PickupResult.PickupNotFound;
-            }
 
             if (!pickup.IsCollectable)
                 return PickupResult.CannotBeCollected;
@@ -71,55 +35,20 @@ namespace Game.Pickup
             if (pickup.Definition == null)
                 return PickupResult.CannotBeCollected;
 
-            var canApplyAny = false;
-
-            foreach (var effect in pickup.Definition.Effects)
-            {
-                if (effect == null)
-                    continue;
-
-                if (!handlerProvider.TryGet(
-                        effect.GetType(),
-                        out var handler))
-                {
-                    continue;
-                }
-
-                if (!handler.CanApply(effect, pickup))
-                    continue;
-
-                canApplyAny = true;
-                break;
-            }
-
-            if (!canApplyAny)
+            if (!_effects.CanApplyAny(collectorId, pickup))
                 return PickupResult.EffectCannotApply;
 
             try
             {
-                foreach (var effect in pickup.Definition.Effects)
-                {
-                    token.ThrowIfCancellationRequested();
-
-                    if (effect == null)
-                        continue;
-
-                    if (!handlerProvider.TryGet(
-                            effect.GetType(),
-                            out var handler))
-                    {
-                        continue;
-                    }
-
-                    if (!handler.CanApply(effect, pickup))
-                        continue;
-
-                    await handler.ApplyAsync(effect, pickup, token);
-                }
+                await _effects.ApplyAllAsync(
+                    collectorId,
+                    pickup,
+                    token);
 
                 await pickup.SetCollectedAsync(token);
 
-                _world.Despawn(pickupId);
+                if (!pickup.WorldId.IsEmpty)
+                    _world.Despawn(pickup.WorldId);
 
                 return PickupResult.Succeeded;
             }

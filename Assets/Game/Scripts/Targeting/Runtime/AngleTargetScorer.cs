@@ -17,7 +17,7 @@ namespace Game.Targeting
             Vector3 origin,
             Vector3 forward)
         {
-            Vector3 direction = target.TargetPoint.position - origin;
+            Vector3 direction = target.TargetAnchor.position - origin;
 
             if (direction.sqrMagnitude <= 0.0001f)
                 return 0f;

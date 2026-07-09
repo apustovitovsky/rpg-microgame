@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 830530097464295945}
   - component: {fileID: 9105987983110174402}
   m_Layer: 0
-  m_Name: TargetController
+  m_Name: Targeting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4572070285593981700}
+  - {fileID: 8001699794044061676}
+  - {fileID: 6394816356344162244}
+  - {fileID: 2364232120977672641}
   m_Father: {fileID: 8538305375040021554}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9105987983110174402
@@ -89,7 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6c6a90516ef87642b7fdc9e8f3e755e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Actor::Game.Actor.TargetingController
-  _perception: {fileID: 979458091877328965}
+  _sensor: {fileID: 2013396884381996775}
   _look: {fileID: 6670009868325032160}
   _distanceScoreWeight: 100
   _angleScoreWeight: 40
@@ -104,9 +106,9 @@ GameObject:
   - component: {fileID: 8001699794044061676}
   - component: {fileID: 1246138189286156447}
   - component: {fileID: 231651809293694714}
-  - component: {fileID: 979458091877328965}
+  - component: {fileID: 2013396884381996775}
   m_Layer: 2
-  m_Name: Perception
+  m_Name: TargetingSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,7 +127,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8538305375040021554}
+  m_Father: {fileID: 830530097464295945}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &1246138189286156447
 SphereCollider:
@@ -175,7 +177,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &979458091877328965
+--- !u!114 &2013396884381996775
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,13 +186,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1781962995865054892}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 930afb633dedcd2409c91350a1a03001, type: 3}
+  m_Script: {fileID: 11500000, guid: d15cc48d2b8a94242abd400aba315577, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Game.Targeting::Game.Targeting.TargetPerception
+  m_EditorClassIdentifier: Game.Targeting::Game.Targeting.TargetingSensor
   _layerMask:
     serializedVersion: 2
     m_Bits: 8
-  _self: {fileID: 2318020467662121911}
+  _self: {fileID: 6814041445508415463}
 --- !u!1 &2109844347971483119
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,7 +456,7 @@ GameObject:
   - component: {fileID: 2514131473133142423}
   - component: {fileID: 8063674528496561993}
   m_Layer: 3
-  m_Name: TargetMarker
+  m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -468,12 +470,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5809602784777941306}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8538305375040021554}
+  m_Father: {fileID: 830530097464295945}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2514131473133142423
 CapsuleCollider:
@@ -510,7 +512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc69222aa8068a843904ba188c226e39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Targeting::Game.Targeting.TargetCapsule
-  _targetable: {fileID: 2318020467662121911}
+  _targetable: {fileID: 6814041445508415463}
 --- !u!1 &5911953290435061223
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,7 +553,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2364232120977672641}
-  - component: {fileID: 2318020467662121911}
+  - component: {fileID: 6814041445508415463}
   m_Layer: 0
   m_Name: Targetable
   m_TagString: Untagged
@@ -567,15 +569,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6134614389310925526}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4363193191726351544}
-  m_Father: {fileID: 8538305375040021554}
+  - {fileID: 4572070285593981700}
+  m_Father: {fileID: 830530097464295945}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2318020467662121911
+--- !u!114 &6814041445508415463
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -584,11 +587,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6134614389310925526}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d429d1611d04dcc4ea746b9067889ca7, type: 3}
+  m_Script: {fileID: 11500000, guid: 13d6509641abc6042918ca84ac6000e5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Game.Targeting::Game.Targeting.Targetable
+  m_EditorClassIdentifier: Game.Targeting::Game.Targeting.TargetableComponent
   _uiAnchor: {fileID: 4363193191726351544}
-  _targetPoint: {fileID: 4572070285593981700}
+  _targetAnchor: {fileID: 4572070285593981700}
   _isTargetable: 1
 --- !u!1 &6487710103038410519
 GameObject:
@@ -692,12 +695,9 @@ Transform:
   - {fileID: 5992648241858565039}
   - {fileID: 5186002720919307954}
   - {fileID: 7869591971293288977}
-  - {fileID: 8001699794044061676}
   - {fileID: 6764066207046100429}
   - {fileID: 6769934990369498367}
   - {fileID: 830530097464295945}
-  - {fileID: 6394816356344162244}
-  - {fileID: 2364232120977672641}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &691123616913121196
@@ -973,12 +973,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7632643582066817605}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 830530097464295945}
+  m_Father: {fileID: 2364232120977672641}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3903189828942223446
 PrefabInstance:

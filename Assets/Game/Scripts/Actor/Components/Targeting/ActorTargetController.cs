@@ -11,7 +11,7 @@ namespace Game.Actor
         MonoBehaviour,
         IActorTargeting
     {
-        [SerializeField] private ActorTargetSensor _perception;
+        [SerializeField] private TargetingSensor _sensor;
         [SerializeField] private ActorLookController _look;
 
         [SerializeField] private float _distanceScoreWeight = 0f;
@@ -123,22 +123,22 @@ namespace Game.Actor
 
         private ITargetable FindBestTarget()
         {
-            if (_perception == null ||
-                _perception.Candidates.Count == 0 ||
+            if (_sensor == null ||
+                _sensor.Candidates.Count == 0 ||
                 _look == null)
             {
                 return null;
             }
 
             return _selector.SelectBest(
-                _perception.Candidates,
+                _sensor.Candidates,
                 _look.Position,
                 _look.Forward);
         }
 
         private bool ContainsCurrentTarget()
         {
-            foreach (var candidate in _perception.Candidates)
+            foreach (var candidate in _sensor.Candidates)
             {
                 if (ReferenceEquals(candidate, CurrentTarget))
                     return true;
@@ -150,13 +150,13 @@ namespace Game.Actor
         private void ApplyTarget(ITargetable target)
         {
             if (target == null ||
-                target.TargetPoint == null)
+                target.TargetAnchor == null)
             {
                 Unlock();
                 return;
             }
 
-            _look.SetTarget(target.TargetPoint);
+            _look.SetTarget(target.TargetAnchor);
         }
 
         private void SetCurrentTarget(ITargetable target)

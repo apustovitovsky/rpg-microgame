@@ -7,7 +7,7 @@ namespace Game.Targeting
         {
             return target != null &&
                 target.IsTargetable &&
-                target.TargetPoint != null;
+                target.TargetAnchor != null;
         }
     }
 }

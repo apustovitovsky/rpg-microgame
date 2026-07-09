@@ -1,4 +1,5 @@
 using Game.Core;
+using Game.Targeting;
 using UnityEngine;
 using VContainer;
 
@@ -12,6 +13,10 @@ namespace Game.Actor
         public override void Install(IContainerBuilder builder)
         {
             builder.RegisterComponentInModuleRoot<ActorTransform>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterComponentInModuleRoot<Targetable>()
+                .AsSelf()
                 .AsImplementedInterfaces();
 
             builder.RegisterComponentInModuleRoot<ActorLookController>();

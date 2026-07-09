@@ -2,7 +2,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Interaction;
 using UnityEngine;
-using VContainer;
 
 namespace Game.Pickup
 {
@@ -12,20 +11,19 @@ namespace Game.Pickup
         IInteractable
     {
         [SerializeField] private PickupComponent _pickup;
-        [SerializeField] private Transform _interactionPoint;
+        [SerializeField] private Transform _interactionAnchor;
 
         [field: SerializeField]
         public float MaxRange { get; private set; } = 5f;
 
         private IPickupService _pickupService;
 
-        public Vector3 InteractionPosition =>
-            _interactionPoint != null
-                ? _interactionPoint.position
+        public Vector3 InteractionPoint =>
+            _interactionAnchor != null
+                ? _interactionAnchor.position
                 : transform.position;
 
-        [Inject]
-        public void Construct(IPickupService pickupService)
+        public void Initialize(IPickupService pickupService)
         {
             _pickupService = pickupService;
         }
@@ -34,7 +32,6 @@ namespace Game.Pickup
         {
             return _pickupService != null &&
                    _pickup != null &&
-                   _pickup.Pickup != null &&
                    !context.InteractorWorldId.IsEmpty &&
                    !_pickup.WorldId.IsEmpty;
         }
@@ -48,7 +45,7 @@ namespace Game.Pickup
 
             var result = await _pickupService.CollectAsync(
                 context.InteractorWorldId,
-                _pickup.WorldId,
+                _pickup,
                 token);
 
             if (result != PickupResult.Succeeded)
