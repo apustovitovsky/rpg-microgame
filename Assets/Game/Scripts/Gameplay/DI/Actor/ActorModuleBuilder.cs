@@ -1,22 +1,33 @@
 using Game.Core;
+using Game.Targeting;
 using UnityEngine;
 using VContainer;
 
 namespace Game.Actor
 {
     [CreateAssetMenu(
-        fileName = "ActorModuleBuilder",
-        menuName = "Game/Gameplay/Actor Module Builder")]
+        fileName = "ActorRuntimeConfigurator",
+        menuName = "Game/Actor/Actor Runtime Configurator")]
     public sealed class ActorModuleBuilder : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<ActorFactory>(Lifetime.Singleton);
-
-            builder.Register<ActorSpawner>(Lifetime.Singleton)
+            builder.RegisterComponentInModuleRoot<ActorTransform>()
                 .AsImplementedInterfaces();
 
-            builder.Register<ActorService>(Lifetime.Singleton)
+            builder.RegisterComponentInModuleRoot<Targetable>()
+                .AsSelf()
+                .AsImplementedInterfaces();
+
+            builder.RegisterComponentInModuleRoot<ActorLookController>();
+
+            builder.RegisterComponentInModuleRoot<MovementController>();
+
+            builder.RegisterComponentInModuleRoot<ActorTargetController>()
+                .AsSelf()
+                .AsImplementedInterfaces();
+
+            builder.RegisterComponentInModuleRoot<ActorDialogue>()
                 .AsImplementedInterfaces();
         }
     }

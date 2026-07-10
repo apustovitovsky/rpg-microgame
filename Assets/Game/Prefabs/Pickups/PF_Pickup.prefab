@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3c7801e9208d0f499c15e28cad5fb7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupInteractible
-  _pickup: {fileID: 5316104281471738783}
+  _collectable: {fileID: 5316104281471738783}
   _interactionAnchor: {fileID: 5915848263178846759}
   <MaxRange>k__BackingField: 10
 --- !u!114 &5316104281471738783

@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+using Game.Inventory;
 using UnityEngine;
 
 namespace Game.Pickup
@@ -14,12 +13,23 @@ namespace Game.Pickup
         [field: SerializeField]
         public GameObject Prefab { get; private set; }
 
-        [SerializeField] private PickupEffect[] _effects = Array.Empty<PickupEffect>();
+        [field: SerializeField]
+        public ItemDefinition Item { get; private set; }
 
-        public string DisplayName => string.IsNullOrWhiteSpace(_displayName)
-            ? name
-            : _displayName.Trim();
+        [field: SerializeField, Min(1)]
+        public int Amount { get; private set; } = 1;
 
-        public IReadOnlyList<PickupEffect> Effects => _effects;
+        public string DisplayName
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_displayName))
+                    return _displayName.Trim();
+
+                return Item != null
+                    ? Item.DisplayName
+                    : name;
+            }
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace Game.Actor
     {
         public WorldActor(
             WorldInfo info,
-            ActorDefinition definition,
+            // ActorDefinition definition,
             IActorTransform transform,
             IActorNavigation navigation,
             IActorDialogue dialogue,
@@ -34,7 +34,7 @@ namespace Game.Actor
             IActorTargeting targeting)
         {
             Info = info;
-            Definition = definition;
+            // Definition = definition;
             Transform = transform;
             InputBinder = inputBinder;
             Navigation = navigation;

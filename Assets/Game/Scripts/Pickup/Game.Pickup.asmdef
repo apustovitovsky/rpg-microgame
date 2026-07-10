@@ -2,11 +2,10 @@
     "name": "Game.Pickup",
     "rootNamespace": "",
     "references": [
-        "VContainer",
-        "Game.Core",
         "Game.World",
         "Game.Targeting",
         "Game.Interaction",
+        "Game.Inventory",
         "UniTask"
     ],
     "includePlatforms": [],

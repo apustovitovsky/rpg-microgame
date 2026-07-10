@@ -1,9 +1,8 @@
 {
-    "name": "Game.Dialogue",
+    "name": "Game.Inventory",
     "rootNamespace": "",
     "references": [
-        "Game.Interaction",
-        "UniTask"
+        "Game.World"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

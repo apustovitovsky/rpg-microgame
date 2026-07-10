@@ -12,18 +12,12 @@ namespace Game.Gameplay
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<PickupService>(Lifetime.Singleton)
+            builder.Register<ItemPickupService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
             builder.Register<PickupFactory>(Lifetime.Singleton);
 
             builder.Register<PickupSpawner>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<DebugPickupEffectHandler>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<PickupEffectApplier>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

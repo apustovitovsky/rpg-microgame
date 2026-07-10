@@ -1,6 +1,6 @@
 using System;
-using Game.Core;
 using Game.Interaction;
+using Game.Inventory;
 using Game.Targeting;
 using Game.World;
 using VContainer;
@@ -13,21 +13,26 @@ namespace Game.Actor
         private readonly LifetimeScope _parentScope;
         private readonly IActorRegistrationService _actors;
         private readonly IInteractionRegistrationService _interactions;
+        private readonly IInventoryRegistrationService _inventories;
 
         public ActorFactory(
             LifetimeScope parentScope,
             IActorRegistrationService actors,
-            IInteractionRegistrationService interactions)
+            IInteractionRegistrationService interactions,
+            IInventoryRegistrationService inventories)
         {
             _parentScope = parentScope;
             _actors = actors;
             _interactions = interactions;
+            _inventories = inventories;
         }
 
         public IWorldObject Create(ActorSpawnRequest request)
         {
             if (request.WorldId.IsEmpty)
-                throw new ArgumentException("Actor world id is required.", nameof(request));
+                throw new ArgumentException(
+                    "Actor world id is required.",
+                    nameof(request));
 
             if (request.Definition == null)
                 throw new ArgumentNullException(nameof(request.Definition));
@@ -40,6 +45,11 @@ namespace Game.Actor
                 request.Definition.DisplayName);
 
             using (LifetimeScope.EnqueueParent(_parentScope))
+            using (LifetimeScope.Enqueue(builder =>
+            {
+                builder.Register<IWorldActor, WorldActor>(Lifetime.Scoped)
+                    .WithParameter(info);
+            }))
             {
                 var instance = UnityEngine.Object.Instantiate(
                     request.Definition.Prefab,
@@ -47,46 +57,60 @@ namespace Game.Actor
                     request.Rotation,
                     request.Parent);
 
-                instance.name = $"{request.Definition.DisplayName} ({request.WorldId})";
+                instance.name =
+                    $"{request.Definition.DisplayName} ({request.WorldId})";
 
-                var scope = instance.GetComponentInChildren<ActorScope>(true);
+                var scope =
+                    instance.GetComponentInChildren<ActorModule>(true);
 
                 if (scope == null)
+                {
                     throw new InvalidOperationException(
-                        $"Actor prefab '{request.Definition.Prefab.name}' has no {nameof(ActorScope)}.");
+                        $"Actor prefab '{request.Definition.Prefab.name}' " +
+                        $"has no {nameof(ActorModule)}.");
+                }
 
                 if (scope.Container == null)
+                {
                     throw new InvalidOperationException(
-                        $"Actor prefab '{request.Definition.Prefab.name}' has no built VContainer scope.");
+                        $"Actor prefab '{request.Definition.Prefab.name}' " +
+                        "has no built VContainer scope.");
+                }
 
                 if (scope.Container.TryResolve<Targetable>(out var targetable))
                     targetable.Initialize(info);
 
-                var view = scope.Container.Resolve<IActorTransform>();
+                var transform =
+                    scope.Container.Resolve<IActorTransform>();
 
-                scope.Container.TryResolve<IActorInputBinder>(out var inputBinder);
-                scope.Container.TryResolve<IActorDialogue>(out var dialogue);
-                scope.Container.TryResolve<IActorNavigation>(out var navigation);
-                scope.Container.TryResolve<IActorTargeting>(out var targeting);
-                scope.Container.TryResolve<IInteractable>(out var interaction);
+                var actor =
+                    scope.Container.Resolve<IWorldActor>();
 
-                var actor = new WorldActor(
-                    info,
-                    request.Definition,
-                    view,
-                    navigation,
-                    dialogue,
-                    inputBinder,
-                    targeting);
+                scope.Container.TryResolve<IInteractable>(
+                    out var interactable);
 
                 var lifetime = new WorldObject(
-                    view.Root.gameObject,
+                    transform.Root.gameObject,
                     info);
 
                 lifetime.Add(_actors.Register(actor));
 
-                if (interaction != null)
-                    lifetime.Add(_interactions.RegisterInteractable(request.WorldId, interaction));
+                if (scope.Container.TryResolve<IInventory>(out var inventory))
+                {
+                    var owner = new InventoryOwner(
+                        request.WorldId,
+                        inventory);
+
+                    lifetime.Add(_inventories.Register(owner));
+                }
+
+                if (interactable != null)
+                {
+                    lifetime.Add(
+                        _interactions.RegisterInteractable(
+                            request.WorldId,
+                            interactable));
+                }
 
                 return lifetime;
             }
