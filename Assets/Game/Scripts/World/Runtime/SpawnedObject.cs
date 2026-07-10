@@ -3,39 +3,32 @@ using UnityEngine;
 
 namespace Game.World
 {
-    public interface ISpawnedObject : IDisposable
-    {
-        Guid InstanceId { get; }
-
-        GameObject GameObject { get; }
-
-        bool IsDisposed { get; }
-
-        void Add(IDisposable registration);
-    }
-
     public sealed class SpawnedObject : ISpawnedObject
     {
         private readonly CompositeLifetime _registrations = new();
         private bool _isDisposed;
 
         public SpawnedObject(
-            Guid instanceId,
+            IWorldInstance instance,
             GameObject gameObject)
         {
-            if (instanceId == Guid.Empty)
+            Instance = instance
+                ?? throw new ArgumentNullException(nameof(instance));
+
+            if (Instance.InstanceId == Guid.Empty)
             {
                 throw new ArgumentException(
-                    "Instance id is required.",
-                    nameof(instanceId));
+                    "World instance id is required.",
+                    nameof(instance));
             }
 
-            InstanceId = instanceId;
             GameObject = gameObject
                 ?? throw new ArgumentNullException(nameof(gameObject));
         }
 
-        public Guid InstanceId { get; }
+        public IWorldInstance Instance { get; }
+
+        public Guid InstanceId => Instance.InstanceId;
 
         public GameObject GameObject { get; }
 

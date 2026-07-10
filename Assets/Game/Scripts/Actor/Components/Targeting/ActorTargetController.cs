@@ -1,7 +1,6 @@
 using System;
 using Game.Input;
 using Game.Targeting;
-
 using UnityEngine;
 
 namespace Game.Actor
@@ -9,7 +8,7 @@ namespace Game.Actor
     [DisallowMultipleComponent]
     public sealed class ActorTargetController :
         MonoBehaviour,
-        IActorTargeting
+        ITargetProvider
     {
         [SerializeField] private TargetingSensor _sensor;
         [SerializeField] private ActorLookController _look;

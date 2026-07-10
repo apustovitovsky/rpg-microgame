@@ -1,17 +1,9 @@
 using System;
 using System.Collections.Generic;
 
+
 namespace Game.World
 {
-    public interface ISpawnedObjectRegistry
-    {
-        bool Track(ISpawnedObject spawnedObject);
-
-        bool Despawn(Guid instanceId);
-
-        void DespawnAll();
-    }
-
     public sealed class SpawnedObjectRegistry :
         ISpawnedObjectRegistry
     {
@@ -50,15 +42,36 @@ namespace Game.World
             return true;
         }
 
+        public bool TryGet(
+            Guid instanceId,
+            out ISpawnedObject spawnedObject)
+        {
+            spawnedObject = null;
+
+            return instanceId != Guid.Empty &&
+                   _entries.TryGetValue(
+                       instanceId,
+                       out spawnedObject);
+        }
+
+        public bool TryGetInstance<TInstance>(
+            Guid instanceId,
+            out TInstance instance)
+            where TInstance : class, IWorldInstance
+        {
+            instance = null;
+
+            if (!TryGet(instanceId, out var spawnedObject))
+                return false;
+
+            instance = spawnedObject.Instance as TInstance;
+            return instance != null;
+        }
+
         public bool Despawn(Guid instanceId)
         {
-            if (instanceId == Guid.Empty ||
-                !_entries.TryGetValue(
-                    instanceId,
-                    out var spawnedObject))
-            {
+            if (!TryGet(instanceId, out var spawnedObject))
                 return false;
-            }
 
             spawnedObject.Dispose();
             return true;

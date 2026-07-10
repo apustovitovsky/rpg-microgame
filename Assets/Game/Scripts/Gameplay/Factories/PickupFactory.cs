@@ -28,14 +28,8 @@ namespace Game.Pickup
 
         public ISpawnedObject Create(PickupSpawnRequest request)
         {
-            if (request.InstanceId == Guid.Empty)
-            {
-                throw new ArgumentException(
-                    "Pickup instance id is required.",
-                    nameof(request));
-            }
-
-            var definition = request.Definition;
+            var pickupInstance = request.Instance;
+            var definition = pickupInstance.Definition;
 
             if (definition.Prefab == null)
             {
@@ -62,10 +56,11 @@ namespace Game.Pickup
                 request.Parent);
 
             gameObject.name =
-                $"{definition.DisplayName} ({request.InstanceId:N})";
+                $"{definition.DisplayName} " +
+                $"({pickupInstance.InstanceId:N})";
 
             ISpawnedObject spawnedObject = new SpawnedObject(
-                request.InstanceId,
+                pickupInstance,
                 gameObject);
 
             try
@@ -101,23 +96,23 @@ namespace Game.Pickup
                 }
 
                 collectable.Initialize(
-                    request.InstanceId,
+                    pickupInstance.InstanceId,
                     definition,
                     _inventories);
 
                 interactable.Initialize(_pickupService);
 
-                targetable.Initialize(request.InstanceId);
+                targetable.Initialize(pickupInstance.InstanceId);
 
                 spawnedObject.Add(
                     _displayNames.Register(
-                        request.InstanceId,
+                        pickupInstance.InstanceId,
                         new DisplayNameProvider(
                             () => definition.DisplayName)));
 
                 spawnedObject.Add(
                     _interactions.RegisterInteractable(
-                        request.InstanceId,
+                        pickupInstance.InstanceId,
                         interactable));
 
                 return spawnedObject;

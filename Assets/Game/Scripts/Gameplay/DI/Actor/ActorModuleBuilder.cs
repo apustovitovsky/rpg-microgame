@@ -6,13 +6,13 @@ using VContainer;
 namespace Game.Actor
 {
     [CreateAssetMenu(
-        fileName = "ActorRuntimeConfigurator",
-        menuName = "Game/Actor/Actor Runtime Configurator")]
+        fileName = "ActorConfigurator",
+        menuName = "Game/Actor/Actor Configurator")]
     public sealed class ActorModuleBuilder : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.RegisterComponentInModuleRoot<ActorView>()
+            builder.RegisterComponentInModuleRoot<ActorPossessable>()
                 .AsImplementedInterfaces();
 
             builder.RegisterComponentInModuleRoot<Targetable>()

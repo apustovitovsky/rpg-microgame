@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace Game.World
 {
-    public sealed class InstanceIndex<T>
+    public sealed class InstanceIndex<T> :
+        IInstanceRegistry<T>
         where T : class
     {
         private readonly Dictionary<Guid, T> _items = new();
@@ -40,7 +41,9 @@ namespace Game.World
             value = null;
 
             return instanceId != Guid.Empty &&
-                   _items.TryGetValue(instanceId, out value);
+                _items.TryGetValue(
+                    instanceId,
+                    out value);
         }
 
         public bool Contains(Guid instanceId)

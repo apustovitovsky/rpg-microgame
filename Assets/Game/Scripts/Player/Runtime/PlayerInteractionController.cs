@@ -1,8 +1,9 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Actor;
 using Game.Interaction;
+using Game.Targeting;
+using Game.World;
 using VContainer.Unity;
 
 namespace Game.Player
@@ -14,7 +15,8 @@ namespace Game.Player
         private readonly IPlayerInteractionInput _input;
         private readonly IPlayerService _player;
         private readonly IInteractionService _interactions;
-        private readonly IActorService _actors;
+        private readonly IInstanceRegistry<ITargetProvider> _targetProviders;
+        private readonly ISpawnedObjectRegistry _spawnedObjects;
 
         private CancellationTokenSource _interactionCts;
 
@@ -22,12 +24,14 @@ namespace Game.Player
             IPlayerInteractionInput input,
             IPlayerService player,
             IInteractionService interactions,
-            IActorService actors)
+            IInstanceRegistry<ITargetProvider> targetProviders,
+            ISpawnedObjectRegistry spawnedObjects)
         {
             _input = input;
             _player = player;
             _interactions = interactions;
-            _actors = actors;
+            _targetProviders = targetProviders;
+            _spawnedObjects = spawnedObjects;
         }
 
         public void Start()
@@ -54,16 +58,17 @@ namespace Game.Player
             var currentActorId = _player.CurrentActor;
 
             if (currentActorId == Guid.Empty ||
-                !_actors.TryGet(
+                !_targetProviders.TryGet(
                     currentActorId,
-                    out var currentActor) ||
-                currentActor.View == null ||
-                currentActor.Targeting == null)
+                    out var targetProvider) ||
+                !_spawnedObjects.TryGet(
+                    currentActorId,
+                    out var currentSpawnedObject))
             {
                 return;
             }
 
-            var target = currentActor.Targeting.CurrentTarget;
+            var target = targetProvider.CurrentTarget;
 
             if (target == null ||
                 target.InstanceId == Guid.Empty)
@@ -77,7 +82,7 @@ namespace Game.Player
 
             var context = new InteractionContext(
                 currentActorId,
-                currentActor.View.Root.position,
+                currentSpawnedObject.GameObject.transform.position,
                 target.InstanceId);
 
             await _interactions.TryInteractAsync(

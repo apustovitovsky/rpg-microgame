@@ -8701,6 +8701,7 @@ MonoBehaviour:
   _navigation: {fileID: 11400000, guid: 75613f041580a9d47b8c00ab14aaf6f0, type: 2}
   _interaction: {fileID: 11400000, guid: 2f4e58428bbe34c4a9f3fb88c62d4d68, type: 2}
   _actor: {fileID: 11400000, guid: 02f4659f7202ba44d855f1dc09abbbb5, type: 2}
+  _nameplates: {fileID: 11400000, guid: d8138af95a1bbf1458e552e82a20113e, type: 2}
   _player: {fileID: 11400000, guid: a80cfe3a73aa86847944dd8de1cfd40c, type: 2}
   _displayName: {fileID: 11400000, guid: 8d588e88ba9bbed4c87ed1934a8a6505, type: 2}
   _pickup: {fileID: 11400000, guid: 40b583444b264284d8977e2737474638, type: 2}

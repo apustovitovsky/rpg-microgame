@@ -6,32 +6,20 @@ namespace Game.Pickup
     public readonly struct PickupSpawnRequest
     {
         public PickupSpawnRequest(
-            Guid instanceId,
-            PickupDefinition definition,
+            PickupInstance instance,
             Vector3 position,
             Quaternion rotation,
             Transform parent = null)
         {
-            if (instanceId == Guid.Empty)
-            {
-                throw new ArgumentException(
-                    "Pickup instance id is required.",
-                    nameof(instanceId));
-            }
-
-            InstanceId = instanceId;
-
-            Definition = definition
-                ?? throw new ArgumentNullException(nameof(definition));
+            Instance = instance
+                ?? throw new ArgumentNullException(nameof(instance));
 
             Position = position;
             Rotation = rotation;
             Parent = parent;
         }
 
-        public Guid InstanceId { get; }
-
-        public PickupDefinition Definition { get; }
+        public PickupInstance Instance { get; }
 
         public Vector3 Position { get; }
 

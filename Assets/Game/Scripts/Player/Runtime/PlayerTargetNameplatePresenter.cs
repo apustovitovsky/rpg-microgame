@@ -2,6 +2,7 @@ using System;
 using Game.Actor;
 using Game.Targeting;
 using Game.UI;
+using Game.World;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -13,9 +14,9 @@ namespace Game.Player
     {
         private readonly IPlayerService _player;
         private readonly TargetNameplatePool _pool;
-        private readonly IActorService _actors;
+        private readonly IInstanceRegistry<ITargetProvider> _targetProviders;
         private readonly IDisplayNameService _displayNames;
-        private IActorTargeting _targeting;
+        private ITargetProvider _targetProvider;
         private TargetNameplateView _currentView;
         private ITargetable _currentTarget;
         private Camera _camera;
@@ -23,12 +24,12 @@ namespace Game.Player
         public PlayerTargetNameplatePresenter(
             IPlayerService player,
             TargetNameplatePool pool,
-            IActorService actors,
+            IInstanceRegistry<ITargetProvider> targetProviders,
             IDisplayNameService displayNames)
         {
             _player = player;
             _pool = pool;
-            _actors = actors;
+            _targetProviders = targetProviders;
             _displayNames = displayNames;
         }
 
@@ -41,37 +42,35 @@ namespace Game.Player
         public void Dispose()
         {
             _player.CurrentActorChanged -= OnCurrentActorChanged;
-            UnbindTargeting();
+            UnbindTargetProvider();
             ReleaseCurrent();
         }
 
         private void OnCurrentActorChanged()
         {
-            UnbindTargeting();
+            UnbindTargetProvider();
             ReleaseCurrent();
 
             var actorInstanceId = _player.CurrentActor;
 
             if (actorInstanceId == Guid.Empty ||
-                !_actors.TryGet(
+                !_targetProviders.TryGet(
                     actorInstanceId,
-                    out var actor) ||
-                actor.Targeting == null)
+                    out _targetProvider))
             {
                 return;
             }
 
-            _targeting = actor.Targeting;
-            _targeting.CurrentTargetChanged += OnCurrentTargetChanged;
-            OnCurrentTargetChanged(_targeting.CurrentTarget);
+            _targetProvider.CurrentTargetChanged += OnCurrentTargetChanged;
+            OnCurrentTargetChanged(_targetProvider.CurrentTarget);
         }
 
-        private void UnbindTargeting()
+        private void UnbindTargetProvider()
         {
-            if (_targeting != null)
-                _targeting.CurrentTargetChanged -= OnCurrentTargetChanged;
+            if (_targetProvider != null)
+                _targetProvider.CurrentTargetChanged -= OnCurrentTargetChanged;
 
-            _targeting = null;
+            _targetProvider = null;
         }
 
         private void OnCurrentTargetChanged(ITargetable target)

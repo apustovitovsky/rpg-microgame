@@ -12,23 +12,26 @@ namespace Game.Actor
     public sealed class ActorFactory
     {
         private readonly LifetimeScope _parentScope;
-        private readonly IActorRegistrationService _actors;
         private readonly IInteractionRegistrationService _interactions;
         private readonly IInventoryRegistrationService _inventories;
         private readonly IDisplayNameRegistrationService _displayNames;
+        private readonly IInstanceRegistry<IPossessable> _possessables;
+        private readonly IInstanceRegistry<ITargetProvider> _targetProviders;
 
         public ActorFactory(
             LifetimeScope parentScope,
-            IActorRegistrationService actors,
             IInteractionRegistrationService interactions,
             IInventoryRegistrationService inventories,
-            IDisplayNameRegistrationService displayNames)
+            IDisplayNameRegistrationService displayNames,
+            IInstanceRegistry<IPossessable> possessables,
+            IInstanceRegistry<ITargetProvider> targetProviders)
         {
             _parentScope = parentScope;
-            _actors = actors;
             _interactions = interactions;
             _inventories = inventories;
             _displayNames = displayNames;
+            _possessables = possessables;
+            _targetProviders = targetProviders;
         }
 
         public ISpawnedObject Create(ActorSpawnRequest request)
@@ -47,9 +50,6 @@ namespace Game.Actor
             using (LifetimeScope.Enqueue(builder =>
             {
                 builder.RegisterInstance(actorInstance);
-
-                builder.Register<ActorRuntime>(Lifetime.Scoped)
-                    .AsImplementedInterfaces();
             }))
             {
                 var gameObject = UnityEngine.Object.Instantiate(
@@ -61,7 +61,7 @@ namespace Game.Actor
                 gameObject.name = definition.DefinitionId;
 
                 ISpawnedObject spawnedObject = new SpawnedObject(
-                    actorInstance.InstanceId,
+                    actorInstance,
                     gameObject);
 
                 try
@@ -90,9 +90,23 @@ namespace Game.Actor
                             actorInstance.InstanceId);
                     }
 
-                    var actor = scope.Container.Resolve<IActorRuntime>();
+                    if (scope.Container.TryResolve<IPossessable>(
+                            out var possessable))
+                    {
+                        spawnedObject.Add(
+                            _possessables.Register(
+                                actorInstance.InstanceId,
+                                possessable));
+                    }
 
-                    spawnedObject.Add(_actors.Register(actor));
+                    if (scope.Container.TryResolve<ITargetProvider>(
+                            out var targetProvider))
+                    {
+                        spawnedObject.Add(
+                            _targetProviders.Register(
+                                actorInstance.InstanceId,
+                                targetProvider));
+                    }
 
                     spawnedObject.Add(
                         _displayNames.Register(

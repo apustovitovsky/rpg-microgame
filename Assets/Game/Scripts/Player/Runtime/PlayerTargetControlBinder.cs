@@ -1,5 +1,7 @@
 using System;
 using Game.Actor;
+using Game.Targeting;
+using Game.World;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -10,17 +12,20 @@ namespace Game.Player
         IDisposable
     {
         private readonly IPlayerService _player;
-        private readonly IActorService _actors;
         private readonly IPlayerInteractionInput _input;
+        private readonly IInstanceRegistry<ITargetProvider> _targetProviders;
+        private readonly IInstanceRegistry<IPossessable> _possessables;
 
         public PlayerTargetControlBinder(
             IPlayerInteractionInput input,
             IPlayerService player,
-            IActorService actors)
+            IInstanceRegistry<ITargetProvider> targetProviders,
+            IInstanceRegistry<IPossessable> possessables)
         {
             _input = input;
             _player = player;
-            _actors = actors;
+            _targetProviders = targetProviders;
+            _possessables = possessables;
         }
 
         public void Start()
@@ -38,15 +43,14 @@ namespace Game.Player
             var currentActorId = _player.CurrentActor;
 
             if (currentActorId == Guid.Empty ||
-                !_actors.TryGet(
+                !_targetProviders.TryGet(
                     currentActorId,
-                    out var currentActor) ||
-                currentActor.Targeting == null)
+                    out var targetProvider))
             {
                 return;
             }
 
-            var target = currentActor.Targeting.CurrentTarget;
+            var target = targetProvider.CurrentTarget;
 
             if (target == null ||
                 target.InstanceId == Guid.Empty ||
@@ -55,14 +59,11 @@ namespace Game.Player
                 return;
             }
 
-            if (!_actors.TryGet(
-                    target.InstanceId,
-                    out var actor) ||
-                actor.InputBinder == null)
+            if (!_possessables.Contains(target.InstanceId))
             {
                 Debug.LogWarning(
                     $"Target '{target.InstanceId:N}' " +
-                    "is not a controllable actor.");
+                    "is not possessable.");
 
                 return;
             }

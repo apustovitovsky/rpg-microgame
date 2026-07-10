@@ -1,5 +1,7 @@
 using System;
 using Game.Core;
+using Game.Targeting;
+using Game.World;
 using UnityEngine;
 using VContainer;
 
@@ -24,12 +26,15 @@ namespace Game.Actor
             builder.RegisterInstance(_catalog)
                 .AsImplementedInterfaces();
 
+            builder.Register<InstanceIndex<IPossessable>>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
+            builder.Register<InstanceIndex<ITargetProvider>>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
             builder.Register<ActorFactory>(Lifetime.Singleton);
 
             builder.Register<ActorSpawner>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<ActorService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

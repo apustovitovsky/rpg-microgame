@@ -185,11 +185,11 @@ namespace Game.Gameplay
                 return Guid.Empty;
             }
 
-            var pickupInstanceId = Guid.NewGuid();
+            var pickupInstance = new PickupInstance(
+                entry.Definition);
 
             var request = new PickupSpawnRequest(
-                pickupInstanceId,
-                entry.Definition,
+                pickupInstance,
                 node.Position,
                 node.Rotation);
 
@@ -199,7 +199,7 @@ namespace Game.Gameplay
             if (spawnedPickupId == Guid.Empty)
             {
                 Debug.LogWarning(
-                    $"Pickup '{pickupInstanceId:N}' was not spawned.");
+                    $"Pickup '{pickupInstance.InstanceId:N}' was not spawned.");
             }
 
             return spawnedPickupId;

@@ -1,6 +1,7 @@
 using System;
 using Game.Actor;
 using Game.Input;
+using Game.World;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -10,16 +11,16 @@ namespace Game.Player
     {
         private readonly CinemachineCamera _camera;
         private readonly IActorInput _input;
-        private readonly IActorService _actors;
+        private readonly IInstanceRegistry<IPossessable> _possessables;
 
         public PlayerService(
             CinemachineCamera camera,
             IActorInput input,
-            IActorService actors)
+            IInstanceRegistry<IPossessable> possessables)
         {
             _camera = camera;
             _input = input;
-            _actors = actors;
+            _possessables = possessables;
         }
 
         public Guid CurrentActor { get; private set; }
@@ -34,31 +35,23 @@ namespace Game.Player
                 return;
             }
 
-            if (!_actors.TryGet(
+            if (!_possessables.TryGet(
                     actorInstanceId,
-                    out var actor) ||
-                actor.InputBinder == null)
+                    out var possessable))
             {
                 Debug.LogWarning(
                     $"Player cannot bind actor '{actorInstanceId:N}': " +
-                    "input binder is missing.");
+                    "possessable capability is missing.");
 
                 return;
             }
 
-            if (CurrentActor != Guid.Empty &&
-                _actors.TryGet(
-                    CurrentActor,
-                    out var currentActor) &&
-                currentActor.InputBinder != null)
-            {
-                currentActor.InputBinder.Unbind();
-            }
+            UnbindCurrent();
 
             CurrentActor = actorInstanceId;
-            actor.InputBinder.Bind(_input);
+            possessable.BindInput(_input);
 
-            BindCamera(actor);
+            BindCamera(possessable);
             CurrentActorChanged?.Invoke();
         }
 
@@ -67,13 +60,7 @@ namespace Game.Player
             if (CurrentActor != actorInstanceId)
                 return;
 
-            if (_actors.TryGet(
-                    CurrentActor,
-                    out var actor) &&
-                actor.InputBinder != null)
-            {
-                actor.InputBinder.Unbind();
-            }
+            UnbindCurrent();
 
             CurrentActor = Guid.Empty;
 
@@ -81,7 +68,20 @@ namespace Game.Player
             CurrentActorChanged?.Invoke();
         }
 
-        private void BindCamera(IActorRuntime actor)
+        private void UnbindCurrent()
+        {
+            if (CurrentActor == Guid.Empty)
+                return;
+
+            if (_possessables.TryGet(
+                    CurrentActor,
+                    out var currentPossessable))
+            {
+                currentPossessable.UnbindInput();
+            }
+        }
+
+        private void BindCamera(IPossessable possessable)
         {
             if (_camera == null)
             {
@@ -89,10 +89,7 @@ namespace Game.Player
                 return;
             }
 
-            _camera.Follow = actor?.View != null
-                ? actor.View.CameraPivot
-                : null;
-
+            _camera.Follow = possessable?.CameraPivot;
             _camera.LookAt = null;
         }
     }

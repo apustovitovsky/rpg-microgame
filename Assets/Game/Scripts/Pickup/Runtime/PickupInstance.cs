@@ -1,24 +1,24 @@
 using System;
 using Game.World;
 
-namespace Game.Actor
+namespace Game.Pickup
 {
-    public sealed class ActorInstance :
+    public sealed class PickupInstance :
         IWorldInstance
     {
-        public ActorInstance(ActorDefinition definition)
+        public PickupInstance(PickupDefinition definition)
             : this(Guid.NewGuid(), definition)
         {
         }
 
-        public ActorInstance(
+        public PickupInstance(
             Guid instanceId,
-            ActorDefinition definition)
+            PickupDefinition definition)
         {
             if (instanceId == Guid.Empty)
             {
                 throw new ArgumentException(
-                    "Actor instance id cannot be empty.",
+                    "Pickup instance id cannot be empty.",
                     nameof(instanceId));
             }
 
@@ -30,6 +30,6 @@ namespace Game.Actor
 
         public Guid InstanceId { get; }
 
-        public ActorDefinition Definition { get; }
+        public PickupDefinition Definition { get; }
     }
 }
