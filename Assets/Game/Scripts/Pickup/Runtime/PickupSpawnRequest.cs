@@ -1,4 +1,4 @@
-using Game.World;
+using System;
 using UnityEngine;
 
 namespace Game.Pickup
@@ -6,20 +6,30 @@ namespace Game.Pickup
     public readonly struct PickupSpawnRequest
     {
         public PickupSpawnRequest(
-            WorldId worldId,
+            Guid instanceId,
             PickupDefinition definition,
             Vector3 position,
             Quaternion rotation,
             Transform parent = null)
         {
-            WorldId = worldId;
-            Definition = definition;
+            if (instanceId == Guid.Empty)
+            {
+                throw new ArgumentException(
+                    "Pickup instance id is required.",
+                    nameof(instanceId));
+            }
+
+            InstanceId = instanceId;
+
+            Definition = definition
+                ?? throw new ArgumentNullException(nameof(definition));
+
             Position = position;
             Rotation = rotation;
             Parent = parent;
         }
 
-        public WorldId WorldId { get; }
+        public Guid InstanceId { get; }
 
         public PickupDefinition Definition { get; }
 

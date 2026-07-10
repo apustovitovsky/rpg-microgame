@@ -1,4 +1,4 @@
-using Game.World;
+using System;
 using UnityEngine;
 
 namespace Game.Targeting
@@ -12,9 +12,7 @@ namespace Game.Targeting
         [SerializeField] private Transform _targetAnchor;
         [SerializeField] private bool _isTargetable = true;
 
-        public WorldInfo Info { get; private set; }
-
-        public WorldId WorldId => Info.WorldId;
+        public Guid InstanceId { get; private set; }
 
         public Transform UiAnchor => _uiAnchor != null
             ? _uiAnchor
@@ -26,11 +24,18 @@ namespace Game.Targeting
 
         public bool IsTargetable =>
             _isTargetable &&
-            !WorldId.IsEmpty;
+            InstanceId != Guid.Empty;
 
-        public void Initialize(WorldInfo info)
+        public void Initialize(Guid instanceId)
         {
-            Info = info;
+            if (instanceId == Guid.Empty)
+            {
+                throw new ArgumentException(
+                    "Target instance id is required.",
+                    nameof(instanceId));
+            }
+
+            InstanceId = instanceId;
         }
     }
 }

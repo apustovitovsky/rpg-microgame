@@ -1,11 +1,10 @@
 using System;
-using Game.World;
 
 namespace Game.Inventory
 {
     public interface IInventoryOwner
     {
-        WorldId WorldId { get; }
+        Guid InstanceId { get; }
 
         IInventory Inventory { get; }
     }
@@ -13,21 +12,23 @@ namespace Game.Inventory
     public sealed class InventoryOwner : IInventoryOwner
     {
         public InventoryOwner(
-            WorldId worldId,
+            Guid instanceId,
             IInventory inventory)
         {
-            if (worldId.IsEmpty)
+            if (instanceId == Guid.Empty)
+            {
                 throw new ArgumentException(
-                    "World id is required.",
-                    nameof(worldId));
+                    "Inventory owner instance id is required.",
+                    nameof(instanceId));
+            }
 
-            WorldId = worldId;
+            InstanceId = instanceId;
 
             Inventory = inventory
                 ?? throw new ArgumentNullException(nameof(inventory));
         }
 
-        public WorldId WorldId { get; }
+        public Guid InstanceId { get; }
 
         public IInventory Inventory { get; }
     }

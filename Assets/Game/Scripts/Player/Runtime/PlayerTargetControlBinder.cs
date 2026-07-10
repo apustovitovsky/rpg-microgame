@@ -37,8 +37,10 @@ namespace Game.Player
         {
             var currentActorId = _player.CurrentActor;
 
-            if (currentActorId.IsEmpty ||
-                !_actors.TryGet(currentActorId, out var currentActor) ||
+            if (currentActorId == Guid.Empty ||
+                !_actors.TryGet(
+                    currentActorId,
+                    out var currentActor) ||
                 currentActor.Targeting == null)
             {
                 return;
@@ -47,24 +49,25 @@ namespace Game.Player
             var target = currentActor.Targeting.CurrentTarget;
 
             if (target == null ||
-                target.WorldId.IsEmpty)
+                target.InstanceId == Guid.Empty ||
+                target.InstanceId == currentActorId)
             {
                 return;
             }
 
-            if (target.WorldId == currentActorId)
-                return;
-
-            if (!_actors.TryGet(target.WorldId, out var actor) ||
+            if (!_actors.TryGet(
+                    target.InstanceId,
+                    out var actor) ||
                 actor.InputBinder == null)
             {
                 Debug.LogWarning(
-                    $"Target '{target.WorldId}' is not a controllable actor.");
+                    $"Target '{target.InstanceId:N}' " +
+                    "is not a controllable actor.");
 
                 return;
             }
 
-            _player.BindActor(target.WorldId);
+            _player.BindActor(target.InstanceId);
         }
     }
 }

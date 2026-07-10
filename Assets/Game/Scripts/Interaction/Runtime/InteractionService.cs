@@ -10,14 +10,15 @@ namespace Game.Interaction
         IInteractionService,
         IInteractionRegistrationService
     {
-        private readonly WorldIndex<IInteractable> _interactables = new();
+        private readonly InstanceIndex<IInteractable> _interactables =
+            new();
 
         public IDisposable RegisterInteractable(
-            WorldId worldId,
+            Guid instanceId,
             IInteractable interactable)
         {
             return _interactables.Register(
-                worldId,
+                instanceId,
                 interactable);
         }
 
@@ -25,17 +26,24 @@ namespace Game.Interaction
             InteractionContext context,
             CancellationToken token)
         {
-            if (context.InteractorWorldId.IsEmpty)
+            if (context.InteractorInstanceId == Guid.Empty)
                 return InteractionResult.InvalidInteractor;
 
-            if (context.TargetWorldId.IsEmpty)
+            if (context.TargetInstanceId == Guid.Empty)
                 return InteractionResult.InvalidTarget;
 
-            if (context.InteractorWorldId == context.TargetWorldId)
+            if (context.InteractorInstanceId ==
+                context.TargetInstanceId)
+            {
                 return InteractionResult.SameObject;
+            }
 
-            if (!_interactables.TryGet(context.TargetWorldId, out var interactable))
+            if (!_interactables.TryGet(
+                    context.TargetInstanceId,
+                    out var interactable))
+            {
                 return InteractionResult.InteractableNotFound;
+            }
 
             var distance = Vector3.Distance(
                 context.Origin,

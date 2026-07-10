@@ -2,6 +2,7 @@ using System;
 using Game.Interaction;
 using Game.Inventory;
 using Game.Targeting;
+using Game.UI;
 using Game.World;
 using VContainer;
 using VContainer.Unity;
@@ -14,105 +15,118 @@ namespace Game.Actor
         private readonly IActorRegistrationService _actors;
         private readonly IInteractionRegistrationService _interactions;
         private readonly IInventoryRegistrationService _inventories;
+        private readonly IDisplayNameRegistrationService _displayNames;
 
         public ActorFactory(
             LifetimeScope parentScope,
             IActorRegistrationService actors,
             IInteractionRegistrationService interactions,
-            IInventoryRegistrationService inventories)
+            IInventoryRegistrationService inventories,
+            IDisplayNameRegistrationService displayNames)
         {
             _parentScope = parentScope;
             _actors = actors;
             _interactions = interactions;
             _inventories = inventories;
+            _displayNames = displayNames;
         }
 
-        public IWorldObject Create(ActorSpawnRequest request)
+        public ISpawnedObject Create(ActorSpawnRequest request)
         {
-            if (request.WorldId.IsEmpty)
+            var actorInstance = request.Instance;
+            var definition = actorInstance.Definition;
+
+            if (definition.Prefab == null)
+            {
                 throw new ArgumentException(
-                    "Actor world id is required.",
+                    "Actor definition prefab is required.",
                     nameof(request));
-
-            if (request.Definition == null)
-                throw new ArgumentNullException(nameof(request.Definition));
-
-            if (request.Definition.Prefab == null)
-                throw new ArgumentNullException(nameof(request.Definition.Prefab));
-
-            var info = new WorldInfo(
-                request.WorldId,
-                request.Definition.DisplayName);
+            }
 
             using (LifetimeScope.EnqueueParent(_parentScope))
             using (LifetimeScope.Enqueue(builder =>
             {
-                builder.Register<IWorldActor, WorldActor>(Lifetime.Scoped)
-                    .WithParameter(info);
+                builder.RegisterInstance(actorInstance);
+
+                builder.Register<ActorRuntime>(Lifetime.Scoped)
+                    .AsImplementedInterfaces();
             }))
             {
-                var instance = UnityEngine.Object.Instantiate(
-                    request.Definition.Prefab,
+                var gameObject = UnityEngine.Object.Instantiate(
+                    definition.Prefab,
                     request.Position,
                     request.Rotation,
                     request.Parent);
 
-                instance.name =
-                    $"{request.Definition.DisplayName} ({request.WorldId})";
+                gameObject.name = definition.DefinitionId;
 
-                var scope =
-                    instance.GetComponentInChildren<ActorModule>(true);
+                ISpawnedObject spawnedObject = new SpawnedObject(
+                    actorInstance.InstanceId,
+                    gameObject);
 
-                if (scope == null)
+                try
                 {
-                    throw new InvalidOperationException(
-                        $"Actor prefab '{request.Definition.Prefab.name}' " +
-                        $"has no {nameof(ActorModule)}.");
-                }
+                    var scope = gameObject
+                        .GetComponentInChildren<ActorModule>(true);
 
-                if (scope.Container == null)
+                    if (scope == null)
+                    {
+                        throw new InvalidOperationException(
+                            $"Actor prefab '{definition.Prefab.name}' " +
+                            $"has no {nameof(ActorModule)}.");
+                    }
+
+                    if (scope.Container == null)
+                    {
+                        throw new InvalidOperationException(
+                            $"Actor prefab '{definition.Prefab.name}' " +
+                            "has no built VContainer scope.");
+                    }
+
+                    if (scope.Container.TryResolve<Targetable>(
+                            out var targetable))
+                    {
+                        targetable.Initialize(
+                            actorInstance.InstanceId);
+                    }
+
+                    var actor = scope.Container.Resolve<IActorRuntime>();
+
+                    spawnedObject.Add(_actors.Register(actor));
+
+                    spawnedObject.Add(
+                        _displayNames.Register(
+                            actorInstance.InstanceId,
+                            new DisplayNameProvider(
+                                () => definition.DisplayName)));
+
+                    if (scope.Container.TryResolve<IInventory>(
+                            out var inventory))
+                    {
+                        var owner = new InventoryOwner(
+                            actorInstance.InstanceId,
+                            inventory);
+
+                        spawnedObject.Add(
+                            _inventories.Register(owner));
+                    }
+
+                    if (scope.Container.TryResolve<IInteractable>(
+                            out var interactable))
+                    {
+                        spawnedObject.Add(
+                            _interactions.RegisterInteractable(
+                                actorInstance.InstanceId,
+                                interactable));
+                    }
+
+                    return spawnedObject;
+                }
+                catch
                 {
-                    throw new InvalidOperationException(
-                        $"Actor prefab '{request.Definition.Prefab.name}' " +
-                        "has no built VContainer scope.");
+                    spawnedObject.Dispose();
+                    throw;
                 }
-
-                if (scope.Container.TryResolve<Targetable>(out var targetable))
-                    targetable.Initialize(info);
-
-                var transform =
-                    scope.Container.Resolve<IActorTransform>();
-
-                var actor =
-                    scope.Container.Resolve<IWorldActor>();
-
-                scope.Container.TryResolve<IInteractable>(
-                    out var interactable);
-
-                var lifetime = new WorldObject(
-                    transform.Root.gameObject,
-                    info);
-
-                lifetime.Add(_actors.Register(actor));
-
-                if (scope.Container.TryResolve<IInventory>(out var inventory))
-                {
-                    var owner = new InventoryOwner(
-                        request.WorldId,
-                        inventory);
-
-                    lifetime.Add(_inventories.Register(owner));
-                }
-
-                if (interactable != null)
-                {
-                    lifetime.Add(
-                        _interactions.RegisterInteractable(
-                            request.WorldId,
-                            interactable));
-                }
-
-                return lifetime;
             }
         }
     }

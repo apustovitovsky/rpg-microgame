@@ -32,8 +32,10 @@ namespace Game.Pickup
         {
             return _pickupService != null &&
                    _collectable != null &&
-                   context.TargetWorldId == _collectable.WorldId &&
-                   _collectable.CanCollect(context.InteractorWorldId);
+                   context.TargetInstanceId ==
+                   _collectable.InstanceId &&
+                   _collectable.CanCollect(
+                       context.InteractorInstanceId);
         }
 
         public async UniTask InteractAsync(
@@ -44,12 +46,14 @@ namespace Game.Pickup
                 return;
 
             var result = await _pickupService.CollectAsync(
-                context.InteractorWorldId,
+                context.InteractorInstanceId,
                 _collectable,
                 token);
 
             if (result != CollectResult.Succeeded)
-                Debug.LogWarning($"Item pickup failed: {result}.", this);
+                Debug.LogWarning(
+                    $"Item pickup failed: {result}.",
+                    this);
         }
     }
 }

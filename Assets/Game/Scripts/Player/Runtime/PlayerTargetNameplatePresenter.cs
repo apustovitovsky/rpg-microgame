@@ -1,7 +1,7 @@
 using System;
 using Game.Actor;
 using Game.Targeting;
-using Game.World;
+using Game.UI;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -12,25 +12,24 @@ namespace Game.Player
         IDisposable
     {
         private readonly IPlayerService _player;
-        private readonly ActorNameplatePool _pool;
+        private readonly TargetNameplatePool _pool;
         private readonly IActorService _actors;
-        private readonly IWorldObjectRegistry _world;
-
+        private readonly IDisplayNameService _displayNames;
         private IActorTargeting _targeting;
-        private ActorNameplateView _currentView;
+        private TargetNameplateView _currentView;
         private ITargetable _currentTarget;
         private Camera _camera;
 
         public PlayerTargetNameplatePresenter(
             IPlayerService player,
-            ActorNameplatePool pool,
+            TargetNameplatePool pool,
             IActorService actors,
-            IWorldObjectRegistry world)
+            IDisplayNameService displayNames)
         {
             _player = player;
             _pool = pool;
             _actors = actors;
-            _world = world;
+            _displayNames = displayNames;
         }
 
         public void Start()
@@ -51,12 +50,12 @@ namespace Game.Player
             UnbindTargeting();
             ReleaseCurrent();
 
-            var actorWorldId = _player.CurrentActor;
+            var actorInstanceId = _player.CurrentActor;
 
-            if (actorWorldId.IsEmpty)
-                return;
-
-            if (!_actors.TryGet(actorWorldId, out var actor) ||
+            if (actorInstanceId == Guid.Empty ||
+                !_actors.TryGet(
+                    actorInstanceId,
+                    out var actor) ||
                 actor.Targeting == null)
             {
                 return;
@@ -79,16 +78,15 @@ namespace Game.Player
         {
             if (target == null ||
                 !target.IsTargetable ||
-                target.WorldId.IsEmpty)
+                target.InstanceId == Guid.Empty)
             {
                 ReleaseCurrent();
                 return;
             }
 
-            var currentActor = _player.CurrentActor;
+            var currentActorId = _player.CurrentActor;
 
-            if (!currentActor.IsEmpty &&
-                target.WorldId == currentActor)
+            if (target.InstanceId == currentActorId)
             {
                 ReleaseCurrent();
                 return;
@@ -96,6 +94,14 @@ namespace Game.Player
 
             if (ReferenceEquals(_currentTarget, target))
                 return;
+
+            if (!_displayNames.TryGet(
+                    target.InstanceId,
+                    out var displayName))
+            {
+                ReleaseCurrent();
+                return;
+            }
 
             var camera = ResolveCamera();
 
@@ -110,19 +116,8 @@ namespace Game.Player
             _currentTarget = target;
             _currentView = _pool.Get(
                 target.UiAnchor,
-                ResolveTargetName(target.WorldId),
+                displayName,
                 camera);
-        }
-
-        private string ResolveTargetName(WorldId worldId)
-        {
-            if (_world.TryGetInfo(worldId, out var info) &&
-                !string.IsNullOrWhiteSpace(info.DisplayName))
-            {
-                return info.DisplayName;
-            }
-
-            return worldId.ToString();
         }
 
         private Camera ResolveCamera()

@@ -1,17 +1,17 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.World;
 
 namespace Game.Pickup
 {
     public interface ICollectable
     {
-        WorldId WorldId { get; }
+        Guid InstanceId { get; }
 
-        bool CanCollect(WorldId collectorId);
+        bool CanCollect(Guid collectorInstanceId);
 
         UniTask<CollectResult> CollectAsync(
-            WorldId collectorId,
+            Guid collectorInstanceId,
             CancellationToken token);
     }
 }

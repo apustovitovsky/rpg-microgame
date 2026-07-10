@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game.Actor
 {
-    public sealed class ActorNameplatePoolHost : MonoBehaviour, IActorNameplatePoolRoots
+    public sealed class TargetNameplatePoolHost : MonoBehaviour, ITargetNameplatePoolRoots
     {
         [SerializeField] private Transform _activeRoot;
         [SerializeField] private Transform _inactiveRoot;

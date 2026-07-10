@@ -2,9 +2,10 @@ using UnityEngine;
 
 namespace Game.Actor
 {
-    public interface IActorTransform
+    public interface IActorView
     {
         Transform Root { get; }
+
         Transform CameraPivot { get; }
     }
 }

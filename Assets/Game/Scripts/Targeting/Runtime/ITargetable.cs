@@ -1,13 +1,11 @@
-using Game.World;
+using System;
 using UnityEngine;
 
 namespace Game.Targeting
 {
     public interface ITargetable
     {
-        WorldInfo Info { get; }
-
-        WorldId WorldId { get; }
+        Guid InstanceId { get; }
 
         Transform TargetAnchor { get; }
 

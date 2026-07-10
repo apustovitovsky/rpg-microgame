@@ -15,8 +15,9 @@ namespace Game.Gameplay
         [SerializeField] private ModuleBuilder _navigation;
         [SerializeField] private ModuleBuilder _interaction;
         [SerializeField] private ModuleBuilder _actor;
+        [SerializeField] private ModuleBuilder _nameplates;
         [SerializeField] private ModuleBuilder _player;
-        [SerializeField] private ModuleBuilder _actorNameplates;
+        [SerializeField] private ModuleBuilder _displayName;
         [SerializeField] private ModuleBuilder _pickup;
         [SerializeField] private ModuleBuilder _gameplay;
 
@@ -29,8 +30,9 @@ namespace Game.Gameplay
             builder.Configure(_navigation);
             builder.Configure(_interaction);
             builder.Configure(_actor);
+            builder.Configure(_nameplates);
             builder.Configure(_player);
-            builder.Configure(_actorNameplates);
+            builder.Configure(_displayName);
             builder.Configure(_pickup);
             builder.Configure(_gameplay);
         }

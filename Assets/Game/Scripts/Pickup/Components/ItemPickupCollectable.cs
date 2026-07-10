@@ -1,8 +1,8 @@
+using System;
 using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Inventory;
-using Game.World;
 using UnityEngine;
 
 namespace Game.Pickup
@@ -14,73 +14,91 @@ namespace Game.Pickup
     {
         private IInventoryService _inventories;
 
-        public WorldId WorldId { get; private set; }
+        public Guid InstanceId { get; private set; }
 
         public PickupDefinition Definition { get; private set; }
 
         public bool IsCollected { get; private set; }
 
         public void Initialize(
-            WorldId worldId,
+            Guid instanceId,
             PickupDefinition definition,
             IInventoryService inventories)
         {
-            WorldId = worldId;
-            Definition = definition;
-            _inventories = inventories;
+            if (instanceId == Guid.Empty)
+            {
+                throw new ArgumentException(
+                    "Pickup instance id is required.",
+                    nameof(instanceId));
+            }
+
+            InstanceId = instanceId;
+            Definition = definition
+                ?? throw new ArgumentNullException(nameof(definition));
+
+            _inventories = inventories
+                ?? throw new ArgumentNullException(nameof(inventories));
+
             IsCollected = false;
         }
 
-        public bool CanCollect(WorldId collectorId)
+        public bool CanCollect(Guid collectorInstanceId)
         {
-            return !collectorId.IsEmpty &&
-                   !WorldId.IsEmpty &&
-                   Definition != null &&
+            return collectorInstanceId != Guid.Empty &&
+                   InstanceId != Guid.Empty &&
                    Definition.Item != null &&
                    Definition.Amount > 0 &&
-                   _inventories != null &&
                    !IsCollected &&
                    isActiveAndEnabled &&
                    gameObject.activeInHierarchy &&
                    _inventories.CanAdd(
-                       collectorId,
+                       collectorInstanceId,
                        Definition.Item,
                        Definition.Amount);
         }
 
         public UniTask<CollectResult> CollectAsync(
-            WorldId collectorId,
+            Guid collectorInstanceId,
             CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
 
-            if (!CanCollect(collectorId))
-                return UniTask.FromResult(CollectResult.CannotCollect);
+            if (!CanCollect(collectorInstanceId))
+            {
+                return UniTask.FromResult(
+                    CollectResult.CannotCollect);
+            }
 
             if (!_inventories.TryAdd(
-                    collectorId,
+                    collectorInstanceId,
                     Definition.Item,
                     Definition.Amount))
             {
-                return UniTask.FromResult(CollectResult.CannotCollect);
+                return UniTask.FromResult(
+                    CollectResult.CannotCollect);
             }
 
             IsCollected = true;
 
-            LogInventory(collectorId);
+            LogInventory(collectorInstanceId);
 
-            return UniTask.FromResult(CollectResult.Succeeded);
+            return UniTask.FromResult(
+                CollectResult.Succeeded);
         }
 
-        private void LogInventory(WorldId ownerId)
+        private void LogInventory(Guid ownerInstanceId)
         {
-            if (!_inventories.TryGet(ownerId, out var inventory))
+            if (!_inventories.TryGet(
+                    ownerInstanceId,
+                    out var inventory))
+            {
                 return;
+            }
 
             var log = new StringBuilder();
 
             log.Append("Inventory '")
-                .Append(ownerId)
+                .Append(ownerInstanceId)
                 .Append("' (")
                 .Append(inventory.Entries.Count)
                 .Append('/')

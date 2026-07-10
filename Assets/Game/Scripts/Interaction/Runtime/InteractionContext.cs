@@ -1,4 +1,4 @@
-using Game.World;
+using System;
 using UnityEngine;
 
 namespace Game.Interaction
@@ -6,19 +6,19 @@ namespace Game.Interaction
     public readonly struct InteractionContext
     {
         public InteractionContext(
-            WorldId interactorWorldId,
+            Guid interactorInstanceId,
             Vector3 origin,
-            WorldId targetWorldId)
+            Guid targetInstanceId)
         {
-            InteractorWorldId = interactorWorldId;
+            InteractorInstanceId = interactorInstanceId;
             Origin = origin;
-            TargetWorldId = targetWorldId;
+            TargetInstanceId = targetInstanceId;
         }
 
-        public WorldId InteractorWorldId { get; }
+        public Guid InteractorInstanceId { get; }
 
         public Vector3 Origin { get; }
 
-        public WorldId TargetWorldId { get; }
+        public Guid TargetInstanceId { get; }
     }
 }

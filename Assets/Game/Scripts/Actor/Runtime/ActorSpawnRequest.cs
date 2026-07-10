@@ -1,4 +1,4 @@
-using Game.World;
+using System;
 using UnityEngine;
 
 namespace Game.Actor
@@ -6,22 +6,20 @@ namespace Game.Actor
     public readonly struct ActorSpawnRequest
     {
         public ActorSpawnRequest(
-            WorldId worldId,
-            ActorDefinition definition,
+            ActorInstance instance,
             Vector3 position,
             Quaternion rotation,
             Transform parent = null)
         {
-            WorldId = worldId;
-            Definition = definition;
+            Instance = instance
+                ?? throw new ArgumentNullException(nameof(instance));
+
             Position = position;
             Rotation = rotation;
             Parent = parent;
         }
 
-        public WorldId WorldId { get; }
-
-        public ActorDefinition Definition { get; }
+        public ActorInstance Instance { get; }
 
         public Vector3 Position { get; }
 

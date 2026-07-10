@@ -1,21 +1,20 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.World;
 
 namespace Game.Interaction
 {
     public interface IInteractionService
     {
         UniTask<InteractionResult> TryInteractAsync(
-            InteractionContext request,
+            InteractionContext context,
             CancellationToken token);
     }
 
     public interface IInteractionRegistrationService
     {
         IDisposable RegisterInteractable(
-            WorldId worldId,
+            Guid instanceId,
             IInteractable interactable);
     }
 }

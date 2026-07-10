@@ -1,19 +1,8 @@
 {
-    "name": "Game.Player",
+    "name": "Game.UI",
     "rootNamespace": "",
     "references": [
-        "VContainer",
-        "UniTask",
-        "Unity.InputSystem",
-        "Game.Core",
-        "Game.Actor",
-        "Game.Interaction",
-        "Game.Targeting",
-        "Game.Input",
-        "Game.World",
-        "Game.UI",
-        "Unity.Cinemachine",
-        "Game.Pickup"
+        "Game.World"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

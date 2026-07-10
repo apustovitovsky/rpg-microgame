@@ -1,41 +1,42 @@
+using System;
 using Game.World;
 
 namespace Game.Actor
 {
     public interface IActorSpawner
     {
-        WorldId Spawn(ActorSpawnRequest request);
+        Guid Spawn(ActorSpawnRequest request);
     }
 
     public sealed class ActorSpawner : IActorSpawner
     {
         private readonly ActorFactory _factory;
-        private readonly IWorldObjectRegistry _world;
+        private readonly ISpawnedObjectRegistry _spawnedObjects;
 
         public ActorSpawner(
             ActorFactory factory,
-            IWorldObjectRegistry world)
+            ISpawnedObjectRegistry spawnedObjects)
         {
             _factory = factory;
-            _world = world;
+            _spawnedObjects = spawnedObjects;
         }
 
-        public WorldId Spawn(ActorSpawnRequest request)
+        public Guid Spawn(ActorSpawnRequest request)
         {
-            var lifetime = _factory.Create(request);
+            var spawnedObject = _factory.Create(request);
 
-            if (lifetime == null ||
-                lifetime.WorldId.IsEmpty ||
-                lifetime.IsDisposed)
+            if (spawnedObject == null ||
+                spawnedObject.InstanceId == Guid.Empty ||
+                spawnedObject.IsDisposed)
             {
-                lifetime?.Dispose();
-                return default;
+                spawnedObject?.Dispose();
+                return Guid.Empty;
             }
 
-            if (!_world.Track(lifetime))
-                return default;
+            if (!_spawnedObjects.Track(spawnedObject))
+                return Guid.Empty;
 
-            return lifetime.WorldId;
+            return spawnedObject.InstanceId;
         }
     }
 }

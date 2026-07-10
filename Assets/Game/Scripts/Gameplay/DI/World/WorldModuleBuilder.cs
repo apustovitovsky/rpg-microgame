@@ -7,15 +7,12 @@ namespace Game.Gameplay
 {
     [CreateAssetMenu(
         fileName = "WorldModuleBuilder",
-        menuName = "Game/World/World Module Builder")]
+        menuName = "Game/Gameplay/World Module Builder")]
     public sealed class WorldModuleBuilder : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<WorldIdFactory>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<WorldObjectRegistry>(Lifetime.Singleton)
+            builder.Register<SpawnedObjectRegistry>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

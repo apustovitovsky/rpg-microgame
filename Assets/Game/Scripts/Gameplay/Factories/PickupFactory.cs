@@ -2,6 +2,7 @@ using System;
 using Game.Interaction;
 using Game.Inventory;
 using Game.Targeting;
+using Game.UI;
 using Game.World;
 
 namespace Game.Pickup
@@ -11,100 +12,121 @@ namespace Game.Pickup
         private readonly IItemPickupService _pickupService;
         private readonly IInventoryService _inventories;
         private readonly IInteractionRegistrationService _interactions;
+        private readonly IDisplayNameRegistrationService _displayNames;
 
         public PickupFactory(
             IItemPickupService pickupService,
             IInventoryService inventories,
-            IInteractionRegistrationService interactions)
+            IInteractionRegistrationService interactions,
+            IDisplayNameRegistrationService displayNames)
         {
             _pickupService = pickupService;
             _inventories = inventories;
             _interactions = interactions;
+            _displayNames = displayNames;
         }
 
-        public IWorldObject Create(PickupSpawnRequest request)
+        public ISpawnedObject Create(PickupSpawnRequest request)
         {
-            if (request.WorldId.IsEmpty)
+            if (request.InstanceId == Guid.Empty)
+            {
                 throw new ArgumentException(
-                    "Pickup world id is required.",
+                    "Pickup instance id is required.",
                     nameof(request));
+            }
 
-            if (request.Definition == null)
-                throw new ArgumentNullException(nameof(request.Definition));
+            var definition = request.Definition;
 
-            if (request.Definition.Prefab == null)
+            if (definition.Prefab == null)
+            {
                 throw new InvalidOperationException(
                     "Pickup prefab is required.");
+            }
 
-            if (request.Definition.Item == null)
+            if (definition.Item == null)
+            {
                 throw new InvalidOperationException(
                     "Pickup item definition is required.");
+            }
 
-            if (request.Definition.Amount <= 0)
+            if (definition.Amount <= 0)
+            {
                 throw new InvalidOperationException(
                     "Pickup amount must be greater than zero.");
+            }
 
-            var instance = UnityEngine.Object.Instantiate(
-                request.Definition.Prefab,
+            var gameObject = UnityEngine.Object.Instantiate(
+                definition.Prefab,
                 request.Position,
                 request.Rotation,
                 request.Parent);
 
-            instance.name =
-                $"{request.Definition.DisplayName} ({request.WorldId})";
+            gameObject.name =
+                $"{definition.DisplayName} ({request.InstanceId:N})";
 
-            var collectable =
-                instance.GetComponentInChildren<ItemPickupCollectable>(true);
+            ISpawnedObject spawnedObject = new SpawnedObject(
+                request.InstanceId,
+                gameObject);
 
-            if (collectable == null)
+            try
             {
-                throw new InvalidOperationException(
-                    $"Pickup prefab '{request.Definition.Prefab.name}' has no " +
-                    $"{nameof(ItemPickupCollectable)}.");
+                var collectable = gameObject
+                    .GetComponentInChildren<ItemPickupCollectable>(true);
+
+                if (collectable == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Pickup prefab '{definition.Prefab.name}' has no " +
+                        $"{nameof(ItemPickupCollectable)}.");
+                }
+
+                var interactable = gameObject
+                    .GetComponentInChildren<ItemPickupInteractable>(true);
+
+                if (interactable == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Pickup prefab '{definition.Prefab.name}' has no " +
+                        $"{nameof(ItemPickupInteractable)}.");
+                }
+
+                var targetable = gameObject
+                    .GetComponentInChildren<Targetable>(true);
+
+                if (targetable == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Pickup prefab '{definition.Prefab.name}' has no " +
+                        $"{nameof(Targetable)}.");
+                }
+
+                collectable.Initialize(
+                    request.InstanceId,
+                    definition,
+                    _inventories);
+
+                interactable.Initialize(_pickupService);
+
+                targetable.Initialize(request.InstanceId);
+
+                spawnedObject.Add(
+                    _displayNames.Register(
+                        request.InstanceId,
+                        new DisplayNameProvider(
+                            () => definition.DisplayName)));
+
+                spawnedObject.Add(
+                    _interactions.RegisterInteractable(
+                        request.InstanceId,
+                        interactable));
+
+                return spawnedObject;
             }
-
-            var interactable =
-                instance.GetComponentInChildren<ItemPickupInteractable>(true);
-
-            if (interactable == null)
+            catch
             {
-                throw new InvalidOperationException(
-                    $"Pickup prefab '{request.Definition.Prefab.name}' has no " +
-                    $"{nameof(ItemPickupInteractable)}.");
+                spawnedObject.Dispose();
+                throw;
             }
-
-            var targetable =
-                instance.GetComponentInChildren<Targetable>(true);
-
-            if (targetable == null)
-            {
-                throw new InvalidOperationException(
-                    $"Pickup prefab '{request.Definition.Prefab.name}' has no " +
-                    $"{nameof(Targetable)}.");
-            }
-
-            var info = new WorldInfo(
-                request.WorldId,
-                request.Definition.DisplayName);
-
-            collectable.Initialize(
-                request.WorldId,
-                request.Definition,
-                _inventories);
-
-            interactable.Initialize(_pickupService);
-            targetable.Initialize(info);
-
-            var lifetime = new WorldObject(
-                instance,
-                info);
-
-            lifetime.Add(
-                _interactions.RegisterInteractable(
-                    request.WorldId,
-                    interactable));
-
-            return lifetime;
         }
     }
 }

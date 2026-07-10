@@ -12,7 +12,7 @@ namespace Game.Actor
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.RegisterComponentInModuleRoot<ActorTransform>()
+            builder.RegisterComponentInModuleRoot<ActorView>()
                 .AsImplementedInterfaces();
 
             builder.RegisterComponentInModuleRoot<Targetable>()

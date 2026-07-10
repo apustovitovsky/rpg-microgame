@@ -6,7 +6,7 @@ namespace Game.Input
 {
     [CreateAssetMenu(
         fileName = "InputModuleBuilder",
-        menuName = "Game/Input/Input Module Builder")]
+        menuName = "Game/Gameplay/Input Module Builder")]
     public sealed class InputModuleBuilder : ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)

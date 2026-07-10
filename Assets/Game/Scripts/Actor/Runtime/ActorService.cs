@@ -6,37 +6,37 @@ namespace Game.Actor
     public interface IActorService
     {
         bool TryGet(
-            WorldId worldId,
-            out IWorldActor actor);
+            Guid instanceId,
+            out IActorRuntime actor);
     }
 
     public interface IActorRegistrationService
     {
-        IDisposable Register(IWorldActor actor);
+        IDisposable Register(IActorRuntime actor);
     }
 
     public sealed class ActorService :
         IActorService,
         IActorRegistrationService
     {
-        private readonly WorldIndex<IWorldActor> _actors = new();
+        private readonly InstanceIndex<IActorRuntime> _actors = new();
 
-        public IDisposable Register(IWorldActor actor)
+        public IDisposable Register(IActorRuntime actor)
         {
             if (actor == null)
                 throw new ArgumentNullException(nameof(actor));
 
             return _actors.Register(
-                actor.WorldId,
+                actor.InstanceId,
                 actor);
         }
 
         public bool TryGet(
-            WorldId worldId,
-            out IWorldActor actor)
+            Guid instanceId,
+            out IActorRuntime actor)
         {
             return _actors.TryGet(
-                worldId,
+                instanceId,
                 out actor);
         }
     }

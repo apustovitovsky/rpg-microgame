@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Actor
 {
-    public sealed class ActorNameplateView : MonoBehaviour
+    public sealed class TargetNameplateView : MonoBehaviour
     {
         [SerializeField] private TMP_Text _text;
         [SerializeField] private CanvasGroup _canvasGroup;

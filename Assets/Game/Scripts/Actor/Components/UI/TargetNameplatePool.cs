@@ -5,19 +5,19 @@ using VContainer.Unity;
 
 namespace Game.Actor
 {
-    public sealed class ActorNameplatePool
+    public sealed class TargetNameplatePool
     {
-        private readonly IObjectPool<ActorNameplateView> _pool;
+        private readonly IObjectPool<TargetNameplateView> _pool;
 
-        public ActorNameplatePool(
+        public TargetNameplatePool(
             IObjectResolver resolver,
-            ActorNameplateView prefab,
-            IActorNameplatePoolRoots roots)
+            TargetNameplateView prefab,
+            ITargetNameplatePoolRoots roots)
         {
-            _pool = new ObjectPool<ActorNameplateView>(
+            _pool = new ObjectPool<TargetNameplateView>(
                 createFunc: () =>
                 {
-                    ActorNameplateView instance = resolver.Instantiate(prefab, roots.InactiveRoot);
+                    TargetNameplateView instance = resolver.Instantiate(prefab, roots.InactiveRoot);
                     instance.gameObject.SetActive(false);
                     return instance;
                 },
@@ -43,14 +43,14 @@ namespace Game.Actor
                 maxSize: 64);
         }
 
-        public ActorNameplateView Get(Transform anchor, string text, Camera camera)
+        public TargetNameplateView Get(Transform anchor, string text, Camera camera)
         {
-            ActorNameplateView view = _pool.Get();
+            TargetNameplateView view = _pool.Get();
             view.Bind(anchor, text, camera);
             return view;
         }
 
-        public void Release(ActorNameplateView view)
+        public void Release(TargetNameplateView view)
         {
             if (view != null)
                 _pool.Release(view);

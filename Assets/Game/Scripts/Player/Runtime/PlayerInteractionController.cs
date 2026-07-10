@@ -3,7 +3,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Actor;
 using Game.Interaction;
-using UnityEngine;
 using VContainer.Unity;
 
 namespace Game.Player
@@ -54,9 +53,11 @@ namespace Game.Player
         {
             var currentActorId = _player.CurrentActor;
 
-            if (currentActorId.IsEmpty ||
-                !_actors.TryGet(currentActorId, out var currentActor) ||
-                currentActor.Transform == null ||
+            if (currentActorId == Guid.Empty ||
+                !_actors.TryGet(
+                    currentActorId,
+                    out var currentActor) ||
+                currentActor.View == null ||
                 currentActor.Targeting == null)
             {
                 return;
@@ -65,7 +66,7 @@ namespace Game.Player
             var target = currentActor.Targeting.CurrentTarget;
 
             if (target == null ||
-                target.WorldId.IsEmpty)
+                target.InstanceId == Guid.Empty)
             {
                 return;
             }
@@ -76,19 +77,12 @@ namespace Game.Player
 
             var context = new InteractionContext(
                 currentActorId,
-                currentActor.Transform.Root.position,
-                target.WorldId);
+                currentActor.View.Root.position,
+                target.InstanceId);
 
-            var result = await _interactions.TryInteractAsync(
+            await _interactions.TryInteractAsync(
                 context,
                 _interactionCts.Token);
-
-            if (result != InteractionResult.Succeeded)
-            {
-                // Debug.Log(
-                //     $"Interaction with '{target.WorldId}' failed: {result}.",
-                //     target.TargetPos);
-            }
         }
     }
 }

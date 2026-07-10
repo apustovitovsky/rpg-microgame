@@ -1,7 +1,7 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Interaction;
-using Game.World;
 using UnityEngine;
 
 namespace Game.Actor
@@ -23,26 +23,29 @@ namespace Game.Actor
 
         public bool CanInteract(InteractionContext context)
         {
-            return !context.InteractorWorldId.IsEmpty &&
-                   !context.TargetWorldId.IsEmpty &&
-                   context.InteractorWorldId != context.TargetWorldId;
+            return context.InteractorInstanceId != Guid.Empty &&
+                   context.TargetInstanceId != Guid.Empty &&
+                   context.InteractorInstanceId !=
+                   context.TargetInstanceId;
         }
 
-        public async UniTask InteractAsync(
+        public UniTask InteractAsync(
             InteractionContext context,
             CancellationToken token)
         {
-            await StartDialogueAsync(
-                context.InteractorWorldId,
+            return StartDialogueAsync(
+                context.InteractorInstanceId,
                 token);
         }
 
         public UniTask StartDialogueAsync(
-            WorldId interactorWorldId,
+            Guid interactorInstanceId,
             CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             Debug.Log(
-                $"Dialogue started by actor '{interactorWorldId}'.",
+                $"Dialogue started by actor '{interactorInstanceId:N}'.",
                 this);
 
             return UniTask.CompletedTask;

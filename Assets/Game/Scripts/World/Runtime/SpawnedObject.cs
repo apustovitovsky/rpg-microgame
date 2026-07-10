@@ -3,11 +3,9 @@ using UnityEngine;
 
 namespace Game.World
 {
-    public interface IWorldObject : IDisposable
+    public interface ISpawnedObject : IDisposable
     {
-        WorldId WorldId { get; }
-
-        WorldInfo Info { get; }
+        Guid InstanceId { get; }
 
         GameObject GameObject { get; }
 
@@ -16,22 +14,28 @@ namespace Game.World
         void Add(IDisposable registration);
     }
 
-    public sealed class WorldObject : IWorldObject
+    public sealed class SpawnedObject : ISpawnedObject
     {
         private readonly CompositeLifetime _registrations = new();
         private bool _isDisposed;
 
-        public WorldObject(
-            GameObject gameObject,
-            WorldInfo info)
+        public SpawnedObject(
+            Guid instanceId,
+            GameObject gameObject)
         {
-            GameObject = gameObject;
-            Info = info;
+            if (instanceId == Guid.Empty)
+            {
+                throw new ArgumentException(
+                    "Instance id is required.",
+                    nameof(instanceId));
+            }
+
+            InstanceId = instanceId;
+            GameObject = gameObject
+                ?? throw new ArgumentNullException(nameof(gameObject));
         }
 
-        public WorldId WorldId => Info.WorldId;
-
-        public WorldInfo Info { get; }
+        public Guid InstanceId { get; }
 
         public GameObject GameObject { get; }
 

@@ -1,41 +1,42 @@
+using System;
 using Game.World;
 
 namespace Game.Pickup
 {
     public interface IPickupSpawner
     {
-        WorldId Spawn(PickupSpawnRequest request);
+        Guid Spawn(PickupSpawnRequest request);
     }
 
     public sealed class PickupSpawner : IPickupSpawner
     {
         private readonly PickupFactory _factory;
-        private readonly IWorldObjectRegistry _world;
+        private readonly ISpawnedObjectRegistry _spawnedObjects;
 
         public PickupSpawner(
             PickupFactory factory,
-            IWorldObjectRegistry world)
+            ISpawnedObjectRegistry spawnedObjects)
         {
             _factory = factory;
-            _world = world;
+            _spawnedObjects = spawnedObjects;
         }
 
-        public WorldId Spawn(PickupSpawnRequest request)
+        public Guid Spawn(PickupSpawnRequest request)
         {
-            var lifetime = _factory.Create(request);
+            var spawnedObject = _factory.Create(request);
 
-            if (lifetime == null ||
-                lifetime.WorldId.IsEmpty ||
-                lifetime.IsDisposed)
+            if (spawnedObject == null ||
+                spawnedObject.InstanceId == Guid.Empty ||
+                spawnedObject.IsDisposed)
             {
-                lifetime?.Dispose();
-                return default;
+                spawnedObject?.Dispose();
+                return Guid.Empty;
             }
 
-            if (!_world.Track(lifetime))
-                return default;
+            if (!_spawnedObjects.Track(spawnedObject))
+                return Guid.Empty;
 
-            return lifetime.WorldId;
+            return spawnedObject.InstanceId;
         }
     }
 }

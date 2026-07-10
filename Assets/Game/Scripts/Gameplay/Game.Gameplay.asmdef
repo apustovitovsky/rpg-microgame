@@ -4,6 +4,7 @@
     "references": [
         "VContainer",
         "Game.Core",
+        "Game.UI",
         "Game.World",
         "Game.Actor",
         "Game.Input",

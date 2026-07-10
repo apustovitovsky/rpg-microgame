@@ -8,41 +8,45 @@ namespace Game.Pickup
 {
     public sealed class ItemPickupService : IItemPickupService
     {
-        private readonly HashSet<WorldId> _collecting = new();
-        private readonly IWorldObjectRegistry _world;
+        private readonly HashSet<Guid> _collecting = new();
+        private readonly ISpawnedObjectRegistry _spawnedObjects;
 
-        public ItemPickupService(IWorldObjectRegistry world)
+        public ItemPickupService(
+            ISpawnedObjectRegistry spawnedObjects)
         {
-            _world = world;
+            _spawnedObjects = spawnedObjects;
         }
 
         public async UniTask<CollectResult> CollectAsync(
-            WorldId collectorId,
+            Guid collectorInstanceId,
             ICollectable collectable,
             CancellationToken token)
         {
-            if (collectorId.IsEmpty)
+            if (collectorInstanceId == Guid.Empty)
                 return CollectResult.InvalidCollector;
 
-            if (collectable == null || collectable.WorldId.IsEmpty)
+            if (collectable == null ||
+                collectable.InstanceId == Guid.Empty)
+            {
                 return CollectResult.InvalidCollectable;
+            }
 
-            var worldId = collectable.WorldId;
+            var instanceId = collectable.InstanceId;
 
-            if (!_collecting.Add(worldId))
+            if (!_collecting.Add(instanceId))
                 return CollectResult.AlreadyInProgress;
 
             try
             {
-                if (!collectable.CanCollect(collectorId))
+                if (!collectable.CanCollect(collectorInstanceId))
                     return CollectResult.CannotCollect;
 
                 var result = await collectable.CollectAsync(
-                    collectorId,
+                    collectorInstanceId,
                     token);
 
                 if (result == CollectResult.Succeeded)
-                    _world.Despawn(worldId);
+                    _spawnedObjects.Despawn(instanceId);
 
                 return result;
             }
@@ -56,7 +60,7 @@ namespace Game.Pickup
             }
             finally
             {
-                _collecting.Remove(worldId);
+                _collecting.Remove(instanceId);
             }
         }
     }

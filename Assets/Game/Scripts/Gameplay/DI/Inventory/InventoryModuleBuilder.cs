@@ -6,7 +6,7 @@ namespace Game.Inventory
 {
     [CreateAssetMenu(
         fileName = "InventoryModuleBuilder",
-        menuName = "Game/Inventory/Inventory Module Builder")]
+        menuName = "Game/Gameplay/Inventory Module Builder")]
     public sealed class InventoryModuleBuilder : ModuleBuilder
     {
         [SerializeField, Min(1)]

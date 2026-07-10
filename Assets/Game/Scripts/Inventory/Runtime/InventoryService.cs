@@ -6,35 +6,35 @@ namespace Game.Inventory
     public interface IInventoryService
     {
         bool TryGet(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             out IInventory inventory);
 
         bool CanAdd(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             ItemDefinition definition,
             int amount);
 
         bool TryAdd(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             ItemDefinition definition,
             int amount);
 
         bool TryRemove(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             ItemDefinition definition,
             int amount);
 
         int GetCount(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             ItemDefinition definition);
 
         bool TryGetCount(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             string definitionId,
             out int count);
 
         bool HasItems(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             string definitionId,
             int amount);
     }
@@ -48,7 +48,9 @@ namespace Game.Inventory
         IInventoryService,
         IInventoryRegistrationService
     {
-        private readonly WorldIndex<IInventoryOwner> _owners = new();
+        private readonly InstanceIndex<IInventoryOwner> _owners =
+            new();
+
         private readonly IItemDefinitionCatalog _definitions;
 
         public InventoryService(
@@ -70,70 +72,72 @@ namespace Game.Inventory
             }
 
             return _owners.Register(
-                owner.WorldId,
+                owner.InstanceId,
                 owner);
         }
 
         public bool TryGet(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             out IInventory inventory)
         {
             inventory = null;
 
-            if (!_owners.TryGet(ownerId, out var owner))
+            if (!_owners.TryGet(
+                    ownerInstanceId,
+                    out var owner))
+            {
                 return false;
+            }
 
             inventory = owner.Inventory;
             return inventory != null;
         }
 
         public bool CanAdd(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             ItemDefinition definition,
             int amount)
         {
-            return TryGet(ownerId, out var inventory) &&
+            return TryGet(ownerInstanceId, out var inventory) &&
                    inventory.CanAdd(definition, amount);
         }
 
         public bool TryAdd(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             ItemDefinition definition,
             int amount)
         {
-            return TryGet(ownerId, out var inventory) &&
+            return TryGet(ownerInstanceId, out var inventory) &&
                    inventory.TryAdd(definition, amount);
         }
 
         public bool TryRemove(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             ItemDefinition definition,
             int amount)
         {
-            return TryGet(ownerId, out var inventory) &&
+            return TryGet(ownerInstanceId, out var inventory) &&
                    inventory.TryRemove(definition, amount);
         }
 
         public int GetCount(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             ItemDefinition definition)
         {
-            return TryGet(ownerId, out var inventory)
+            return TryGet(ownerInstanceId, out var inventory)
                 ? inventory.GetCount(definition)
                 : 0;
         }
 
         public bool TryGetCount(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             string definitionId,
             out int count)
         {
             count = 0;
 
-            if (!TryGet(ownerId, out var inventory))
-                return false;
-
-            if (!_definitions.TryGet(
+            if (!TryGet(ownerInstanceId, out var inventory) ||
+                !_definitions.TryGet(
                     definitionId,
                     out var definition))
             {
@@ -145,16 +149,16 @@ namespace Game.Inventory
         }
 
         public bool HasItems(
-            WorldId ownerId,
+            Guid ownerInstanceId,
             string definitionId,
             int amount)
         {
             return amount > 0 &&
-                   TryGetCount(
-                       ownerId,
-                       definitionId,
-                       out var count) &&
-                   count >= amount;
+                TryGetCount(
+                    ownerInstanceId,
+                    definitionId,
+                    out var count) &&
+                    count >= amount;
         }
     }
 }
