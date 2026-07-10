@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Item_Gold
   m_EditorClassIdentifier: Game.Inventory::Game.Inventory.ItemDefinition
   _displayName: Gold
-  <MaxStackSize>k__BackingField: 5
+  _definitionId: item.gold
+  <MaxStackSize>k__BackingField: 50

@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: ActorSpawnCatalog
   m_EditorClassIdentifier: Game.World::Game.World.WorldActorConfigSO
   _player:
-    _definition: {fileID: 11400000, guid: b090ace1adb625143a5c20e191bfb40b, type: 2}
+    _definitionId: npc.character
     _locationId: city_storage
     _anchorKey: entrance_outer
   _actors:
-  - _definition: {fileID: 11400000, guid: 4e99ec7270fe34d4d9665e5ebc5545bb, type: 2}
+  - _definitionId: npc.guard
     _locationId: city_storage
     _anchorKey: entrance_inner
-  - _definition: {fileID: 11400000, guid: 4e99ec7270fe34d4d9665e5ebc5545bb, type: 2}
+  - _definitionId: npc.guard
     _locationId: city_storage
     _anchorKey: corner_01
-  - _definition: {fileID: 11400000, guid: 4e99ec7270fe34d4d9665e5ebc5545bb, type: 2}
+  - _definitionId: npc.bandit
     _locationId: city_storage
     _anchorKey: corner_02

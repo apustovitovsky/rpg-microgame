@@ -1,3 +1,4 @@
+using Game.Core;
 using Game.Inventory;
 using UnityEngine;
 
@@ -6,10 +7,8 @@ namespace Game.Pickup
     [CreateAssetMenu(
         fileName = "PickupDefinition",
         menuName = "Game/Pickup/Pickup Definition")]
-    public sealed class PickupDefinition : ScriptableObject
+    public sealed class PickupDefinition : Definition
     {
-        [SerializeField] private string _displayName;
-
         [field: SerializeField]
         public GameObject Prefab { get; private set; }
 
@@ -19,17 +18,12 @@ namespace Game.Pickup
         [field: SerializeField, Min(1)]
         public int Amount { get; private set; } = 1;
 
-        public string DisplayName
+        protected override void OnValidate()
         {
-            get
-            {
-                if (!string.IsNullOrWhiteSpace(_displayName))
-                    return _displayName.Trim();
+            base.OnValidate();
 
-                return Item != null
-                    ? Item.DisplayName
-                    : name;
-            }
+            if (Amount < 1)
+                Amount = 1;
         }
     }
 }

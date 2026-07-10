@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Etheria.Game.World;
-using Game.Actor;
 using UnityEngine;
 
 namespace Game.Gameplay
@@ -12,9 +11,12 @@ namespace Game.Gameplay
     public sealed class ActorSpawnCatalog : ScriptableObject
     {
         [SerializeField] private ActorEntry _player = new();
-        [SerializeField] private ActorEntry[] _actors = Array.Empty<ActorEntry>();
+        [SerializeField]
+        private ActorEntry[] _actors =
+            Array.Empty<ActorEntry>();
 
         public ActorEntry Player => _player;
+
         public IReadOnlyList<ActorEntry> Actors => _actors;
 
         private void OnValidate()
@@ -31,16 +33,22 @@ namespace Game.Gameplay
         [Serializable]
         public sealed class ActorEntry
         {
-            [SerializeField] private ActorDefinition _definition;
+            [SerializeField] private string _definitionId;
             [SerializeField] private string _locationId;
-            [SerializeField] private string _anchorKey = NavigationAnchorKeys.Default;
 
-            public ActorDefinition Definition => _definition;
+            [SerializeField]
+            private string _anchorKey =
+                NavigationAnchorKeys.Default;
+
+            public string DefinitionId => _definitionId;
+
             public string LocationId => _locationId;
+
             public string AnchorKey => _anchorKey;
 
             public void Normalize()
             {
+                _definitionId = _definitionId?.Trim();
                 _locationId = _locationId?.Trim();
 
                 _anchorKey = string.IsNullOrWhiteSpace(_anchorKey)

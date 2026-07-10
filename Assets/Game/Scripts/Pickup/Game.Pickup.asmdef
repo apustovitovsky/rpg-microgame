@@ -2,6 +2,7 @@
     "name": "Game.Pickup",
     "rootNamespace": "",
     "references": [
+        "Game.Core",
         "Game.World",
         "Game.Targeting",
         "Game.Interaction",

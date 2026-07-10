@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 66b8237ad99c76245b619954befcbdbb, type: 3}
-  m_Name: GoldBagPickupDefinition
+  m_Name: GoldBagPickup_small
   m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupDefinition
   _displayName: Gold Bag
   <Prefab>k__BackingField: {fileID: 2440724634624028458, guid: 995871178727ef74eb5dbb722422677c,
     type: 3}
   <Item>k__BackingField: {fileID: 11400000, guid: 061285384c2e0084fa3cbcb7df583492,
     type: 2}
-  <Amount>k__BackingField: 3
+  <Amount>k__BackingField: 10

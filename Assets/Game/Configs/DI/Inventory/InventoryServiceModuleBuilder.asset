@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: add7bce382b83f64583c2652f9d18334, type: 3}
   m_Name: InventoryServiceModuleBuilder
   m_EditorClassIdentifier: Game.Gameplay::Game.Inventory.InventoryServiceModuleBuilder
+  _catalog: {fileID: 11400000, guid: 854c4bcb4969a6b489bc4b492c70d6fb, type: 2}

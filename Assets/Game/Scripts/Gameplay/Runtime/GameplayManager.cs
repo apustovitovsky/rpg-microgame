@@ -15,6 +15,7 @@ namespace Game.Gameplay
     {
         private readonly ActorSpawnCatalog _actors;
         private readonly PickupSpawnCatalog _pickups;
+        private readonly IActorDefinitionCatalog _actorDefinitions;
         private readonly IPlayerService _player;
         private readonly IWorldObjectRegistry _world;
         private readonly IWorldIdFactory _worldIds;
@@ -25,6 +26,7 @@ namespace Game.Gameplay
         public GameplayManager(
             ActorSpawnCatalog actors,
             PickupSpawnCatalog pickups,
+            IActorDefinitionCatalog actorDefinitions,
             IWorldIdFactory worldIds,
             ISpawnPointResolver spawnPoints,
             IWorldObjectRegistry world,
@@ -34,6 +36,7 @@ namespace Game.Gameplay
         {
             _actors = actors;
             _pickups = pickups;
+            _actorDefinitions = actorDefinitions;
             _worldIds = worldIds;
             _world = world;
             _actorSpawner = actorSpawner;
@@ -60,6 +63,7 @@ namespace Game.Gameplay
             {
                 Debug.LogWarning(
                     "Player was not spawned: spawn point could not be resolved.");
+
                 return;
             }
 
@@ -79,7 +83,9 @@ namespace Game.Gameplay
                         out var node))
                 {
                     Debug.LogWarning(
-                        $"Actor '{actor?.Definition?.name}' was not spawned: spawn point could not be resolved.");
+                        $"Actor '{actor?.DefinitionId}' was not spawned: " +
+                        "spawn point could not be resolved.");
+
                     continue;
                 }
 
@@ -87,14 +93,6 @@ namespace Game.Gameplay
                     actor,
                     node,
                     bindPlayer: false);
-            }
-        }
-
-        private void SpawnPickups()
-        {
-            foreach (var pickup in _pickups.Pickups)
-            {
-                SpawnPickup(pickup);
             }
         }
 
@@ -106,29 +104,36 @@ namespace Game.Gameplay
             if (entry == null)
                 return default;
 
-            if (entry.Definition == null)
+            if (!_actorDefinitions.TryGet(
+                    entry.DefinitionId,
+                    out var definition))
             {
                 Debug.LogWarning(
-                    "Actor was not spawned: definition is missing.");
+                    $"Actor definition '{entry.DefinitionId}' was not found.");
+
                 return default;
             }
 
-            if (entry.Definition.Prefab == null)
+            if (definition.Prefab == null)
             {
                 Debug.LogWarning(
-                    $"Actor '{entry.Definition.name}' was not spawned: prefab is missing.");
+                    $"Actor '{definition.DefinitionId}' was not spawned: " +
+                    "prefab is missing.");
+
                 return default;
             }
 
-            var worldId = _worldIds.Create(entry.Definition.DisplayName);
+            var worldId =
+                _worldIds.Create(definition.DefinitionId);
 
             var request = new ActorSpawnRequest(
                 worldId,
-                entry.Definition,
+                definition,
                 node.Position,
                 node.Rotation);
 
-            var actorWorldId = _actorSpawner.Spawn(request);
+            var actorWorldId =
+                _actorSpawner.Spawn(request);
 
             if (actorWorldId.IsEmpty)
             {
@@ -144,7 +149,14 @@ namespace Game.Gameplay
             return actorWorldId;
         }
 
-        private WorldId SpawnPickup(PickupSpawnCatalog.PickupEntry entry)
+        private void SpawnPickups()
+        {
+            foreach (var pickup in _pickups.Pickups)
+                SpawnPickup(pickup);
+        }
+
+        private WorldId SpawnPickup(
+            PickupSpawnCatalog.PickupEntry entry)
         {
             if (entry == null)
                 return default;
@@ -153,13 +165,16 @@ namespace Game.Gameplay
             {
                 Debug.LogWarning(
                     "Pickup was not spawned: definition is missing.");
+
                 return default;
             }
 
             if (entry.Definition.Prefab == null)
             {
                 Debug.LogWarning(
-                    $"Pickup '{entry.Definition.name}' was not spawned: prefab is missing.");
+                    $"Pickup '{entry.Definition.name}' was not spawned: " +
+                    "prefab is missing.");
+
                 return default;
             }
 
@@ -169,11 +184,14 @@ namespace Game.Gameplay
                     out var node))
             {
                 Debug.LogWarning(
-                    $"Pickup '{entry.Definition.name}' was not spawned: spawn point could not be resolved.");
+                    $"Pickup '{entry.Definition.name}' was not spawned: " +
+                    "spawn point could not be resolved.");
+
                 return default;
             }
 
-            var worldId = _worldIds.Create(entry.Definition.DisplayName);
+            var worldId =
+                _worldIds.Create(entry.Definition.DisplayName);
 
             var request = new PickupSpawnRequest(
                 worldId,
@@ -181,13 +199,13 @@ namespace Game.Gameplay
                 node.Position,
                 node.Rotation);
 
-            var pickupWorldId = _pickupSpawner.Spawn(request);
+            var pickupWorldId =
+                _pickupSpawner.Spawn(request);
 
             if (pickupWorldId.IsEmpty)
             {
                 Debug.LogWarning(
                     $"Pickup '{worldId}' was not spawned.");
-                return default;
             }
 
             return pickupWorldId;

@@ -16,7 +16,7 @@ MonoBehaviour:
   - _definition: {fileID: 11400000, guid: 3b8926a077cf8a840971656bd6415e6e, type: 2}
     _locationId: city_central_square
     _anchorKey: spawn_02
-  - _definition: {fileID: 11400000, guid: 3b8926a077cf8a840971656bd6415e6e, type: 2}
+  - _definition: {fileID: 11400000, guid: de41de05175ad364887c1560dd25dd9e, type: 2}
     _locationId: city_central_square
     _anchorKey: spawn_04
   - _definition: {fileID: 11400000, guid: 3b8926a077cf8a840971656bd6415e6e, type: 2}

@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4857ddcb480a7894391b5fc7418f1619, type: 3}
-  m_Name: ActorDefinition_Player
+  m_Name: ActorDefinition_Character
   m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorDefinition
-  _displayName: 
+  _displayName: npc.character
+  _definitionId: npc.character
   <Prefab>k__BackingField: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
     type: 3}

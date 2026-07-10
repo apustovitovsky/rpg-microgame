@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44951e1e8b0a7774696f548c26a08f47, type: 3}
   m_Name: ActorConfigurator
   m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorInstallerSO
+  _catalog: {fileID: 11400000, guid: 0cb2a836da00efd42b65aa42b86d355f, type: 2}

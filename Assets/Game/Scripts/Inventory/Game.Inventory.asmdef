@@ -2,6 +2,7 @@
     "name": "Game.Inventory",
     "rootNamespace": "",
     "references": [
+        "Game.Core",
         "Game.World"
     ],
     "includePlatforms": [],
