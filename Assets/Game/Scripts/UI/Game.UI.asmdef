@@ -2,7 +2,7 @@
     "name": "Game.UI",
     "rootNamespace": "",
     "references": [
-        "Game.World"
+        "Game.Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

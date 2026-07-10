@@ -352,6 +352,7 @@ MonoBehaviour:
   autoInjectGameObjects: []
   _actorRoot: {fileID: 8538305375040021554}
   _identity: {fileID: 11400000, guid: 3fad7c24c1e6eb748877ff02d7425018, type: 2}
+  _commands: {fileID: 11400000, guid: c886941594a342840b2f7a4c056dec94, type: 2}
   _inventory: {fileID: 11400000, guid: f23d96273983e1243a8474195182f5e5, type: 2}
   _movement: {fileID: 0}
   _targeting: {fileID: 0}
@@ -667,7 +668,6 @@ GameObject:
   - component: {fileID: 8538305375040021554}
   - component: {fileID: 691123616913121196}
   - component: {fileID: 5842623703354476941}
-  - component: {fileID: 864978277779090854}
   - component: {fileID: 535090416791697999}
   - component: {fileID: 6320987743397312848}
   - component: {fileID: 2755038198008224742}
@@ -749,19 +749,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &864978277779090854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6938359593822086918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b863d5f065a8b03429a5815f099ae77f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorView
-  _cameraPivot: {fileID: 2416931173838807167}
 --- !u!114 &535090416791697999
 MonoBehaviour:
   m_ObjectHideFlags: 0

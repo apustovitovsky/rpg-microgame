@@ -2,7 +2,7 @@ using System;
 using Game.Actor;
 using Game.Targeting;
 using Game.UI;
-using Game.World;
+using Game.Core;
 using UnityEngine;
 using VContainer.Unity;
 

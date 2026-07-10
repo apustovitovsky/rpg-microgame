@@ -12,6 +12,7 @@ namespace Game.Actor
 
         [Header("Build Configurations")]
         [SerializeField] private ModuleBuilder _identity;
+        [SerializeField] private ModuleBuilder _commands;
         [SerializeField] private ModuleBuilder _inventory;
         [SerializeField] private ModuleBuilder _movement;
         [SerializeField] private ModuleBuilder _targeting;
@@ -30,6 +31,7 @@ namespace Game.Actor
                 .AsImplementedInterfaces();
 
             builder.Configure(_identity);
+            builder.Configure(_commands);
             builder.Configure(_inventory);
             builder.Configure(_movement);
             builder.Configure(_targeting);

@@ -1,5 +1,5 @@
 using System;
-using Game.World;
+using Game.Core;
 
 namespace Game.Inventory
 {

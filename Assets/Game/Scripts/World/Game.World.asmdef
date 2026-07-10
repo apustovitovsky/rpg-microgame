@@ -1,7 +1,9 @@
 {
     "name": "Game.World",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "Game.Core"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

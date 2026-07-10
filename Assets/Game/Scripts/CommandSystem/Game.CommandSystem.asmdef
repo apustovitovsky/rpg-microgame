@@ -2,7 +2,9 @@
     "name": "Game.CommandSystem",
     "rootNamespace": "",
     "references": [
-        "UniTask"
+        "UniTask",
+        "Game.Core",
+        "Game.World"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

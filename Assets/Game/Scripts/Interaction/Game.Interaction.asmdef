@@ -3,9 +3,7 @@
     "rootNamespace": "",
     "references": [
         "UniTask",
-        "VContainer",
-        "Game.Core",
-        "Game.World"
+        "Game.CommandSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

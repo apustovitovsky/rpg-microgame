@@ -1,5 +1,6 @@
 using System;
-using Game.Interaction;
+using Game.CommandSystem;
+using Game.Core;
 using Game.Inventory;
 using Game.Targeting;
 using Game.UI;
@@ -12,24 +13,24 @@ namespace Game.Actor
     public sealed class ActorFactory
     {
         private readonly LifetimeScope _parentScope;
-        private readonly IInteractionRegistrationService _interactions;
         private readonly IInventoryRegistrationService _inventories;
         private readonly IDisplayNameRegistrationService _displayNames;
+        private readonly IInstanceRegistry<ICommandReceiver> _commandReceivers;
         private readonly IInstanceRegistry<IPossessable> _possessables;
         private readonly IInstanceRegistry<ITargetProvider> _targetProviders;
 
         public ActorFactory(
             LifetimeScope parentScope,
-            IInteractionRegistrationService interactions,
             IInventoryRegistrationService inventories,
             IDisplayNameRegistrationService displayNames,
+            IInstanceRegistry<ICommandReceiver> commandReceivers,
             IInstanceRegistry<IPossessable> possessables,
             IInstanceRegistry<ITargetProvider> targetProviders)
         {
             _parentScope = parentScope;
-            _interactions = interactions;
             _inventories = inventories;
             _displayNames = displayNames;
+            _commandReceivers = commandReceivers;
             _possessables = possessables;
             _targetProviders = targetProviders;
         }
@@ -49,7 +50,9 @@ namespace Game.Actor
             using (LifetimeScope.EnqueueParent(_parentScope))
             using (LifetimeScope.Enqueue(builder =>
             {
-                builder.RegisterInstance(actorInstance);
+                builder.RegisterInstance(actorInstance)
+                    .AsSelf()
+                    .AsImplementedInterfaces();
             }))
             {
                 var gameObject = UnityEngine.Object.Instantiate(
@@ -90,6 +93,14 @@ namespace Game.Actor
                             actorInstance.InstanceId);
                     }
 
+                    var commandReceiver = scope.Container
+                        .Resolve<ICommandReceiver>();
+
+                    spawnedObject.Add(
+                        _commandReceivers.Register(
+                            actorInstance.InstanceId,
+                            commandReceiver));
+
                     if (scope.Container.TryResolve<IPossessable>(
                             out var possessable))
                     {
@@ -123,15 +134,6 @@ namespace Game.Actor
 
                         spawnedObject.Add(
                             _inventories.Register(owner));
-                    }
-
-                    if (scope.Container.TryResolve<IInteractable>(
-                            out var interactable))
-                    {
-                        spawnedObject.Add(
-                            _interactions.RegisterInteractable(
-                                actorInstance.InstanceId,
-                                interactable));
                     }
 
                     return spawnedObject;

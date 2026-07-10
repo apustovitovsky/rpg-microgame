@@ -1,4 +1,6 @@
 using System;
+using Game.CommandSystem;
+using Game.Core;
 using Game.Interaction;
 using Game.Inventory;
 using Game.Targeting;
@@ -11,19 +13,19 @@ namespace Game.Pickup
     {
         private readonly IItemPickupService _pickupService;
         private readonly IInventoryService _inventories;
-        private readonly IInteractionRegistrationService _interactions;
         private readonly IDisplayNameRegistrationService _displayNames;
+        private readonly IInstanceRegistry<ICommandReceiver> _commandReceivers;
 
         public PickupFactory(
             IItemPickupService pickupService,
             IInventoryService inventories,
-            IInteractionRegistrationService interactions,
-            IDisplayNameRegistrationService displayNames)
+            IDisplayNameRegistrationService displayNames,
+            IInstanceRegistry<ICommandReceiver> commandReceivers)
         {
             _pickupService = pickupService;
             _inventories = inventories;
-            _interactions = interactions;
             _displayNames = displayNames;
+            _commandReceivers = commandReceivers;
         }
 
         public ISpawnedObject Create(PickupSpawnRequest request)
@@ -104,16 +106,23 @@ namespace Game.Pickup
 
                 targetable.Initialize(pickupInstance.InstanceId);
 
+                var commandReceiver = new WorldCommandReceiver(
+                    pickupInstance,
+                    new IWorldCommandHandler[]
+                    {
+                        new InteractCommandHandler(interactable),
+                    });
+
+                spawnedObject.Add(
+                    _commandReceivers.Register(
+                        pickupInstance.InstanceId,
+                        commandReceiver));
+
                 spawnedObject.Add(
                     _displayNames.Register(
                         pickupInstance.InstanceId,
                         new DisplayNameProvider(
                             () => definition.DisplayName)));
-
-                spawnedObject.Add(
-                    _interactions.RegisterInteractable(
-                        pickupInstance.InstanceId,
-                        interactable));
 
                 return spawnedObject;
             }

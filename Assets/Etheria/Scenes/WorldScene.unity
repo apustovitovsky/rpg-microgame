@@ -8696,6 +8696,7 @@ MonoBehaviour:
   autoInjectGameObjects: []
   _game: {fileID: 11400000, guid: 4d3e7eca3c1041b4b97e2009b739a078, type: 2}
   _world: {fileID: 11400000, guid: 3e03f365509f9cb4fb29837a14c13f33, type: 2}
+  _commandSystem: {fileID: 11400000, guid: a9300be20f9f927498448db848e6127c, type: 2}
   _inventory: {fileID: 11400000, guid: 641bc45f5e671774b803f55d2c804cca, type: 2}
   _input: {fileID: 11400000, guid: df7bb53107971cc49b155381320e4fcc, type: 2}
   _navigation: {fileID: 11400000, guid: 75613f041580a9d47b8c00ab14aaf6f0, type: 2}

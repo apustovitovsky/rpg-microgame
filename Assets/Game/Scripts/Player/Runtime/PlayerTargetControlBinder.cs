@@ -1,9 +1,9 @@
 using System;
 using Game.Actor;
 using Game.Targeting;
-using Game.World;
 using UnityEngine;
 using VContainer.Unity;
+using Game.Core;
 
 namespace Game.Player
 {

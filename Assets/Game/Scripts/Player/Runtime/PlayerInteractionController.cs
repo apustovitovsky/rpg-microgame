@@ -1,6 +1,8 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.CommandSystem;
+using Game.Core;
 using Game.Interaction;
 using Game.Targeting;
 using Game.World;
@@ -14,7 +16,7 @@ namespace Game.Player
     {
         private readonly IPlayerInteractionInput _input;
         private readonly IPlayerService _player;
-        private readonly IInteractionService _interactions;
+        private readonly ICommandDispatcher _commandDispatcher;
         private readonly IInstanceRegistry<ITargetProvider> _targetProviders;
         private readonly ISpawnedObjectRegistry _spawnedObjects;
 
@@ -23,13 +25,13 @@ namespace Game.Player
         public PlayerInteractionController(
             IPlayerInteractionInput input,
             IPlayerService player,
-            IInteractionService interactions,
+            ICommandDispatcher commandDispatcher,
             IInstanceRegistry<ITargetProvider> targetProviders,
             ISpawnedObjectRegistry spawnedObjects)
         {
             _input = input;
             _player = player;
-            _interactions = interactions;
+            _commandDispatcher = commandDispatcher;
             _targetProviders = targetProviders;
             _spawnedObjects = spawnedObjects;
         }
@@ -80,13 +82,13 @@ namespace Game.Player
             _interactionCts?.Dispose();
             _interactionCts = new CancellationTokenSource();
 
-            var context = new InteractionContext(
+            var command = new InteractCommand(
                 currentActorId,
-                currentSpawnedObject.GameObject.transform.position,
-                target.InstanceId);
+                currentSpawnedObject.GameObject.transform.position);
 
-            await _interactions.TryInteractAsync(
-                context,
+            await _commandDispatcher.SendAsync(
+                target.InstanceId,
+                command,
                 _interactionCts.Token);
         }
     }

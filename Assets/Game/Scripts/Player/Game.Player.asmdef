@@ -12,6 +12,7 @@
         "Game.Input",
         "Game.World",
         "Game.UI",
+        "Game.CommandSystem",
         "Unity.Cinemachine",
         "Game.Pickup"
     ],

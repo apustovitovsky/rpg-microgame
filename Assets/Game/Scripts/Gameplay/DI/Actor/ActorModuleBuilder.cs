@@ -27,7 +27,7 @@ namespace Game.Actor
                 .AsSelf()
                 .AsImplementedInterfaces();
 
-            builder.RegisterComponentInModuleRoot<ActorDialogue>()
+            builder.RegisterComponentInModuleRoot<DialogueParticipant>()
                 .AsImplementedInterfaces();
         }
     }
