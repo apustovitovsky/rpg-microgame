@@ -1,10 +1,10 @@
+using Game.Control;
 using Game.Input;
-
 
 namespace Game.Actor
 {
     public sealed class ActorInputBinder :
-        IActorInputBinder
+        IControlInputBinder
     {
         private readonly ActorLookController _look;
         private readonly MovementController _movement;
@@ -20,7 +20,7 @@ namespace Game.Actor
             _targeting = targeting;
         }
 
-        public void Bind(IActorInput input)
+        public void Bind(IControlInput input)
         {
             _look.Bind(input);
             _movement.Bind(input);

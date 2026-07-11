@@ -3,28 +3,32 @@ using Game.Input;
 using UnityEngine;
 using VContainer;
 
-namespace Game.Actor
+namespace Game.Control
 {
     [DisallowMultipleComponent]
-    public sealed class ActorPossessable :
+    public sealed class PossessionEndpoint :
         MonoBehaviour,
-        IPossessable
+        IPossessionEndpoint
     {
+        [SerializeField] private Transform _root;
         [SerializeField] private Transform _cameraPivot;
 
-        private IActorInputBinder _inputBinder;
+        private IControlInputBinder _inputBinder;
+
+        public Transform Root =>
+            _root != null ? _root : transform;
 
         public Transform CameraPivot =>
-            _cameraPivot != null ? _cameraPivot : transform;
+            _cameraPivot != null ? _cameraPivot : Root;
 
         [Inject]
-        public void Construct(IActorInputBinder inputBinder)
+        public void Construct(IControlInputBinder inputBinder)
         {
             _inputBinder = inputBinder
                 ?? throw new ArgumentNullException(nameof(inputBinder));
         }
 
-        public void BindInput(IActorInput input)
+        public void BindInput(IControlInput input)
         {
             _inputBinder.Bind(input);
         }

@@ -3,16 +3,12 @@ using UnityEngine;
 
 namespace Game.Input
 {
-    public interface IActorInput
+    public interface IControlInput
     {
         Vector2 LookDelta { get; }
-
         Vector2 MoveComposite { get; }
-
         float MovementInputDuration { get; set; }
-
         bool MovementInputDetected { get; }
-
         event Action OnAimActivated;
         event Action OnAimDeactivated;
         event Action OnCrouchActivated;

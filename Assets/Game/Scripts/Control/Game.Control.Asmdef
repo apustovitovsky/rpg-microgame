@@ -1,10 +1,9 @@
 {
-    "name": "Game.UI",
+    "name": "Game.Control",
     "rootNamespace": "",
     "references": [
-        "VContainer",
-        "Unity.TextMeshPro",
-        "Game.Core"
+        "Game.Input",
+        "VContainer"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,6 +1,7 @@
 using Game.CommandSystem;
 using Game.Core;
 using Game.Interaction;
+using Game.Player;
 using UnityEngine;
 using VContainer;
 
@@ -15,6 +16,9 @@ namespace Game.Gameplay
         public override void Install(IContainerBuilder builder)
         {
             builder.Register<InteractCommandHandler>(Lifetime.Scoped)
+                .AsImplementedInterfaces();
+
+            builder.Register<PossessCommandHandler>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
             builder.Register<WorldCommandReceiver>(Lifetime.Scoped)

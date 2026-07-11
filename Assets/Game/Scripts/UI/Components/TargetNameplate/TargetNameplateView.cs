@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Game.Actor
+namespace Game.UI
 {
     public sealed class TargetNameplateView : MonoBehaviour
     {
@@ -31,7 +31,6 @@ namespace Game.Actor
             if (_text != null)
                 _text.text = text;
 
-            _rectTransform ??= transform as RectTransform;
             UpdatePosition();
         }
 

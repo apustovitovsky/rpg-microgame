@@ -11,7 +11,8 @@
         "Game.Pickup",
         "Game.Input",
         "Game.Core",
-        "Game.Interaction"
+        "Game.Interaction",
+        "Game.Control"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

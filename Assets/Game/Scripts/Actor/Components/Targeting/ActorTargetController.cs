@@ -16,7 +16,7 @@ namespace Game.Actor
         [SerializeField] private float _distanceScoreWeight = 0f;
         [SerializeField] private float _angleScoreWeight = 100f;
 
-        private IActorInput _input;
+        private IControlInput _input;
         private ITargetSelector _selector;
 
         public ITargetable CurrentTarget { get; private set; }
@@ -38,7 +38,7 @@ namespace Game.Actor
                 });
         }
 
-        public void Bind(IActorInput input)
+        public void Bind(IControlInput input)
         {
             if (_input != null)
                 _input.OnLockOnToggled -= ToggleLock;

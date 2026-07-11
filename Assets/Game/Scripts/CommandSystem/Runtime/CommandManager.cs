@@ -5,12 +5,12 @@ using Game.Core;
 
 namespace Game.CommandSystem
 {
-    public sealed class CommandDispatcher :
-        ICommandDispatcher
+    public sealed class CommandManager :
+        ICommandManager
     {
         private readonly IInstanceRegistry<ICommandReceiver> _receivers;
 
-        public CommandDispatcher(
+        public CommandManager(
             IInstanceRegistry<ICommandReceiver> receivers)
         {
             _receivers = receivers

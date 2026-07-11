@@ -3,11 +3,13 @@
     "rootNamespace": "",
     "references": [
         "VContainer",
+        "UniTask",
         "Game.Core",
         "Game.UI",
         "Game.World",
         "Game.Actor",
         "Game.Input",
+        "Game.Control",
         "Game.Player",
         "Game.Pickup",
         "Game.Targeting",

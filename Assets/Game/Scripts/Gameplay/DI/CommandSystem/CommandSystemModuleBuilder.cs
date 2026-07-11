@@ -17,7 +17,7 @@ namespace Game.Gameplay
                     Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<CommandDispatcher>(Lifetime.Singleton)
+            builder.Register<CommandManager>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

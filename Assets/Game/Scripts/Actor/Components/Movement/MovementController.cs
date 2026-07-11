@@ -91,10 +91,10 @@ namespace Game.Actor
         [SerializeField]
         private ActorTargetController _targeting;
 
-        private IActorInput _input;
+        private IControlInput _input;
         private bool _inputBound;
 
-        public void Bind(IActorInput input)
+        public void Bind(IControlInput input)
         {
             if (_input == input)
             {

@@ -3,7 +3,7 @@ using UnityEngine.Pool;
 using VContainer;
 using VContainer.Unity;
 
-namespace Game.Actor
+namespace Game.UI
 {
     public sealed class TargetNameplatePool
     {

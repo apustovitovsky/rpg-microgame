@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Etheria.Game.World;
 using Game.Actor;
 using Game.Pickup;
@@ -16,7 +18,7 @@ namespace Game.Gameplay
         private readonly ActorSpawnCatalog _actors;
         private readonly PickupSpawnCatalog _pickups;
         private readonly IActorDefinitionCatalog _actorDefinitions;
-        private readonly IPlayerService _player;
+        private readonly IPlayerControl _player;
         private readonly ISpawnedObjectRegistry _spawnedObjects;
         private readonly IActorSpawner _actorSpawner;
         private readonly IPickupSpawner _pickupSpawner;
@@ -30,7 +32,7 @@ namespace Game.Gameplay
             ISpawnedObjectRegistry spawnedObjects,
             IActorSpawner actorSpawner,
             IPickupSpawner pickupSpawner,
-            IPlayerService player)
+            IPlayerControl player)
         {
             _actors = actors;
             _pickups = pickups;
@@ -139,7 +141,12 @@ namespace Game.Gameplay
             }
 
             if (bindPlayer)
-                _player.BindActor(actorInstanceId);
+            {
+                _player.PossessAsync(
+                        actorInstanceId,
+                        CancellationToken.None)
+                    .Forget();
+            }
 
             return actorInstanceId;
         }

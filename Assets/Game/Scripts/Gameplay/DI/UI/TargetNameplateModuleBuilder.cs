@@ -1,9 +1,10 @@
 using Game.Core;
+using Game.UI;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Game.Actor
+namespace Game.Gameplay
 {
     [CreateAssetMenu(
         fileName = "TargetNameplateModuleBuilder",
@@ -17,7 +18,7 @@ namespace Game.Actor
             if (_labelPrefab == null)
             {
                 Debug.LogError(
-                    $"{nameof(TargetNameplateModuleBuilder)} requires assigned actor label prefab.");
+                    $"{nameof(TargetNameplateModuleBuilder)} requires assigned target nameplate prefab.");
 
                 return;
             }

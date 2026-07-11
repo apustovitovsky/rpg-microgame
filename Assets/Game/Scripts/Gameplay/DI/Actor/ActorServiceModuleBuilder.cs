@@ -26,9 +26,6 @@ namespace Game.Actor
             builder.RegisterInstance(_catalog)
                 .AsImplementedInterfaces();
 
-            builder.Register<InstanceIndex<IPossessable>>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
             builder.Register<InstanceIndex<ITargetProvider>>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 

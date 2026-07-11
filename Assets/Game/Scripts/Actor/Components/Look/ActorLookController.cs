@@ -30,7 +30,7 @@ namespace Game.Actor
         [SerializeField]
         private float _rotationLag = 1f;
 
-        private IActorInput _input;
+        private IControlInput _input;
         private Transform _target;
         private const int _LAG_DELTA_TIME_ADJUSTMENT = 20;
         private float _verticalInversion;
@@ -43,7 +43,7 @@ namespace Game.Actor
         private float _pitchDelta;
         private float _yawDelta;
 
-        public void Bind(IActorInput input)
+        public void Bind(IControlInput input)
         {
             _input = input;
         }

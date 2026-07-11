@@ -1,8 +1,4 @@
-using System;
-using Game.Actor;
-using Game.Targeting;
 using Game.UI;
-using Game.Core;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -10,91 +6,57 @@ namespace Game.Player
 {
     public sealed class PlayerTargetNameplatePresenter :
         IStartable,
-        IDisposable
+        System.IDisposable
     {
-        private readonly IPlayerService _player;
+        private readonly IPlayerControl _control;
         private readonly TargetNameplatePool _pool;
-        private readonly IInstanceRegistry<ITargetProvider> _targetProviders;
         private readonly IDisplayNameService _displayNames;
-        private ITargetProvider _targetProvider;
+
         private TargetNameplateView _currentView;
-        private ITargetable _currentTarget;
         private Camera _camera;
 
         public PlayerTargetNameplatePresenter(
-            IPlayerService player,
+            IPlayerControl control,
             TargetNameplatePool pool,
-            IInstanceRegistry<ITargetProvider> targetProviders,
             IDisplayNameService displayNames)
         {
-            _player = player;
+            _control = control;
             _pool = pool;
-            _targetProviders = targetProviders;
             _displayNames = displayNames;
         }
 
         public void Start()
         {
-            _player.CurrentActorChanged += OnCurrentActorChanged;
-            OnCurrentActorChanged();
+            _control.ControlledObjectChanged +=
+                RefreshCurrentTarget;
+
+            _control.CurrentTargetChanged +=
+                RefreshCurrentTarget;
+
+            RefreshCurrentTarget();
         }
 
         public void Dispose()
         {
-            _player.CurrentActorChanged -= OnCurrentActorChanged;
-            UnbindTargetProvider();
+            _control.ControlledObjectChanged -=
+                RefreshCurrentTarget;
+
+            _control.CurrentTargetChanged -=
+                RefreshCurrentTarget;
+
             ReleaseCurrent();
         }
 
-        private void OnCurrentActorChanged()
+        private void RefreshCurrentTarget()
         {
-            UnbindTargetProvider();
-            ReleaseCurrent();
+            var target = _control.CurrentTarget;
 
-            var actorInstanceId = _player.CurrentActor;
-
-            if (actorInstanceId == Guid.Empty ||
-                !_targetProviders.TryGet(
-                    actorInstanceId,
-                    out _targetProvider))
-            {
-                return;
-            }
-
-            _targetProvider.CurrentTargetChanged += OnCurrentTargetChanged;
-            OnCurrentTargetChanged(_targetProvider.CurrentTarget);
-        }
-
-        private void UnbindTargetProvider()
-        {
-            if (_targetProvider != null)
-                _targetProvider.CurrentTargetChanged -= OnCurrentTargetChanged;
-
-            _targetProvider = null;
-        }
-
-        private void OnCurrentTargetChanged(ITargetable target)
-        {
             if (target == null ||
                 !target.IsTargetable ||
-                target.InstanceId == Guid.Empty)
-            {
-                ReleaseCurrent();
-                return;
-            }
-
-            var currentActorId = _player.CurrentActor;
-
-            if (target.InstanceId == currentActorId)
-            {
-                ReleaseCurrent();
-                return;
-            }
-
-            if (ReferenceEquals(_currentTarget, target))
-                return;
-
-            if (!_displayNames.TryGet(
+                target.InstanceId == System.Guid.Empty ||
+                target.InstanceId ==
+                _control.ControlledInstanceId ||
+                !_displayNames.TryGet(
                     target.InstanceId,
                     out var displayName))
             {
@@ -112,7 +74,6 @@ namespace Game.Player
 
             ReleaseCurrent();
 
-            _currentTarget = target;
             _currentView = _pool.Get(
                 target.UiAnchor,
                 displayName,
@@ -134,7 +95,6 @@ namespace Game.Player
                 _pool.Release(_currentView);
 
             _currentView = null;
-            _currentTarget = null;
         }
     }
 }

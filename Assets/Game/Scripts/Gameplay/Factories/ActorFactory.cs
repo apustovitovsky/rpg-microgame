@@ -16,7 +16,6 @@ namespace Game.Actor
         private readonly IInventoryRegistrationService _inventories;
         private readonly IDisplayNameRegistrationService _displayNames;
         private readonly IInstanceRegistry<ICommandReceiver> _commandReceivers;
-        private readonly IInstanceRegistry<IPossessable> _possessables;
         private readonly IInstanceRegistry<ITargetProvider> _targetProviders;
 
         public ActorFactory(
@@ -24,14 +23,12 @@ namespace Game.Actor
             IInventoryRegistrationService inventories,
             IDisplayNameRegistrationService displayNames,
             IInstanceRegistry<ICommandReceiver> commandReceivers,
-            IInstanceRegistry<IPossessable> possessables,
             IInstanceRegistry<ITargetProvider> targetProviders)
         {
             _parentScope = parentScope;
             _inventories = inventories;
             _displayNames = displayNames;
             _commandReceivers = commandReceivers;
-            _possessables = possessables;
             _targetProviders = targetProviders;
         }
 
@@ -100,15 +97,6 @@ namespace Game.Actor
                         _commandReceivers.Register(
                             actorInstance.InstanceId,
                             commandReceiver));
-
-                    if (scope.Container.TryResolve<IPossessable>(
-                            out var possessable))
-                    {
-                        spawnedObject.Add(
-                            _possessables.Register(
-                                actorInstance.InstanceId,
-                                possessable));
-                    }
 
                     if (scope.Container.TryResolve<ITargetProvider>(
                             out var targetProvider))

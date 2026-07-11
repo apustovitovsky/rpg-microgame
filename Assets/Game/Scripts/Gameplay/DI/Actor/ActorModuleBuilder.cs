@@ -1,3 +1,4 @@
+using Game.Control;
 using Game.Core;
 using Game.Targeting;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Game.Actor
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.RegisterComponentInModuleRoot<ActorPossessable>()
+            builder.RegisterComponentInModuleRoot<PossessionEndpoint>()
                 .AsImplementedInterfaces();
 
             builder.RegisterComponentInModuleRoot<Targetable>()

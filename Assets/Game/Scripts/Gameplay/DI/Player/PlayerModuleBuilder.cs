@@ -18,7 +18,8 @@ namespace Game.Player
             builder.Register<PlayerInputService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<PlayerService>(Lifetime.Singleton)
+            builder.Register<PlayerControlService>(Lifetime.Singleton)
+                .AsSelf()
                 .AsImplementedInterfaces();
 
             builder.RegisterEntryPoint<PlayerTargetNameplatePresenter>(
@@ -28,10 +29,7 @@ namespace Game.Player
                 _virtualCameraPrefab,
                 Lifetime.Singleton);
 
-            builder.RegisterEntryPoint<PlayerTargetControlBinder>(
-                Lifetime.Singleton);
-
-            builder.RegisterEntryPoint<PlayerInteractionController>(
+            builder.RegisterEntryPoint<PlayerWorldActionController>(
                 Lifetime.Singleton);
         }
     }

@@ -919,6 +919,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a84feb9e5a0a066448e9b4b2a5e71e92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorPossessable
+  _root: {fileID: 8538305375040021554}
   _cameraPivot: {fileID: 2416931173838807167}
 --- !u!1 &7583298266897560319
 GameObject:

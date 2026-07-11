@@ -9,7 +9,7 @@ namespace Game.AI
     [DisallowMultipleComponent]
     public sealed class NavMeshActorInput :
         MonoBehaviour,
-        IActorInput
+        IControlInput
     {
         private INavMeshPlanner _planner;
         [SerializeField] private ActorLookController _look;

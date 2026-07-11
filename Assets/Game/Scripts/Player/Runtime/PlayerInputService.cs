@@ -8,8 +8,8 @@ namespace Game.Player
     public class PlayerInputService :
         InputActions_Generated.IPlayerActions,
         InputActions_Generated.IUIActions,
-        IActorInput,
-        IPlayerInteractionInput,
+        IControlInput,
+        IPlayerActionInput,
         IDisposable
     {
         private readonly InputActions_Generated _input;
