@@ -1,5 +1,5 @@
 using Game.Core;
-using Game.Inventory;
+using Game.Item;
 using UnityEngine;
 
 namespace Game.Pickup

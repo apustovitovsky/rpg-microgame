@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: ItemDefinitionCatalog
   m_EditorClassIdentifier: Game.Inventory::Game.Inventory.ItemDefinitionCatalog
   _definitions:
-  - {fileID: 11400000, guid: 061285384c2e0084fa3cbcb7df583492, type: 2}
+  - {fileID: 11400000, guid: a2a0f303d3769564b83686978b16be20, type: 2}
+  - {fileID: 11400000, guid: d22cffe9a6ec8a94bbdc5ea3a3dea03a, type: 2}

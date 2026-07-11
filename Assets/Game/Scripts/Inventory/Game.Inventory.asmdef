@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "Game.Core",
-        "Game.World"
+        "Game.World",
+        "Game.Item"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

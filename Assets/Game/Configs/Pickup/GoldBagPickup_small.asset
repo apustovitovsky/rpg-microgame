@@ -15,6 +15,6 @@ MonoBehaviour:
   _displayName: Gold Bag
   <Prefab>k__BackingField: {fileID: 2440724634624028458, guid: 995871178727ef74eb5dbb722422677c,
     type: 3}
-  <Item>k__BackingField: {fileID: 11400000, guid: 061285384c2e0084fa3cbcb7df583492,
+  <Item>k__BackingField: {fileID: 11400000, guid: a2a0f303d3769564b83686978b16be20,
     type: 2}
   <Amount>k__BackingField: 10

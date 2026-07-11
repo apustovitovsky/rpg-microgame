@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.World::Game.World.WorldActorInstallerSO
   _actors: {fileID: 11400000, guid: a7a7955319c19304cb7fae09219ba1d1, type: 2}
   _pickups: {fileID: 11400000, guid: 573d9218b88ae8d41985798349c01183, type: 2}
+  _lootContainers: {fileID: 11400000, guid: bf5cb540445544c4a811b5e69eea4e71, type: 2}

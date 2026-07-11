@@ -4,6 +4,7 @@
     "references": [
         "Game.Core",
         "Game.World",
+        "Game.Item",
         "Game.Targeting",
         "Game.Interaction",
         "Game.Inventory",

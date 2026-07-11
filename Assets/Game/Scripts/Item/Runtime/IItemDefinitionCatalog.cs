@@ -1,4 +1,4 @@
-namespace Game.Inventory
+namespace Game.Item
 {
     public interface IItemDefinitionCatalog
     {

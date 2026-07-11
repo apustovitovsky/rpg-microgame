@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Game.Item;
 
 namespace Game.Inventory
 {
@@ -19,6 +21,17 @@ namespace Game.Inventory
         bool TryRemove(
             ItemDefinition definition,
             int amount);
+
+        bool TryExtract(
+            Guid instanceId,
+            int count,
+            out InventoryStack stack);
+
+        bool CanInsert(
+            InventoryStack stack);
+
+        bool TryInsert(
+            InventoryStack stack);
 
         int GetCount(ItemDefinition definition);
     }

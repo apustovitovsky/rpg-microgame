@@ -1,14 +1,13 @@
 using System;
 
-namespace Game.Inventory
+namespace Game.Item
 {
     public sealed class ItemInstance
     {
         public ItemInstance(ItemDefinition definition)
         {
-            Definition = definition != null
-                ? definition
-                : throw new ArgumentNullException(nameof(definition));
+            Definition = definition
+                ?? throw new ArgumentNullException(nameof(definition));
 
             InstanceId = Guid.NewGuid();
         }
@@ -16,5 +15,10 @@ namespace Game.Inventory
         public Guid InstanceId { get; }
 
         public ItemDefinition Definition { get; }
+
+        public ItemInstance CreateSplitInstance()
+        {
+            return new ItemInstance(Definition);
+        }
     }
 }

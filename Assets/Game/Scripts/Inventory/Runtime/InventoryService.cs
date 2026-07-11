@@ -1,5 +1,6 @@
 using System;
 using Game.Core;
+using Game.Item;
 
 namespace Game.Inventory
 {
@@ -158,7 +159,7 @@ namespace Game.Inventory
                     ownerInstanceId,
                     definitionId,
                     out var count) &&
-                    count >= amount;
+                count >= amount;
         }
     }
 }

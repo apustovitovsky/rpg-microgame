@@ -1,6 +1,7 @@
 using System;
 using Game.Core;
 using Game.Inventory;
+using Game.Item;
 using UnityEngine;
 using VContainer;
 
@@ -26,6 +27,10 @@ namespace Game.Gameplay
                 .AsImplementedInterfaces();
 
             builder.Register<InventoryService>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
+            builder.Register<InventoryTransferService>(
+                    Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Inventory
+namespace Game.Item
 {
     [CreateAssetMenu(
         fileName = "ItemDefinitionCatalog",
-        menuName = "Game/Inventory/Item Definition Catalog")]
+        menuName = "Game/Item/Item Definition Catalog")]
     public sealed class ItemDefinitionCatalog :
         ScriptableObject,
         IItemDefinitionCatalog

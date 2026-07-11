@@ -1,11 +1,11 @@
 using Game.Core;
 using UnityEngine;
 
-namespace Game.Inventory
+namespace Game.Item
 {
     [CreateAssetMenu(
         fileName = "ItemDefinition",
-        menuName = "Game/Inventory/Item Definition")]
+        menuName = "Game/Item/Item Definition")]
     public sealed class ItemDefinition : Definition
     {
         [SerializeField] private string _definitionId;

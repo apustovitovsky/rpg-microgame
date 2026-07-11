@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.Item;
 
 namespace Game.Inventory
 {
@@ -103,6 +104,73 @@ namespace Game.Inventory
                 if (entry.Count == 0)
                     _entries.RemoveAt(index);
             }
+
+            return true;
+        }
+
+        public bool TryExtract(
+            Guid instanceId,
+            int count,
+            out InventoryStack stack)
+        {
+            stack = default;
+
+            if (instanceId == Guid.Empty || count <= 0)
+                return false;
+
+            for (var index = 0; index < _entries.Count; index++)
+            {
+                var entry = _entries[index];
+
+                if (entry.Instance.InstanceId != instanceId)
+                    continue;
+
+                if (count > entry.Count)
+                    return false;
+
+                if (count == entry.Count)
+                {
+                    _entries.RemoveAt(index);
+
+                    stack = new InventoryStack(
+                        entry.Instance,
+                        count);
+
+                    return true;
+                }
+
+                entry.Remove(count);
+
+                stack = new InventoryStack(
+                    entry.Instance.CreateSplitInstance(),
+                    count);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool CanInsert(
+            InventoryStack stack)
+        {
+            return stack.Instance != null &&
+                   stack.Count > 0 &&
+                   stack.Count <=
+                   stack.Instance.Definition.MaxStackSize &&
+                   _entries.Count < Capacity;
+        }
+
+        public bool TryInsert(
+            InventoryStack stack)
+        {
+            if (!CanInsert(stack))
+                return false;
+
+            _entries.Add(
+                new InventoryEntry(
+                    stack.Instance,
+                    stack.Count));
 
             return true;
         }

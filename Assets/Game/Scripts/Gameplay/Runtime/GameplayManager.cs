@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Etheria.Game.World;
 using Game.Actor;
+using Game.Loot;
 using Game.Pickup;
 using Game.Player;
 using Game.World;
@@ -17,29 +18,35 @@ namespace Game.Gameplay
     {
         private readonly ActorSpawnCatalog _actors;
         private readonly PickupSpawnCatalog _pickups;
+        private readonly LootContainerSpawnCatalog _lootContainers;
         private readonly IActorDefinitionCatalog _actorDefinitions;
         private readonly IPlayerControl _player;
         private readonly ISpawnedObjectRegistry _spawnedObjects;
         private readonly IActorSpawner _actorSpawner;
         private readonly IPickupSpawner _pickupSpawner;
+        private readonly ILootContainerSpawner _lootContainerSpawner;
         private readonly ISpawnPointResolver _spawnPoints;
 
         public GameplayManager(
             ActorSpawnCatalog actors,
             PickupSpawnCatalog pickups,
+            LootContainerSpawnCatalog lootContainers,
             IActorDefinitionCatalog actorDefinitions,
             ISpawnPointResolver spawnPoints,
             ISpawnedObjectRegistry spawnedObjects,
             IActorSpawner actorSpawner,
             IPickupSpawner pickupSpawner,
+            ILootContainerSpawner lootContainerSpawner,
             IPlayerControl player)
         {
             _actors = actors;
             _pickups = pickups;
+            _lootContainers = lootContainers;
             _actorDefinitions = actorDefinitions;
             _spawnedObjects = spawnedObjects;
             _actorSpawner = actorSpawner;
             _pickupSpawner = pickupSpawner;
+            _lootContainerSpawner = lootContainerSpawner;
             _player = player;
             _spawnPoints = spawnPoints;
         }
@@ -49,6 +56,7 @@ namespace Game.Gameplay
             SpawnPlayer();
             SpawnActors();
             SpawnPickups();
+            SpawnLootContainers();
         }
 
         private void SpawnPlayer()
@@ -210,6 +218,68 @@ namespace Game.Gameplay
             }
 
             return spawnedPickupId;
+        }
+
+        private void SpawnLootContainers()
+        {
+            foreach (var container in _lootContainers.Containers)
+                SpawnLootContainer(container);
+        }
+
+        private Guid SpawnLootContainer(
+            LootContainerSpawnCatalog.LootContainerEntry entry)
+        {
+            if (entry == null)
+                return Guid.Empty;
+
+            if (entry.Definition == null)
+            {
+                Debug.LogWarning(
+                    "Loot container was not spawned: definition is missing.");
+
+                return Guid.Empty;
+            }
+
+            if (entry.Definition.Prefab == null)
+            {
+                Debug.LogWarning(
+                    $"Loot container '{entry.Definition.name}' " +
+                    "was not spawned: prefab is missing.");
+
+                return Guid.Empty;
+            }
+
+            if (!_spawnPoints.TryResolve(
+                    entry.LocationId,
+                    entry.AnchorKey,
+                    out var node))
+            {
+                Debug.LogWarning(
+                    $"Loot container '{entry.Definition.name}' " +
+                    "was not spawned: spawn point could not be resolved.");
+
+                return Guid.Empty;
+            }
+
+            var containerInstance = new LootContainerInstance(
+                entry.Definition);
+
+            var request = new LootContainerSpawnRequest(
+                containerInstance,
+                node.Position,
+                node.Rotation);
+
+            var spawnedContainerId =
+                _lootContainerSpawner.Spawn(request);
+
+            if (spawnedContainerId == Guid.Empty)
+            {
+                Debug.LogWarning(
+                    $"Loot container '{containerInstance.InstanceId:N}' " +
+                    "was not spawned.");
+            }
+
+            return spawnedContainerId;
         }
 
         public void Dispose()

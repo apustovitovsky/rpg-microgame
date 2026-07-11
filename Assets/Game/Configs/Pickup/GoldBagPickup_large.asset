@@ -15,6 +15,6 @@ MonoBehaviour:
   _displayName: Greater Gold Pouch
   <Prefab>k__BackingField: {fileID: 1101457921106491675, guid: 322b977777d572b4793aa4cebad4f2d6,
     type: 3}
-  <Item>k__BackingField: {fileID: 11400000, guid: 061285384c2e0084fa3cbcb7df583492,
+  <Item>k__BackingField: {fileID: 11400000, guid: a2a0f303d3769564b83686978b16be20,
     type: 2}
   <Amount>k__BackingField: 30

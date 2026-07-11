@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e37e99f61f3c0954cbe2e2d2d779ac65, type: 3}
+  m_Script: {fileID: 11500000, guid: 167c45f7eff1a5e44888bad1d6109e79, type: 3}
   m_Name: Item_Gold
-  m_EditorClassIdentifier: Game.Inventory::Game.Inventory.ItemDefinition
+  m_EditorClassIdentifier: Game.Item::Game.Item.ItemDefinition
   _displayName: Gold
   _definitionId: item.gold
   <MaxStackSize>k__BackingField: 50

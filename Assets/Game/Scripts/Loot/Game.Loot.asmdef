@@ -1,0 +1,21 @@
+{
+    "name": "Game.Loot",
+    "rootNamespace": "",
+    "references": [
+        "UniTask",
+        "Game.Core",
+        "Game.Item",
+        "Game.Inventory",
+        "Game.World",
+        "Game.Interaction"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
