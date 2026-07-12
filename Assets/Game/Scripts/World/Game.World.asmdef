@@ -2,6 +2,7 @@
     "name": "Game.World",
     "rootNamespace": "",
     "references": [
+        "VContainer",
         "Game.Core"
     ],
     "includePlatforms": [],

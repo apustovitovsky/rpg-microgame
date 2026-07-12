@@ -6,11 +6,6 @@ namespace Game.Actor
     public sealed class ActorInstance :
         IWorldInstance
     {
-        public ActorInstance(ActorDefinition definition)
-            : this(Guid.NewGuid(), definition)
-        {
-        }
-
         public ActorInstance(
             Guid instanceId,
             ActorDefinition definition)
@@ -24,11 +19,14 @@ namespace Game.Actor
 
             InstanceId = instanceId;
 
-            Definition = definition
-                ?? throw new ArgumentNullException(nameof(definition));
+            Definition = definition != null
+                ? definition
+                : throw new ArgumentNullException(nameof(definition));
         }
 
         public Guid InstanceId { get; }
+
+        public string DisplayName => Definition.DisplayName;
 
         public ActorDefinition Definition { get; }
     }

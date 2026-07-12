@@ -1,3 +1,4 @@
+using System;
 using Game.Core;
 using Game.Loot;
 using UnityEngine;
@@ -10,14 +11,21 @@ namespace Game.Gameplay
         menuName = "Game/Gameplay/Loot Module Builder")]
     public sealed class LootModuleBuilder : ModuleBuilder
     {
+        [SerializeField]
+        private LootContainerAssetCatalog _catalog;
+
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<LootSessionService>(Lifetime.Singleton)
+            if (_catalog == null)
+            {
+                throw new InvalidOperationException(
+                    "Loot container asset catalog is required.");
+            }
+
+            builder.RegisterInstance(_catalog)
                 .AsImplementedInterfaces();
 
-            builder.Register<LootContainerFactory>(Lifetime.Singleton);
-
-            builder.Register<LootContainerSpawner>(Lifetime.Singleton)
+            builder.Register<LootSessionService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

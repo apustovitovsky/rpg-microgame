@@ -14,6 +14,9 @@ namespace Game.Gameplay
         {
             builder.Register<SpawnedObjectRegistry>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
+
+            builder.Register<WorldSpawner>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
         }
     }
 }

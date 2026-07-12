@@ -4,21 +4,26 @@ namespace Game.Item
 {
     public sealed class ItemInstance
     {
-        public ItemInstance(ItemDefinition definition)
+        public ItemInstance(
+            Guid instanceId,
+            ItemDefinition definition)
         {
-            Definition = definition
-                ?? throw new ArgumentNullException(nameof(definition));
+            if (instanceId == Guid.Empty)
+            {
+                throw new ArgumentException(
+                    "Item instance id cannot be empty.",
+                    nameof(instanceId));
+            }
 
-            InstanceId = Guid.NewGuid();
+            InstanceId = instanceId;
+
+            Definition = definition != null
+                ? definition
+                : throw new ArgumentNullException(nameof(definition));
         }
 
         public Guid InstanceId { get; }
 
         public ItemDefinition Definition { get; }
-
-        public ItemInstance CreateSplitInstance()
-        {
-            return new ItemInstance(Definition);
-        }
     }
 }

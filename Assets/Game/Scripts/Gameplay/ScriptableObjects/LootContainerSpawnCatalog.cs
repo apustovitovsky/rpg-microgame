@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Etheria.Game.World;
-using Game.Loot;
 using UnityEngine;
 
 namespace Game.Gameplay
@@ -31,18 +30,14 @@ namespace Game.Gameplay
         [Serializable]
         public sealed class LootContainerEntry
         {
-            [SerializeField]
-            private LootContainerDefinition _definition;
-
-            [SerializeField]
-            private string _locationId;
+            [SerializeField] private string _definitionId;
+            [SerializeField] private string _locationId;
 
             [SerializeField]
             private string _anchorKey =
                 NavigationAnchorKeys.Default;
 
-            public LootContainerDefinition Definition =>
-                _definition;
+            public string DefinitionId => _definitionId;
 
             public string LocationId => _locationId;
 
@@ -50,6 +45,7 @@ namespace Game.Gameplay
 
             public void Normalize()
             {
+                _definitionId = _definitionId?.Trim();
                 _locationId = _locationId?.Trim();
 
                 _anchorKey = string.IsNullOrWhiteSpace(_anchorKey)

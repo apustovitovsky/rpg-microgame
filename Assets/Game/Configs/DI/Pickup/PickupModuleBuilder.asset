@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68d91b64523714b4d9c01f1fea154091, type: 3}
   m_Name: PickupModuleBuilder
   m_EditorClassIdentifier: Game.Gameplay::Game.Gameplay.PickupConfiguratorSO
+  _catalog: {fileID: 11400000, guid: 9a33d1b57f5946647ac6fb310c8e90c3, type: 2}

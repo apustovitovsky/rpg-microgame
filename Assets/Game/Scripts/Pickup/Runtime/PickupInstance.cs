@@ -6,11 +6,6 @@ namespace Game.Pickup
     public sealed class PickupInstance :
         IWorldInstance
     {
-        public PickupInstance(PickupDefinition definition)
-            : this(Guid.NewGuid(), definition)
-        {
-        }
-
         public PickupInstance(
             Guid instanceId,
             PickupDefinition definition)
@@ -24,11 +19,14 @@ namespace Game.Pickup
 
             InstanceId = instanceId;
 
-            Definition = definition
-                ?? throw new ArgumentNullException(nameof(definition));
+            Definition = definition != null
+                ? definition
+                : throw new ArgumentNullException(nameof(definition));
         }
 
         public Guid InstanceId { get; }
+
+        public string DisplayName => Definition.DisplayName;
 
         public PickupDefinition Definition { get; }
     }

@@ -1,4 +1,7 @@
+using Game.CommandSystem;
 using Game.Core;
+using Game.Inventory;
+using Game.Targeting;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -6,7 +9,8 @@ using VContainer.Unity;
 namespace Game.Actor
 {
     [DisallowMultipleComponent]
-    public sealed class ActorModule : LifetimeScope
+    public sealed class ActorModule :
+        LifetimeScope
     {
         [SerializeField] private Transform _actorRoot;
 
@@ -19,13 +23,15 @@ namespace Game.Actor
         [SerializeField] private ModuleBuilder _combat;
         [SerializeField] private ModuleBuilder _ai;
 
-        protected override void Configure(IContainerBuilder builder)
+        protected override void Configure(
+            IContainerBuilder builder)
         {
             var root = _actorRoot != null
                 ? _actorRoot
                 : transform;
 
-            builder.RegisterInstance(new ModuleRoot(root));
+            builder.RegisterInstance(
+                new ModuleRoot(root));
 
             builder.Register<ActorInputBinder>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
@@ -37,6 +43,18 @@ namespace Game.Actor
             builder.Configure(_targeting);
             builder.Configure(_combat);
             builder.Configure(_ai);
+
+            builder.RegisterComponentInModuleRoot<InventoryOwner>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterEntryPoint<InventoryOwnerRegistration>(
+                Lifetime.Scoped);
+
+            builder.RegisterBuildCallback(resolver =>
+            {
+                resolver.Resolve<Targetable>();
+                resolver.Resolve<ICommandReceiver>();
+            });
         }
     }
 }

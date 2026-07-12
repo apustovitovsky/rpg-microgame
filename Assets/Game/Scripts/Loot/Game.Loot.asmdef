@@ -2,6 +2,7 @@
     "name": "Game.Loot",
     "rootNamespace": "",
     "references": [
+        "VContainer",
         "UniTask",
         "Game.Core",
         "Game.Item",

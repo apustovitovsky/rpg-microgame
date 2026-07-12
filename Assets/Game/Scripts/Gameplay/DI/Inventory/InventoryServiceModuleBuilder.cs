@@ -13,7 +13,7 @@ namespace Game.Gameplay
     public sealed class InventoryServiceModuleBuilder : ModuleBuilder
     {
         [SerializeField]
-        private ItemDefinitionCatalog _catalog;
+        private ItemAssetCatalog _catalog;
 
         public override void Install(IContainerBuilder builder)
         {

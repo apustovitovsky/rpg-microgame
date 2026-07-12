@@ -68,7 +68,7 @@ namespace Game.Inventory
 
                 _entries.Add(
                     new InventoryEntry(
-                        new ItemInstance(definition),
+                        definition.CreateInstance(),
                         stackSize));
 
                 remaining -= stackSize;
@@ -142,7 +142,7 @@ namespace Game.Inventory
                 entry.Remove(count);
 
                 stack = new InventoryStack(
-                    entry.Instance.CreateSplitInstance(),
+                    entry.Definition.CreateInstance(),
                     count);
 
                 return true;

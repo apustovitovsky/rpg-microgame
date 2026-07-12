@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Interaction;
 using UnityEngine;
+using VContainer;
 
 namespace Game.Loot
 {
@@ -17,7 +18,7 @@ namespace Game.Loot
         [field: SerializeField]
         public float MaxRange { get; private set; } = 5f;
 
-        private Guid _sourceInstanceId;
+        private LootContainerInstance _instance;
         private ILootSessionService _sessions;
 
         public Vector3 InteractionPoint =>
@@ -25,18 +26,13 @@ namespace Game.Loot
                 ? _interactionAnchor.position
                 : transform.position;
 
-        public void Initialize(
-            Guid sourceInstanceId,
+        [Inject]
+        public void Construct(
+            LootContainerInstance instance,
             ILootSessionService sessions)
         {
-            if (sourceInstanceId == Guid.Empty)
-            {
-                throw new ArgumentException(
-                    "Loot source instance id is required.",
-                    nameof(sourceInstanceId));
-            }
-
-            _sourceInstanceId = sourceInstanceId;
+            _instance = instance
+                ?? throw new ArgumentNullException(nameof(instance));
 
             _sessions = sessions
                 ?? throw new ArgumentNullException(nameof(sessions));
@@ -44,12 +40,12 @@ namespace Game.Loot
 
         public bool CanInteract(InteractionContext context)
         {
-            return _sessions != null &&
-                   _sourceInstanceId != Guid.Empty &&
+            return _instance != null &&
+                   _sessions != null &&
                    context.InteractorInstanceId != Guid.Empty &&
-                   context.TargetInstanceId == _sourceInstanceId &&
+                   context.TargetInstanceId == _instance.InstanceId &&
                    context.InteractorInstanceId !=
-                   _sourceInstanceId;
+                   _instance.InstanceId;
         }
 
         public UniTask InteractAsync(
@@ -63,7 +59,7 @@ namespace Game.Loot
 
             var openResult = _sessions.TryOpen(
                 context.InteractorInstanceId,
-                _sourceInstanceId);
+                _instance.InstanceId);
 
             if (!openResult.Succeeded &&
                 openResult.Status !=
@@ -81,7 +77,7 @@ namespace Game.Loot
                     openResult.SessionId,
                     out var session) ||
                 session.SourceInstanceId !=
-                _sourceInstanceId)
+                _instance.InstanceId)
             {
                 Debug.LogWarning(
                     "Loot session is already open for another source.",

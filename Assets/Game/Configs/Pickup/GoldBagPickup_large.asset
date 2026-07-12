@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66b8237ad99c76245b619954befcbdbb, type: 3}
   m_Name: GoldBagPickup_large
   m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupDefinition
-  _displayName: Greater Gold Pouch
+  _definitionId: pickup.gold-bag
+  _displayName: Gold Bag
   <Prefab>k__BackingField: {fileID: 1101457921106491675, guid: 322b977777d572b4793aa4cebad4f2d6,
     type: 3}
   <Item>k__BackingField: {fileID: 11400000, guid: a2a0f303d3769564b83686978b16be20,

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a677007be6bd24c88687ef5e2bb71d, type: 3}
   m_Name: LootChestDefinition
   m_EditorClassIdentifier: Game.Loot::Game.Loot.LootContainerDefinition
-  _displayName: Loot Chest
+  _definitionId: loot.hakons-chest
+  _displayName: Hakon's Chest
   <Prefab>k__BackingField: {fileID: 2440724634624028458, guid: f42672fded6597d48ae6ec72d768787a,
     type: 3}
   <Capacity>k__BackingField: 20

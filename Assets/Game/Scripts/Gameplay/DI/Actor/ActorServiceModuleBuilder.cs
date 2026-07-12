@@ -1,7 +1,5 @@
 using System;
 using Game.Core;
-using Game.Targeting;
-using Game.World;
 using UnityEngine;
 using VContainer;
 
@@ -13,7 +11,7 @@ namespace Game.Actor
     public sealed class ActorServiceModuleBuilder : ModuleBuilder
     {
         [SerializeField]
-        private ActorDefinitionCatalog _catalog;
+        private ActorAssetCatalog _catalog;
 
         public override void Install(IContainerBuilder builder)
         {
@@ -24,14 +22,6 @@ namespace Game.Actor
             }
 
             builder.RegisterInstance(_catalog)
-                .AsImplementedInterfaces();
-
-            builder.Register<InstanceIndex<ITargetProvider>>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<ActorFactory>(Lifetime.Singleton);
-
-            builder.Register<ActorSpawner>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

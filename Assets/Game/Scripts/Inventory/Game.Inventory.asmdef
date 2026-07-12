@@ -2,6 +2,7 @@
     "name": "Game.Inventory",
     "rootNamespace": "",
     "references": [
+        "VContainer",
         "Game.Core",
         "Game.World",
         "Game.Item"

@@ -184,7 +184,7 @@ namespace Game.Loot
 
                 entries[index] = new LootEntrySnapshot(
                     entry.Instance.InstanceId,
-                    entry.Definition.DefinitionId,
+                    entry.Definition.Id,
                     entry.Count);
             }
 

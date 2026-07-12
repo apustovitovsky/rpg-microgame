@@ -16,37 +16,37 @@ namespace Game.Gameplay
         IStartable,
         IDisposable
     {
-        private readonly ActorSpawnCatalog _actors;
+        private readonly ActorSpawnCatalog _spawnCatalog;
         private readonly PickupSpawnCatalog _pickups;
         private readonly LootContainerSpawnCatalog _lootContainers;
-        private readonly IActorDefinitionCatalog _actorDefinitions;
+        private readonly IActorAssetCatalog _actorCatalog;
+        private readonly IPickupAssetCatalog _pickupCatalog;
+        private readonly ILootContainerAssetCatalog _lootContainerCatalog;
         private readonly IPlayerControl _player;
         private readonly ISpawnedObjectRegistry _spawnedObjects;
-        private readonly IActorSpawner _actorSpawner;
-        private readonly IPickupSpawner _pickupSpawner;
-        private readonly ILootContainerSpawner _lootContainerSpawner;
+        private readonly IWorldSpawner _worldSpawner;
         private readonly ISpawnPointResolver _spawnPoints;
 
         public GameplayManager(
-            ActorSpawnCatalog actors,
+            ActorSpawnCatalog spawnCatalog,
             PickupSpawnCatalog pickups,
             LootContainerSpawnCatalog lootContainers,
-            IActorDefinitionCatalog actorDefinitions,
+            IActorAssetCatalog actorCatalog,
+            IPickupAssetCatalog pickupCatalog,
+            ILootContainerAssetCatalog lootContainerCatalog,
             ISpawnPointResolver spawnPoints,
             ISpawnedObjectRegistry spawnedObjects,
-            IActorSpawner actorSpawner,
-            IPickupSpawner pickupSpawner,
-            ILootContainerSpawner lootContainerSpawner,
+            IWorldSpawner worldSpawner,
             IPlayerControl player)
         {
-            _actors = actors;
+            _spawnCatalog = spawnCatalog;
             _pickups = pickups;
             _lootContainers = lootContainers;
-            _actorDefinitions = actorDefinitions;
+            _actorCatalog = actorCatalog;
+            _pickupCatalog = pickupCatalog;
+            _lootContainerCatalog = lootContainerCatalog;
             _spawnedObjects = spawnedObjects;
-            _actorSpawner = actorSpawner;
-            _pickupSpawner = pickupSpawner;
-            _lootContainerSpawner = lootContainerSpawner;
+            _worldSpawner = worldSpawner;
             _player = player;
             _spawnPoints = spawnPoints;
         }
@@ -61,7 +61,7 @@ namespace Game.Gameplay
 
         private void SpawnPlayer()
         {
-            var player = _actors.Player;
+            var player = _spawnCatalog.Player;
 
             if (!_spawnPoints.TryResolve(
                     player.LocationId,
@@ -82,7 +82,7 @@ namespace Game.Gameplay
 
         private void SpawnActors()
         {
-            foreach (var actor in _actors.Actors)
+            foreach (var actor in _spawnCatalog.Actors)
             {
                 if (!_spawnPoints.TryResolve(
                         actor.LocationId,
@@ -111,7 +111,7 @@ namespace Game.Gameplay
             if (entry == null)
                 return Guid.Empty;
 
-            if (!_actorDefinitions.TryGet(
+            if (!_actorCatalog.TryGet(
                     entry.DefinitionId,
                     out var definition))
             {
@@ -124,29 +124,20 @@ namespace Game.Gameplay
             if (definition.Prefab == null)
             {
                 Debug.LogWarning(
-                    $"Actor '{definition.DefinitionId}' was not spawned: " +
+                    $"Actor '{definition.Id}' was not spawned: " +
                     "prefab is missing.");
 
                 return Guid.Empty;
             }
 
-            var actorInstance = new ActorInstance(definition);
+            var spawnedObject = _worldSpawner.Spawn(
+                new SpawnRequest<ActorInstance>(
+                    definition,
+                    new SpawnPlacement(
+                        node.Position,
+                        node.Rotation)));
 
-            var request = new ActorSpawnRequest(
-                actorInstance,
-                node.Position,
-                node.Rotation);
-
-            var actorInstanceId =
-                _actorSpawner.Spawn(request);
-
-            if (actorInstanceId == Guid.Empty)
-            {
-                Debug.LogWarning(
-                    $"Actor '{actorInstance.InstanceId:N}' was not spawned.");
-
-                return Guid.Empty;
-            }
+            var actorInstanceId = spawnedObject.InstanceId;
 
             if (bindPlayer)
             {
@@ -171,18 +162,20 @@ namespace Game.Gameplay
             if (entry == null)
                 return Guid.Empty;
 
-            if (entry.Definition == null)
+            if (!_pickupCatalog.TryGet(
+                    entry.DefinitionId,
+                    out var definition))
             {
                 Debug.LogWarning(
-                    "Pickup was not spawned: definition is missing.");
+                    $"Pickup definition '{entry.DefinitionId}' was not found.");
 
                 return Guid.Empty;
             }
 
-            if (entry.Definition.Prefab == null)
+            if (definition.Prefab == null)
             {
                 Debug.LogWarning(
-                    $"Pickup '{entry.Definition.name}' was not spawned: " +
+                    $"Pickup '{definition.Id}' was not spawned: " +
                     "prefab is missing.");
 
                 return Guid.Empty;
@@ -194,30 +187,20 @@ namespace Game.Gameplay
                     out var node))
             {
                 Debug.LogWarning(
-                    $"Pickup '{entry.Definition.name}' was not spawned: " +
+                    $"Pickup '{definition.Id}' was not spawned: " +
                     "spawn point could not be resolved.");
 
                 return Guid.Empty;
             }
 
-            var pickupInstance = new PickupInstance(
-                entry.Definition);
+            var spawnedObject = _worldSpawner.Spawn(
+                new SpawnRequest<PickupInstance>(
+                    definition,
+                    new SpawnPlacement(
+                        node.Position,
+                        node.Rotation)));
 
-            var request = new PickupSpawnRequest(
-                pickupInstance,
-                node.Position,
-                node.Rotation);
-
-            var spawnedPickupId =
-                _pickupSpawner.Spawn(request);
-
-            if (spawnedPickupId == Guid.Empty)
-            {
-                Debug.LogWarning(
-                    $"Pickup '{pickupInstance.InstanceId:N}' was not spawned.");
-            }
-
-            return spawnedPickupId;
+            return spawnedObject.InstanceId;
         }
 
         private void SpawnLootContainers()
@@ -232,18 +215,21 @@ namespace Game.Gameplay
             if (entry == null)
                 return Guid.Empty;
 
-            if (entry.Definition == null)
+            if (!_lootContainerCatalog.TryGet(
+                    entry.DefinitionId,
+                    out var definition))
             {
                 Debug.LogWarning(
-                    "Loot container was not spawned: definition is missing.");
+                    $"Loot container definition '{entry.DefinitionId}' " +
+                    "was not found.");
 
                 return Guid.Empty;
             }
 
-            if (entry.Definition.Prefab == null)
+            if (definition.Prefab == null)
             {
                 Debug.LogWarning(
-                    $"Loot container '{entry.Definition.name}' " +
+                    $"Loot container '{definition.Id}' " +
                     "was not spawned: prefab is missing.");
 
                 return Guid.Empty;
@@ -255,31 +241,20 @@ namespace Game.Gameplay
                     out var node))
             {
                 Debug.LogWarning(
-                    $"Loot container '{entry.Definition.name}' " +
+                    $"Loot container '{definition.Id}' " +
                     "was not spawned: spawn point could not be resolved.");
 
                 return Guid.Empty;
             }
 
-            var containerInstance = new LootContainerInstance(
-                entry.Definition);
+            var spawnedObject = _worldSpawner.Spawn(
+                new SpawnRequest<LootContainerInstance>(
+                    definition,
+                    new SpawnPlacement(
+                        node.Position,
+                        node.Rotation)));
 
-            var request = new LootContainerSpawnRequest(
-                containerInstance,
-                node.Position,
-                node.Rotation);
-
-            var spawnedContainerId =
-                _lootContainerSpawner.Spawn(request);
-
-            if (spawnedContainerId == Guid.Empty)
-            {
-                Debug.LogWarning(
-                    $"Loot container '{containerInstance.InstanceId:N}' " +
-                    "was not spawned.");
-            }
-
-            return spawnedContainerId;
+            return spawnedObject.InstanceId;
         }
 
         public void Dispose()

@@ -2,14 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Core;
 using Game.World;
 
 namespace Game.CommandSystem
 {
     public sealed class WorldCommandReceiver :
-        ICommandReceiver
+        ICommandReceiver,
+        IDisposable
     {
         private readonly IWorldInstance _instance;
+        private readonly IRegistryWriter<ICommandReceiver> _receivers;
+
         private readonly Dictionary<Type, IWorldCommandHandler> _handlers =
             new();
 
@@ -17,10 +21,14 @@ namespace Game.CommandSystem
 
         public WorldCommandReceiver(
             IWorldInstance instance,
-            IEnumerable<IWorldCommandHandler> handlers)
+            IEnumerable<IWorldCommandHandler> handlers,
+            IRegistryWriter<ICommandReceiver> receivers)
         {
             _instance = instance
                 ?? throw new ArgumentNullException(nameof(instance));
+
+            _receivers = receivers
+                ?? throw new ArgumentNullException(nameof(receivers));
 
             if (_instance.InstanceId == Guid.Empty)
             {
@@ -29,24 +37,28 @@ namespace Game.CommandSystem
                     nameof(instance));
             }
 
-            if (handlers == null)
-                return;
-
-            foreach (var handler in handlers)
+            if (handlers != null)
             {
-                if (handler == null)
-                    continue;
-
-                if (!_handlers.TryAdd(
-                        handler.CommandType,
-                        handler))
+                foreach (var handler in handlers)
                 {
-                    throw new InvalidOperationException(
-                        $"Multiple handlers for command " +
-                        $"'{handler.CommandType.Name}' " +
-                        "are registered on one receiver.");
+                    if (handler == null)
+                        continue;
+
+                    if (!_handlers.TryAdd(
+                            handler.CommandType,
+                            handler))
+                    {
+                        throw new InvalidOperationException(
+                            $"Multiple handlers for command " +
+                            $"'{handler.CommandType.Name}' " +
+                            "are registered on one receiver.");
+                    }
                 }
             }
+
+            _receivers.Add(
+                _instance.InstanceId,
+                this);
         }
 
         public async UniTask<CommandResult> ReceiveAsync(
@@ -91,6 +103,13 @@ namespace Game.CommandSystem
             {
                 _isExecuting = false;
             }
+        }
+
+        public void Dispose()
+        {
+            _receivers.Remove(
+                _instance.InstanceId,
+                this);
         }
     }
 }

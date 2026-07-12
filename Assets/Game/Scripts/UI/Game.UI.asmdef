@@ -4,7 +4,8 @@
     "references": [
         "VContainer",
         "Unity.TextMeshPro",
-        "Game.Core"
+        "Game.Core",
+        "Game.World"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

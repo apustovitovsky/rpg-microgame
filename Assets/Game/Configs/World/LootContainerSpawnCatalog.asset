@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: LootContainerSpawnCatalog
   m_EditorClassIdentifier: Game.Gameplay::Game.Gameplay.LootContainerSpawnCatalog
   _containers:
-  - _definition: {fileID: 11400000, guid: d46268242fa785a4f8f6c45df40a93de, type: 2}
+  - _definitionId: loot.hakons-chest
     _locationId: city_central_square
     _anchorKey: spawn_03

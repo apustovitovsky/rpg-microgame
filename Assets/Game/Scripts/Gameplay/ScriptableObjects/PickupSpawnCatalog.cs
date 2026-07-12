@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Etheria.Game.World;
-using Game.Pickup;
 using UnityEngine;
 
 namespace Game.Gameplay
@@ -11,7 +10,9 @@ namespace Game.Gameplay
         menuName = "Game/Gameplay/Pickup Spawn Catalog")]
     public sealed class PickupSpawnCatalog : ScriptableObject
     {
-        [SerializeField] private PickupEntry[] _pickups = Array.Empty<PickupEntry>();
+        [SerializeField]
+        private PickupEntry[] _pickups =
+            Array.Empty<PickupEntry>();
 
         public IReadOnlyList<PickupEntry> Pickups => _pickups;
 
@@ -27,16 +28,21 @@ namespace Game.Gameplay
         [Serializable]
         public sealed class PickupEntry
         {
-            [SerializeField] private PickupDefinition _definition;
+            [SerializeField] private string _definitionId;
             [SerializeField] private string _locationId;
-            [SerializeField] private string _anchorKey = NavigationAnchorKeys.Default;
+            [SerializeField]
+            private string _anchorKey =
+                NavigationAnchorKeys.Default;
 
-            public PickupDefinition Definition => _definition;
+            public string DefinitionId => _definitionId;
+
             public string LocationId => _locationId;
+
             public string AnchorKey => _anchorKey;
 
             public void Normalize()
             {
+                _definitionId = _definitionId?.Trim();
                 _locationId = _locationId?.Trim();
 
                 _anchorKey = string.IsNullOrWhiteSpace(_anchorKey)

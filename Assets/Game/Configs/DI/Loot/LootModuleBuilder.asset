@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb8e655f4c480c943ac032479719de0e, type: 3}
   m_Name: LootModuleBuilder
   m_EditorClassIdentifier: Game.Gameplay::Game.Gameplay.LootModuleBuilder
+  _catalog: {fileID: 11400000, guid: 062525a9e7b4e504f82cc28d711381c0, type: 2}

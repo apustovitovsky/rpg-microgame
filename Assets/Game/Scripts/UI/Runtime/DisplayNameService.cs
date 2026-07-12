@@ -1,13 +1,8 @@
 using System;
-using Game.Core;
+using Game.World;
 
 namespace Game.UI
 {
-    public interface IDisplayNameProvider
-    {
-        string DisplayName { get; }
-    }
-
     public interface IDisplayNameService
     {
         bool TryGet(
@@ -15,44 +10,17 @@ namespace Game.UI
             out string displayName);
     }
 
-    public interface IDisplayNameRegistrationService
-    {
-        IDisposable Register(
-            Guid instanceId,
-            IDisplayNameProvider provider);
-    }
-
-    public sealed class DisplayNameProvider :
-        IDisplayNameProvider
-    {
-        private readonly Func<string> _getDisplayName;
-
-        public DisplayNameProvider(
-            Func<string> getDisplayName)
-        {
-            _getDisplayName = getDisplayName
-                ?? throw new ArgumentNullException(
-                    nameof(getDisplayName));
-        }
-
-        public string DisplayName => _getDisplayName();
-    }
-
     public sealed class DisplayNameService :
-        IDisplayNameService,
-        IDisplayNameRegistrationService
+        IDisplayNameService
     {
-        private readonly InstanceIndex<IDisplayNameProvider> _providers =
-            new();
+        private readonly ISpawnedObjectRegistry _spawnedObjects;
 
-        public IDisposable Register(
-            Guid instanceId,
-            IDisplayNameProvider provider)
+        public DisplayNameService(
+            ISpawnedObjectRegistry spawnedObjects)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-
-            return _providers.Register(instanceId, provider);
+            _spawnedObjects = spawnedObjects
+                ?? throw new ArgumentNullException(
+                    nameof(spawnedObjects));
         }
 
         public bool TryGet(
@@ -61,14 +29,14 @@ namespace Game.UI
         {
             displayName = null;
 
-            if (!_providers.TryGet(
+            if (!_spawnedObjects.TryGet(
                     instanceId,
-                    out var provider))
+                    out var spawnedObject))
             {
                 return false;
             }
 
-            displayName = provider.DisplayName;
+            displayName = spawnedObject.Instance.DisplayName;
 
             return !string.IsNullOrWhiteSpace(displayName);
         }

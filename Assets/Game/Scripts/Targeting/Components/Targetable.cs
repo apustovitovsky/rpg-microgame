@@ -1,5 +1,7 @@
 using System;
+using Game.World;
 using UnityEngine;
+using VContainer;
 
 namespace Game.Targeting
 {
@@ -25,6 +27,15 @@ namespace Game.Targeting
         public bool IsTargetable =>
             _isTargetable &&
             InstanceId != Guid.Empty;
+
+        [Inject]
+        public void Construct(IWorldInstance instance)
+        {
+            if (instance == null)
+                throw new ArgumentNullException(nameof(instance));
+
+            Initialize(instance.InstanceId);
+        }
 
         public void Initialize(Guid instanceId)
         {

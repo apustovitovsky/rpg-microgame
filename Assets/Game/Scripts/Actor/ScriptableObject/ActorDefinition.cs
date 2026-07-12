@@ -1,4 +1,5 @@
-using Game.Core;
+using System;
+using Game.World;
 using UnityEngine;
 
 namespace Game.Actor
@@ -6,20 +7,15 @@ namespace Game.Actor
     [CreateAssetMenu(
         fileName = "ActorDefinition",
         menuName = "Game/Actor/Actor Definition")]
-    public sealed class ActorDefinition : Definition
+    public sealed class ActorDefinition :
+        WorldDefinition<ActorInstance>
     {
-        [SerializeField] private string _definitionId;
-
-        [field: SerializeField]
-        public GameObject Prefab { get; private set; }
-
-        public string DefinitionId => _definitionId;
-
-        protected override void OnValidate()
+        public override ActorInstance CreateInstance(
+            Guid? instanceId = null)
         {
-            base.OnValidate();
-
-            _definitionId = _definitionId?.Trim();
+            return new ActorInstance(
+                instanceId ?? Guid.NewGuid(),
+                this);
         }
     }
 }

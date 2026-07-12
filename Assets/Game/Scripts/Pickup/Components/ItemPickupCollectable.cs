@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Inventory;
 using UnityEngine;
+using VContainer;
 
 namespace Game.Pickup
 {
@@ -20,6 +21,20 @@ namespace Game.Pickup
 
         public bool IsCollected { get; private set; }
 
+        [Inject]
+        public void Construct(
+            PickupInstance instance,
+            IInventoryService inventories)
+        {
+            if (instance == null)
+                throw new ArgumentNullException(nameof(instance));
+
+            Initialize(
+                instance.InstanceId,
+                instance.Definition,
+                inventories);
+        }
+
         public void Initialize(
             Guid instanceId,
             PickupDefinition definition,
@@ -33,8 +48,10 @@ namespace Game.Pickup
             }
 
             InstanceId = instanceId;
-            Definition = definition
-                ?? throw new ArgumentNullException(nameof(definition));
+
+            Definition = definition != null
+                ? definition
+                : throw new ArgumentNullException(nameof(definition));
 
             _inventories = inventories
                 ?? throw new ArgumentNullException(nameof(inventories));

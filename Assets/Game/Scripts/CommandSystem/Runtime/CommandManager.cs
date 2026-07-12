@@ -8,10 +8,10 @@ namespace Game.CommandSystem
     public sealed class CommandManager :
         ICommandManager
     {
-        private readonly IInstanceRegistry<ICommandReceiver> _receivers;
+        private readonly IRegistry<ICommandReceiver> _receivers;
 
         public CommandManager(
-            IInstanceRegistry<ICommandReceiver> receivers)
+            IRegistry<ICommandReceiver> receivers)
         {
             _receivers = receivers
                 ?? throw new ArgumentNullException(nameof(receivers));

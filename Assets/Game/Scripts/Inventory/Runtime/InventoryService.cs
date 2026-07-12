@@ -4,66 +4,42 @@ using Game.Item;
 
 namespace Game.Inventory
 {
-    public interface IInventoryService
-    {
-        bool TryGet(
-            Guid ownerInstanceId,
-            out IInventory inventory);
-
-        bool CanAdd(
-            Guid ownerInstanceId,
-            ItemDefinition definition,
-            int amount);
-
-        bool TryAdd(
-            Guid ownerInstanceId,
-            ItemDefinition definition,
-            int amount);
-
-        bool TryRemove(
-            Guid ownerInstanceId,
-            ItemDefinition definition,
-            int amount);
-
-        int GetCount(
-            Guid ownerInstanceId,
-            ItemDefinition definition);
-
-        bool TryGetCount(
-            Guid ownerInstanceId,
-            string definitionId,
-            out int count);
-
-        bool HasItems(
-            Guid ownerInstanceId,
-            string definitionId,
-            int amount);
-    }
-
-    public interface IInventoryRegistrationService
-    {
-        IDisposable Register(IInventoryOwner owner);
-    }
-
     public sealed class InventoryService :
         IInventoryService,
-        IInventoryRegistrationService
+        IRegistryWriter<IInventoryOwner>
     {
-        private readonly InstanceIndex<IInventoryOwner> _owners =
+        private readonly Registry<IInventoryOwner> _owners =
             new();
 
-        private readonly IItemDefinitionCatalog _definitions;
+        private readonly IItemAssetCatalog _catalog;
 
         public InventoryService(
-            IItemDefinitionCatalog definitions)
+            IItemAssetCatalog catalog)
         {
-            _definitions = definitions;
+            _catalog = catalog;
         }
 
-        public IDisposable Register(IInventoryOwner owner)
+        public void Add(
+            Guid instanceId,
+            IInventoryOwner owner)
         {
             if (owner == null)
                 throw new ArgumentNullException(nameof(owner));
+
+            if (instanceId == Guid.Empty)
+            {
+                throw new ArgumentException(
+                    "Inventory owner instance id is required.",
+                    nameof(instanceId));
+            }
+
+            if (owner.InstanceId != instanceId)
+            {
+                throw new ArgumentException(
+                    "Inventory owner instance id does not match " +
+                    "the registration id.",
+                    nameof(instanceId));
+            }
 
             if (owner.Inventory == null)
             {
@@ -72,9 +48,16 @@ namespace Game.Inventory
                     nameof(owner));
             }
 
-            return _owners.Register(
-                owner.InstanceId,
-                owner);
+            _owners.Add(instanceId, owner);
+        }
+
+        public bool Remove(
+            Guid instanceId,
+            IInventoryOwner expectedOwner)
+        {
+            return _owners.Remove(
+                instanceId,
+                expectedOwner);
         }
 
         public bool TryGet(
@@ -138,7 +121,7 @@ namespace Game.Inventory
             count = 0;
 
             if (!TryGet(ownerInstanceId, out var inventory) ||
-                !_definitions.TryGet(
+                !_catalog.TryGet(
                     definitionId,
                     out var definition))
             {
@@ -155,11 +138,11 @@ namespace Game.Inventory
             int amount)
         {
             return amount > 0 &&
-                TryGetCount(
-                    ownerInstanceId,
-                    definitionId,
-                    out var count) &&
-                count >= amount;
+                   TryGetCount(
+                       ownerInstanceId,
+                       definitionId,
+                       out var count) &&
+                   count >= amount;
         }
     }
 }
