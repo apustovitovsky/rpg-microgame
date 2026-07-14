@@ -20,7 +20,8 @@ namespace Game.World
         {
             builder.RegisterInstance(_instance)
                 .AsSelf()
-                .As<WorldInstance>();
+                .As<WorldInstance>()
+                .AsImplementedInterfaces();
         }
     }
 }

@@ -1,7 +1,6 @@
 using Game.Core;
 using UnityEngine;
 using VContainer;
-using VContainer.Unity;
 
 namespace Game.Commands
 {
@@ -13,12 +12,10 @@ namespace Game.Commands
         public void Install(
             IContainerBuilder builder)
         {
-            builder.Register<WorldCommandReceiver>(Lifetime.Scoped)
+            builder.Register<CommandReceiver>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
-            builder.RegisterEntryPoint<
-                RegistryBinding<ICommandReceiver>>(
-                Lifetime.Scoped);
+            builder.RegisterBinding<ICommandReceiver>();
         }
     }
 }

@@ -1,8 +1,10 @@
 using System;
+using Game.Core;
 
 namespace Game.World
 {
-    public abstract class WorldInstance
+    public abstract class WorldInstance :
+        IInstanceIdentity
     {
         protected WorldInstance(Guid instanceId)
         {

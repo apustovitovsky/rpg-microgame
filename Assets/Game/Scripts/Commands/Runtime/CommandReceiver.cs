@@ -2,15 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Core;
 using Game.World;
 using UnityEngine;
 
 namespace Game.Commands
 {
-    public sealed class WorldCommandReceiver :
-        ICommandReceiver,
-        IRegistryBindingSource<ICommandReceiver>
+    public sealed class CommandReceiver :
+        ICommandReceiver
     {
         private readonly WorldInstance _instance;
 
@@ -19,7 +17,7 @@ namespace Game.Commands
 
         private bool _isExecuting;
 
-        public WorldCommandReceiver(
+        public CommandReceiver(
             WorldInstance instance,
             IEnumerable<IWorldCommandHandler> handlers)
         {
@@ -52,10 +50,6 @@ namespace Game.Commands
                 }
             }
         }
-
-        public Guid Id => _instance.InstanceId;
-
-        public ICommandReceiver Value => this;
 
         public async UniTask<CommandResult> ReceiveAsync(
             IWorldCommand command,
