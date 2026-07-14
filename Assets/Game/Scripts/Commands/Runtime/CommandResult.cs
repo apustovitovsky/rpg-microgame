@@ -1,4 +1,4 @@
-namespace Game.CommandSystem
+namespace Game.Commands
 {
     public enum CommandResult
     {

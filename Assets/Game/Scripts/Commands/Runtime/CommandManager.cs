@@ -3,7 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Core;
 
-namespace Game.CommandSystem
+namespace Game.Commands
 {
     public sealed class CommandManager :
         ICommandManager

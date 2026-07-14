@@ -1,5 +1,5 @@
 using System;
-using Game.CommandSystem;
+using Game.Commands;
 using UnityEngine;
 
 namespace Game.Interaction

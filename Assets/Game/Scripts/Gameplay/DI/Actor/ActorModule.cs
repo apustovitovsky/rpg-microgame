@@ -1,4 +1,4 @@
-using Game.CommandSystem;
+using Game.Commands;
 using Game.Core;
 using Game.Inventory;
 using Game.Targeting;

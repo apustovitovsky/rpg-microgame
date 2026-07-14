@@ -1,4 +1,4 @@
-using Game.CommandSystem;
+using Game.Commands;
 using Game.Core;
 using UnityEngine;
 using VContainer;
@@ -6,9 +6,9 @@ using VContainer;
 namespace Game.Gameplay
 {
     [CreateAssetMenu(
-        fileName = "CommandSystemModuleBuilder",
+        fileName = "CommandsModuleBuilder",
         menuName = "Game/Gameplay/Command System Module Builder")]
-    public sealed class CommandSystemModuleBuilder :
+    public sealed class CommandsModuleBuilder :
         ModuleBuilder
     {
         public override void Install(IContainerBuilder builder)

@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
-namespace Game.CommandSystem
+namespace Game.Commands
 {
     public abstract class WorldCommandHandler<TCommand> :
         IWorldCommandHandler<TCommand>

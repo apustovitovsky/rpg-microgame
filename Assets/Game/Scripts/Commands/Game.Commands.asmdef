@@ -1,5 +1,5 @@
 {
-    "name": "Game.CommandSystem",
+    "name": "Game.Commands",
     "rootNamespace": "",
     "references": [
         "UniTask",

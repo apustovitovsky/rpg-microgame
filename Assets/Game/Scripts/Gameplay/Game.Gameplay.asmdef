@@ -18,7 +18,7 @@
         "Game.Loot",
         "Game.Interaction",
         "Game.Navigation",
-        "Game.CommandSystem",
+        "Game.Commands",
         "Unity.Cinemachine",
         "Etheria.Game",
         "Etheria.Navigation",

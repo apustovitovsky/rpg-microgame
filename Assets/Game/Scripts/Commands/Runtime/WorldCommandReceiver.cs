@@ -6,7 +6,7 @@ using Game.Core;
 using Game.World;
 using UnityEngine;
 
-namespace Game.CommandSystem
+namespace Game.Commands
 {
     public sealed class WorldCommandReceiver :
         ICommandReceiver,

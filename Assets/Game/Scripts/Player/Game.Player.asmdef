@@ -10,7 +10,7 @@
         "Game.Targeting",
         "Game.Input",
         "Game.UI",
-        "Game.CommandSystem",
+        "Game.Commands",
         "Unity.Cinemachine"
     ],
     "includePlatforms": [],
