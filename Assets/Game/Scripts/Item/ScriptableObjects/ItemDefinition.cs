@@ -8,25 +8,37 @@ namespace Game.Item
         fileName = "ItemDefinition",
         menuName = "Game/Item/Item Definition")]
     public sealed class ItemDefinition :
-        AssetDefinition<ItemInstance>
+        AssetDefinition<ItemInstance, ItemFragment>
     {
-        [field: SerializeField, Min(1)]
-        public int MaxStackSize { get; private set; } = 1;
-
         public override ItemInstance CreateInstance(
             Guid? instanceId = null)
         {
-            return new ItemInstance(
+            var instance = new ItemInstance(
                 instanceId ?? Guid.NewGuid(),
                 this);
-        }
 
-        protected override void OnValidate()
-        {
-            base.OnValidate();
+            if (!TryGetFragment(
+                    out InitialStatsFragment initialStats))
+            {
+                return instance;
+            }
 
-            if (MaxStackSize < 1)
-                MaxStackSize = 1;
+            foreach (var initialStat in initialStats.Stats)
+            {
+                if (initialStat.Stat == null)
+                {
+                    throw new InvalidOperationException(
+                        $"{nameof(ItemDefinition)} " +
+                        $"'{DisplayName}' contains an initial stat " +
+                        $"without {nameof(ItemStat)}.");
+                }
+
+                instance.SetStatStack(
+                    initialStat.Stat,
+                    initialStat.Value);
+            }
+
+            return instance;
         }
     }
 }

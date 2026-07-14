@@ -23,6 +23,9 @@ namespace Game.Actor
 
             builder.RegisterInstance(_catalog)
                 .AsImplementedInterfaces();
+
+            builder.Register<ActorSpawner>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Game.Pickup
         ICollectable
     {
         private IInventoryService _inventories;
+        private ItemPickupFragment _itemPickup;
 
         public Guid InstanceId { get; private set; }
 
@@ -29,49 +30,37 @@ namespace Game.Pickup
             if (instance == null)
                 throw new ArgumentNullException(nameof(instance));
 
-            Initialize(
-                instance.InstanceId,
-                instance.Definition,
-                inventories);
-        }
-
-        public void Initialize(
-            Guid instanceId,
-            PickupDefinition definition,
-            IInventoryService inventories)
-        {
-            if (instanceId == Guid.Empty)
+            if (!instance.TryGetFragment(
+                    out ItemPickupFragment itemPickup) ||
+                itemPickup.Item == null ||
+                itemPickup.Count <= 0)
             {
-                throw new ArgumentException(
-                    "Pickup instance id is required.",
-                    nameof(instanceId));
+                throw new InvalidOperationException(
+                    $"{nameof(PickupDefinition)} " +
+                    $"'{instance.Definition.DisplayName}' requires a valid " +
+                    $"{nameof(ItemPickupFragment)}.");
             }
 
-            InstanceId = instanceId;
-
-            Definition = definition != null
-                ? definition
-                : throw new ArgumentNullException(nameof(definition));
+            InstanceId = instance.InstanceId;
+            Definition = instance.Definition;
+            _itemPickup = itemPickup;
 
             _inventories = inventories
                 ?? throw new ArgumentNullException(nameof(inventories));
-
-            IsCollected = false;
         }
 
         public bool CanCollect(Guid collectorInstanceId)
         {
             return collectorInstanceId != Guid.Empty &&
                    InstanceId != Guid.Empty &&
-                   Definition.Item != null &&
-                   Definition.Amount > 0 &&
+                   _itemPickup != null &&
                    !IsCollected &&
                    isActiveAndEnabled &&
                    gameObject.activeInHierarchy &&
                    _inventories.CanAdd(
                        collectorInstanceId,
-                       Definition.Item,
-                       Definition.Amount);
+                       _itemPickup.Item,
+                       _itemPickup.Count);
         }
 
         public UniTask<CollectResult> CollectAsync(
@@ -88,8 +77,8 @@ namespace Game.Pickup
 
             if (!_inventories.TryAdd(
                     collectorInstanceId,
-                    Definition.Item,
-                    Definition.Amount))
+                    _itemPickup.Item,
+                    _itemPickup.Count))
             {
                 return UniTask.FromResult(
                     CollectResult.CannotCollect);

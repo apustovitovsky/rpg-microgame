@@ -9,12 +9,12 @@ namespace Game.Pickup
     public sealed class ItemPickupService : IItemPickupService
     {
         private readonly HashSet<Guid> _collecting = new();
-        private readonly ISpawnedObjectRegistry _spawnedObjects;
+        private readonly IWorldSpawner _worldSpawner;
 
-        public ItemPickupService(
-            ISpawnedObjectRegistry spawnedObjects)
+        public ItemPickupService(IWorldSpawner worldSpawner)
         {
-            _spawnedObjects = spawnedObjects;
+            _worldSpawner = worldSpawner
+                ?? throw new ArgumentNullException(nameof(worldSpawner));
         }
 
         public async UniTask<CollectResult> CollectAsync(
@@ -46,7 +46,7 @@ namespace Game.Pickup
                     token);
 
                 if (result == CollectResult.Succeeded)
-                    _spawnedObjects.Despawn(instanceId);
+                    _worldSpawner.Despawn(instanceId);
 
                 return result;
             }

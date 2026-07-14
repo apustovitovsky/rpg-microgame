@@ -1,6 +1,5 @@
 using System;
-using Game.Item;
-using Game.World;
+using Game.Core;
 using UnityEngine;
 
 namespace Game.Pickup
@@ -9,13 +8,10 @@ namespace Game.Pickup
         fileName = "PickupDefinition",
         menuName = "Game/Pickup/Pickup Definition")]
     public sealed class PickupDefinition :
-        WorldDefinition<PickupInstance>
+        AssetDefinition<PickupInstance, PickupFragment>
     {
         [field: SerializeField]
-        public ItemDefinition Item { get; private set; }
-
-        [field: SerializeField, Min(1)]
-        public int Amount { get; private set; } = 1;
+        public GameObject Prefab { get; private set; }
 
         public override PickupInstance CreateInstance(
             Guid? instanceId = null)
@@ -23,14 +19,6 @@ namespace Game.Pickup
             return new PickupInstance(
                 instanceId ?? Guid.NewGuid(),
                 this);
-        }
-
-        protected override void OnValidate()
-        {
-            base.OnValidate();
-
-            if (Amount < 1)
-                Amount = 1;
         }
     }
 }

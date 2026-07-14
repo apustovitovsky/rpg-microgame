@@ -313,7 +313,7 @@ GameObject:
   - component: {fileID: 5186002720919307954}
   - component: {fileID: 8493052202015039233}
   m_Layer: 0
-  m_Name: DI
+  m_Name: Scope
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -353,11 +353,11 @@ MonoBehaviour:
   _actorRoot: {fileID: 8538305375040021554}
   _identity: {fileID: 11400000, guid: 3fad7c24c1e6eb748877ff02d7425018, type: 2}
   _commands: {fileID: 11400000, guid: c886941594a342840b2f7a4c056dec94, type: 2}
-  _inventory: {fileID: 11400000, guid: f23d96273983e1243a8474195182f5e5, type: 2}
   _movement: {fileID: 0}
   _targeting: {fileID: 0}
   _combat: {fileID: 0}
   _ai: {fileID: 11400000, guid: 99d453e615c7d4b45a0ffba6cb40ab6f, type: 2}
+  _loot: {fileID: 0}
 --- !u!1 &3705399738479044897
 GameObject:
   m_ObjectHideFlags: 0

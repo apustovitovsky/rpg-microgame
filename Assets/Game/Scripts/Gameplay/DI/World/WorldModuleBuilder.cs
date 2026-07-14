@@ -12,9 +12,6 @@ namespace Game.Gameplay
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<SpawnedObjectRegistry>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
             builder.Register<WorldSpawner>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }

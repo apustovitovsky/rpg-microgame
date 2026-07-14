@@ -1,12 +1,16 @@
 using System;
+using UnityEngine;
+using VContainer.Unity;
 
 namespace Game.World
 {
     public interface IWorldSpawner
     {
-        ISpawnedObject Spawn<TInstance>(
-            SpawnRequest<TInstance> request)
-            where TInstance : class, IWorldInstance;
+        GameObject Spawn(
+            Guid instanceId,
+            GameObject prefab,
+            SpawnPlacement placement,
+            IInstaller installer);
 
         bool Despawn(Guid instanceId);
     }

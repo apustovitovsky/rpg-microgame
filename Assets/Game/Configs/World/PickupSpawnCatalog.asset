@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PickupSpawnCatalog
   m_EditorClassIdentifier: Game.Gameplay::Game.Gameplay.PickupSpawnCatalog
   _pickups:
-  - _definitionId: pickup.gold-bag
+  - _definitionId: pickup.gold
     _locationId: city_central_square
     _anchorKey: spawn_02
-  - _definitionId: pickup.gold-bag
+  - _definitionId: pickup.gold
     _locationId: city_central_square
     _anchorKey: spawn_04

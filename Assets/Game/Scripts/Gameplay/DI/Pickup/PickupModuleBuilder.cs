@@ -25,6 +25,9 @@ namespace Game.Gameplay
             builder.RegisterInstance(_catalog)
                 .AsImplementedInterfaces();
 
+            builder.Register<PickupSpawner>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
             builder.Register<ItemPickupService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }

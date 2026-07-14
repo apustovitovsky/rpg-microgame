@@ -1,9 +1,9 @@
 using Game.CommandSystem;
 using Game.Core;
 using Game.Interaction;
-using Game.Player;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Game.Gameplay
 {
@@ -18,11 +18,12 @@ namespace Game.Gameplay
             builder.Register<InteractCommandHandler>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
-            builder.Register<PossessCommandHandler>(Lifetime.Scoped)
-                .AsImplementedInterfaces();
-
             builder.Register<WorldCommandReceiver>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
+
+            builder.RegisterEntryPoint<
+                RegistryBinding<ICommandReceiver>>(
+                Lifetime.Scoped);
         }
     }
 }

@@ -1,5 +1,6 @@
 using Game.Control;
 using Game.Core;
+using Game.Player;
 using Game.Targeting;
 using UnityEngine;
 using VContainer;
@@ -29,6 +30,9 @@ namespace Game.Actor
                 .AsImplementedInterfaces();
 
             builder.RegisterComponentInModuleRoot<DialogueParticipant>()
+                .AsImplementedInterfaces();
+
+            builder.Register<PossessCommandHandler>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
         }
     }

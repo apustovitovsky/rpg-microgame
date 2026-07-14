@@ -45,10 +45,13 @@ namespace Game.Pickup
             builder.Register<WorldCommandReceiver>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
+            builder.RegisterEntryPoint<
+                RegistryBinding<ICommandReceiver>>(
+                Lifetime.Scoped);
+
             builder.RegisterBuildCallback(resolver =>
             {
                 resolver.Resolve<Targetable>();
-                resolver.Resolve<ICommandReceiver>();
             });
         }
     }

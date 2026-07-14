@@ -30,13 +30,6 @@ namespace Game.Pickup
             ItemPickupCollectable collectable,
             IItemPickupService pickupService)
         {
-            Initialize(collectable, pickupService);
-        }
-
-        public void Initialize(
-            ItemPickupCollectable collectable,
-            IItemPickupService pickupService)
-        {
             _collectable = collectable
                 ?? throw new ArgumentNullException(nameof(collectable));
 

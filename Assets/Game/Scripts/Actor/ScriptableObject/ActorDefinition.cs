@@ -1,5 +1,5 @@
 using System;
-using Game.World;
+using Game.Core;
 using UnityEngine;
 
 namespace Game.Actor
@@ -8,8 +8,11 @@ namespace Game.Actor
         fileName = "ActorDefinition",
         menuName = "Game/Actor/Actor Definition")]
     public sealed class ActorDefinition :
-        WorldDefinition<ActorInstance>
+        AssetDefinition<ActorInstance, ActorFragment>
     {
+        [field: SerializeField]
+        public GameObject Prefab { get; private set; }
+
         public override ActorInstance CreateInstance(
             Guid? instanceId = null)
         {

@@ -12,6 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167c45f7eff1a5e44888bad1d6109e79, type: 3}
   m_Name: Item_Gold
   m_EditorClassIdentifier: Game.Item::Game.Item.ItemDefinition
+  _id: item.gold
   _displayName: Gold
-  _definitionId: item.gold
-  <MaxStackSize>k__BackingField: 50
+  _fragments:
+  - rid: 1610866214784991312
+  references:
+    version: 2
+    RefIds:
+    - rid: 1610866214784991312
+      type: {class: StackFragment, ns: Game.Item, asm: Game.Item}
+      data:
+        <MaximumCount>k__BackingField: 50

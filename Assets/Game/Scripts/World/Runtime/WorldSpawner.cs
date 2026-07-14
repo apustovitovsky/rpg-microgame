@@ -1,4 +1,5 @@
 using System;
+using Game.Core;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -9,88 +10,86 @@ namespace Game.World
         IWorldSpawner
     {
         private readonly LifetimeScope _parentScope;
-        private readonly ISpawnedObjectRegistry _spawnedObjects;
+        private readonly Registry<GameObject> _roots = new();
 
-        public WorldSpawner(
-            LifetimeScope parentScope,
-            ISpawnedObjectRegistry spawnedObjects)
+        public WorldSpawner(LifetimeScope parentScope)
         {
-            _parentScope = parentScope
-                != null ? parentScope : throw new ArgumentNullException(nameof(parentScope));
-
-            _spawnedObjects = spawnedObjects
-                ?? throw new ArgumentNullException(nameof(spawnedObjects));
+            _parentScope = parentScope != null
+                ? parentScope
+                : throw new ArgumentNullException(nameof(parentScope));
         }
 
-        public ISpawnedObject Spawn<TInstance>(
-            SpawnRequest<TInstance> request)
-            where TInstance : class, IWorldInstance
+        public GameObject Spawn(
+            Guid instanceId,
+            GameObject prefab,
+            SpawnPlacement placement,
+            IInstaller installer)
         {
-            var definition = request.Definition
-                != null ? request.Definition : throw new ArgumentNullException(
-                    nameof(request),
-                    "Spawn request requires a definition.");
-
-            if (definition.Prefab == null)
+            if (instanceId == Guid.Empty)
             {
                 throw new ArgumentException(
-                    "World definition prefab is required.",
-                    nameof(request));
+                    "Instance id is required.",
+                    nameof(instanceId));
             }
 
-            if (request.InstanceId == Guid.Empty)
-            {
-                throw new ArgumentException(
-                    "Instance id cannot be empty.",
-                    nameof(request));
-            }
+            if (prefab == null)
+                throw new ArgumentNullException(nameof(prefab));
 
-            var instanceId = request.InstanceId ?? Guid.NewGuid();
+            if (installer == null)
+                throw new ArgumentNullException(nameof(installer));
 
-            if (_spawnedObjects.TryGet(instanceId, out _))
+            if (_roots.Contains(instanceId))
             {
                 throw new InvalidOperationException(
-                    $"World instance '{instanceId}' is already spawned.");
+                    $"World object '{instanceId}' is already spawned.");
             }
 
-            var instance = definition.CreateInstance(instanceId)
-                ?? throw new InvalidOperationException(
-                    $"World definition '{definition.name}' " +
-                    "created a null instance.");
+            GameObject root = null;
 
-            using (LifetimeScope.EnqueueParent(_parentScope))
-            using (LifetimeScope.Enqueue(builder =>
+            try
             {
-                builder.RegisterInstance(instance)
-                    .AsSelf()
-                    .As<IWorldInstance>();
-            }))
+                using (LifetimeScope.EnqueueParent(_parentScope))
+                using (LifetimeScope.Enqueue(installer))
+                {
+                    root = UnityEngine.Object.Instantiate(
+                        prefab,
+                        placement.Position,
+                        placement.Rotation,
+                        placement.Parent);
+                }
+
+                _roots.Add(instanceId, root);
+
+                return root;
+            }
+            catch
             {
-                var gameObject = UnityEngine.Object.Instantiate(
-                    definition.Prefab,
-                    request.Placement.Position,
-                    request.Placement.Rotation,
-                    request.Placement.Parent);
+                if (root != null)
+                    UnityEngine.Object.Destroy(root);
 
-                if (!string.IsNullOrWhiteSpace(definition.Id))
-                    gameObject.name = definition.Id;
-
-                var spawnedObject = new SpawnedObject(
-                    instance,
-                    gameObject);
-
-                if (_spawnedObjects.Track(spawnedObject))
-                    return spawnedObject;
-
-                throw new InvalidOperationException(
-                    $"World instance '{instanceId}' " +
-                    "could not be tracked.");
+                throw;
             }
         }
 
         public bool Despawn(Guid instanceId)
         {
-            return _spawnedObjects.Despawn(instanceId);
+            if (!_roots.TryGet(
+                    instanceId,
+                    out var root))
+            {
+                return false;
+            }
+
+            if (!_roots.Remove(
+                    instanceId,
+                    root))
+            {
+                return false;
+            }
+
+            UnityEngine.Object.Destroy(root);
+
+            return true;
         }
     }
 }

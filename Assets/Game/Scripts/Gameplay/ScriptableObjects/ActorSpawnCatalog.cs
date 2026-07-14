@@ -6,8 +6,8 @@ using UnityEngine;
 namespace Game.Gameplay
 {
     [CreateAssetMenu(
-        fileName = "ActorSpawnCatalog",
-        menuName = "Game/Gameplay/Actor Spawn Catalog")]
+        fileName = "EntitySpawnCatalog",
+        menuName = "Game/Gameplay/Entity Spawn Catalog")]
     public sealed class ActorSpawnCatalog : ScriptableObject
     {
         [SerializeField] private ActorEntry _player = new();

@@ -4,30 +4,28 @@ using Game.World;
 namespace Game.Pickup
 {
     public sealed class PickupInstance :
-        IWorldInstance
+        WorldInstance
     {
         public PickupInstance(
             Guid instanceId,
             PickupDefinition definition)
+            : base(instanceId)
         {
-            if (instanceId == Guid.Empty)
-            {
-                throw new ArgumentException(
-                    "Pickup instance id cannot be empty.",
-                    nameof(instanceId));
-            }
-
-            InstanceId = instanceId;
-
             Definition = definition != null
                 ? definition
                 : throw new ArgumentNullException(nameof(definition));
         }
 
-        public Guid InstanceId { get; }
-
-        public string DisplayName => Definition.DisplayName;
-
         public PickupDefinition Definition { get; }
+
+        public override string DisplayName =>
+            Definition.DisplayName;
+
+        public bool TryGetFragment<TFragment>(
+            out TFragment fragment)
+            where TFragment : PickupFragment
+        {
+            return Definition.TryGetFragment(out fragment);
+        }
     }
 }

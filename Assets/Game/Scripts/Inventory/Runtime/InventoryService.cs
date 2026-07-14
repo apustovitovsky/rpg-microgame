@@ -6,9 +6,9 @@ namespace Game.Inventory
 {
     public sealed class InventoryService :
         IInventoryService,
-        IRegistryWriter<IInventoryOwner>
+        IRegistryWriter<IInventory>
     {
-        private readonly Registry<IInventoryOwner> _owners =
+        private readonly Registry<IInventory> _inventories =
             new();
 
         private readonly IItemAssetCatalog _catalog;
@@ -16,65 +16,35 @@ namespace Game.Inventory
         public InventoryService(
             IItemAssetCatalog catalog)
         {
-            _catalog = catalog;
+            _catalog = catalog
+                ?? throw new ArgumentNullException(nameof(catalog));
         }
 
         public void Add(
             Guid instanceId,
-            IInventoryOwner owner)
+            IInventory inventory)
         {
-            if (owner == null)
-                throw new ArgumentNullException(nameof(owner));
-
-            if (instanceId == Guid.Empty)
-            {
-                throw new ArgumentException(
-                    "Inventory owner instance id is required.",
-                    nameof(instanceId));
-            }
-
-            if (owner.InstanceId != instanceId)
-            {
-                throw new ArgumentException(
-                    "Inventory owner instance id does not match " +
-                    "the registration id.",
-                    nameof(instanceId));
-            }
-
-            if (owner.Inventory == null)
-            {
-                throw new ArgumentException(
-                    "Inventory owner must provide an inventory.",
-                    nameof(owner));
-            }
-
-            _owners.Add(instanceId, owner);
+            _inventories.Add(
+                instanceId,
+                inventory);
         }
 
         public bool Remove(
             Guid instanceId,
-            IInventoryOwner expectedOwner)
+            IInventory expectedInventory)
         {
-            return _owners.Remove(
+            return _inventories.Remove(
                 instanceId,
-                expectedOwner);
+                expectedInventory);
         }
 
         public bool TryGet(
             Guid ownerInstanceId,
             out IInventory inventory)
         {
-            inventory = null;
-
-            if (!_owners.TryGet(
-                    ownerInstanceId,
-                    out var owner))
-            {
-                return false;
-            }
-
-            inventory = owner.Inventory;
-            return inventory != null;
+            return _inventories.TryGet(
+                ownerInstanceId,
+                out inventory);
         }
 
         public bool CanAdd(

@@ -16,6 +16,8 @@ namespace Game.Targeting
 
         public Guid InstanceId { get; private set; }
 
+        public string DisplayName { get; private set; }
+
         public Transform UiAnchor => _uiAnchor != null
             ? _uiAnchor
             : transform;
@@ -29,24 +31,13 @@ namespace Game.Targeting
             InstanceId != Guid.Empty;
 
         [Inject]
-        public void Construct(IWorldInstance instance)
+        public void Construct(WorldInstance instance)
         {
             if (instance == null)
                 throw new ArgumentNullException(nameof(instance));
 
-            Initialize(instance.InstanceId);
-        }
-
-        public void Initialize(Guid instanceId)
-        {
-            if (instanceId == Guid.Empty)
-            {
-                throw new ArgumentException(
-                    "Target instance id is required.",
-                    nameof(instanceId));
-            }
-
-            InstanceId = instanceId;
+            InstanceId = instance.InstanceId;
+            DisplayName = instance.DisplayName;
         }
     }
 }

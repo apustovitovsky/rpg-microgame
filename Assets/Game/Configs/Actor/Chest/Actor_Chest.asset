@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4857ddcb480a7894391b5fc7418f1619, type: 3}
+  m_Name: Actor_Chest
+  m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorDefinition
+  _id: world.chest
+  _displayName: Chest
+  _fragments:
+  - rid: 1610866178936012879
+  <Prefab>k__BackingField: {fileID: 2440724634624028458, guid: f42672fded6597d48ae6ec72d768787a,
+    type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1610866178936012879
+      type: {class: InventoryFragment, ns: Game.Actor, asm: Game.Actor}
+      data:
+        _capacity: 20
+        _initialItems:
+        - <Definition>k__BackingField: {fileID: 11400000, guid: a2a0f303d3769564b83686978b16be20,
+            type: 2}
+          <Count>k__BackingField: 15
+        - <Definition>k__BackingField: {fileID: 11400000, guid: d22cffe9a6ec8a94bbdc5ea3a3dea03a,
+            type: 2}
+          <Count>k__BackingField: 1

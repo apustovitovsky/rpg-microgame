@@ -17,11 +17,11 @@ namespace Game.Actor
         [Header("Build Configurations")]
         [SerializeField] private ModuleBuilder _identity;
         [SerializeField] private ModuleBuilder _commands;
-        [SerializeField] private ModuleBuilder _inventory;
         [SerializeField] private ModuleBuilder _movement;
         [SerializeField] private ModuleBuilder _targeting;
         [SerializeField] private ModuleBuilder _combat;
         [SerializeField] private ModuleBuilder _ai;
+        [SerializeField] private ModuleBuilder _loot;
 
         protected override void Configure(
             IContainerBuilder builder)
@@ -38,22 +38,21 @@ namespace Game.Actor
 
             builder.Configure(_identity);
             builder.Configure(_commands);
-            builder.Configure(_inventory);
             builder.Configure(_movement);
             builder.Configure(_targeting);
             builder.Configure(_combat);
             builder.Configure(_ai);
+            builder.Configure(_loot);
 
             builder.RegisterComponentInModuleRoot<InventoryOwner>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterEntryPoint<InventoryOwnerRegistration>(
+            builder.RegisterEntryPoint<RegistryBinding<IInventory>>(
                 Lifetime.Scoped);
 
             builder.RegisterBuildCallback(resolver =>
             {
                 resolver.Resolve<Targetable>();
-                resolver.Resolve<ICommandReceiver>();
             });
         }
     }

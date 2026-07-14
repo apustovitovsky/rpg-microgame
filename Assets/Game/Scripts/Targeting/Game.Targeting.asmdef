@@ -2,6 +2,7 @@
     "name": "Game.Targeting",
     "rootNamespace": "",
     "references": [
+        "Game.Core",
         "Game.World",
         "VContainer"
     ],

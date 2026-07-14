@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Game.Actor
 {
     [CreateAssetMenu(
-        fileName = "ActorAssetCatalog",
+        fileName = "EntityAssetCatalog",
         menuName = "Game/Actor/Actor Asset Catalog")]
     public sealed class ActorAssetCatalog :
         ScriptableObject,

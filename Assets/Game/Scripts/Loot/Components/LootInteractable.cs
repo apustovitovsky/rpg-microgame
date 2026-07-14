@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Interaction;
+using Game.World;
 using UnityEngine;
 using VContainer;
 
@@ -18,7 +19,7 @@ namespace Game.Loot
         [field: SerializeField]
         public float MaxRange { get; private set; } = 5f;
 
-        private LootContainerInstance _instance;
+        private WorldInstance _instance;
         private ILootSessionService _sessions;
 
         public Vector3 InteractionPoint =>
@@ -28,7 +29,7 @@ namespace Game.Loot
 
         [Inject]
         public void Construct(
-            LootContainerInstance instance,
+            WorldInstance instance,
             ILootSessionService sessions)
         {
             _instance = instance
@@ -44,8 +45,7 @@ namespace Game.Loot
                    _sessions != null &&
                    context.InteractorInstanceId != Guid.Empty &&
                    context.TargetInstanceId == _instance.InstanceId &&
-                   context.InteractorInstanceId !=
-                   _instance.InstanceId;
+                   context.InteractorInstanceId != _instance.InstanceId;
         }
 
         public UniTask InteractAsync(

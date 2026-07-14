@@ -24,12 +24,18 @@ namespace Game.Inventory
             ItemDefinition definition,
             int amount)
         {
-            if (definition == null || amount <= 0)
+            if (definition == null ||
+                amount <= 0 ||
+                !TryGetMaximumCount(
+                    definition,
+                    out var maximumCount))
+            {
                 return false;
+            }
 
             long availableSpace =
                 (long)(Capacity - _entries.Count) *
-                definition.MaxStackSize;
+                maximumCount;
 
             foreach (var entry in _entries)
             {
@@ -44,8 +50,13 @@ namespace Game.Inventory
             ItemDefinition definition,
             int amount)
         {
-            if (!CanAdd(definition, amount))
+            if (!CanAdd(definition, amount) ||
+                !TryGetMaximumCount(
+                    definition,
+                    out var maximumCount))
+            {
                 return false;
+            }
 
             var remaining = amount;
 
@@ -64,7 +75,7 @@ namespace Game.Inventory
             {
                 var stackSize = Math.Min(
                     remaining,
-                    definition.MaxStackSize);
+                    maximumCount);
 
                 _entries.Add(
                     new InventoryEntry(
@@ -156,8 +167,10 @@ namespace Game.Inventory
         {
             return stack.Instance != null &&
                    stack.Count > 0 &&
-                   stack.Count <=
-                   stack.Instance.Definition.MaxStackSize &&
+                   TryGetMaximumCount(
+                       stack.Instance.Definition,
+                       out var maximumCount) &&
+                   stack.Count <= maximumCount &&
                    _entries.Count < Capacity;
         }
 
@@ -189,6 +202,19 @@ namespace Game.Inventory
             }
 
             return total;
+        }
+
+        private static bool TryGetMaximumCount(
+            ItemDefinition definition,
+            out int maximumCount)
+        {
+            maximumCount = 0;
+
+            return definition != null &&
+                   definition.TryGetFragment(
+                       out StackFragment stack) &&
+                   stack.MaximumCount > 0 &&
+                   (maximumCount = stack.MaximumCount) > 0;
         }
     }
 }

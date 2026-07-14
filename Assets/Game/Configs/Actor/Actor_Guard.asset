@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4857ddcb480a7894391b5fc7418f1619, type: 3}
+  m_Name: Actor_Guard
+  m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorDefinition
+  _id: character.guard
+  _displayName: Guard
+  _fragments:
+  - rid: 1610866178936012884
+  <Prefab>k__BackingField: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
+    type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1610866178936012884
+      type: {class: InventoryFragment, ns: Game.Actor, asm: Game.Actor}
+      data:
+        _capacity: 20
+        _initialItems: []

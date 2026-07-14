@@ -13,16 +13,19 @@ MonoBehaviour:
   m_Name: ActorSpawnCatalog
   m_EditorClassIdentifier: Game.World::Game.World.WorldActorConfigSO
   _player:
-    _definitionId: npc.character
+    _definitionId: character.player
     _locationId: city_storage
     _anchorKey: entrance_outer
   _actors:
-  - _definitionId: npc.guard
+  - _definitionId: character.guard
     _locationId: city_storage
     _anchorKey: entrance_inner
-  - _definitionId: npc.guard
+  - _definitionId: character.guard
     _locationId: city_storage
     _anchorKey: corner_01
-  - _definitionId: npc.bandit
+  - _definitionId: character.bandit
     _locationId: city_storage
     _anchorKey: corner_02
+  - _definitionId: world.chest
+    _locationId: city_tavern
+    _anchorKey: entrance_outer

@@ -7,6 +7,8 @@ namespace Game.Targeting
     {
         Guid InstanceId { get; }
 
+        string DisplayName { get; }
+
         Transform TargetAnchor { get; }
 
         Transform UiAnchor { get; }

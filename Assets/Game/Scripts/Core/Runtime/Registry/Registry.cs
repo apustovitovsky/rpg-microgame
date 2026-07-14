@@ -10,16 +10,6 @@ namespace Game.Core
     {
         private readonly Dictionary<Guid, T> _items = new();
 
-        public IDisposable Register(
-            Guid id,
-            T value)
-        {
-            Add(id, value);
-
-            return new LifetimeToken(
-                () => Remove(id, value));
-        }
-
         public void Add(
             Guid id,
             T value)

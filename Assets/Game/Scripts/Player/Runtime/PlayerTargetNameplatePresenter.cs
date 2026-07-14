@@ -10,19 +10,16 @@ namespace Game.Player
     {
         private readonly IPlayerControl _control;
         private readonly TargetNameplatePool _pool;
-        private readonly IDisplayNameService _displayNames;
 
         private TargetNameplateView _currentView;
         private Camera _camera;
 
         public PlayerTargetNameplatePresenter(
             IPlayerControl control,
-            TargetNameplatePool pool,
-            IDisplayNameService displayNames)
+            TargetNameplatePool pool)
         {
             _control = control;
             _pool = pool;
-            _displayNames = displayNames;
         }
 
         public void Start()
@@ -56,9 +53,7 @@ namespace Game.Player
                 target.InstanceId == System.Guid.Empty ||
                 target.InstanceId ==
                 _control.ControlledInstanceId ||
-                !_displayNames.TryGet(
-                    target.InstanceId,
-                    out var displayName))
+                string.IsNullOrWhiteSpace(target.DisplayName))
             {
                 ReleaseCurrent();
                 return;
@@ -76,7 +71,7 @@ namespace Game.Player
 
             _currentView = _pool.Get(
                 target.UiAnchor,
-                displayName,
+                target.DisplayName,
                 camera);
         }
 

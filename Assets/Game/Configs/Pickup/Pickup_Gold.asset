@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66b8237ad99c76245b619954befcbdbb, type: 3}
+  m_Name: Pickup_Gold
+  m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupDefinition
+  _id: pickup.gold
+  _displayName: Gold Pickup
+  _fragments:
+  - rid: 1610866178936012880
+  - rid: 1610866178936012881
+  <Prefab>k__BackingField: {fileID: 2440724634624028458, guid: 995871178727ef74eb5dbb722422677c,
+    type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1610866178936012880
+      type: {class: ItemPickupFragment, ns: Game.Pickup, asm: Game.Pickup}
+      data:
+        <Item>k__BackingField: {fileID: 11400000, guid: a2a0f303d3769564b83686978b16be20,
+          type: 2}
+        <Count>k__BackingField: 4
+    - rid: 1610866178936012881
+      type: {class: ItemPickupFragment, ns: Game.Pickup, asm: Game.Pickup}
+      data:
+        <Item>k__BackingField: {fileID: 11400000, guid: a2a0f303d3769564b83686978b16be20,
+          type: 2}
+        <Count>k__BackingField: 2
