@@ -240,8 +240,8 @@ namespace Game.Loot
         private bool TryGetInventories(
             Guid sessionId,
             LootSession session,
-            out IInventory sourceInventory,
-            out IInventory looterInventory,
+            out InventoryInstance sourceInventory,
+            out InventoryInstance looterInventory,
             out LootTakeResult failureResult)
         {
             sourceInventory = null;

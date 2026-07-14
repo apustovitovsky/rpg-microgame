@@ -7,7 +7,7 @@ namespace Game.Inventory
     {
         bool TryGet(
             Guid ownerInstanceId,
-            out IInventory inventory);
+            out InventoryInstance inventory);
 
         bool CanAdd(
             Guid ownerInstanceId,

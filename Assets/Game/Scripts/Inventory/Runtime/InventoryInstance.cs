@@ -4,11 +4,11 @@ using Game.Item;
 
 namespace Game.Inventory
 {
-    public sealed class Inventory : IInventory
+    public sealed class InventoryInstance
     {
         private readonly List<InventoryEntry> _entries = new();
 
-        public Inventory(int capacity)
+        public InventoryInstance(int capacity)
         {
             if (capacity <= 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
@@ -26,8 +26,7 @@ namespace Game.Inventory
         {
             if (definition == null ||
                 amount <= 0 ||
-                !TryGetMaximumCount(
-                    definition,
+                !definition.TryGetMaximumStackCount(
                     out var maximumCount))
             {
                 return false;
@@ -51,8 +50,7 @@ namespace Game.Inventory
             int amount)
         {
             if (!CanAdd(definition, amount) ||
-                !TryGetMaximumCount(
-                    definition,
+                !definition.TryGetMaximumStackCount(
                     out var maximumCount))
             {
                 return false;
@@ -167,8 +165,7 @@ namespace Game.Inventory
         {
             return stack.Instance != null &&
                    stack.Count > 0 &&
-                   TryGetMaximumCount(
-                       stack.Instance.Definition,
+                   stack.Instance.Definition.TryGetMaximumStackCount(
                        out var maximumCount) &&
                    stack.Count <= maximumCount &&
                    _entries.Count < Capacity;
@@ -202,19 +199,6 @@ namespace Game.Inventory
             }
 
             return total;
-        }
-
-        private static bool TryGetMaximumCount(
-            ItemDefinition definition,
-            out int maximumCount)
-        {
-            maximumCount = 0;
-
-            return definition != null &&
-                   definition.TryGetFragment(
-                       out StackFragment stack) &&
-                   stack.MaximumCount > 0 &&
-                   (maximumCount = stack.MaximumCount) > 0;
         }
     }
 }

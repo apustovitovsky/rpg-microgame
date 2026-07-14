@@ -1,4 +1,5 @@
 using System;
+using Game.Inventory;
 using Game.Item;
 using UnityEngine;
 
@@ -25,9 +26,9 @@ namespace Game.Actor
         private InitialItemEntry[] _initialItems =
             Array.Empty<InitialItemEntry>();
 
-        public Inventory.Inventory Create()
+        public InventoryInstance Create()
         {
-            var inventory = new Inventory.Inventory(_capacity);
+            var inventory = new InventoryInstance(_capacity);
 
             foreach (var entry in _initialItems)
             {

@@ -5,8 +5,8 @@ namespace Game.Inventory
     public interface IInventoryTransferService
     {
         InventoryTransferResult TryTransfer(
-            IInventory source,
-            IInventory destination,
+            InventoryInstance source,
+            InventoryInstance destination,
             Guid instanceId,
             int count);
     }

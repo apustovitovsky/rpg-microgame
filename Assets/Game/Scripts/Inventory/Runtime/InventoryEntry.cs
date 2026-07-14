@@ -14,8 +14,13 @@ namespace Game.Inventory
             Instance = instance
                 ?? throw new ArgumentNullException(nameof(instance));
 
-            _maximumCount = GetMaximumCount(
-                instance.Definition);
+            if (!instance.Definition.TryGetMaximumStackCount(
+                    out _maximumCount))
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(ItemDefinition)} requires " +
+                    $"{nameof(StackFragment)}.");
+            }
 
             if (count <= 0 || count > _maximumCount)
                 throw new ArgumentOutOfRangeException(nameof(count));
@@ -56,21 +61,6 @@ namespace Game.Inventory
 
             Count -= removed;
             return removed;
-        }
-
-        private static int GetMaximumCount(
-            ItemDefinition definition)
-        {
-            if (definition == null ||
-                !definition.TryGetFragment(
-                    out StackFragment stack))
-            {
-                throw new InvalidOperationException(
-                    $"{nameof(ItemDefinition)} requires " +
-                    $"{nameof(StackFragment)}.");
-            }
-
-            return stack.MaximumCount;
         }
     }
 }

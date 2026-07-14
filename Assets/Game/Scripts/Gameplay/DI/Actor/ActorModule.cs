@@ -47,7 +47,7 @@ namespace Game.Actor
             builder.RegisterComponentInModuleRoot<InventoryOwner>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterEntryPoint<RegistryBinding<IInventory>>(
+            builder.RegisterEntryPoint<RegistryBinding<InventoryInstance>>(
                 Lifetime.Scoped);
 
             builder.RegisterBuildCallback(resolver =>

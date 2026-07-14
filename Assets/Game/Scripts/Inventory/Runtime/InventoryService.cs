@@ -6,9 +6,9 @@ namespace Game.Inventory
 {
     public sealed class InventoryService :
         IInventoryService,
-        IRegistryWriter<IInventory>
+        IRegistryWriter<InventoryInstance>
     {
-        private readonly Registry<IInventory> _inventories =
+        private readonly Registry<InventoryInstance> _inventories =
             new();
 
         private readonly IItemAssetCatalog _catalog;
@@ -22,7 +22,7 @@ namespace Game.Inventory
 
         public void Add(
             Guid instanceId,
-            IInventory inventory)
+            InventoryInstance inventory)
         {
             _inventories.Add(
                 instanceId,
@@ -31,7 +31,7 @@ namespace Game.Inventory
 
         public bool Remove(
             Guid instanceId,
-            IInventory expectedInventory)
+            InventoryInstance expectedInventory)
         {
             return _inventories.Remove(
                 instanceId,
@@ -40,7 +40,7 @@ namespace Game.Inventory
 
         public bool TryGet(
             Guid ownerInstanceId,
-            out IInventory inventory)
+            out InventoryInstance inventory)
         {
             return _inventories.TryGet(
                 ownerInstanceId,

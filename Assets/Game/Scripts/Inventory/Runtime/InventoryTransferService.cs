@@ -6,8 +6,8 @@ namespace Game.Inventory
         IInventoryTransferService
     {
         public InventoryTransferResult TryTransfer(
-            IInventory source,
-            IInventory destination,
+            InventoryInstance source,
+            InventoryInstance destination,
             Guid instanceId,
             int count)
         {
@@ -57,7 +57,7 @@ namespace Game.Inventory
         }
 
         private static bool TryFindEntry(
-            IInventory inventory,
+            InventoryInstance inventory,
             Guid instanceId,
             out InventoryEntry entry)
         {

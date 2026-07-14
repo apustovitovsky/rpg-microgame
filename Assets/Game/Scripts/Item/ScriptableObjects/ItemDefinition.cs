@@ -10,6 +10,17 @@ namespace Game.Item
     public sealed class ItemDefinition :
         AssetDefinition<ItemInstance, ItemFragment>
     {
+        public bool TryGetMaximumStackCount(
+            out int maximumCount)
+        {
+            maximumCount = 0;
+
+            return TryGetFragment(
+                out StackFragment stack) &&
+                stack.MaximumCount > 0 &&
+                (maximumCount = stack.MaximumCount) > 0;
+        }
+
         public override ItemInstance CreateInstance(
             Guid? instanceId = null)
         {
@@ -21,6 +32,19 @@ namespace Game.Item
                     out InitialStatsFragment initialStats))
             {
                 return instance;
+            }
+
+            if (!TryGetMaximumStackCount(
+                    out var maximumCount) ||
+                maximumCount != 1)
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(ItemDefinition)} " +
+                    $"'{DisplayName}' has " +
+                    $"{nameof(InitialStatsFragment)}, so " +
+                    $"{nameof(StackFragment)}." +
+                    $"{nameof(StackFragment.MaximumCount)} " +
+                    "must be 1.");
             }
 
             foreach (var initialStat in initialStats.Stats)

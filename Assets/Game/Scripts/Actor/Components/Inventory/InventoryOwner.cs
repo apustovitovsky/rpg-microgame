@@ -9,14 +9,14 @@ namespace Game.Actor
     [DisallowMultipleComponent]
     public sealed class InventoryOwner :
         MonoBehaviour,
-        IRegistryBindingSource<IInventory>
+        IRegistryBindingSource<InventoryInstance>
     {
         private Guid _instanceId;
-        private IInventory _inventory;
+        private InventoryInstance _inventory;
 
         public Guid Id => _instanceId;
 
-        public IInventory Value => _inventory;
+        public InventoryInstance Value => _inventory;
 
         [Inject]
         public void Construct(ActorInstance instance)
