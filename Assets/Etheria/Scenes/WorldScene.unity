@@ -8696,7 +8696,7 @@ MonoBehaviour:
   autoInjectGameObjects: []
   _game: {fileID: 11400000, guid: 4d3e7eca3c1041b4b97e2009b739a078, type: 2}
   _world: {fileID: 11400000, guid: 3e03f365509f9cb4fb29837a14c13f33, type: 2}
-  _commandSystem: {fileID: 11400000, guid: a9300be20f9f927498448db848e6127c, type: 2}
+  _commands: {fileID: 11400000, guid: a9300be20f9f927498448db848e6127c, type: 2}
   _inventory: {fileID: 11400000, guid: 641bc45f5e671774b803f55d2c804cca, type: 2}
   _loot: {fileID: 11400000, guid: d654d4aacaf231247a509c3e17a836c0, type: 2}
   _input: {fileID: 11400000, guid: df7bb53107971cc49b155381320e4fcc, type: 2}
@@ -8704,7 +8704,6 @@ MonoBehaviour:
   _actor: {fileID: 11400000, guid: 02f4659f7202ba44d855f1dc09abbbb5, type: 2}
   _nameplates: {fileID: 11400000, guid: d8138af95a1bbf1458e552e82a20113e, type: 2}
   _player: {fileID: 11400000, guid: a80cfe3a73aa86847944dd8de1cfd40c, type: 2}
-  _displayName: {fileID: 11400000, guid: 8d588e88ba9bbed4c87ed1934a8a6505, type: 2}
   _pickup: {fileID: 11400000, guid: 40b583444b264284d8977e2737474638, type: 2}
   _gameplay: {fileID: 11400000, guid: e130d74d49e9c3745887bfcd8520d450, type: 2}
 --- !u!1660057539 &9223372036854775807

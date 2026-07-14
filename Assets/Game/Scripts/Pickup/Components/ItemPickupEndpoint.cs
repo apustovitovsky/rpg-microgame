@@ -2,16 +2,19 @@ using System;
 using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Core;
 using Game.Inventory;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Game.Pickup
 {
     [DisallowMultipleComponent]
-    public sealed class ItemPickupCollectable :
+    public sealed class ItemPickupEndpoint :
         MonoBehaviour,
-        ICollectable
+        ICollectable,
+        IPrefabInstaller
     {
         private IInventoryService _inventories;
         private ItemPickupFragment _itemPickup;
@@ -21,6 +24,14 @@ namespace Game.Pickup
         public PickupDefinition Definition { get; private set; }
 
         public bool IsCollected { get; private set; }
+
+        public void Install(
+            IContainerBuilder builder)
+        {
+            builder.RegisterComponent(this)
+                .AsSelf()
+                .As<ICollectable>();
+        }
 
         [Inject]
         public void Construct(

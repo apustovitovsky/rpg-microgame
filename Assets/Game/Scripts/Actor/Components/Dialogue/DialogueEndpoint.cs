@@ -1,15 +1,20 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Core;
 using Game.Interaction;
 using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace Game.Actor
 {
-    public sealed class DialogueParticipant :
+    [DisallowMultipleComponent]
+    public sealed class DialogueEndpoint :
         MonoBehaviour,
         IInteractable,
-        IDialogueSessionStarter
+        IDialogueSessionStarter,
+        IPrefabInstaller
     {
         [SerializeField] private Transform _interactionPoint;
 
@@ -20,6 +25,18 @@ namespace Game.Actor
             _interactionPoint != null
                 ? _interactionPoint.position
                 : transform.position;
+
+        public void Install(
+            IContainerBuilder builder)
+        {
+            builder.RegisterComponent(this)
+                .AsSelf()
+                .As<IInteractable>()
+                .As<IDialogueSessionStarter>();
+
+            builder.Register<InteractCommandHandler>(Lifetime.Scoped)
+                .AsImplementedInterfaces();
+        }
 
         public bool CanInteract(InteractionContext context)
         {

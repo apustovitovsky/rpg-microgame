@@ -1,15 +1,18 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Actor;
+using Game.Core;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Game.AI
 {
     [DisallowMultipleComponent]
     public sealed class NavMeshTravelEndpoint :
         MonoBehaviour,
-        IActorNavigation
+        IActorNavigation,
+        IPrefabInstaller
     {
         private INavMeshPlanner _planner;
         private NavMeshActorInput _input;
@@ -23,6 +26,13 @@ namespace Game.AI
         public bool IsFacingComplete =>
             _input == null || _input.IsFacingComplete;
 
+        public void Install(
+            IContainerBuilder builder)
+        {
+            builder.RegisterComponent(this)
+                .AsSelf()
+                .As<IActorNavigation>();
+        }
 
         [Inject]
         public void Construct(

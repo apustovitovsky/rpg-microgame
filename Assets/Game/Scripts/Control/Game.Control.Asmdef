@@ -3,6 +3,7 @@
     "rootNamespace": "",
     "references": [
         "Game.Input",
+        "Game.Core",
         "VContainer"
     ],
     "includePlatforms": [],

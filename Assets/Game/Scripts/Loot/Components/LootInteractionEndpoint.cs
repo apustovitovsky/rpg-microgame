@@ -2,17 +2,20 @@ using System;
 using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Core;
 using Game.Interaction;
 using Game.World;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Game.Loot
 {
     [DisallowMultipleComponent]
-    public sealed class LootInteractable :
+    public sealed class LootInteractionEndpoint :
         MonoBehaviour,
-        IInteractable
+        IInteractable,
+        IPrefabInstaller
     {
         [SerializeField] private Transform _interactionAnchor;
 
@@ -26,6 +29,17 @@ namespace Game.Loot
             _interactionAnchor != null
                 ? _interactionAnchor.position
                 : transform.position;
+
+        public void Install(
+            IContainerBuilder builder)
+        {
+            builder.RegisterComponent(this)
+                .AsSelf()
+                .As<IInteractable>();
+
+            builder.Register<InteractCommandHandler>(Lifetime.Scoped)
+                .AsImplementedInterfaces();
+        }
 
         [Inject]
         public void Construct(

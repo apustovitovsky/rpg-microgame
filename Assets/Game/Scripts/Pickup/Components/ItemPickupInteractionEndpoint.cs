@@ -1,23 +1,26 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Core;
 using Game.Interaction;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Game.Pickup
 {
     [DisallowMultipleComponent]
-    public sealed class ItemPickupInteractable :
+    public sealed class ItemPickupInteractionEndpoint :
         MonoBehaviour,
-        IInteractable
+        IInteractable,
+        IPrefabInstaller
     {
         [SerializeField] private Transform _interactionAnchor;
 
         [field: SerializeField]
         public float MaxRange { get; private set; } = 5f;
 
-        private ItemPickupCollectable _collectable;
+        private ItemPickupEndpoint _pickup;
         private IItemPickupService _pickupService;
 
         public Vector3 InteractionPoint =>
@@ -25,13 +28,24 @@ namespace Game.Pickup
                 ? _interactionAnchor.position
                 : transform.position;
 
+        public void Install(
+            IContainerBuilder builder)
+        {
+            builder.RegisterComponent(this)
+                .AsSelf()
+                .As<IInteractable>();
+
+            builder.Register<InteractCommandHandler>(Lifetime.Scoped)
+                .AsImplementedInterfaces();
+        }
+
         [Inject]
         public void Construct(
-            ItemPickupCollectable collectable,
+            ItemPickupEndpoint pickup,
             IItemPickupService pickupService)
         {
-            _collectable = collectable
-                ?? throw new ArgumentNullException(nameof(collectable));
+            _pickup = pickup
+                ?? throw new ArgumentNullException(nameof(pickup));
 
             _pickupService = pickupService
                 ?? throw new ArgumentNullException(nameof(pickupService));
@@ -40,10 +54,10 @@ namespace Game.Pickup
         public bool CanInteract(InteractionContext context)
         {
             return _pickupService != null &&
-                   _collectable != null &&
+                   _pickup != null &&
                    context.TargetInstanceId ==
-                   _collectable.InstanceId &&
-                   _collectable.CanCollect(
+                   _pickup.InstanceId &&
+                   _pickup.CanCollect(
                        context.InteractorInstanceId);
         }
 
@@ -56,7 +70,7 @@ namespace Game.Pickup
 
             var result = await _pickupService.CollectAsync(
                 context.InteractorInstanceId,
-                _collectable,
+                _pickup,
                 token);
 
             if (result != CollectResult.Succeeded)

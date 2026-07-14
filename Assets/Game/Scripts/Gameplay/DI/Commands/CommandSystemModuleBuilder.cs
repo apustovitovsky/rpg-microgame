@@ -13,11 +13,7 @@ namespace Game.Gameplay
     {
         public override void Install(IContainerBuilder builder)
         {
-            builder.Register<Registry<ICommandReceiver>>(
-                    Lifetime.Singleton)
-                .AsImplementedInterfaces();
-
-            builder.Register<CommandManager>(Lifetime.Singleton)
+            builder.Register<CommandSenderService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
     }

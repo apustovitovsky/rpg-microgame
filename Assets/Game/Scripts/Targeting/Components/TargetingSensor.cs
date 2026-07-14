@@ -12,10 +12,13 @@ namespace Game.Targeting
         private LayerMask _layerMask = ~0;
 
         [SerializeField]
-        private Targetable _self;
+        private TargetableEndpoint _self;
 
-        private readonly Dictionary<ITargetable, int> _overlapCounts = new();
-        private readonly HashSet<ITargetable> _candidates = new();
+        private readonly Dictionary<ITargetable, int> _overlapCounts =
+            new();
+
+        private readonly HashSet<ITargetable> _candidates =
+            new();
 
         public IReadOnlyCollection<ITargetable> Candidates
         {
@@ -90,7 +93,8 @@ namespace Game.Targeting
         {
             _candidates.RemoveWhere(IsDestroyed);
 
-            foreach (var candidate in new List<ITargetable>(_overlapCounts.Keys))
+            foreach (var candidate in
+                     new List<ITargetable>(_overlapCounts.Keys))
             {
                 if (IsDestroyed(candidate))
                     _overlapCounts.Remove(candidate);

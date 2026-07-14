@@ -5,6 +5,7 @@
         "VContainer",
         "UniTask",
         "Unity.InputSystem",
+        "Game.Core",
         "Game.Control",
         "Game.Interaction",
         "Game.Targeting",

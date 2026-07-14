@@ -1,14 +1,17 @@
 using System;
+using Game.Core;
 using Game.Input;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Game.Control
 {
     [DisallowMultipleComponent]
     public sealed class PossessionEndpoint :
         MonoBehaviour,
-        IPossessionEndpoint
+        IPossessionEndpoint,
+        IPrefabInstaller
     {
         [SerializeField] private Transform _root;
         [SerializeField] private Transform _cameraPivot;
@@ -20,6 +23,13 @@ namespace Game.Control
 
         public Transform CameraPivot =>
             _cameraPivot != null ? _cameraPivot : Root;
+
+        public void Install(
+            IContainerBuilder builder)
+        {
+            builder.RegisterComponent(this)
+                .As<IPossessionEndpoint>();
+        }
 
         [Inject]
         public void Construct(IControlInputBinder inputBinder)

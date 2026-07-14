@@ -3,9 +3,10 @@ using UnityEngine;
 namespace Game.Targeting
 {
     [DisallowMultipleComponent]
-    public sealed class TargetCapsule : MonoBehaviour
+    public sealed class TargetCapsule :
+        MonoBehaviour
     {
-        [SerializeField] private Targetable _targetable;
+        [SerializeField] private TargetableEndpoint _targetable;
 
         public bool TryGetTarget(out ITargetable target)
         {

@@ -73,7 +73,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1626765946519449011}
-  - component: {fileID: 3286319360653355340}
+  - component: {fileID: 4093544189447544080}
   m_Layer: 3
   m_Name: Targetable
   m_TagString: Untagged
@@ -98,7 +98,7 @@ Transform:
   - {fileID: 8331168959086960302}
   m_Father: {fileID: 2443734503394889422}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3286319360653355340
+--- !u!114 &4093544189447544080
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,9 +107,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2199256971673639411}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13d6509641abc6042918ca84ac6000e5, type: 3}
+  m_Script: {fileID: 11500000, guid: 90fc536625911ea4b96194b01c843030, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Game.Targeting::Game.Targeting.TargetableComponent
+  m_EditorClassIdentifier: Game.Targeting::Game.Targeting.TargetableEndpoint
   _uiAnchor: {fileID: 2313720167493599390}
   _targetAnchor: {fileID: 8331168959086960302}
   _isTargetable: 1
@@ -148,6 +148,7 @@ Transform:
   - {fileID: 7768082151179234178}
   - {fileID: 2443734503394889422}
   - {fileID: 1225232481940544222}
+  - {fileID: 2446059528991304828}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2443304151321799375
@@ -162,7 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3c7801e9208d0f499c15e28cad5fb7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupInteractible
-  _collectable: {fileID: 5316104281471738783}
   _interactionAnchor: {fileID: 5915848263178846759}
   <MaxRange>k__BackingField: 10
 --- !u!114 &5316104281471738783
@@ -177,6 +177,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b33a8db3b894494f8022f8a853b3bc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Pickup::Game.Pickup.PickupComponent
+--- !u!1 &2795764219761471565
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2446059528991304828}
+  - component: {fileID: 4438936858136194156}
+  m_Layer: 0
+  m_Name: Commands
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2446059528991304828
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2795764219761471565}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2127906321771726787}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4438936858136194156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2795764219761471565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec1314982e26d648b006bd84179c43e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Commands::Game.Commands.CommandReceiverEndpoint
 --- !u!1 &2851780622898926234
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,7 +377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc69222aa8068a843904ba188c226e39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Targeting::Game.Targeting.TargetCapsule
-  _targetable: {fileID: 3286319360653355340}
+  _targetable: {fileID: 4093544189447544080}
 --- !u!1 &5872846508683093920
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,7 +449,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1225232481940544222}
-  - component: {fileID: 2619123783474267642}
+  - component: {fileID: 6570302942090630435}
   m_Layer: 0
   m_Name: Scope
   m_TagString: Untagged
@@ -428,7 +472,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2127906321771726787}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2619123783474267642
+--- !u!114 &6570302942090630435
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -437,11 +481,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6752189308390927583}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adfddea4132091545b6b76d792ed5f0e, type: 3}
+  m_Script: {fileID: 11500000, guid: 6bb46546ffd68e941971664354285ae2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Game.Gameplay::Game.Pickup.PickupScope
+  m_EditorClassIdentifier: Game.Core::Game.Core.PrefabScope
   parentReference:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  _pickupRoot: {fileID: 2127906321771726787}
+  _prefabRoot: {fileID: 2127906321771726787}
