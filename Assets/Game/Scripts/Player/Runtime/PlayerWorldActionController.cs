@@ -54,12 +54,12 @@ namespace Game.Player
 
         private async UniTaskVoid InteractAsync()
         {
-            var controlledInstanceId =
+            var interactorInstanceId =
                 _control.ControlledInstanceId;
 
             var target = _control.CurrentTarget;
 
-            if (controlledInstanceId == Guid.Empty ||
+            if (interactorInstanceId == Guid.Empty ||
                 target == null ||
                 target.InstanceId == Guid.Empty)
             {
@@ -67,11 +67,10 @@ namespace Game.Player
             }
 
             var command = new InteractCommand(
-                controlledInstanceId,
-                _control.ControlledPosition);
+                target.InstanceId);
 
             await _commands.SendAsync(
-                target.InstanceId,
+                interactorInstanceId,
                 command,
                 _lifetime.Token);
         }

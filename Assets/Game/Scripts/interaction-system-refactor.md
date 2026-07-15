@@ -1,307 +1,690 @@
-﻿Проверю актуальную реализацию interaction целиком: input/targeting → command → receiver/handler → interactable capability, а также связанные registry bindings и prefab installers. Затем укажу конкретные архитектурные проблемы и минимальный рефактор.
+﻿Да. Тогда `InteractionService` — **владелец собственного индекса interactable-объектов** и одновременно `IRegistryWriter<IInteractable>`. Никакого отдельного `Registry<IInteractable>` снаружи ему не передаётся.
 
-
-Да, ощущение верное: сейчас interaction-система получилась **параллельной command-системе**, хотя по смыслу должна быть её локальной capability.
-
-Сейчас поток примерно такой:
+Итоговый поток:
 
 ```text
-InteractCommand
-→ CommandReceiver
-→ handler
-→ InteractionService
-→ собственный WorldIndex<IInteractable>
-→ IInteractable
+InteractCommand(TargetInstanceId)
+    ↓ адресуется CommandReceiver инициатора
+InteractCommandHandler
+    ↓
+InteractionService
+    ↓ внутренний InstanceId → IInteractable
+IInteractable.InteractAsync(...)
 ```
 
-`InteractionService` одновременно содержит отдельный реестр interactable-объектов, выполняет адресацию по target ID, проверяет дистанцию и запускает действие. При этом адресация цели уже выполнена `CommandReceiver`. Получается второй routing layer и второй registry одного и того же world object. ([GitHub][1])
+## 1. Команда
 
-## Главная проблема
-
-После введения `CommandReceiver` глобальный `InteractionService` больше не должен искать target:
+Обычный класс, без `record struct`:
 
 ```csharp
-_interactables.TryGet(context.TargetInstanceId, out var interactable);
+using System;
+using Game.Commands;
+
+namespace Game.Interaction
+{
+    public sealed class InteractCommand : IWorldCommand
+    {
+        public InteractCommand(Guid targetInstanceId)
+        {
+            TargetInstanceId = targetInstanceId;
+        }
+
+        public Guid TargetInstanceId { get; }
+    }
+}
 ```
 
-Receiver уже найден по `TargetInstanceId`, а его локальный handler должен получить локальный `IInteractable` через scope:
+Команда отправляется receiver того, кто выполняет действие:
 
-```text
-CommandDispatcher
-→ receiver конкретного prefab
-→ InteractCommandHandler
-→ локальный IInteractable
+```csharp
+_commandDispatcher.DispatchAsync(
+    interactorInstanceId,
+    new InteractCommand(targetInstanceId),
+    cancellationToken);
 ```
 
-То есть interaction — не глобальная адресная система, а локальный use case объекта.
+## 2. `IInteractor` без identity
 
-## Как я бы перестроил
+```csharp
+using UnityEngine;
 
-### 1. Удалить interaction registry
+namespace Game.Interaction
+{
+    public interface IInteractor
+    {
+        Vector3 InteractionOrigin { get; }
+    }
+}
+```
 
-Удалить:
+`InstanceId` сюда не добавляем. ID инициатора уже известен `WorldCommandReceiver` и передаётся handler через его стандартный контекст.
+
+## 3. `InteractionService` хранит interactables сам
+
+Названия методов writer подставь из своего Core Registry API, но ответственность должна выглядеть так:
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+
+namespace Game.Interaction
+{
+    public sealed class InteractionService :
+        IInteractionService,
+        IRegistryWriter<IInteractable>
+    {
+        private readonly Dictionary<Guid, IInteractable> _interactables =
+            new Dictionary<Guid, IInteractable>();
+
+        public void Add(
+            Guid instanceId,
+            IInteractable interactable)
+        {
+            if (interactable == null)
+            {
+                throw new ArgumentNullException(
+                    nameof(interactable));
+            }
+
+            if (!_interactables.TryAdd(
+                    instanceId,
+                    interactable))
+            {
+                throw new InvalidOperationException(
+                    $"Interactable '{instanceId}' is already registered.");
+            }
+        }
+
+        public void Remove(
+            Guid instanceId,
+            IInteractable interactable)
+        {
+            if (!_interactables.TryGetValue(
+                    instanceId,
+                    out var registered))
+            {
+                return;
+            }
+
+            // Защита от старого binding, который пытается удалить
+            // новую регистрацию с таким же ID.
+            if (!ReferenceEquals(registered, interactable))
+            {
+                return;
+            }
+
+            _interactables.Remove(instanceId);
+        }
+
+        public async UniTask<InteractionResult> InteractAsync(
+            InteractionContext context,
+            CancellationToken cancellationToken)
+        {
+            if (context.InteractorInstanceId == Guid.Empty ||
+                context.TargetInstanceId == Guid.Empty)
+            {
+                return InteractionResult.Invalid;
+            }
+
+            if (context.InteractorInstanceId ==
+                context.TargetInstanceId)
+            {
+                return InteractionResult.Invalid;
+            }
+
+            if (!_interactables.TryGetValue(
+                    context.TargetInstanceId,
+                    out var interactable))
+            {
+                return InteractionResult.NotFound;
+            }
+
+            var distance = Vector3.Distance(
+                context.Origin,
+                interactable.InteractionPoint);
+
+            if (distance > interactable.InteractionRange)
+            {
+                return InteractionResult.OutOfRange;
+            }
+
+            if (!interactable.CanInteract(context))
+            {
+                return InteractionResult.Rejected;
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            await interactable.InteractAsync(
+                context,
+                cancellationToken);
+
+            return InteractionResult.Completed;
+        }
+    }
+}
+```
+
+Если у тебя уже есть `WorldIndex<T>` или похожая коллекция в Core, внутри можно использовать её:
+
+```csharp
+private readonly WorldIndex<IInteractable> _interactables = new();
+```
+
+Но это **внутренняя деталь `InteractionService`**, а не внедряемый внешний registry.
+
+## 4. Контракт сервиса
+
+```csharp
+using System.Threading;
+using Cysharp.Threading.Tasks;
+
+namespace Game.Interaction
+{
+    public interface IInteractionService
+    {
+        UniTask<InteractionResult> InteractAsync(
+            InteractionContext context,
+            CancellationToken cancellationToken);
+    }
+}
+```
+
+Контекст остаётся orchestration DTO и спокойно содержит ID:
+
+```csharp
+using System;
+using UnityEngine;
+
+namespace Game.Interaction
+{
+    public readonly struct InteractionContext
+    {
+        public InteractionContext(
+            Guid interactorInstanceId,
+            Vector3 origin,
+            Guid targetInstanceId)
+        {
+            InteractorInstanceId = interactorInstanceId;
+            Origin = origin;
+            TargetInstanceId = targetInstanceId;
+        }
+
+        public Guid InteractorInstanceId { get; }
+
+        public Vector3 Origin { get; }
+
+        public Guid TargetInstanceId { get; }
+    }
+}
+```
+
+Это не capability-протокол, поэтому наличие `Guid` здесь нормально.
+
+## 5. Тонкий handler на стороне инициатора
+
+```csharp
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+
+namespace Game.Interaction
+{
+    public sealed class InteractCommandHandler :
+        IWorldCommandHandler<InteractCommand>
+    {
+        private readonly IInteractor _interactor;
+        private readonly IInteractionService _interactionService;
+
+        public InteractCommandHandler(
+            IInteractor interactor,
+            IInteractionService interactionService)
+        {
+            _interactor = interactor;
+            _interactionService = interactionService;
+        }
+
+        public async UniTask<CommandResult> HandleAsync(
+            Guid receiverInstanceId,
+            InteractCommand command,
+            CancellationToken cancellationToken)
+        {
+            var context = new InteractionContext(
+                receiverInstanceId,
+                _interactor.InteractionOrigin,
+                command.TargetInstanceId);
+
+            var result =
+                await _interactionService.InteractAsync(
+                    context,
+                    cancellationToken);
+
+            return ToCommandResult(result);
+        }
+
+        private static CommandResult ToCommandResult(
+            InteractionResult result)
+        {
+            switch (result)
+            {
+                case InteractionResult.Completed:
+                    return CommandResult.Completed;
+
+                case InteractionResult.Cancelled:
+                    return CommandResult.Cancelled;
+
+                default:
+                    return CommandResult.Rejected;
+            }
+        }
+    }
+}
+```
+
+Handler не:
+
+* ищет target;
+* проверяет дистанцию;
+* вызывает `CanInteract`;
+* содержит registry logic.
+
+Он только переводит command context в interaction context.
+
+## 6. Endpoint инициатора
+
+```csharp
+using UnityEngine;
+using VContainer;
+
+namespace Game.Interaction
+{
+    public sealed class InteractorEndpoint :
+        MonoBehaviour,
+        IInteractor,
+        IPrefabInstaller
+    {
+        [SerializeField]
+        private Transform _interactionOrigin;
+
+        public Vector3 InteractionOrigin =>
+            _interactionOrigin.position;
+
+        public void Install(IContainerBuilder builder)
+        {
+            builder.RegisterComponent(this)
+                .As<IInteractor>();
+
+            builder.Register<InteractCommandHandler>(
+                    Lifetime.Scoped)
+                .As<IWorldCommandHandler>();
+        }
+    }
+}
+```
+
+На actor prefab:
 
 ```text
-IInteractionRegistrationService
-InteractionService._interactables
-RegisterInteractable(...)
+CommandReceiverEndpoint
+InteractorEndpoint
+```
+
+## 7. Interactable регистрируется непосредственно в сервисе
+
+Глобальная DI-регистрация:
+
+```csharp
+builder.Register<InteractionService>(Lifetime.Singleton)
+    .As<IInteractionService>()
+    .As<IRegistryWriter<IInteractable>>();
+```
+
+Твой существующий generic `RegistryBinding<IInteractable>` получит именно этот writer.
+
+На сундуке или pickup:
+
+```csharp
+public sealed class LootInteractionEndpoint :
+    MonoBehaviour,
+    IInteractable,
+    IRegistryBindingSource<IInteractable>,
+    IPrefabInstaller
+{
+    private IWorldIdentity _identity;
+
+    public Guid Id => _identity.InstanceId;
+
+    public IInteractable Value => this;
+
+    public void Install(IContainerBuilder builder)
+    {
+        builder.RegisterComponent(this)
+            .As<IInteractable>()
+            .As<IRegistryBindingSource<IInteractable>>();
+
+        builder.RegisterEntryPoint<
+            RegistryBinding<IInteractable>>();
+    }
+}
+```
+
+Здесь `Guid` находится в специальном инфраструктурном `IRegistryBindingSource<T>`, а не загрязняет `IInteractable`.
+
+## Что удаляется с сундуков и pickup
+
+```text
+CommandReceiverEndpoint
+InteractCommandHandler
+RegistryBinding<ICommandReceiver>
+```
+
+Остаётся:
+
+```text
+LootInteractionEndpoint / PickupInteractionEndpoint
 RegistryBinding<IInteractable>
 ```
 
-`IInteractable` не требуется публиковать глобально, потому что снаружи объект адресуется через `ICommandReceiver`.
+## Ответственность после рефактора
 
-### 2. Сделать один локальный handler
+```text
+CommandReceiver
+    исполняет команды инициатора
 
-В `Game.Interaction`:
+InteractCommandHandler
+    адаптирует команду к interaction use case
+
+InteractionService
+    хранит interactables
+    является IRegistryWriter<IInteractable>
+    находит цель
+    проверяет общие правила
+    запускает взаимодействие
+
+IInteractable
+    реализует конкретное действие сундука, pickup, двери и т. п.
+```
+
+Это соответствует твоей текущей модели реестров: **feature service сам владеет индексом и предоставляет writer для generic bindings других scope**.
+
+Да, точная модель такая:
+
+> `InteractionService` **владеет `Registry<IInteractable>`**, использует его для чтения и проксирует его writer API наружу.
+
+Твой `Registry<T>` уже реализует и `IRegistry<T>`, и `IRegistryWriter<T>`, включая проверки ID, дубликатов и безопасное удаление через `expectedValue`. `RegistryBinding<T>` при старте вызывает `writer.Add(...)`, а при уничтожении scope — `writer.Remove(...)`. ([GitHub][1])
+
+## `InteractionService`
 
 ```csharp
-public sealed class InteractCommandHandler
-    : WorldCommandHandler<InteractCommand>
-{
-    private readonly IInteractable _interactable;
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Game.Core;
+using UnityEngine;
 
-    public InteractCommandHandler(IInteractable interactable)
+namespace Game.Interaction
+{
+    public sealed class InteractionService :
+        IInteractionService,
+        IRegistryWriter<IInteractable>
     {
-        _interactable = interactable;
+        private readonly Registry<IInteractable> _interactables = new();
+
+        public void Add(
+            Guid id,
+            IInteractable value)
+        {
+            _interactables.Add(id, value);
+        }
+
+        public bool Remove(
+            Guid id,
+            IInteractable expectedValue)
+        {
+            return _interactables.Remove(
+                id,
+                expectedValue);
+        }
+
+        public async UniTask<bool> TryInteractAsync(
+            InteractionContext context,
+            CancellationToken token)
+        {
+            if (context.InteractorInstanceId == Guid.Empty ||
+                context.TargetInstanceId == Guid.Empty ||
+                context.InteractorInstanceId ==
+                context.TargetInstanceId)
+            {
+                return false;
+            }
+
+            if (!_interactables.TryGet(
+                    context.TargetInstanceId,
+                    out var interactable))
+            {
+                return false;
+            }
+
+            var distance = Vector3.Distance(
+                context.Origin,
+                interactable.InteractionPoint);
+
+            if (distance > interactable.MaxRange)
+            {
+                return false;
+            }
+
+            if (!interactable.CanInteract(context))
+            {
+                return false;
+            }
+
+            token.ThrowIfCancellationRequested();
+
+            await interactable.InteractAsync(
+                context,
+                token);
+
+            return true;
+        }
+    }
+}
+```
+
+То есть внутри сервиса нет:
+
+```csharp
+Dictionary<Guid, IInteractable>
+```
+
+и нет внедряемого:
+
+```csharp
+IRegistry<IInteractable>
+IRegistryWriter<IInteractable>
+```
+
+Он сам создаёт конкретный Core registry:
+
+```csharp
+private readonly Registry<IInteractable> _interactables = new();
+```
+
+## Контракт
+
+```csharp
+using System.Threading;
+using Cysharp.Threading.Tasks;
+
+namespace Game.Interaction
+{
+    public interface IInteractionService
+    {
+        UniTask<bool> TryInteractAsync(
+            InteractionContext context,
+            CancellationToken token);
+    }
+}
+```
+
+## Глобальная регистрация
+
+```csharp
+builder.Register<InteractionService>(
+        Lifetime.Singleton)
+    .As<IInteractionService>()
+    .As<IRegistryWriter<IInteractable>>();
+```
+
+Принципиально наружу не публикуется:
+
+```csharp
+IRegistry<IInteractable>
+```
+
+Читать interactables может только `InteractionService`. Другим объектам доступен лишь writer, необходимый `RegistryBinding<IInteractable>`.
+
+## Interactable на prefab
+
+```csharp
+public void Install(IContainerBuilder builder)
+{
+    builder.RegisterComponent(this)
+        .As<IInteractable>();
+
+    builder.RegisterEntryPoint<
+        RegistryBinding<IInteractable>>(
+        Lifetime.Scoped);
+}
+```
+
+Существующий `RegistryBinding<IInteractable>` получит:
+
+```text
+IInstanceIdentity
+IInteractable
+IRegistryWriter<IInteractable>
+```
+
+А writer будет указывать на `InteractionService`, который проксирует регистрацию в свой `_interactables`. Текущий generic binding уже рассчитан именно на такую схему. ([GitHub][2])
+
+## Команда после переноса receiver к инициатору
+
+Совместимый с текущим стилем обычный `readonly struct`:
+
+```csharp
+using System;
+using Game.Commands;
+using UnityEngine;
+
+namespace Game.Interaction
+{
+    public readonly struct InteractCommand :
+        IWorldCommand
+    {
+        public InteractCommand(
+            Guid targetInstanceId,
+            Vector3 interactorPosition)
+        {
+            TargetInstanceId = targetInstanceId;
+            InteractorPosition = interactorPosition;
+        }
+
+        public Guid TargetInstanceId { get; }
+
+        public Vector3 InteractorPosition { get; }
+    }
+}
+```
+
+Команда адресуется receiver инициатора:
+
+```csharp
+_dispatcher.DispatchAsync(
+    interactorInstanceId,
+    new InteractCommand(
+        targetInstanceId,
+        interactorPosition),
+    token);
+```
+
+## Тонкий handler
+
+```csharp
+public sealed class InteractCommandHandler :
+    WorldCommandHandler<InteractCommand>
+{
+    private readonly IInteractionService _interactionService;
+
+    public InteractCommandHandler(
+        IInteractionService interactionService)
+    {
+        _interactionService = interactionService;
     }
 
-    protected override async UniTask<CommandResult> ExecuteAsync(
+    public override async UniTask<CommandResult> HandleAsync(
         InteractCommand command,
+        Guid interactorInstanceId,
         CancellationToken token)
     {
         var context = new InteractionContext(
-            command.InteractorInstanceId,
-            command.Origin);
+            interactorInstanceId,
+            command.InteractorPosition,
+            command.TargetInstanceId);
 
-        var result = await _interactable.InteractAsync(
-            context,
-            token);
+        try
+        {
+            var succeeded =
+                await _interactionService.TryInteractAsync(
+                    context,
+                    token);
 
-        return result.Succeeded
-            ? CommandResult.Succeeded
-            : CommandResult.Rejected;
+            return succeeded
+                ? CommandResult.Completed
+                : CommandResult.Rejected;
+        }
+        catch (OperationCanceledException)
+        {
+            return CommandResult.Cancelled;
+        }
     }
 }
 ```
 
-Каждая interaction-capability регистрирует:
+Текущий handler сам получает локальный `IInteractable` и выполняет distance/availability checks, из-за чего он должен находиться на prefab цели. После рефактора он получает `IInteractionService`, а проверки и поиск цели переходят в сервис. ([GitHub][3])
 
-```csharp
-builder.RegisterComponent(this)
-    .As<IInteractable>();
-
-builder.Register<InteractCommandHandler>(Lifetime.Scoped)
-    .As<IWorldCommandHandler>();
-```
-
-Тогда наличие `LootInteractionEndpoint` автоматически добавляет поддержку `InteractCommand`.
-
-## Упростить `InteractionContext`
-
-Сейчас context содержит и interactor, и target:
-
-```csharp
-InteractorInstanceId
-Origin
-TargetInstanceId
-```
-
-Но target уже определён receiver’ом. Локальный capability не должен повторно проверять:
-
-```csharp
-context.TargetInstanceId == _instance.InstanceId
-```
-
-Оставить:
-
-```csharp
-public readonly record struct InteractionContext(
-    Guid InteractorInstanceId,
-    Vector3 Origin);
-```
-
-Это уберёт повторяющиеся проверки из `LootInteractionEndpoint` и `ItemPickupInteractionEndpoint`. Сейчас оба endpoint самостоятельно перепроверяют target identity, хотя маршрутизация уже должна гарантировать принадлежность команды этому scope. ([GitHub][2])
-
-## `IInteractable` сейчас скрывает ошибки
-
-Текущий контракт:
-
-```csharp
-bool CanInteract(InteractionContext context);
-
-UniTask InteractAsync(
-    InteractionContext context,
-    CancellationToken token);
-```
-
-имеет слабое место: `InteractAsync` ничего не возвращает. Например, loot endpoint может:
-
-* не открыть сессию;
-* обнаружить другую открытую сессию;
-* не получить snapshot;
-* не забрать предметы;
-
-но просто записывает warning и возвращает completed task. Внешний `InteractionService` после этого считает interaction успешным. ([GitHub][2])
-
-Лучше:
-
-```csharp
-public interface IInteractable
-{
-    Vector3 InteractionPoint { get; }
-
-    float MaxRange { get; }
-
-    InteractionAvailability GetAvailability(
-        InteractionContext context);
-
-    UniTask<InteractionResult> InteractAsync(
-        InteractionContext context,
-        CancellationToken token);
-}
-```
-
-Либо для MVP ещё проще:
-
-```csharp
-public interface IInteractable
-{
-    Vector3 InteractionPoint { get; }
-
-    float MaxRange { get; }
-
-    UniTask<InteractionResult> TryInteractAsync(
-        InteractionContext context,
-        CancellationToken token);
-}
-```
-
-Второй вариант избегает расхождения:
+## Итоговая структура
 
 ```text
-CanInteract вернул true
-→ состояние изменилось
-→ InteractAsync уже выполнить нельзя
-```
+InteractionService
+    owns Registry<IInteractable>
+    reads Registry<IInteractable>
+    proxies IRegistryWriter<IInteractable>
+    выполняет interaction policy
 
-Для UI-подсказок позднее можно отдельно добавить read-only availability query.
+RegistryBinding<IInteractable>
+    регистрирует prefab capability
+    через InteractionService writer
 
-## Где проверять дистанцию
-
-Не в loot и не в pickup. Это общая interaction policy, поэтому её должен проверять `InteractCommandHandler` или локальный `InteractionExecutor`:
-
-```csharp
-var distance = Vector3.Distance(
-    context.Origin,
-    _interactable.InteractionPoint);
-
-if (distance > _interactable.MaxRange)
-    return CommandResult.OutOfRange;
-```
-
-При этом `LootInteractionEndpoint` отвечает только за loot-семантику, а `ItemPickupInteractionEndpoint` — за сбор pickup.
-
-## Что не так с самими endpoint
-
-### `LootInteractionEndpoint`
-
-Сейчас один MonoBehaviour:
-
-* является Unity endpoint;
-* валидирует общие interaction invariants;
-* открывает loot session;
-* получает snapshot;
-* забирает всё содержимое;
-* форматирует debug log.
-
-Это слишком много ответственности. ([GitHub][2])
-
-Минимально оставить ему:
-
-```csharp
-public UniTask<InteractionResult> TryInteractAsync(...)
-{
-    var result = _sessions.TryOpen(
-        context.InteractorInstanceId,
-        _instance.InstanceId);
-
-    return UniTask.FromResult(Map(result));
-}
-```
-
-`TryTakeAll` вообще не должен автоматически происходить при открытии сундука, если предполагается loot UI. Interaction открывает session; UI или отдельная команда забирает предметы.
-
-### `ItemPickupInteractionEndpoint`
-
-Он выглядит лучше: interaction адаптирует общую команду к `IItemPickupService.CollectAsync`. Но `CanInteract` сейчас дублируется:
-
-```text
-ItemPickupInteractionEndpoint.CanInteract
-→ ItemPickupEndpoint.CanCollect
-→ ItemPickupService.CollectAsync
-→ вероятно повторная проверка
-```
-
-Достаточно одного выполнения с результатом:
-
-```csharp
-public async UniTask<InteractionResult> TryInteractAsync(...)
-{
-    var result = await _pickupService.CollectAsync(
-        context.InteractorInstanceId,
-        _pickup,
-        token);
-
-    return result == CollectResult.Succeeded
-        ? InteractionResult.Succeeded
-        : InteractionResult.Rejected;
-}
-```
-
-## Рекомендуемая итоговая цепочка
-
-```text
-Player / AI
-    ↓
-InteractCommand
-    ↓
-CommandDispatcher
-    ↓ InstanceId
-WorldCommandReceiver
-    ↓ локальная коллекция handlers
 InteractCommandHandler
-    ↓ общая проверка range/cancellation
-IInteractable
-    ↓ feature-specific действие
-Loot session / Pickup collection / Dialogue
+    находится у инициатора
+    создаёт InteractionContext
+    вызывает InteractionService
+
+Chest / Pickup
+    имеют IInteractable
+    не имеют CommandReceiver
+
+Actor
+    имеет CommandReceiver
+    имеет InteractCommandHandler
 ```
 
-Глобально публикуется только:
+Это именно та граница ответственности, которую ты описываешь: `Registry<T>` остаётся готовой Core-структурой хранения, а feature-service является её владельцем и единственной публичной точкой записи и использования.
 
-```text
-InstanceId → ICommandReceiver
-```
-
-Локально в prefab scope находятся:
-
-```text
-IInteractable
-InteractCommandHandler
-```
-
-## Конкретный рефактор
-
-1. Удалить собственный registry из `InteractionService`.
-2. Удалить `IInteractionRegistrationService`.
-3. Превратить `InteractionService` в локальный `InteractCommandHandler` либо полностью удалить.
-4. Убрать `TargetInstanceId` из `InteractionContext`.
-5. Сделать interaction возвращающим `InteractionResult`.
-6. Перенести общие проверки дистанции и cancellation в handler.
-7. Оставить feature-specific проверки внутри loot/pickup.
-8. Убрать автоматический `TryTakeAll` из открытия сундука.
-9. Не публиковать `IInteractable` через Core registry.
-
-Итог: **command system отвечает за адресацию, interaction handler — за общую политику взаимодействия, конкретный endpoint — только за feature-specific действие**. Сейчас эти три уровня частично смешаны.
-
-[1]: https://raw.githubusercontent.com/apustovitovsky/rpg-microgame/main/Assets/Game/Scripts/Interaction/Runtime/InteractionService.cs "raw.githubusercontent.com"
-[2]: https://raw.githubusercontent.com/apustovitovsky/rpg-microgame/main/Assets/Game/Scripts/Loot/Components/LootInteractionEndpoint.cs "raw.githubusercontent.com"
+[1]: https://github.com/apustovitovsky/rpg-microgame/blob/main/Assets/Game/Scripts/Core/Runtime/Registry/Registry.cs "rpg-microgame/Assets/Game/Scripts/Core/Runtime/Registry/Registry.cs at main · apustovitovsky/rpg-microgame · GitHub"
+[2]: https://github.com/apustovitovsky/rpg-microgame/blob/main/Assets/Game/Scripts/Core/Runtime/Registry/RegistryBinding.cs "rpg-microgame/Assets/Game/Scripts/Core/Runtime/Registry/RegistryBinding.cs at main · apustovitovsky/rpg-microgame · GitHub"
+[3]: https://github.com/apustovitovsky/rpg-microgame/blob/main/Assets/Game/Scripts/Interaction/Runtime/InteractCommandHandler.cs "rpg-microgame/Assets/Game/Scripts/Interaction/Runtime/InteractCommandHandler.cs at main · apustovitovsky/rpg-microgame · GitHub"

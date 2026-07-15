@@ -37,8 +37,7 @@ namespace Game.Loot
                 .AsSelf()
                 .As<IInteractable>();
 
-            builder.Register<InteractCommandHandler>(Lifetime.Scoped)
-                .AsImplementedInterfaces();
+            builder.RegisterBinding<IInteractable>();
         }
 
         [Inject]

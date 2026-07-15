@@ -2,57 +2,45 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Commands;
-using UnityEngine;
 
 namespace Game.Interaction
 {
     public sealed class InteractCommandHandler :
         CommandHandler<InteractCommand>
     {
-        private readonly IInteractable _interactable;
+        private readonly IInteractor _interactor;
+        private readonly IInteractionService _interactionService;
 
         public InteractCommandHandler(
-            IInteractable interactable)
+            IInteractor interactor,
+            IInteractionService interactionService)
         {
-            _interactable = interactable
-                ?? throw new ArgumentNullException(nameof(interactable));
+            _interactor = interactor
+                ?? throw new ArgumentNullException(nameof(interactor));
+
+            _interactionService = interactionService
+                ?? throw new ArgumentNullException(
+                    nameof(interactionService));
         }
 
         public override async UniTask<CommandResult> HandleAsync(
             InteractCommand command,
-            Guid targetInstanceId,
+            Guid interactorInstanceId,
             CancellationToken token)
         {
-            if (command.InteractorInstanceId == Guid.Empty ||
-                targetInstanceId == Guid.Empty ||
-                command.InteractorInstanceId == targetInstanceId)
-            {
-                return CommandResult.Rejected;
-            }
-
             var context = new InteractionContext(
-                command.InteractorInstanceId,
-                command.InteractorPosition,
-                targetInstanceId);
+                interactorInstanceId,
+                _interactor.InteractionOrigin,
+                command.TargetInstanceId);
 
-            var distance = Vector3.Distance(
-                context.Origin,
-                _interactable.InteractionPoint);
+            var succeeded =
+                await _interactionService.TryInteractAsync(
+                    context,
+                    token);
 
-            if (distance > _interactable.MaxRange ||
-                !_interactable.CanInteract(context))
-            {
-                return CommandResult.Rejected;
-            }
-
-            if (token.IsCancellationRequested)
-                return CommandResult.Cancelled;
-
-            await _interactable.InteractAsync(context, token);
-
-            return token.IsCancellationRequested
-                ? CommandResult.Cancelled
-                : CommandResult.Completed;
+            return succeeded
+                ? CommandResult.Completed
+                : CommandResult.Rejected;
         }
     }
 }

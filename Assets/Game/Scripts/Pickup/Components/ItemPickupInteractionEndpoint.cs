@@ -35,8 +35,7 @@ namespace Game.Pickup
                 .AsSelf()
                 .As<IInteractable>();
 
-            builder.Register<InteractCommandHandler>(Lifetime.Scoped)
-                .AsImplementedInterfaces();
+            builder.RegisterBinding<IInteractable>();
         }
 
         [Inject]
@@ -45,7 +44,7 @@ namespace Game.Pickup
             IItemPickupService pickupService)
         {
             _pickup = pickup
-                ?? throw new ArgumentNullException(nameof(pickup));
+                != null ? pickup : throw new ArgumentNullException(nameof(pickup));
 
             _pickupService = pickupService
                 ?? throw new ArgumentNullException(nameof(pickupService));

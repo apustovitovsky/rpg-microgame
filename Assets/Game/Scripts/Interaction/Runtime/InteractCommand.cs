@@ -1,6 +1,5 @@
 using System;
 using Game.Commands;
-using UnityEngine;
 
 namespace Game.Interaction
 {
@@ -8,15 +7,11 @@ namespace Game.Interaction
         ICommand
     {
         public InteractCommand(
-            Guid interactorInstanceId,
-            Vector3 interactorPosition)
+            Guid targetInstanceId)
         {
-            InteractorInstanceId = interactorInstanceId;
-            InteractorPosition = interactorPosition;
+            TargetInstanceId = targetInstanceId;
         }
 
-        public Guid InteractorInstanceId { get; }
-
-        public Vector3 InteractorPosition { get; }
+        public Guid TargetInstanceId { get; }
     }
 }

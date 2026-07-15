@@ -2,7 +2,9 @@
     "name": "Game.Interaction",
     "rootNamespace": "",
     "references": [
+        "VContainer",
         "UniTask",
+        "Game.Core",
         "Game.Commands"
     ],
     "includePlatforms": [],

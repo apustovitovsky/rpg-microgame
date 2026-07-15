@@ -7,10 +7,10 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Game.Actor
+namespace Game.Dialogue
 {
     [DisallowMultipleComponent]
-    public sealed class DialogueEndpoint :
+    public sealed class DialogueInteractionEndpoint :
         MonoBehaviour,
         IInteractable,
         IDialogueSessionStarter,
@@ -34,8 +34,7 @@ namespace Game.Actor
                 .As<IInteractable>()
                 .As<IDialogueSessionStarter>();
 
-            builder.Register<InteractCommandHandler>(Lifetime.Scoped)
-                .AsImplementedInterfaces();
+            builder.RegisterBinding<IInteractable>();
         }
 
         public bool CanInteract(InteractionContext context)

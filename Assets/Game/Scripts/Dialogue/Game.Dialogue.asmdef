@@ -2,6 +2,8 @@
     "name": "Game.Dialogue",
     "rootNamespace": "",
     "references": [
+        "VContainer",
+        "Game.Core",
         "Game.Interaction",
         "UniTask"
     ],
