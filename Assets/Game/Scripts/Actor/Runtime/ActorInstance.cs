@@ -1,10 +1,12 @@
 using System;
+using Game.Core;
 using Game.World;
 
 namespace Game.Actor
 {
     public sealed class ActorInstance :
-        WorldInstance
+        WorldInstance,
+        IFragmentProvider
     {
         public ActorInstance(
             Guid instanceId,
@@ -23,9 +25,10 @@ namespace Game.Actor
 
         public bool TryGetFragment<TFragment>(
             out TFragment fragment)
-            where TFragment : ActorFragment
+            where TFragment : class
         {
-            return Definition.TryGetFragment(out fragment);
+            return Definition.TryGetFragment(
+                out fragment);
         }
     }
 }

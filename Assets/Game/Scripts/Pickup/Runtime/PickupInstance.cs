@@ -1,10 +1,12 @@
 using System;
+using Game.Core;
 using Game.World;
 
 namespace Game.Pickup
 {
     public sealed class PickupInstance :
-        WorldInstance
+        WorldInstance,
+        IFragmentProvider
     {
         public PickupInstance(
             Guid instanceId,
@@ -23,9 +25,10 @@ namespace Game.Pickup
 
         public bool TryGetFragment<TFragment>(
             out TFragment fragment)
-            where TFragment : PickupFragment
+            where TFragment : class
         {
-            return Definition.TryGetFragment(out fragment);
+            return Definition.TryGetFragment(
+                out fragment);
         }
     }
 }

@@ -5,7 +5,8 @@ using UnityEngine;
 namespace Game.Core
 {
     public abstract class AssetDefinition :
-        ScriptableObject
+        ScriptableObject,
+        IFragmentProvider
     {
         [SerializeField] private string _id;
         [SerializeField] private string _displayName;
@@ -16,6 +17,10 @@ namespace Game.Core
             string.IsNullOrWhiteSpace(_displayName)
                 ? name
                 : _displayName;
+
+        public abstract bool TryGetFragment<TFragment>(
+            out TFragment fragment)
+            where TFragment : class;
 
         protected virtual void OnValidate()
         {
@@ -35,9 +40,8 @@ namespace Game.Core
         public abstract TInstance CreateInstance(
             Guid? instanceId = null);
 
-        public bool TryGetFragment<TConcreteFragment>(
+        public override bool TryGetFragment<TConcreteFragment>(
             out TConcreteFragment fragment)
-            where TConcreteFragment : TFragment
         {
             foreach (var current in _fragments)
             {

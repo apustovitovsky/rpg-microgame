@@ -4,7 +4,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Core;
 using Game.Interaction;
-using Game.World;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -22,7 +21,7 @@ namespace Game.Loot
         [field: SerializeField]
         public float MaxRange { get; private set; } = 5f;
 
-        private WorldInstance _instance;
+        private IInstanceIdentity _identity;
         private ILootSessionService _sessions;
 
         public Vector3 InteractionPoint =>
@@ -42,11 +41,11 @@ namespace Game.Loot
 
         [Inject]
         public void Construct(
-            WorldInstance instance,
+            IInstanceIdentity identity,
             ILootSessionService sessions)
         {
-            _instance = instance
-                ?? throw new ArgumentNullException(nameof(instance));
+            _identity = identity
+                ?? throw new ArgumentNullException(nameof(identity));
 
             _sessions = sessions
                 ?? throw new ArgumentNullException(nameof(sessions));
@@ -54,11 +53,13 @@ namespace Game.Loot
 
         public bool CanInteract(InteractionContext context)
         {
-            return _instance != null &&
+            return _identity != null &&
                    _sessions != null &&
                    context.InteractorInstanceId != Guid.Empty &&
-                   context.TargetInstanceId == _instance.InstanceId &&
-                   context.InteractorInstanceId != _instance.InstanceId;
+                   context.TargetInstanceId ==
+                   _identity.InstanceId &&
+                   context.InteractorInstanceId !=
+                   _identity.InstanceId;
         }
 
         public UniTask InteractAsync(
@@ -72,7 +73,7 @@ namespace Game.Loot
 
             var openResult = _sessions.TryOpen(
                 context.InteractorInstanceId,
-                _instance.InstanceId);
+                _identity.InstanceId);
 
             if (!openResult.Succeeded &&
                 openResult.Status !=
@@ -90,7 +91,7 @@ namespace Game.Loot
                     openResult.SessionId,
                     out var session) ||
                 session.SourceInstanceId !=
-                _instance.InstanceId)
+                _identity.InstanceId)
             {
                 Debug.LogWarning(
                     "Loot session is already open for another source.",

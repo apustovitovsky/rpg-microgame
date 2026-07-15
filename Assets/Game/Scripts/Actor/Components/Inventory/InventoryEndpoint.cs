@@ -17,15 +17,14 @@ namespace Game.Actor
             builder.Register(
                 resolver =>
                 {
-                    var instance =
-                        resolver.Resolve<ActorInstance>();
+                    var fragments =
+                        resolver.Resolve<IFragmentProvider>();
 
-                    if (!instance.TryGetFragment(
+                    if (!fragments.TryGetFragment(
                             out InventoryFragment fragment))
                     {
                         throw new InvalidOperationException(
-                            $"{nameof(ActorDefinition)} for " +
-                            $"'{instance.DisplayName}' requires " +
+                            $"{nameof(ActorDefinition)} requires " +
                             $"{nameof(InventoryFragment)}.");
                     }
 

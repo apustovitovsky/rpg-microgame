@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Game.Core;
 
 namespace Game.Item
 {
-    public sealed class ItemInstance
+    public sealed class ItemInstance :
+        IFragmentProvider
     {
         private readonly Dictionary<ItemStat, int> _statStacks =
             new();
@@ -32,9 +34,10 @@ namespace Game.Item
 
         public bool TryGetFragment<TFragment>(
             out TFragment fragment)
-            where TFragment : ItemFragment
+            where TFragment : class
         {
-            return Definition.TryGetFragment(out fragment);
+            return Definition.TryGetFragment(
+                out fragment);
         }
 
         public int GetStatStack(ItemStat stat)
@@ -85,7 +88,10 @@ namespace Game.Item
                 throw new ArgumentNullException(nameof(stat));
 
             if (amount <= 0)
-                throw new ArgumentOutOfRangeException(nameof(amount));
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(amount));
+            }
 
             var current = GetStatStack(stat);
 

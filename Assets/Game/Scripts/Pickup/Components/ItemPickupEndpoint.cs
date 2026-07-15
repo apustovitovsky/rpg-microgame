@@ -21,8 +21,6 @@ namespace Game.Pickup
 
         public Guid InstanceId { get; private set; }
 
-        public PickupDefinition Definition { get; private set; }
-
         public bool IsCollected { get; private set; }
 
         public void Install(
@@ -35,25 +33,26 @@ namespace Game.Pickup
 
         [Inject]
         public void Construct(
-            PickupInstance instance,
+            IInstanceIdentity identity,
+            IFragmentProvider fragments,
             IInventoryService inventories)
         {
-            if (instance == null)
-                throw new ArgumentNullException(nameof(instance));
+            if (identity == null)
+                throw new ArgumentNullException(nameof(identity));
 
-            if (!instance.TryGetFragment(
+            if (fragments == null)
+                throw new ArgumentNullException(nameof(fragments));
+
+            if (!fragments.TryGetFragment(
                     out ItemPickupFragment itemPickup) ||
                 itemPickup.Item == null ||
                 itemPickup.Count <= 0)
             {
                 throw new InvalidOperationException(
-                    $"{nameof(PickupDefinition)} " +
-                    $"'{instance.Definition.DisplayName}' requires a valid " +
-                    $"{nameof(ItemPickupFragment)}.");
+                    $"{nameof(ItemPickupFragment)} is required.");
             }
 
-            InstanceId = instance.InstanceId;
-            Definition = instance.Definition;
+            InstanceId = identity.InstanceId;
             _itemPickup = itemPickup;
 
             _inventories = inventories

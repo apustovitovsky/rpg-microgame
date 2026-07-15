@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.World;
+using Game.Core;
 using UnityEngine;
 
 namespace Game.Commands
@@ -10,7 +10,7 @@ namespace Game.Commands
     public sealed class CommandReceiver :
         ICommandReceiver
     {
-        private readonly WorldInstance _instance;
+        private readonly IInstanceIdentity _identity;
 
         private readonly Dictionary<Type, ICommandHandler> _handlers =
             new();
@@ -18,17 +18,17 @@ namespace Game.Commands
         private bool _isExecuting;
 
         public CommandReceiver(
-            WorldInstance instance,
+            IInstanceIdentity identity,
             IEnumerable<ICommandHandler> handlers)
         {
-            _instance = instance
-                ?? throw new ArgumentNullException(nameof(instance));
+            _identity = identity
+                ?? throw new ArgumentNullException(nameof(identity));
 
-            if (_instance.InstanceId == Guid.Empty)
+            if (_identity.InstanceId == Guid.Empty)
             {
                 throw new ArgumentException(
                     "Instance id is required.",
-                    nameof(instance));
+                    nameof(identity));
             }
 
             if (handlers == null)
@@ -77,7 +77,7 @@ namespace Game.Commands
             {
                 return await handler.HandleAsync(
                     command,
-                    _instance.InstanceId,
+                    _identity.InstanceId,
                     token);
             }
             catch (OperationCanceledException)
