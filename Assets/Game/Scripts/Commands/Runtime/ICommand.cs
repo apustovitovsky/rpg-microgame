@@ -1,6 +1,6 @@
 namespace Game.Commands
 {
-    public interface IWorldCommand
+    public interface ICommand
     {
     }
 }

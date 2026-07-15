@@ -4,19 +4,19 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.Commands
 {
-    public interface IWorldCommandHandler
+    public interface ICommandHandler
     {
         Type CommandType { get; }
 
         UniTask<CommandResult> HandleAsync(
-            IWorldCommand command,
+            ICommand command,
             Guid targetInstanceId,
             CancellationToken token);
     }
 
-    public interface IWorldCommandHandler<TCommand> :
-        IWorldCommandHandler
-        where TCommand : IWorldCommand
+    public interface ICommandHandler<TCommand> :
+        ICommandHandler
+        where TCommand : ICommand
     {
         UniTask<CommandResult> HandleAsync(
             TCommand command,

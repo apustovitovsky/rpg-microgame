@@ -6,7 +6,7 @@ namespace Game.Commands
     public interface ICommandReceiver
     {
         UniTask<CommandResult> ReceiveAsync(
-            IWorldCommand command,
+            ICommand command,
             CancellationToken token);
     }
 }

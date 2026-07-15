@@ -54,7 +54,7 @@ namespace Game.Commands
 
         public UniTask<CommandResult> SendAsync(
             Guid targetInstanceId,
-            IWorldCommand command,
+            ICommand command,
             CancellationToken token)
         {
             if (targetInstanceId == Guid.Empty)

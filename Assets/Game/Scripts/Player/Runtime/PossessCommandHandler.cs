@@ -8,12 +8,12 @@ using Game.Targeting;
 namespace Game.Player
 {
     public readonly struct PossessCommand :
-        IWorldCommand
+        ICommand
     {
     }
 
     public sealed class PossessCommandHandler :
-        WorldCommandHandler<PossessCommand>,
+        CommandHandler<PossessCommand>,
         IDisposable
     {
         private readonly PlayerControlService _playerControl;

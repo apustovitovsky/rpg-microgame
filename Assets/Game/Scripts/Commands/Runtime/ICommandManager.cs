@@ -8,7 +8,7 @@ namespace Game.Commands
     {
         UniTask<CommandResult> SendAsync(
             Guid targetInstanceId,
-            IWorldCommand command,
+            ICommand command,
             CancellationToken token);
     }
 }

@@ -12,14 +12,14 @@ namespace Game.Commands
     {
         private readonly WorldInstance _instance;
 
-        private readonly Dictionary<Type, IWorldCommandHandler> _handlers =
+        private readonly Dictionary<Type, ICommandHandler> _handlers =
             new();
 
         private bool _isExecuting;
 
         public CommandReceiver(
             WorldInstance instance,
-            IEnumerable<IWorldCommandHandler> handlers)
+            IEnumerable<ICommandHandler> handlers)
         {
             _instance = instance
                 ?? throw new ArgumentNullException(nameof(instance));
@@ -52,7 +52,7 @@ namespace Game.Commands
         }
 
         public async UniTask<CommandResult> ReceiveAsync(
-            IWorldCommand command,
+            ICommand command,
             CancellationToken token)
         {
             if (command == null)

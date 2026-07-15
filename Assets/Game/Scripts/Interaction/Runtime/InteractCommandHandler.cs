@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Game.Interaction
 {
     public sealed class InteractCommandHandler :
-        WorldCommandHandler<InteractCommand>
+        CommandHandler<InteractCommand>
     {
         private readonly IInteractable _interactable;
 
