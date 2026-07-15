@@ -303,53 +303,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7869591971293288977}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2649709327502031680
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6769934990369498367}
-  - component: {fileID: 8547825589139076706}
-  m_Layer: 0
-  m_Name: Dialogue
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6769934990369498367
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2649709327502031680}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3987800590141924742}
-  m_Father: {fileID: 8538305375040021554}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8547825589139076706
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2649709327502031680}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fb58b0a3f3b05343a878b3dcb7d1b1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Actor::Game.Actor.DialogueInteraction
-  _interactionPoint: {fileID: 3987800590141924742}
-  <MaxRange>k__BackingField: 5
 --- !u!1 &3683214080218915046
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,37 +708,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff783d4a2c13504fb6d947181ff4de1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Player::Game.Player.PossessCommandEndpoint
---- !u!1 &6487710103038410519
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3987800590141924742}
-  m_Layer: 0
-  m_Name: InteractablePos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3987800590141924742
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6487710103038410519}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6769934990369498367}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6685597537023399589
 GameObject:
   m_ObjectHideFlags: 0
@@ -856,7 +778,6 @@ Transform:
   - {fileID: 5186002720919307954}
   - {fileID: 7869591971293288977}
   - {fileID: 6764066207046100429}
-  - {fileID: 6769934990369498367}
   - {fileID: 830530097464295945}
   - {fileID: 4976545742723339783}
   - {fileID: 2672110059924851859}
@@ -1165,6 +1086,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Interaction::Game.Interaction.InteractorEndpoint
   _interactionOrigin: {fileID: 4460859427438145835}
+  <MaxRange>k__BackingField: 5
 --- !u!1 &8900439267306411728
 GameObject:
   m_ObjectHideFlags: 0

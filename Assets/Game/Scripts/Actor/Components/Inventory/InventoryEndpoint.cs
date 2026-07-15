@@ -9,7 +9,7 @@ namespace Game.Actor
     [DisallowMultipleComponent]
     public sealed class InventoryEndpoint :
         MonoBehaviour,
-        IPrefabInstaller
+        IModuleInstaller
     {
         public void Install(
             IContainerBuilder builder)

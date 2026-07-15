@@ -17,7 +17,30 @@ Use the `SO` suffix only when a ScriptableObject name would conflict with a runt
 4. В VContainer не имеет значение порядок регистрации.
 
 ## C# конвенции
-Unity objects should not use null coalescing.
+Зпрещено делать такие конструкции для unity objects:
+
+```csharp
+    _module = module
+        ?? throw new ArgumentNullException(...); // Unity objects should not use null coalescing.
+```
 
 ## Unity
 1. Терминал не подключен, необходимо смотреть логи в Editor.log
+
+## Архитектура
+
+```csharp
+class ModuleScope;
+interface IModuleInstaller;
+```
+Модуль — это автономный набор регистраций и компонентов, который добавляет объекту одну законченную capability: диалог, инвентарь, навигацию, взаимодействие и т. п. Компонент, являющийся IModuleInstaller не должен регистрировать себя в LifetimeScope ни в каком виде.
+
+Если необходимо регистрировать какие-либо authoring данные, то разрешается регистрация отдельной immutable структуры:
+
+```csharp
+public readonly struct DialogueSettings(
+    float InteractionRange);
+
+builder.RegisterInstance(
+    new DialogueSettings(_interactionRange));
+```

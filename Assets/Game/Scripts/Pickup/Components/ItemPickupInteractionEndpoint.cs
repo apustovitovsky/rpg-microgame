@@ -13,7 +13,7 @@ namespace Game.Pickup
     public sealed class ItemPickupInteractionEndpoint :
         MonoBehaviour,
         IInteractionTarget,
-        IPrefabInstaller
+        IModuleInstaller
     {
         [SerializeField] private Transform _interactionAnchor;
 

@@ -14,7 +14,7 @@ namespace Game.Loot
     public sealed class LootInteractionEndpoint :
         MonoBehaviour,
         IInteractionTarget,
-        IPrefabInstaller
+        IModuleInstaller
     {
         [SerializeField] private Transform _interactionAnchor;
 

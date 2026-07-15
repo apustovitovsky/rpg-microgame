@@ -11,7 +11,7 @@ namespace Game.Targeting
     public sealed class TargetableEndpoint :
         MonoBehaviour,
         ITargetable,
-        IPrefabInstaller
+        IModuleInstaller
     {
         [SerializeField] private Transform _uiAnchor;
         [SerializeField] private Transform _targetAnchor;

@@ -7,7 +7,7 @@ namespace Game.Commands
     [DisallowMultipleComponent]
     public sealed class CommandReceiverEndpoint :
         MonoBehaviour,
-        IPrefabInstaller
+        IModuleInstaller
     {
         public void Install(
             IContainerBuilder builder)

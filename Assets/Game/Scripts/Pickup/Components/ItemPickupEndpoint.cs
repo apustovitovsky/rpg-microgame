@@ -14,7 +14,7 @@ namespace Game.Pickup
     public sealed class ItemPickupEndpoint :
         MonoBehaviour,
         ICollectable,
-        IPrefabInstaller
+        IModuleInstaller
     {
         private IInventoryService _inventories;
         private ItemPickupFragment _itemPickup;

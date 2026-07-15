@@ -7,7 +7,7 @@ namespace Game.Player
     [DisallowMultipleComponent]
     public sealed class PossessCommandEndpoint :
         MonoBehaviour,
-        IPrefabInstaller
+        IModuleInstaller
     {
         public void Install(
             IContainerBuilder builder)

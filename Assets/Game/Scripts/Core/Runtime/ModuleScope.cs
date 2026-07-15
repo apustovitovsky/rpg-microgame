@@ -7,7 +7,7 @@ using VContainer.Unity;
 namespace Game.Core
 {
     [DisallowMultipleComponent]
-    public sealed class PrefabScope :
+    public sealed class ModuleScope :
         LifetimeScope
     {
         [SerializeField]
@@ -22,12 +22,12 @@ namespace Game.Core
             }
         }
 
-        private IEnumerable<IPrefabInstaller> FindInstallers()
+        private IEnumerable<IModuleInstaller> FindInstallers()
         {
             if (_prefabRoot == null)
             {
                 throw new InvalidOperationException(
-                    $"{nameof(PrefabScope)} requires a composition root.");
+                    $"{nameof(ModuleScope)} requires a composition root.");
             }
 
             var components = _prefabRoot
@@ -35,7 +35,7 @@ namespace Game.Core
 
             foreach (var component in components)
             {
-                if (component is not IPrefabInstaller installer ||
+                if (component is not IModuleInstaller installer ||
                     !BelongsToThisScope(component))
                 {
                     continue;
@@ -52,7 +52,7 @@ namespace Game.Core
 
             while (current != null)
             {
-                var scope = current.GetComponent<PrefabScope>();
+                var scope = current.GetComponent<ModuleScope>();
 
                 if (scope != null &&
                     scope != this)

@@ -11,7 +11,7 @@ namespace Game.AI
     [DisallowMultipleComponent]
     public sealed class NavMeshPlannerEndpoint :
         MonoBehaviour,
-        IPrefabInstaller
+        IModuleInstaller
     {
         [SerializeField] private NavMeshAgent _agent;
         [SerializeField] private NavMeshActorInput _input;

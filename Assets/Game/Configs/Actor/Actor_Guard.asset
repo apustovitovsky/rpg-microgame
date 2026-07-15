@@ -16,6 +16,7 @@ MonoBehaviour:
   _displayName: Guard
   _fragments:
   - rid: 1610866178936012884
+  - rid: 1610866246188007503
   <Prefab>k__BackingField: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
     type: 3}
   references:
@@ -26,3 +27,8 @@ MonoBehaviour:
       data:
         _capacity: 20
         _initialItems: []
+    - rid: 1610866246188007503
+      type: {class: DialogueFragment, ns: Game.Dialogue.Actor, asm: Game.Dialogue.Actor}
+      data:
+        <Definition>k__BackingField: {fileID: 11400000, guid: 9feacb0d3430e424c9c4a80921f28803,
+          type: 2}

@@ -11,7 +11,7 @@ namespace Game.Control
     public sealed class PossessionEndpoint :
         MonoBehaviour,
         IPossessionEndpoint,
-        IPrefabInstaller
+        IModuleInstaller
     {
         [SerializeField] private Transform _root;
         [SerializeField] private Transform _cameraPivot;

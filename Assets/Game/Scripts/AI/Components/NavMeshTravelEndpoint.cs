@@ -12,7 +12,7 @@ namespace Game.AI
     public sealed class NavMeshTravelEndpoint :
         MonoBehaviour,
         IActorNavigation,
-        IPrefabInstaller
+        IModuleInstaller
     {
         private INavMeshPlanner _planner;
         private NavMeshActorInput _input;

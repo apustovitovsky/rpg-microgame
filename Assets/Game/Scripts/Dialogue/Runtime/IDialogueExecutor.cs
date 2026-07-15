@@ -1,13 +1,12 @@
-using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
 namespace Game.Dialogue
 {
-    public interface IDialogueSessionStarter
+    public interface IDialogueExecutor
     {
-        UniTask StartDialogueAsync(
-            Guid interactorInstanceId,
+        UniTask ExecuteAsync(
+            DialogueSession session,
             CancellationToken cancellationToken);
     }
 }

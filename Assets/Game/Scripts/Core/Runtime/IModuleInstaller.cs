@@ -2,7 +2,7 @@ using VContainer.Unity;
 
 namespace Game.Core
 {
-    public interface IPrefabInstaller :
+    public interface IModuleInstaller :
         IInstaller
     {
     }

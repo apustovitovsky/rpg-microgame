@@ -9,7 +9,7 @@ namespace Game.Interaction
     public sealed class InteractorEndpoint :
         MonoBehaviour,
         IInteractionSource,
-        IPrefabInstaller
+        IModuleInstaller
     {
         [SerializeField]
         private Transform _interactionOrigin;

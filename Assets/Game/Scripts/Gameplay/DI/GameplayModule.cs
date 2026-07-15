@@ -13,6 +13,7 @@ namespace Game.Gameplay
         [SerializeField] private ModuleBuilder _world;
         [SerializeField] private ModuleBuilder _commands;
         [SerializeField] private ModuleBuilder _interaction;
+        [SerializeField] private ModuleBuilder _dialogue;
         [SerializeField] private ModuleBuilder _inventory;
         [SerializeField] private ModuleBuilder _loot;
         [SerializeField] private ModuleBuilder _input;
@@ -30,6 +31,7 @@ namespace Game.Gameplay
             builder.Configure(_world);
             builder.Configure(_commands);
             builder.Configure(_interaction);
+            builder.Configure(_dialogue);
             builder.Configure(_inventory);
             builder.Configure(_loot);
             builder.Configure(_input);

@@ -10,7 +10,7 @@ namespace Game.Actor
     [DisallowMultipleComponent]
     public sealed class ActorInputEndpoint :
         MonoBehaviour,
-        IPrefabInstaller
+        IModuleInstaller
     {
         [SerializeField] private ActorLookController _look;
         [SerializeField] private MovementController _movement;
