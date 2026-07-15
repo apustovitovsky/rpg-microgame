@@ -8,21 +8,21 @@ namespace Game.Interaction
 {
     public sealed class InteractionService :
         IInteractionService,
-        IRegistryWriter<IInteractable>
+        IRegistryWriter<IInteractionTarget>
     {
-        private readonly Registry<IInteractable> _interactables =
+        private readonly Registry<IInteractionTarget> _interactables =
             new();
 
         public void Add(
             Guid id,
-            IInteractable value)
+            IInteractionTarget value)
         {
             _interactables.Add(id, value);
         }
 
         public bool Remove(
             Guid id,
-            IInteractable expectedValue)
+            IInteractionTarget expectedValue)
         {
             return _interactables.Remove(
                 id,

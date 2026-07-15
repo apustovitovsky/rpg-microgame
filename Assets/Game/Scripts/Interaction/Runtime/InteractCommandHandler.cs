@@ -8,11 +8,11 @@ namespace Game.Interaction
     public sealed class InteractCommandHandler :
         CommandHandler<InteractCommand>
     {
-        private readonly IInteractor _interactor;
+        private readonly IInteractionSource _interactor;
         private readonly IInteractionService _interactionService;
 
         public InteractCommandHandler(
-            IInteractor interactor,
+            IInteractionSource interactor,
             IInteractionService interactionService)
         {
             _interactor = interactor

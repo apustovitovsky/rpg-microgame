@@ -8,11 +8,14 @@ namespace Game.Interaction
     [DisallowMultipleComponent]
     public sealed class InteractorEndpoint :
         MonoBehaviour,
-        IInteractor,
+        IInteractionSource,
         IPrefabInstaller
     {
         [SerializeField]
         private Transform _interactionOrigin;
+
+        [field: SerializeField]
+        public float MaxRange { get; private set; } = 5f;
 
         public Vector3 InteractionOrigin =>
             _interactionOrigin != null

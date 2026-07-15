@@ -12,7 +12,7 @@ namespace Game.Dialogue
     [DisallowMultipleComponent]
     public sealed class DialogueInteractionEndpoint :
         MonoBehaviour,
-        IInteractable,
+        IInteractionTarget,
         IDialogueSessionStarter,
         IPrefabInstaller
     {
@@ -31,10 +31,10 @@ namespace Game.Dialogue
         {
             builder.RegisterComponent(this)
                 .AsSelf()
-                .As<IInteractable>()
+                .As<IInteractionTarget>()
                 .As<IDialogueSessionStarter>();
 
-            builder.RegisterBinding<IInteractable>();
+            builder.RegisterBinding<IInteractionTarget>();
         }
 
         public bool CanInteract(InteractionContext context)

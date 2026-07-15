@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Interaction
 {
-    public interface IInteractable
+    public interface IInteractionTarget
     {
         Vector3 InteractionPoint { get; }
         float MaxRange { get; }

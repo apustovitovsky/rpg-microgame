@@ -12,7 +12,7 @@ namespace Game.Pickup
     [DisallowMultipleComponent]
     public sealed class ItemPickupInteractionEndpoint :
         MonoBehaviour,
-        IInteractable,
+        IInteractionTarget,
         IPrefabInstaller
     {
         [SerializeField] private Transform _interactionAnchor;
@@ -33,9 +33,9 @@ namespace Game.Pickup
         {
             builder.RegisterComponent(this)
                 .AsSelf()
-                .As<IInteractable>();
+                .As<IInteractionTarget>();
 
-            builder.RegisterBinding<IInteractable>();
+            builder.RegisterBinding<IInteractionTarget>();
         }
 
         [Inject]
