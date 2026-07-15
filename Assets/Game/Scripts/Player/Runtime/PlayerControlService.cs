@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Game.Commands;
 using Game.Control;
 using Game.Input;
+using Game.Interaction;
 using Game.Targeting;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -13,15 +14,16 @@ namespace Game.Player
     public sealed class PlayerControlService :
         IPlayerControl
     {
-        private readonly ICommandManager _commands;
+        private readonly ICommandDispatch _commands;
         private readonly CinemachineCamera _camera;
         private readonly IControlInput _input;
 
         private IPossessionEndpoint _endpoint;
+        private IInteractor _interactor;
         private ITargetProvider _targetProvider;
 
         public PlayerControlService(
-            ICommandManager commands,
+            ICommandDispatch commands,
             CinemachineCamera camera,
             IControlInput input)
         {
@@ -35,6 +37,11 @@ namespace Game.Player
         public Vector3 ControlledPosition =>
             _endpoint != null
                 ? _endpoint.Root.position
+                : Vector3.zero;
+
+        public Vector3 InteractionOrigin =>
+            _interactor != null
+                ? _interactor.InteractionOrigin
                 : Vector3.zero;
 
         public ITargetable CurrentTarget =>
@@ -80,10 +87,12 @@ namespace Game.Player
         public CommandResult Attach(
             Guid instanceId,
             IPossessionEndpoint endpoint,
+            IInteractor interactor,
             ITargetProvider targetProvider)
         {
             if (instanceId == Guid.Empty ||
                 endpoint == null ||
+                interactor == null ||
                 targetProvider == null)
             {
                 return CommandResult.Rejected;
@@ -96,6 +105,7 @@ namespace Game.Player
 
             ControlledInstanceId = instanceId;
             _endpoint = endpoint;
+            _interactor = interactor;
             _targetProvider = targetProvider;
 
             _endpoint.BindInput(_input);
@@ -134,6 +144,7 @@ namespace Game.Player
 
             ControlledInstanceId = Guid.Empty;
             _endpoint = null;
+            _interactor = null;
             _targetProvider = null;
 
             BindCamera(null);

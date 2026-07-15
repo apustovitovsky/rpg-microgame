@@ -29,7 +29,7 @@ namespace Game.Player
                 _virtualCameraPrefab,
                 Lifetime.Singleton);
 
-            builder.RegisterEntryPoint<PlayerWorldActionController>(
+            builder.RegisterEntryPoint<PlayerActionController>(
                 Lifetime.Singleton);
         }
     }

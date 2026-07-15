@@ -7,20 +7,20 @@ using VContainer.Unity;
 
 namespace Game.Player
 {
-    public sealed class PlayerWorldActionController :
+    public sealed class PlayerActionController :
         IStartable,
         IDisposable
     {
         private readonly IPlayerActionInput _input;
         private readonly IPlayerControl _control;
-        private readonly ICommandManager _commands;
+        private readonly ICommandDispatch _commands;
         private readonly CancellationTokenSource _lifetime =
             new();
 
-        public PlayerWorldActionController(
+        public PlayerActionController(
             IPlayerActionInput input,
             IPlayerControl control,
-            ICommandManager commands)
+            ICommandDispatch commands)
         {
             _input = input;
             _control = control;
@@ -68,7 +68,7 @@ namespace Game.Player
 
             var command = new InteractCommand(
                 interactorInstanceId,
-                _control.ControlledPosition);
+                _control.InteractionOrigin);
 
             await _commands.SendAsync(
                 target.InstanceId,

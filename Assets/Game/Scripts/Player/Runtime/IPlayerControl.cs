@@ -13,6 +13,8 @@ namespace Game.Player
 
         Vector3 ControlledPosition { get; }
 
+        Vector3 InteractionOrigin { get; }
+
         ITargetable CurrentTarget { get; }
 
         event Action ControlledObjectChanged;

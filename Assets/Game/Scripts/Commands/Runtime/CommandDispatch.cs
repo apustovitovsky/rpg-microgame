@@ -6,8 +6,8 @@ using Game.Core;
 
 namespace Game.Commands
 {
-    public sealed class CommandSenderService :
-        ICommandManager,
+    public sealed class CommandDispatch :
+        ICommandDispatch,
         IRegistryWriter<ICommandReceiver>
     {
         private readonly Dictionary<Guid, ICommandReceiver> _receivers =

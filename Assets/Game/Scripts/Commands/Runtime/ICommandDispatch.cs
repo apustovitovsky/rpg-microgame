@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.Commands
 {
-    public interface ICommandManager
+    public interface ICommandDispatch
     {
         UniTask<CommandResult> SendAsync(
             Guid targetInstanceId,

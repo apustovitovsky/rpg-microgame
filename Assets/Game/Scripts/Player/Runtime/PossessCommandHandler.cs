@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Commands;
 using Game.Control;
+using Game.Interaction;
 using Game.Targeting;
 
 namespace Game.Player
@@ -18,11 +19,13 @@ namespace Game.Player
     {
         private readonly PlayerControlService _playerControl;
         private readonly IPossessionEndpoint _endpoint;
+        private readonly IInteractor _interactor;
         private readonly ITargetProvider _targetProvider;
 
         public PossessCommandHandler(
             PlayerControlService playerControl,
             IPossessionEndpoint endpoint,
+            IInteractor interactor,
             ITargetProvider targetProvider)
         {
             _playerControl = playerControl
@@ -32,6 +35,10 @@ namespace Game.Player
             _endpoint = endpoint
                 ?? throw new ArgumentNullException(
                     nameof(endpoint));
+
+            _interactor = interactor
+                ?? throw new ArgumentNullException(
+                    nameof(interactor));
 
             _targetProvider = targetProvider
                 ?? throw new ArgumentNullException(
@@ -53,6 +60,7 @@ namespace Game.Player
                 _playerControl.Attach(
                     targetInstanceId,
                     _endpoint,
+                    _interactor,
                     _targetProvider));
         }
 
