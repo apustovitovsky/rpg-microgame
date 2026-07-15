@@ -67,10 +67,11 @@ namespace Game.Player
             }
 
             var command = new InteractCommand(
-                target.InstanceId);
+                interactorInstanceId,
+                _control.ControlledPosition);
 
             await _commands.SendAsync(
-                interactorInstanceId,
+                target.InstanceId,
                 command,
                 _lifetime.Token);
         }

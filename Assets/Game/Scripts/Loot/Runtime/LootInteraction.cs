@@ -5,60 +5,41 @@ using Cysharp.Threading.Tasks;
 using Game.Core;
 using Game.Interaction;
 using UnityEngine;
-using VContainer;
-using VContainer.Unity;
 
 namespace Game.Loot
 {
-    [DisallowMultipleComponent]
-    public sealed class LootInteractionEndpoint :
-        MonoBehaviour,
-        IInteractionTarget,
-        IModuleInstaller
+    public sealed class LootInteraction :
+        IInteractable
     {
-        [SerializeField] private Transform _interactionAnchor;
+        private readonly IInstanceIdentity _identity;
+        private readonly ILootSessionService _sessions;
+        private readonly LootInteractionSettings _settings;
 
-        [field: SerializeField]
-        public float MaxRange { get; private set; } = 5f;
-
-        private IInstanceIdentity _identity;
-        private ILootSessionService _sessions;
-
-        public Vector3 InteractionPoint =>
-            _interactionAnchor != null
-                ? _interactionAnchor.position
-                : transform.position;
-
-        public void Install(
-            IContainerBuilder builder)
-        {
-            builder.RegisterComponent(this)
-                .AsSelf()
-                .As<IInteractionTarget>();
-
-            builder.RegisterBinding<IInteractionTarget>();
-        }
-
-        [Inject]
-        public void Construct(
+        public LootInteraction(
             IInstanceIdentity identity,
-            ILootSessionService sessions)
+            ILootSessionService sessions,
+            LootInteractionSettings settings)
         {
             _identity = identity
                 ?? throw new ArgumentNullException(nameof(identity));
 
             _sessions = sessions
                 ?? throw new ArgumentNullException(nameof(sessions));
+
+            _settings = settings;
         }
+
+        public Vector3 InteractionPoint =>
+            _settings.InteractionAnchor.position;
+
+        public float MaxRange =>
+            _settings.MaxRange;
 
         public bool CanInteract(
             InteractionContext context)
         {
-            return _identity != null &&
-                   _sessions != null &&
-                   context.InteractorInstanceId != Guid.Empty &&
-                   context.TargetInstanceId ==
-                   _identity.InstanceId &&
+            return context.InteractorInstanceId != Guid.Empty &&
+                   context.TargetInstanceId == _identity.InstanceId &&
                    context.InteractorInstanceId !=
                    _identity.InstanceId;
         }
@@ -85,8 +66,7 @@ namespace Game.Loot
             {
                 Debug.LogWarning(
                     $"Loot session was not opened: " +
-                    $"{openResult.Status}.",
-                    this);
+                    $"{openResult.Status}.");
 
                 return UniTask.FromResult(
                     InteractionResult.Rejected);
@@ -99,8 +79,7 @@ namespace Game.Loot
                 _identity.InstanceId)
             {
                 Debug.LogWarning(
-                    "Loot session is already open for another source.",
-                    this);
+                    "Loot session is already open for another source.");
 
                 return UniTask.FromResult(
                     InteractionResult.Rejected);
@@ -111,8 +90,7 @@ namespace Game.Loot
                     out var snapshot))
             {
                 Debug.LogWarning(
-                    "Loot session snapshot is unavailable.",
-                    this);
+                    "Loot session snapshot is unavailable.");
 
                 return UniTask.FromResult(
                     InteractionResult.Rejected);
@@ -125,8 +103,7 @@ namespace Game.Loot
             {
                 Debug.LogWarning(
                     $"Loot session '{openResult.SessionId:N}' " +
-                    $"was not completed: {takeResult}.",
-                    this);
+                    $"was not completed: {takeResult}.");
 
                 return UniTask.FromResult(
                     InteractionResult.Rejected);
@@ -138,7 +115,7 @@ namespace Game.Loot
                 InteractionResult.Completed);
         }
 
-        private void LogCollected(
+        private static void LogCollected(
             LootSessionSnapshot snapshot)
         {
             var message = new StringBuilder();
@@ -163,7 +140,22 @@ namespace Game.Loot
                 }
             }
 
-            Debug.Log(message.ToString(), this);
+            Debug.Log(message.ToString());
         }
+    }
+
+    public readonly struct LootInteractionSettings
+    {
+        public LootInteractionSettings(
+            Transform interactionAnchor,
+            float maxRange)
+        {
+            InteractionAnchor = interactionAnchor;
+            MaxRange = maxRange;
+        }
+
+        public Transform InteractionAnchor { get; }
+
+        public float MaxRange { get; }
     }
 }

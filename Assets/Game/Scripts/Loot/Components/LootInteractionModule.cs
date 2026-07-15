@@ -1,31 +1,33 @@
 using Game.Core;
+using Game.Interaction;
 using UnityEngine;
 using VContainer;
-using VContainer.Unity;
 
-namespace Game.Interaction
+namespace Game.Loot
 {
     [DisallowMultipleComponent]
-    public sealed class InteractorEndpoint :
+    public sealed class LootInteractionModule :
         MonoBehaviour,
-        IInteractionSource,
         IModuleInstaller
     {
-        [SerializeField]
-        private Transform _interactionOrigin;
+        [SerializeField] private Transform _interactionAnchor;
 
         [field: SerializeField]
         public float MaxRange { get; private set; } = 5f;
 
-        public Vector3 InteractionOrigin =>
-            _interactionOrigin != null
-                ? _interactionOrigin.position
-                : transform.position;
-
         public void Install(
             IContainerBuilder builder)
         {
-            builder.RegisterComponent(this)
+            var interactionAnchor = _interactionAnchor != null
+                ? _interactionAnchor
+                : transform;
+
+            builder.RegisterInstance(
+                new LootInteractionSettings(
+                    interactionAnchor,
+                    MaxRange));
+
+            builder.Register<LootInteraction>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
             builder.Register<InteractCommandHandler>(

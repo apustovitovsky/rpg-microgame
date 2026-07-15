@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game.Interaction
 {
-    public interface IInteractionSource
+    public interface IInteractor
     {
         Vector3 InteractionOrigin { get; }
         float MaxRange { get; }

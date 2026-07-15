@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Game.Dialogue.Interaction
 {
     public sealed class DialogueInteraction :
-        IInteractionTarget
+        IInteractable
     {
         private readonly DialogueInteractionSettings _settings;
         private readonly IDialogueParticipant _dialogue;

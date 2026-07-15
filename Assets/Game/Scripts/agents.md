@@ -28,7 +28,7 @@ Use the `SO` suffix only when a ScriptableObject name would conflict with a runt
 ## Unity
 1. Терминал не подключен, необходимо смотреть логи в Editor.log
 
-## Архитектура
+## ModuleScope
 
 ```csharp
 class ModuleScope;
@@ -45,3 +45,8 @@ public readonly struct DialogueSettings(
 builder.RegisterInstance(
     new DialogueSettings(_interactionRange));
 ```
+
+## Commands
+
+Между world instances → Game.Commands
+Внутри scope одного instance → прямой вызов через DI

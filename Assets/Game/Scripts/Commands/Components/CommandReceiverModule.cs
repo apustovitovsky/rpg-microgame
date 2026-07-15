@@ -5,7 +5,7 @@ using VContainer;
 namespace Game.Commands
 {
     [DisallowMultipleComponent]
-    public sealed class CommandReceiverEndpoint :
+    public sealed class CommandReceiverModule :
         MonoBehaviour,
         IModuleInstaller
     {

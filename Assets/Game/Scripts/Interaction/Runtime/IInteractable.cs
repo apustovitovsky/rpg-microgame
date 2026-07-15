@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Interaction
 {
-    public interface IInteractionTarget
+    public interface IInteractable
     {
         Vector3 InteractionPoint { get; }
 

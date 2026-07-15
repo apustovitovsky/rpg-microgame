@@ -3,14 +3,14 @@ using Game.Interaction;
 using UnityEngine;
 using VContainer;
 
-namespace Game.Dialogue.Interaction
+namespace Game.Pickup
 {
     [DisallowMultipleComponent]
-    public sealed class DialogueInteractionModule :
+    public sealed class ItemPickupInteractionModule :
         MonoBehaviour,
         IModuleInstaller
     {
-        [SerializeField] private Transform _interactionPoint;
+        [SerializeField] private Transform _interactionAnchor;
 
         [field: SerializeField]
         public float MaxRange { get; private set; } = 5f;
@@ -18,16 +18,17 @@ namespace Game.Dialogue.Interaction
         public void Install(
             IContainerBuilder builder)
         {
-            var interactionPoint = _interactionPoint != null
-                ? _interactionPoint
+            var interactionAnchor = _interactionAnchor != null
+                ? _interactionAnchor
                 : transform;
 
             builder.RegisterInstance(
-                new DialogueInteractionSettings(
-                    MaxRange,
-                    interactionPoint));
+                new ItemPickupInteractionSettings(
+                    interactionAnchor,
+                    MaxRange));
 
-            builder.Register<DialogueInteraction>(Lifetime.Scoped)
+            builder.Register<ItemPickupInteraction>(
+                    Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
             builder.Register<InteractCommandHandler>(
