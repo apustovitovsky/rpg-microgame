@@ -43,14 +43,16 @@ namespace Game.Pickup
             ItemPickupEndpoint pickup,
             IItemPickupService pickupService)
         {
-            _pickup = pickup
-                != null ? pickup : throw new ArgumentNullException(nameof(pickup));
+            _pickup = pickup != null
+                ? pickup
+                : throw new ArgumentNullException(nameof(pickup));
 
             _pickupService = pickupService
                 ?? throw new ArgumentNullException(nameof(pickupService));
         }
 
-        public bool CanInteract(InteractionContext context)
+        public bool CanInteract(
+            InteractionContext context)
         {
             return _pickupService != null &&
                    _pickup != null &&
@@ -60,24 +62,30 @@ namespace Game.Pickup
                        context.InteractorInstanceId);
         }
 
-        public async UniTask InteractAsync(
+        public async UniTask<InteractionResult> InteractAsync(
             InteractionContext context,
             CancellationToken token)
         {
             if (!CanInteract(context))
-                return;
+            {
+                return InteractionResult.Rejected;
+            }
 
             var result = await _pickupService.CollectAsync(
                 context.InteractorInstanceId,
                 _pickup,
                 token);
 
-            if (result != CollectResult.Succeeded)
+            return result switch
             {
-                Debug.LogWarning(
-                    $"Item pickup failed: {result}.",
-                    this);
-            }
+                CollectResult.Succeeded =>
+                    InteractionResult.Completed,
+
+                CollectResult.AlreadyInProgress =>
+                    InteractionResult.Busy,
+
+                _ => InteractionResult.Rejected
+            };
         }
     }
 }

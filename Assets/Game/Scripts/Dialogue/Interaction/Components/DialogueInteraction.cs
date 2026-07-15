@@ -36,24 +36,29 @@ namespace Game.Dialogue.Interaction
                    DialogueEvaluationStatus.Available;
         }
 
-        public async UniTask InteractAsync(
+        public async UniTask<InteractionResult> InteractAsync(
             InteractionContext context,
             CancellationToken token)
         {
             if (!CanInteract(context))
             {
-                return;
+                return InteractionResult.Rejected;
             }
 
             var result = await _dialogue.StartDialogueAsync(
                 context.InteractorInstanceId,
                 token);
 
-            if (!result.Succeeded)
+            return result.Status switch
             {
-                Debug.LogWarning(
-                    $"Dialogue was not run: {result.Status}.");
-            }
+                DialogueStartStatus.Started =>
+                    InteractionResult.Completed,
+
+                DialogueStartStatus.Busy =>
+                    InteractionResult.Busy,
+
+                _ => InteractionResult.Rejected
+            };
         }
     }
 }

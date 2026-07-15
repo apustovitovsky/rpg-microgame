@@ -33,14 +33,20 @@ namespace Game.Interaction
                 _interactor.InteractionOrigin,
                 command.TargetInstanceId);
 
-            var succeeded =
-                await _interactionService.TryInteractAsync(
-                    context,
-                    token);
+            var result = await _interactionService.TryInteractAsync(
+                context,
+                token);
 
-            return succeeded
-                ? CommandResult.Completed
-                : CommandResult.Rejected;
+            return result.Status switch
+            {
+                InteractionStatus.Completed =>
+                    CommandResult.Completed,
+
+                InteractionStatus.Busy =>
+                    CommandResult.Busy,
+
+                _ => CommandResult.Rejected
+            };
         }
     }
 }

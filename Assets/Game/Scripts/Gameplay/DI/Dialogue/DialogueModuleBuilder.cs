@@ -19,6 +19,15 @@ namespace Game.Gameplay
         {
             builder.RegisterComponentInHierarchy<DialogueRunner>();
 
+            builder.RegisterComponentInHierarchy<DialogueView>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterComponentInHierarchy<
+                YarnDialoguePresenter>();
+
+            builder.Register<DialoguePresenter>(
+                Lifetime.Singleton);
+
             builder.Register<YarnDialogueExecutor>(
                     Lifetime.Singleton)
                 .AsImplementedInterfaces();

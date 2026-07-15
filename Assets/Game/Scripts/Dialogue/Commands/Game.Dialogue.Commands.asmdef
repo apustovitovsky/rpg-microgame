@@ -1,13 +1,12 @@
 {
-    "name": "Game.Dialogue.Yarn",
+    "name": "Game.Dialogue.Commands",
     "rootNamespace": "",
     "references": [
         "VContainer",
-        "Game.Dialogue",
-        "Game.Player",
         "UniTask",
-        "YarnSpinner.Unity",
-        "Unity.TextMeshPro"
+        "Game.Core",
+        "Game.Commands",
+        "Game.Dialogue"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

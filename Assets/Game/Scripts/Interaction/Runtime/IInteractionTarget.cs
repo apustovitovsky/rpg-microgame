@@ -7,9 +7,13 @@ namespace Game.Interaction
     public interface IInteractionTarget
     {
         Vector3 InteractionPoint { get; }
+
         float MaxRange { get; }
-        bool CanInteract(InteractionContext context);
-        UniTask InteractAsync(
+
+        bool CanInteract(
+            InteractionContext context);
+
+        UniTask<InteractionResult> InteractAsync(
             InteractionContext context,
             CancellationToken token);
     }

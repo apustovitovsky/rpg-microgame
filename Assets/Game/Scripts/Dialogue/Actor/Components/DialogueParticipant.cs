@@ -58,11 +58,11 @@ namespace Game.Dialogue.Actor
                 CreateRequest(initiatorInstanceId));
         }
 
-        public UniTask<DialogueRunResult> StartDialogueAsync(
+        public UniTask<DialogueStartResult> StartDialogueAsync(
             Guid initiatorInstanceId,
             CancellationToken cancellationToken)
         {
-            return _coordinator.RunAsync(
+            return _coordinator.StartAsync(
                 CreateRequest(initiatorInstanceId),
                 cancellationToken);
         }

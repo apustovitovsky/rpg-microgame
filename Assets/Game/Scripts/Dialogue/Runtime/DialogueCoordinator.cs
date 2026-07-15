@@ -14,7 +14,8 @@ namespace Game.Dialogue
         public DialogueCoordinator(
             IDialogueExecutor executor)
         {
-            _executor = executor;
+            _executor = executor
+                ?? throw new ArgumentNullException(nameof(executor));
         }
 
         public bool TryGetActive(
@@ -40,7 +41,7 @@ namespace Game.Dialogue
             return DialogueEvaluationStatus.Available;
         }
 
-        public async UniTask<DialogueRunResult> RunAsync(
+        public UniTask<DialogueStartResult> StartAsync(
             DialogueRequest request,
             CancellationToken cancellationToken)
         {
@@ -48,7 +49,8 @@ namespace Game.Dialogue
 
             if (evaluation != DialogueEvaluationStatus.Available)
             {
-                return DialogueRunResult.Rejected(evaluation);
+                return UniTask.FromResult(
+                    DialogueStartResult.Rejected(evaluation));
             }
 
             var session = new DialogueSession(
@@ -57,13 +59,27 @@ namespace Game.Dialogue
 
             _activeSession = session;
 
+            RunSessionAsync(
+                session,
+                cancellationToken).Forget();
+
+            return UniTask.FromResult(
+                DialogueStartResult.Started(session.Id));
+        }
+
+        private async UniTask RunSessionAsync(
+            DialogueSession session,
+            CancellationToken cancellationToken)
+        {
             try
             {
                 await _executor.ExecuteAsync(
                     session,
                     cancellationToken);
-
-                return DialogueRunResult.Completed(session.Id);
+            }
+            catch (OperationCanceledException)
+                when (cancellationToken.IsCancellationRequested)
+            {
             }
             finally
             {

@@ -17,7 +17,7 @@ MonoBehaviour:
   _fragments:
   - rid: 1610866178936012884
   - rid: 1610866246188007503
-  <Prefab>k__BackingField: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
+  <Prefab>k__BackingField: {fileID: 3042253684763455917, guid: a06bfbb2e76ccdc428038ff23c571eff,
     type: 3}
   references:
     version: 2
@@ -30,5 +30,5 @@ MonoBehaviour:
     - rid: 1610866246188007503
       type: {class: DialogueFragment, ns: Game.Dialogue.Actor, asm: Game.Dialogue.Actor}
       data:
-        <Definition>k__BackingField: {fileID: 11400000, guid: 9feacb0d3430e424c9c4a80921f28803,
+        <Definition>k__BackingField: {fileID: 11400000, guid: b573a628c91205049bfbe6061ebfec1f,
           type: 2}

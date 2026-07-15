@@ -1089,3 +1089,555 @@ Gameplay-системы знают, что изменилось в мире.
 [11]: https://docs.yarnspinner.dev/components/variable-storage?utm_source=chatgpt.com "Variable Storage"
 [12]: https://docs.yarnspinner.dev/api/csharp/yarn.unity/yarn.unity.dialoguerunner?utm_source=chatgpt.com "DialogueRunner"
 [13]: https://github.com/apustovitovsky/rpg-microgame/blob/main/Assets/Game/Scripts/Dialogue/Game.Dialogue.asmdef "rpg-microgame/Assets/Game/Scripts/Dialogue/Game.Dialogue.asmdef at main · apustovitovsky/rpg-microgame · GitHub"
+Ты прав — я недостаточно явно встроил `Game.Commands` в схему. В твоём проекте **диалог начинается именно через command pipeline**, а не напрямую из input в `DialogueCoordinator`.
+
+## Правильная схема для текущего проекта
+
+```text
+Player input
+    ↓
+ICommandManager.SendAsync(
+    npcInstanceId,
+    new InteractCommand(playerId, playerPosition))
+    ↓
+CommandSenderService
+    ↓
+ICommandReceiver NPC
+    ↓
+InteractCommandHandler
+    ↓
+IInteractable.InteractAsync
+    ↓
+DialogueInteraction
+    ↓
+IDialogueSessionStarter / IDialogueCoordinator
+    ↓
+DialogueSession
+    ↓
+YarnDialogueRuntime
+```
+
+То есть `Game.Commands` находится **между источником намерения и конкретным world object**.
+
+У тебя уже есть почти весь первый участок:
+
+* `InteractCommand` содержит ID инициатора и его позицию;
+* target ID передаётся отдельно в `ICommandManager.SendAsync`;
+* `CommandSenderService` находит receiver по `InstanceId`;
+* `InteractCommandHandler` находится в scope целевого объекта;
+* обработчик проверяет ID, дистанцию, `CanInteract`, после чего вызывает `IInteractable.InteractAsync`. ([GitHub][1])
+
+Поэтому для обычного разговора с NPC отдельный `StartDialogueCommand` **не обязателен**. Командой уже является:
+
+```csharp
+InteractCommand
+```
+
+Диалог — это конкретный результат взаимодействия с данным NPC.
+
+---
+
+# Что конкретно находится в NPC scope
+
+Для NPC с диалогом я бы зарегистрировал примерно такие зависимости:
+
+```text
+WorldCommandReceiver
+├── InteractCommandHandler
+├── DialogueInteraction : IInteractable
+└── DialogueStarter
+```
+
+Где `DialogueInteraction` — адаптер между общей системой взаимодействий и диалоговой системой:
+
+```csharp
+public sealed class DialogueInteraction : IInteractable
+{
+    private readonly IDialogueStarter _dialogueStarter;
+    private readonly DialogueEntry _entry;
+    private readonly Guid _speakerInstanceId;
+
+    public DialogueInteraction(
+        IDialogueStarter dialogueStarter,
+        DialogueEntry entry,
+        Guid speakerInstanceId)
+    {
+        _dialogueStarter = dialogueStarter;
+        _entry = entry;
+        _speakerInstanceId = speakerInstanceId;
+    }
+
+    public Vector3 InteractionPoint { get; }
+    public float MaxRange { get; }
+
+    public bool CanInteract(InteractionContext context)
+    {
+        return _dialogueStarter.CanStart(
+            new DialogueRequest(
+                context.InteractorInstanceId,
+                _speakerInstanceId,
+                _entry));
+    }
+
+    public UniTask<InteractionResult> InteractAsync(
+        InteractionContext context,
+        CancellationToken token)
+    {
+        return _dialogueStarter.TryStartAsync(
+            new DialogueRequest(
+                context.InteractorInstanceId,
+                _speakerInstanceId,
+                _entry),
+            token);
+    }
+}
+```
+
+Глобальный `DialogueCoordinator` при этом остаётся в gameplay scope, потому что управляет единственным модальным каналом диалога.
+
+```text
+NPC scope
+    DialogueInteraction
+    DialogueStarter / Endpoint
+            ↓
+Gameplay scope
+    DialogueCoordinator
+    DialogueRunner
+    DialogueParticipantCoordinator
+```
+
+---
+
+# Нужен ли тогда `IDialogueEndpoint`
+
+В предыдущей схеме я вводил:
+
+```csharp
+IDialogueEndpoint
+```
+
+Но с учётом твоего `Game.Commands` это название действительно может запутывать.
+
+У тебя уже есть инфраструктурный endpoint:
+
+```text
+CommandReceiverEndpoint
+```
+
+и world receiver NPC уже является точкой адресации команд. `CommandReceiverEndpoint` устанавливает command receiver и его binding в prefab scope. ([GitHub][2])
+
+Поэтому второй «endpoint» для диалога необязателен. Я бы оставил более предметное имя:
+
+```csharp
+public interface IDialogueStarter
+{
+    bool CanStart(DialogueRequest request);
+
+    UniTask<DialogueStartResult> TryStartAsync(
+        DialogueRequest request,
+        CancellationToken token);
+}
+```
+
+Тогда ответственность читается так:
+
+```text
+CommandReceiverEndpoint
+    принимает команды world object
+
+InteractCommandHandler
+    обрабатывает InteractCommand
+
+DialogueInteraction
+    реализует конкретный тип взаимодействия
+
+IDialogueStarter
+    запускает диалог конкретного NPC
+
+DialogueCoordinator
+    управляет глобальным lifecycle
+```
+
+Твой текущий `IDialogueSessionStarter` концептуально уже находится примерно на этом месте. Его необязательно удалять — достаточно уточнить контракт и, возможно, переименовать в `IDialogueStarter`.
+
+---
+
+# Не нужно посылать команду из команды
+
+Я бы **не делал** такую цепочку:
+
+```text
+InteractCommandHandler
+    ↓
+ICommandManager.SendAsync(
+    тот же NPC,
+    StartDialogueCommand)
+```
+
+Получается:
+
+```text
+InteractCommand
+    → StartDialogueCommand
+        → DialogueCoordinator
+```
+
+Это даёт мало пользы, но создаёт проблемы:
+
+* повторную адресацию к тому же receiver;
+* потенциальную reentrancy;
+* конфликт с `Busy`;
+* двойную обработку cancellation;
+* неясно, какая команда фактически владеет операцией;
+* сложнее сопоставлять результаты.
+
+Лучше:
+
+```text
+InteractCommandHandler
+    ↓
+DialogueInteraction
+    ↓
+IDialogueStarter
+```
+
+И `StartDialogueCommandHandler`, если он позже понадобится, тоже вызывает тот же `IDialogueStarter`:
+
+```text
+InteractCommand ────────┐
+                        ├──→ IDialogueStarter
+StartDialogueCommand ───┘
+```
+
+То есть handlers — разные входы, но application service один.
+
+---
+
+# Когда нужен отдельный `StartDialogueCommand`
+
+Он нужен, когда диалог запускается **не через физическое взаимодействие**:
+
+* квестовый триггер автоматически начинает разговор;
+* NPC сам обращается к игроку;
+* диалог начинается после кат-сцены;
+* Behavior Graph инициирует разговор;
+* начинается NPC ↔ NPC сцена;
+* нужен debug-запуск;
+* сюжетная система запускает удалённый разговор.
+
+Тогда появляется:
+
+```csharp
+public readonly struct StartDialogueCommand : IWorldCommand
+{
+    public StartDialogueCommand(
+        Guid initiatorInstanceId,
+        DialogueStartReason reason)
+    {
+        InitiatorInstanceId = initiatorInstanceId;
+        Reason = reason;
+    }
+
+    public Guid InitiatorInstanceId { get; }
+    public DialogueStartReason Reason { get; }
+}
+```
+
+Отправка:
+
+```csharp
+await _commandManager.SendAsync(
+    speakerInstanceId,
+    new StartDialogueCommand(
+        initiatorInstanceId,
+        DialogueStartReason.Scripted),
+    token);
+```
+
+Обработчик находится в scope NPC:
+
+```csharp
+public sealed class StartDialogueCommandHandler :
+    WorldCommandHandler<StartDialogueCommand>
+{
+    private readonly IDialogueStarter _starter;
+
+    public override async UniTask<CommandResult> HandleAsync(
+        StartDialogueCommand command,
+        Guid speakerInstanceId,
+        CancellationToken token)
+    {
+        var result = await _starter.TryStartAsync(
+            new DialogueRequest(
+                command.InitiatorInstanceId,
+                speakerInstanceId),
+            token);
+
+        return result.Status switch
+        {
+            DialogueStartStatus.Started =>
+                CommandResult.Completed,
+
+            DialogueStartStatus.Busy =>
+                CommandResult.Busy,
+
+            DialogueStartStatus.Cancelled =>
+                CommandResult.Cancelled,
+
+            _ =>
+                CommandResult.Rejected
+        };
+    }
+}
+```
+
+Таким образом:
+
+```text
+Разговор после кнопки E:
+InteractCommand
+
+Разговор, запущенный сюжетом/AI:
+StartDialogueCommand
+```
+
+---
+
+# Важный рефакторинг результата взаимодействия
+
+Сейчас `InteractCommandHandler` после `await _interactable.InteractAsync(...)` возвращает `Completed`, если token не отменён. Значит, если диалог не запустился из-за занятого `DialogueCoordinator`, обработчик всё равно может посчитать команду выполненной. ([GitHub][3])
+
+Поэтому `IInteractable` должен возвращать результат:
+
+```csharp
+public interface IInteractable
+{
+    Vector3 InteractionPoint { get; }
+    float MaxRange { get; }
+
+    bool CanInteract(InteractionContext context);
+
+    UniTask<InteractionResult> InteractAsync(
+        InteractionContext context,
+        CancellationToken token);
+}
+```
+
+```csharp
+public enum InteractionStatus
+{
+    Completed,
+    Rejected,
+    Busy,
+    Cancelled
+}
+```
+
+А `InteractCommandHandler` переводит domain result в `CommandResult`:
+
+```csharp
+var result = await _interactable.InteractAsync(
+    context,
+    token);
+
+return result.Status switch
+{
+    InteractionStatus.Completed =>
+        CommandResult.Completed,
+
+    InteractionStatus.Busy =>
+        CommandResult.Busy,
+
+    InteractionStatus.Cancelled =>
+        CommandResult.Cancelled,
+
+    _ =>
+        CommandResult.Rejected
+};
+```
+
+Это особенно важно для диалогов, потому что у тебя уже есть `CommandResult.Busy`, но текущий `IInteractable` не позволяет передать его наверх. Сам `CommandResult` уже содержит подходящие статусы `Completed`, `Rejected`, `Busy`, `Cancelled`, `Failed` и другие. ([GitHub][4])
+
+Я бы не возвращал `CommandResult` непосредственно из `IInteractable`, потому что это связывает domain-интерфейс interaction с transport-моделью команд. Лучше отдельный `InteractionResult` и простой mapping в handler.
+
+---
+
+# Должен ли `InteractCommand` ждать окончания всего диалога
+
+Тут нужно явно выбрать семантику.
+
+## Вариант 1: команда ждёт весь диалог
+
+```text
+InteractCommand started
+    ↓
+Dialogue started
+    ↓
+Yarn running
+    ↓
+Dialogue completed
+    ↓
+InteractCommand = Completed
+```
+
+Плюсы:
+
+* естественный async lifecycle;
+* cancellation команды отменяет разговор;
+* никакого fire-and-forget;
+* легко писать последовательности команд.
+
+Минусы:
+
+* команда активна несколько минут;
+* если receiver блокирует другие команды, NPC может вообще перестать принимать новые запросы;
+* command pipeline начинает играть роль task scheduler.
+
+## Вариант 2: команда завершается после успешного открытия сессии
+
+```text
+InteractCommand started
+    ↓
+Dialogue session accepted
+    ↓
+InteractCommand = Completed
+
+DialogueSession продолжает жить отдельно
+    ↓
+Dialogue completed
+```
+
+Для твоего проекта я предпочитаю **второй вариант**.
+
+`Game.Commands` у тебя выглядит как маршрутизация намерений к world instance, а не как полноценный планировщик длительных actor tasks. `DialogueSession` должна владеть продолжительным процессом, блокировками, Yarn и завершением. Команда означает:
+
+> «NPC принял запрос начать разговор».
+
+А не:
+
+> «весь разговор окончательно закончился».
+
+Тогда `DialogueCoordinator` должен владеть фоновой session task, её cancellation и очисткой:
+
+```csharp
+public async UniTask<DialogueStartResult> TryStartAsync(
+    DialogueRequest request,
+    CancellationToken token)
+{
+    if (_activeSession != null)
+        return DialogueStartResult.Busy();
+
+    var session = CreateSession(request);
+
+    _activeSession = session;
+
+    try
+    {
+        await _participants.EnterAsync(session, token);
+        await _runtime.StartAsync(session, token);
+
+        ObserveSessionAsync(session).Forget();
+
+        return DialogueStartResult.Started(session.Id);
+    }
+    catch
+    {
+        await CleanupAsync(session);
+        throw;
+    }
+}
+```
+
+Но `.Forget()` здесь должен вызываться внутри владельца сессии, где исключения обрабатываются и есть scope cancellation token. Его нельзя оставлять в `DialogueInteraction`.
+
+Для первого рабочего варианта допустимо ждать весь диалог внутри команды. Но это должно быть осознанным временным решением, а не случайным следствием `await`.
+
+---
+
+# Команды внутри Yarn
+
+`Game.Commands` также полезен для **действий над world instances, инициированных сценарием**.
+
+Например Yarn-команда:
+
+```yarn
+<<face_participant>>
+<<move_speaker "market_gate">>
+<<start_combat>>
+```
+
+Yarn handler не должен сам искать `NavMeshAgent` или `ActorView`. Он переводит сценарную инструкцию в `Game.Commands`:
+
+```csharp
+await _commandManager.SendAsync(
+    session.SpeakerInstanceId,
+    new LookAtCommand(session.InitiatorInstanceId),
+    token);
+```
+
+То есть:
+
+```text
+Yarn command
+    ↓
+Yarn C# handler
+    ↓
+Game.Commands
+    ↓
+World actor receiver
+    ↓
+Navigation / look / interaction handler
+```
+
+Но не нужно проводить через `Game.Commands`:
+
+* отображение строки;
+* показ options;
+* продолжение Yarn node;
+* открытие dialogue UI;
+* закрытие presenter;
+* внутреннее состояние `DialogueSession`.
+
+Это внутренние операции dialogue runtime, а не команды world object.
+
+---
+
+## Итоговая схема
+
+```text
+                         ┌─────────────────────┐
+Player input ───────────→│   Game.Commands     │
+                         │ InteractCommand     │
+                         └──────────┬──────────┘
+                                    ↓
+                         NPC CommandReceiver
+                                    ↓
+                         InteractCommandHandler
+                                    ↓
+                         DialogueInteraction
+                                    ↓
+                         IDialogueStarter
+                                    ↓
+                         DialogueCoordinator
+                          ├── DialogueSession
+                          ├── participant leases
+                          ├── Yarn runtime
+                          └── cleanup
+
+Quest / AI / Cutscene
+        ↓
+StartDialogueCommand
+        ↓
+NPC CommandReceiver
+        ↓
+StartDialogueCommandHandler
+        ↓
+тот же IDialogueStarter
+```
+
+Поэтому мой скорректированный совет: **не обходить `Game.Commands`, но и не протаскивать через него весь внутренний lifecycle Yarn**. Команды доставляют намерение конкретному world object; диалоговая система после принятия намерения управляет сессией самостоятельно.
+
+[1]: https://github.com/apustovitovsky/rpg-microgame/blob/main/Assets/Game/Scripts/Commands/Runtime/CommandSenderService.cs "rpg-microgame/Assets/Game/Scripts/Commands/Runtime/CommandSenderService.cs at main · apustovitovsky/rpg-microgame · GitHub"
+[2]: https://raw.githubusercontent.com/apustovitovsky/rpg-microgame/main/Assets/Game/Scripts/Commands/Components/CommandReceiverEndpoint.cs "raw.githubusercontent.com"
+[3]: https://github.com/apustovitovsky/rpg-microgame/blob/main/Assets/Game/Scripts/Interaction/Runtime/InteractCommandHandler.cs "rpg-microgame/Assets/Game/Scripts/Interaction/Runtime/InteractCommandHandler.cs at main · apustovitovsky/rpg-microgame · GitHub"
+[4]: https://github.com/apustovitovsky/rpg-microgame/blob/main/Assets/Game/Scripts/Commands/Runtime/CommandResult.cs "rpg-microgame/Assets/Game/Scripts/Commands/Runtime/CommandResult.cs at main · apustovitovsky/rpg-microgame · GitHub"

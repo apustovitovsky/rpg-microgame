@@ -9,7 +9,7 @@ namespace Game.Dialogue
         DialogueEvaluationStatus Evaluate(
             Guid initiatorInstanceId);
 
-        UniTask<DialogueRunResult> StartDialogueAsync(
+        UniTask<DialogueStartResult> StartDialogueAsync(
             Guid initiatorInstanceId,
             CancellationToken cancellationToken);
     }

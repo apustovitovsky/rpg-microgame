@@ -5,7 +5,7 @@ namespace Game.Interaction
 {
     public interface IInteractionService
     {
-        UniTask<bool> TryInteractAsync(
+        UniTask<InteractionResult> TryInteractAsync(
             InteractionContext context,
             CancellationToken token);
     }

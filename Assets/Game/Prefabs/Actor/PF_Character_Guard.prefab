@@ -61,7 +61,7 @@ PrefabInstance:
     - target: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
         type: 3}
       propertyPath: m_Name
-      value: PF_CharacterGuard
+      value: PF_Character_Guard
       objectReference: {fileID: 0}
     - target: {fileID: 8538305375040021554, guid: ff419830c249fdb43a317a78c972d9bd,
         type: 3}
@@ -121,11 +121,33 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1468953328830763898}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6168442160149048454, guid: ff419830c249fdb43a317a78c972d9bd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3146951554576230186}
     - targetCorrespondingSourceObject: {fileID: 7820657305054395811, guid: ff419830c249fdb43a317a78c972d9bd,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2906818491364811643}
   m_SourcePrefab: {fileID: 100100000, guid: ff419830c249fdb43a317a78c972d9bd, type: 3}
+--- !u!1 &2299357710744336941 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6168442160149048454, guid: ff419830c249fdb43a317a78c972d9bd,
+    type: 3}
+  m_PrefabInstance: {fileID: 5364421375585064619}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3146951554576230186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2299357710744336941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c76d58f6a3df844bbba507e7c47fcd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Dialogue.Commands::Game.Dialogue.Commands.DialogueCommandModule
 --- !u!1 &2808784588306262792 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7820657305054395811, guid: ff419830c249fdb43a317a78c972d9bd,

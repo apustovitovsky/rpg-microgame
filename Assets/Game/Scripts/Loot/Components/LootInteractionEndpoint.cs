@@ -51,7 +51,8 @@ namespace Game.Loot
                 ?? throw new ArgumentNullException(nameof(sessions));
         }
 
-        public bool CanInteract(InteractionContext context)
+        public bool CanInteract(
+            InteractionContext context)
         {
             return _identity != null &&
                    _sessions != null &&
@@ -62,12 +63,15 @@ namespace Game.Loot
                    _identity.InstanceId;
         }
 
-        public UniTask InteractAsync(
+        public UniTask<InteractionResult> InteractAsync(
             InteractionContext context,
             CancellationToken token)
         {
             if (!CanInteract(context))
-                return UniTask.CompletedTask;
+            {
+                return UniTask.FromResult(
+                    InteractionResult.Rejected);
+            }
 
             token.ThrowIfCancellationRequested();
 
@@ -84,7 +88,8 @@ namespace Game.Loot
                     $"{openResult.Status}.",
                     this);
 
-                return UniTask.CompletedTask;
+                return UniTask.FromResult(
+                    InteractionResult.Rejected);
             }
 
             if (!_sessions.TryGet(
@@ -97,7 +102,8 @@ namespace Game.Loot
                     "Loot session is already open for another source.",
                     this);
 
-                return UniTask.CompletedTask;
+                return UniTask.FromResult(
+                    InteractionResult.Rejected);
             }
 
             if (!_sessions.TryGetSnapshot(
@@ -108,7 +114,8 @@ namespace Game.Loot
                     "Loot session snapshot is unavailable.",
                     this);
 
-                return UniTask.CompletedTask;
+                return UniTask.FromResult(
+                    InteractionResult.Rejected);
             }
 
             var takeResult = _sessions.TryTakeAll(
@@ -121,11 +128,14 @@ namespace Game.Loot
                     $"was not completed: {takeResult}.",
                     this);
 
-                return UniTask.CompletedTask;
+                return UniTask.FromResult(
+                    InteractionResult.Rejected);
             }
 
             LogCollected(snapshot);
-            return UniTask.CompletedTask;
+
+            return UniTask.FromResult(
+                InteractionResult.Completed);
         }
 
         private void LogCollected(

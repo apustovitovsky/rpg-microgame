@@ -10,6 +10,7 @@ namespace Game.Player
         InputActions_Generated.IUIActions,
         IControlInput,
         IPlayerActionInput,
+        IPlayerUiInput,
         IDisposable
     {
         private readonly InputActions_Generated _input;
@@ -66,9 +67,13 @@ namespace Game.Player
         }
 
         public Vector2 LookDelta { get; set; }
+
         public Vector2 MoveComposite { get; set; }
+
         public float MovementInputDuration { get; set; }
+
         public bool MovementInputDetected { get; set; }
+
         public event Action OnAimActivated;
         public event Action OnAimDeactivated;
         public event Action OnCrouchActivated;
@@ -78,7 +83,6 @@ namespace Game.Player
         public event Action OnSprintActivated;
         public event Action OnSprintDeactivated;
         public event Action OnWalkToggled;
-
 
         public void OnLook(InputAction.CallbackContext context)
         {
@@ -166,7 +170,9 @@ namespace Game.Player
         public void OnInteract(InputAction.CallbackContext context)
         {
             if (!context.performed)
+            {
                 return;
+            }
 
             InteractPerformed?.Invoke();
         }
@@ -178,7 +184,9 @@ namespace Game.Player
         public void OnNext(InputAction.CallbackContext context)
         {
             if (!context.performed)
+            {
                 return;
+            }
 
             PossessPerformed?.Invoke();
         }
@@ -202,7 +210,9 @@ namespace Game.Player
         public void OnToggleJournal(InputAction.CallbackContext context)
         {
             if (!context.performed)
+            {
                 return;
+            }
 
             ToggleJournalPerformed?.Invoke();
         }
@@ -214,7 +224,9 @@ namespace Game.Player
         public void OnSubmit(InputAction.CallbackContext context)
         {
             if (!context.performed)
+            {
                 return;
+            }
 
             UiSubmitPerformed?.Invoke();
         }
@@ -222,7 +234,9 @@ namespace Game.Player
         public void OnCancel(InputAction.CallbackContext context)
         {
             if (!context.performed)
+            {
                 return;
+            }
 
             UiCancelPerformed?.Invoke();
         }
@@ -259,5 +273,4 @@ namespace Game.Player
         {
         }
     }
-
 }

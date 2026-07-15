@@ -29,7 +29,7 @@ namespace Game.Interaction
                 expectedValue);
         }
 
-        public async UniTask<bool> TryInteractAsync(
+        public async UniTask<InteractionResult> TryInteractAsync(
             InteractionContext context,
             CancellationToken token)
         {
@@ -38,14 +38,14 @@ namespace Game.Interaction
                 context.InteractorInstanceId ==
                 context.TargetInstanceId)
             {
-                return false;
+                return InteractionResult.Rejected;
             }
 
             if (!_interactables.TryGet(
                     context.TargetInstanceId,
                     out var interactable))
             {
-                return false;
+                return InteractionResult.Rejected;
             }
 
             var distance = Vector3.Distance(
@@ -55,18 +55,18 @@ namespace Game.Interaction
             if (distance > interactable.MaxRange ||
                 !interactable.CanInteract(context))
             {
-                return false;
+                return InteractionResult.Rejected;
             }
 
             token.ThrowIfCancellationRequested();
 
-            await interactable.InteractAsync(
+            var result = await interactable.InteractAsync(
                 context,
                 token);
 
             token.ThrowIfCancellationRequested();
 
-            return true;
+            return result;
         }
     }
 }
