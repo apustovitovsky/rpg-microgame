@@ -1,4 +1,5 @@
 using System;
+using Game.Item;
 
 namespace Game.Inventory
 {
@@ -31,7 +32,7 @@ namespace Game.Inventory
             if (count > sourceEntry.Count)
                 return InventoryTransferResult.InsufficientAmount;
 
-            var requestedStack = new InventoryStack(
+            var requestedStack = new ItemStack(
                 sourceEntry.Instance,
                 count);
 

@@ -1,11 +1,10 @@
 using System;
-using Game.Item;
 
-namespace Game.Inventory
+namespace Game.Item
 {
-    public readonly struct InventoryStack
+    public readonly struct ItemStack
     {
-        internal InventoryStack(
+        public ItemStack(
             ItemInstance instance,
             int count)
         {

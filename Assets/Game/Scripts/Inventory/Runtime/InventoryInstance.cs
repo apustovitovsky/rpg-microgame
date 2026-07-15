@@ -120,7 +120,7 @@ namespace Game.Inventory
         public bool TryExtract(
             Guid instanceId,
             int count,
-            out InventoryStack stack)
+            out ItemStack stack)
         {
             stack = default;
 
@@ -141,7 +141,7 @@ namespace Game.Inventory
                 {
                     _entries.RemoveAt(index);
 
-                    stack = new InventoryStack(
+                    stack = new ItemStack(
                         entry.Instance,
                         count);
 
@@ -150,7 +150,7 @@ namespace Game.Inventory
 
                 entry.Remove(count);
 
-                stack = new InventoryStack(
+                stack = new ItemStack(
                     entry.Definition.CreateInstance(),
                     count);
 
@@ -161,7 +161,7 @@ namespace Game.Inventory
         }
 
         public bool CanInsert(
-            InventoryStack stack)
+            ItemStack stack)
         {
             return stack.Instance != null &&
                    stack.Count > 0 &&
@@ -172,7 +172,7 @@ namespace Game.Inventory
         }
 
         public bool TryInsert(
-            InventoryStack stack)
+            ItemStack stack)
         {
             if (!CanInsert(stack))
                 return false;
