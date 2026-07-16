@@ -1,6 +1,3 @@
-using Etheria.Core.DI;
-using Etheria.Game.World;
-using Etheria.Navigation;
 using Game.Core;
 using UnityEngine;
 using VContainer;

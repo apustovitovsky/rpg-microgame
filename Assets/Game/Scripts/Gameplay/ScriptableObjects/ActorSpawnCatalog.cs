@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Etheria.Game.World;
+using Game.Navigation;
 using UnityEngine;
 
 namespace Game.Gameplay
@@ -11,6 +11,7 @@ namespace Game.Gameplay
     public sealed class ActorSpawnCatalog : ScriptableObject
     {
         [SerializeField] private ActorEntry _player = new();
+
         [SerializeField]
         private ActorEntry[] _actors =
             Array.Empty<ActorEntry>();

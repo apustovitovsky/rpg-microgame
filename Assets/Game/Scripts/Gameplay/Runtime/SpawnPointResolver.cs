@@ -1,4 +1,4 @@
-using Etheria.Game.World;
+using Game.Navigation;
 
 namespace Game.Gameplay
 {

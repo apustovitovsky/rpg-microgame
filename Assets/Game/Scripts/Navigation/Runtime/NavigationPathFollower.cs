@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Etheria.Game.World;
 using Game.Actor;
 using UnityEngine;
 
@@ -139,7 +138,7 @@ namespace Game.Navigation
                 targetNode.Position,
                 cancellationToken);
 
-            Vector3 facingDirection =
+            var facingDirection =
                 targetNode.Rotation * Vector3.forward;
 
             await navigation.FaceDirectionAsync(

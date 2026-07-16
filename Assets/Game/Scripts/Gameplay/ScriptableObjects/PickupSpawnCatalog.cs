@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Etheria.Game.World;
+using Game.Navigation;
 using UnityEngine;
 
 namespace Game.Gameplay
@@ -30,6 +30,7 @@ namespace Game.Gameplay
         {
             [SerializeField] private string _definitionId;
             [SerializeField] private string _locationId;
+
             [SerializeField]
             private string _anchorKey =
                 NavigationAnchorKeys.Default;

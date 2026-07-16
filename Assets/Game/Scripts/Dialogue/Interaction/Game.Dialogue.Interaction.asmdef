@@ -3,11 +3,11 @@
     "rootNamespace": "",
     "references": [
         "VContainer",
+        "UniTask",
         "Game.Core",
         "Game.Commands",
-        "Game.Dialogue",
         "Game.Interaction",
-        "UniTask"
+        "Game.Dialogue"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

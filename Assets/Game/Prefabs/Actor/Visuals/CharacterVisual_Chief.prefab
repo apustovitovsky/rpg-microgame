@@ -1531,8 +1531,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7278032139098885113}
-  - component: {fileID: 7336982276970346754}
   - component: {fileID: -924194920353428513}
+  - component: {fileID: 7336982276970346754}
   m_Layer: 0
   m_Name: CharacterVisual_Chief
   m_TagString: Untagged
@@ -1556,6 +1556,28 @@ Transform:
   - {fileID: 974973002029665485}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-924194920353428513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5376268574155732705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cb05d71cb807d2478d6f36cc2a8f67d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorVisual
+  _animator: {fileID: 8367858099511640880}
+  _head: {fileID: 7380833936151466447}
+  _rightHand: {fileID: 319988696403690617}
+  _leftHand: {fileID: 3760055803305645214}
+  _renderers:
+  - {fileID: 4627539148843022241}
+  _blackMaterial: {fileID: 2100000, guid: fae9a746025d20b4c89e098e3ec38c7a, type: 2}
+  _brownMaterial: {fileID: 2100000, guid: 91e78aa37fa1e8d418f5e38b7d268c7b, type: 2}
+  _whiteMaterial: {fileID: 2100000, guid: 839690d6b6bc966419607805a17f31c7, type: 2}
+  _color: 0
 --- !u!114 &7336982276970346754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1609,28 +1631,6 @@ MonoBehaviour:
   - _slot: 12
     _object: {fileID: 1745118437501696903}
     _visible: 0
---- !u!114 &-924194920353428513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5376268574155732705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cb05d71cb807d2478d6f36cc2a8f67d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorVisual
-  _animator: {fileID: 8367858099511640880}
-  _head: {fileID: 7380833936151466447}
-  _rightHand: {fileID: 319988696403690617}
-  _leftHand: {fileID: 3760055803305645214}
-  _renderers:
-  - {fileID: 4627539148843022241}
-  _blackMaterial: {fileID: 2100000, guid: fae9a746025d20b4c89e098e3ec38c7a, type: 2}
-  _brownMaterial: {fileID: 2100000, guid: 91e78aa37fa1e8d418f5e38b7d268c7b, type: 2}
-  _whiteMaterial: {fileID: 2100000, guid: 839690d6b6bc966419607805a17f31c7, type: 2}
-  _color: 0
 --- !u!1 &5654226090742322003
 GameObject:
   m_ObjectHideFlags: 0

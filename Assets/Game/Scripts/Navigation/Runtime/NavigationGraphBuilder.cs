@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Etheria.Game.World;
 using UnityEngine;
 
-namespace Etheria.Navigation
+namespace Game.Navigation
 {
     public static class NavigationGraphBuilder
     {
@@ -13,8 +12,11 @@ namespace Etheria.Navigation
             if (waypoints == null)
                 throw new ArgumentNullException(nameof(waypoints));
 
-            var waypointById = new Dictionary<string, NavigationWaypoint>();
-            var nodesById = new Dictionary<string, NavigationNode>();
+            var waypointsById =
+                new Dictionary<string, NavigationWaypoint>();
+
+            var nodesById =
+                new Dictionary<string, NavigationNode>();
 
             foreach (var waypoint in waypoints)
             {
@@ -26,10 +28,11 @@ namespace Etheria.Navigation
                 if (string.IsNullOrWhiteSpace(id))
                     continue;
 
-                if (waypointById.ContainsKey(id))
-                    throw new InvalidOperationException($"Duplicate navigation waypoint id: {id}");
-
-                waypointById.Add(id, waypoint);
+                if (!waypointsById.TryAdd(id, waypoint))
+                {
+                    throw new InvalidOperationException(
+                        $"Duplicate navigation waypoint id: '{id}'.");
+                }
 
                 nodesById.Add(
                     id,
@@ -41,41 +44,49 @@ namespace Etheria.Navigation
                         waypoint.Flags));
             }
 
-            var edgesByNodeId = new Dictionary<string, IReadOnlyList<NavigationEdge>>();
+            var edgesByNodeId =
+                new Dictionary<
+                    string,
+                    IReadOnlyList<NavigationEdge>>();
 
-            foreach (var pair in waypointById)
+            foreach (var pair in waypointsById)
             {
-                var fromId = pair.Key;
+                var fromNodeId = pair.Key;
                 var fromWaypoint = pair.Value;
+
                 var edges = new List<NavigationEdge>();
 
                 foreach (var neighbor in fromWaypoint.Neighbors)
                 {
-                    if (neighbor == null || neighbor.Waypoint == null)
+                    if (neighbor == null ||
+                        neighbor.Waypoint == null)
+                    {
                         continue;
+                    }
 
-                    var toId = neighbor.Waypoint.Id?.Trim();
+                    var toNodeId =
+                        neighbor.Waypoint.Id?.Trim();
 
-                    if (string.IsNullOrWhiteSpace(toId))
+                    if (string.IsNullOrWhiteSpace(toNodeId) ||
+                        !waypointsById.ContainsKey(toNodeId))
+                    {
                         continue;
-
-                    if (!waypointById.ContainsKey(toId))
-                        continue;
+                    }
 
                     var cost = Vector3.Distance(
-                                fromWaypoint.Position,
-                                neighbor.Waypoint.Position);
+                        fromWaypoint.Position,
+                        neighbor.Waypoint.Position);
 
                     edges.Add(
                         new NavigationEdge(
-                            fromId,
-                            toId,
+                            fromNodeId,
+                            toNodeId,
                             cost,
                             neighbor.Flags));
                 }
 
                 edgesByNodeId.Add(
-                    fromId,
+                    fromNodeId,
                     edges);
             }
 

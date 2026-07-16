@@ -4,9 +4,6 @@
     "references": [
         "VContainer",
         "Game.Core",
-        "Etheria.Game",
-        "Etheria.Navigation",
-        "Etheria.Core",
         "UniTask",
         "Game.Actor"
     ],

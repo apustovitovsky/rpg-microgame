@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using Etheria.Game.World;
 
-namespace Etheria.Navigation
+namespace Game.Navigation
 {
     public sealed class NavigationLocationResolver :
         INavigationLocationResolver
     {
-        private readonly Dictionary<string, NavigationLocation> _locationsById = new(
-            StringComparer.Ordinal);
+        private readonly Dictionary<string, NavigationLocation>
+            _locationsById =
+                new(StringComparer.Ordinal);
 
         public NavigationLocationResolver(
             IReadOnlyList<NavigationLocation> locations)
@@ -27,11 +27,13 @@ namespace Etheria.Navigation
                     continue;
 
                 if (!_locationsById.TryAdd(id, location))
+                {
                     throw new InvalidOperationException(
                         $"Duplicate navigation location id: '{id}'.");
+                }
             }
         }
-        
+
         public bool TryResolveDefaultAnchorNodeId(
             string locationId,
             out string nodeId)
@@ -41,6 +43,7 @@ namespace Etheria.Navigation
                 NavigationAnchorKeys.Default,
                 out nodeId);
         }
+
         public bool TryResolveAnchorNodeId(
             string locationId,
             string anchorKey,
@@ -53,21 +56,27 @@ namespace Etheria.Navigation
 
             if (string.IsNullOrWhiteSpace(locationId) ||
                 string.IsNullOrWhiteSpace(anchorKey))
+            {
                 return false;
+            }
 
-            if (!_locationsById.TryGetValue(locationId, out var location))
+            if (!_locationsById.TryGetValue(
+                    locationId,
+                    out var location))
+            {
                 return false;
+            }
 
             foreach (var anchor in location.Anchors)
             {
-                if (anchor == null)
-                    continue;
-
-                if (!string.Equals(
+                if (anchor == null ||
+                    !string.Equals(
                         anchor.Key?.Trim(),
                         anchorKey,
                         StringComparison.Ordinal))
+                {
                     continue;
+                }
 
                 nodeId = anchor.NodeId?.Trim() ?? string.Empty;
 

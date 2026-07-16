@@ -2,8 +2,8 @@
     "name": "Game.Gameplay",
     "rootNamespace": "",
     "references": [
-        "VContainer",
         "UniTask",
+        "VContainer",
         "Game.Core",
         "Game.UI",
         "Game.World",
@@ -24,9 +24,6 @@
         "Game.Commands",
         "Unity.Cinemachine",
         "YarnSpinner.Unity",
-        "Etheria.Game",
-        "Etheria.Navigation",
-        "Etheria.Core",
         "Unity.InputSystem"
     ],
     "includePlatforms": [],

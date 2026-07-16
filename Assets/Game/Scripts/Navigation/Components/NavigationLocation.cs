@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Etheria.Navigation
+namespace Game.Navigation
 {
-    public sealed class NavigationLocation : MonoBehaviour
+    public sealed class NavigationLocation :
+        MonoBehaviour
     {
         [SerializeField] private string _id;
-        [SerializeField] private List<Anchor> _anchors = new();
+
+        [SerializeField]
+        private List<Anchor> _anchors = new();
 
         public string Id =>
             _id;
@@ -27,7 +30,9 @@ namespace Etheria.Navigation
         public sealed class Anchor
         {
             [SerializeField] private string _key;
-            [SerializeField] private NavigationWaypoint _waypoint;
+
+            [SerializeField]
+            private NavigationWaypoint _waypoint;
 
             public string Key =>
                 _key;

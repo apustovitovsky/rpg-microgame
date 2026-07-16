@@ -2956,8 +2956,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5492176811010195676}
-  - component: {fileID: 3517624241429576052}
-  - component: {fileID: 3015690145316773228}
+  - component: {fileID: -4707252545172557170}
+  - component: {fileID: -4388584003882879301}
   m_Layer: 0
   m_Name: CharacterVisual_Warrior_01
   m_TagString: Untagged
@@ -2981,7 +2981,7 @@ Transform:
   - {fileID: 2912641971843479142}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3517624241429576052
+--- !u!114 &-4707252545172557170
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2990,20 +2990,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 6008508126832906005}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f6659cc09424a94d90f4d002ec7eb2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 8cb05d71cb807d2478d6f36cc2a8f67d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Character.CharacterVisual
-  _animator: {fileID: 2912641971833747560}
-  _head: {fileID: 2912641971843370262}
-  _rightHand: {fileID: 2912641971843497230}
-  _leftHand: {fileID: 2912641971843367592}
-  _renderers:
-  - {fileID: 2912641971837746528}
-  _blackMaterial: {fileID: 2100000, guid: fae9a746025d20b4c89e098e3ec38c7a, type: 2}
-  _brownMaterial: {fileID: 2100000, guid: 91e78aa37fa1e8d418f5e38b7d268c7b, type: 2}
-  _whiteMaterial: {fileID: 2100000, guid: 839690d6b6bc966419607805a17f31c7, type: 2}
+  m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorVisual
+  _animator: {fileID: 0}
+  _head: {fileID: 0}
+  _rightHand: {fileID: 0}
+  _leftHand: {fileID: 0}
+  _renderers: []
+  _blackMaterial: {fileID: 0}
+  _brownMaterial: {fileID: 0}
+  _whiteMaterial: {fileID: 0}
   _color: 0
---- !u!114 &3015690145316773228
+--- !u!114 &-4388584003882879301
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3012,47 +3011,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 6008508126832906005}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 040f52bfeea305d49941a17c4705e03c, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ebcb3aecf5fa0d4e96300115ae64f5c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Etheria.Features.Actor::Etheria.Features.Character.CharacterAppearance
+  m_EditorClassIdentifier: Game.Actor::Game.Actor.ActorCosmetic
   _preset: {fileID: 0}
-  _cosmetics:
-  - _slot: 0
-    _object: {fileID: 2912641971843194414}
-    _visible: 0
-  - _slot: 1
-    _object: {fileID: 2912641971843206214}
-    _visible: 0
-  - _slot: 2
-    _object: {fileID: 2912641971843017142}
-    _visible: 0
-  - _slot: 3
-    _object: {fileID: 2912641971843011034}
-    _visible: 0
-  - _slot: 4
-    _object: {fileID: 2912641971843124150}
-    _visible: 0
-  - _slot: 5
-    _object: {fileID: 2912641971843233198}
-    _visible: 0
-  - _slot: 6
-    _object: {fileID: 2912641971843225080}
-    _visible: 0
-  - _slot: 7
-    _object: {fileID: 2912641971843214936}
-    _visible: 0
-  - _slot: 8
-    _object: {fileID: 2912641971843006742}
-    _visible: 0
-  - _slot: 9
-    _object: {fileID: 2912641971843033472}
-    _visible: 0
-  - _slot: 10
-    _object: {fileID: 2912641971843018410}
-    _visible: 0
-  - _slot: 11
-    _object: {fileID: 2912641971843218428}
-    _visible: 0
-  - _slot: 12
-    _object: {fileID: 2912641971843193452}
-    _visible: 0
+  _cosmetics: []

@@ -1,8 +1,8 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Etheria.Game.World;
 using Game.Actor;
+using Game.Navigation;
 using Game.Pickup;
 using Game.Player;
 using Game.World;

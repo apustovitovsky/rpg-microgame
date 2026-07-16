@@ -1,18 +1,15 @@
-using Etheria.Game.World;
-using UnityEngine;
-using System.Collections.Generic;
 using System;
-using Etheria.Core.Helpers;
-
-
+using System.Collections.Generic;
+using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-namespace Etheria.Navigation
+namespace Game.Navigation
 {
-    public sealed class NavigationWaypoint : MonoBehaviour
+    public sealed class NavigationWaypoint :
+        MonoBehaviour
     {
         [SerializeField] private string _id;
 
@@ -21,12 +18,12 @@ namespace Etheria.Navigation
         private float _radius = 0.3f;
 
         [SerializeField] private NavigationFlag _flags;
-        [SerializeField] private List<Neighbor> _neighbors = new();
 
-        public IReadOnlyList<Neighbor> Neighbors =>
-            _neighbors;
+        [SerializeField]
+        private List<Neighbor> _neighbors = new();
 
-        public string Id => _id;
+        public string Id =>
+            _id;
 
         public NavigationFlag Flags =>
             _flags;
@@ -39,6 +36,9 @@ namespace Etheria.Navigation
 
         public float Radius =>
             _radius;
+
+        public IReadOnlyList<Neighbor> Neighbors =>
+            _neighbors;
 
         private void OnValidate()
         {
@@ -54,8 +54,11 @@ namespace Etheria.Navigation
         [Serializable]
         public sealed class Neighbor
         {
-            [SerializeField] private NavigationWaypoint _waypoint;
-            [SerializeField] private NavigationFlag _flags;
+            [SerializeField]
+            private NavigationWaypoint _waypoint;
+
+            [SerializeField]
+            private NavigationFlag _flags;
 
             public NavigationWaypoint Waypoint =>
                 _waypoint;
@@ -96,16 +99,23 @@ namespace Etheria.Navigation
 
             foreach (var neighbor in _neighbors)
             {
-                if (neighbor == null || neighbor.Waypoint == null)
+                if (neighbor == null ||
+                    neighbor.Waypoint == null)
+                {
                     continue;
+                }
 
                 var waypoint = neighbor.Waypoint;
 
                 if (waypoint == this)
                     continue;
 
-                DrawConnectionTo(waypoint, NeighborColor);
-                waypoint.DrawReferenceGizmos(NeighborColor);
+                DrawConnectionTo(
+                    waypoint,
+                    NeighborColor);
+
+                waypoint.DrawReferenceGizmos(
+                    NeighborColor);
             }
         }
 
@@ -124,8 +134,12 @@ namespace Etheria.Navigation
             Color color)
         {
             var groundPosition = transform.position;
-            var labelPosition = groundPosition + Vector3.up * LabelHeight;
-            var lineEndPosition = labelPosition - Vector3.up * LineEndOffset;
+
+            var labelPosition =
+                groundPosition + Vector3.up * LabelHeight;
+
+            var lineEndPosition =
+                labelPosition - Vector3.up * LineEndOffset;
 
             DrawDisc(ReachColor, _radius);
 
@@ -156,6 +170,7 @@ namespace Etheria.Navigation
             Color color)
         {
             var origin = transform.position;
+
             var target =
                 origin + transform.forward * _radius;
 
@@ -174,7 +189,8 @@ namespace Etheria.Navigation
                 ? name
                 : _id;
 
-            var style = new GUIStyle(EditorStyles.boldLabel)
+            var style = new GUIStyle(
+                EditorStyles.boldLabel)
             {
                 alignment = TextAnchor.MiddleCenter,
                 normal =
