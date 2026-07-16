@@ -1,26 +1,20 @@
-using System;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 
 namespace Game.Commands
 {
-    public interface ICommandHandler
-    {
-        Type CommandType { get; }
-
-        UniTask<CommandResult> HandleAsync(
-            ICommand command,
-            Guid targetInstanceId,
-            CancellationToken token);
-    }
-
-    public interface ICommandHandler<TCommand> :
-        ICommandHandler
+    public interface ICommandHandler<in TCommand>
         where TCommand : ICommand
     {
-        UniTask<CommandResult> HandleAsync(
+        UniTask HandleAsync(
             TCommand command,
-            Guid targetInstanceId,
-            CancellationToken token);
+            CommandContext context);
+    }
+
+    public interface ICommandHandler<in TCommand, TResult>
+        where TCommand : ICommand<TResult>
+    {
+        UniTask<TResult> HandleAsync(
+            TCommand command,
+            CommandContext context);
     }
 }

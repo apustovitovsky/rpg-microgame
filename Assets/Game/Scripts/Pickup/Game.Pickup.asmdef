@@ -4,6 +4,7 @@
     "references": [
         "VContainer",
         "Game.Core",
+        "Game.Commands",
         "Game.World",
         "Game.Item",
         "Game.Targeting",

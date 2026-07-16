@@ -87,14 +87,10 @@ namespace Game.Dialogue
             DialogueSession session,
             CancellationToken cancellationToken)
         {
-            IDialogueParticipantLease participantLease = null;
+            IUniTaskAsyncDisposable participantLease = null;
 
             try
             {
-                await UniTask.Yield(
-                    PlayerLoopTiming.Update,
-                    cancellationToken);
-
                 participantLease = await _participants.EnterAsync(
                     session,
                     cancellationToken);

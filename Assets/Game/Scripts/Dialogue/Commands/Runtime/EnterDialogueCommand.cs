@@ -1,10 +1,11 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Game.Commands;
 
 namespace Game.Dialogue.Commands
 {
     public readonly struct EnterDialogueCommand :
-        ICommand
+        ICommand<IUniTaskAsyncDisposable>
     {
         public EnterDialogueCommand(
             Guid sessionId,

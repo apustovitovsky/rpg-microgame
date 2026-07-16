@@ -1,3 +1,4 @@
+using Game.Commands;
 using Game.Core;
 using UnityEngine;
 using VContainer;
@@ -12,9 +13,13 @@ namespace Game.Dialogue.Commands
         public void Install(
             IContainerBuilder builder)
         {
-            builder.Register<StartDialogueCommandHandler>(
-                    Lifetime.Scoped)
-                .AsImplementedInterfaces();
+            builder.RegisterCommandRoutes<
+                DialogueStartRoutes>();
+
+            builder.RegisterCommandRoute<
+                DialogueStartRoutes,
+                StartDialogueCommand,
+                DialogueStartResult>();
         }
     }
 }

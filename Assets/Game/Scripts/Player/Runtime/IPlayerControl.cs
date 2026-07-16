@@ -1,12 +1,17 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Commands;
 using Game.Targeting;
 using UnityEngine;
 
 namespace Game.Player
 {
+    public enum PossessionResult
+    {
+        Rejected = 0,
+        Completed = 1,
+    }
+
     public interface IPlayerControl
     {
         Guid ControlledInstanceId { get; }
@@ -21,9 +26,9 @@ namespace Game.Player
 
         event Action CurrentTargetChanged;
 
-        UniTask<CommandResult> PossessAsync(
+        UniTask<PossessionResult> PossessAsync(
             Guid targetInstanceId,
-            CancellationToken token);
+            CancellationToken cancellationToken);
 
         void Release();
     }

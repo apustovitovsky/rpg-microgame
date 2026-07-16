@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Game.Interaction
 {
     public readonly struct InteractCommand :
-        ICommand
+        ICommand<InteractionResult>
     {
         public InteractCommand(
             Guid interactorInstanceId,

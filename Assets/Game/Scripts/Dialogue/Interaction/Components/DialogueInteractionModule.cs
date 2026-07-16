@@ -1,3 +1,4 @@
+using Game.Commands;
 using Game.Core;
 using Game.Interaction;
 using UnityEngine;
@@ -30,9 +31,13 @@ namespace Game.Dialogue.Interaction
             builder.Register<DialogueInteraction>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
-            builder.Register<InteractCommandHandler>(
-                    Lifetime.Scoped)
-                .AsImplementedInterfaces();
+            builder.RegisterCommandRoutes<
+                InteractionRoutes>();
+
+            builder.RegisterCommandRoute<
+                InteractionRoutes,
+                InteractCommand,
+                InteractionResult>();
         }
     }
 }

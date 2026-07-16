@@ -17,20 +17,19 @@ namespace Game.Dialogue.Actor
                 ?? throw new ArgumentNullException(nameof(navigation));
         }
 
-        public UniTask<IDialogueParticipantLease> EnterAsync(
+        public UniTask<IUniTaskAsyncDisposable> EnterAsync(
             DialogueParticipantContext context,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var pause = _navigation.AcquirePause();
-
-            return UniTask.FromResult<IDialogueParticipantLease>(
-                new NavigationPauseLease(pause));
+            return UniTask.FromResult<IUniTaskAsyncDisposable>(
+                new NavigationPauseLease(
+                    _navigation.AcquirePause()));
         }
 
         private sealed class NavigationPauseLease :
-            IDialogueParticipantLease
+            IUniTaskAsyncDisposable
         {
             private IDisposable _pause;
 

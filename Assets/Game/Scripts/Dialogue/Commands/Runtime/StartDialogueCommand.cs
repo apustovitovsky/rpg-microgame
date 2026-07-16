@@ -3,9 +3,8 @@ using Game.Commands;
 
 namespace Game.Dialogue.Commands
 {
-    // TODO: Register a handler when AI and scripted dialogue starts are added.
     public readonly struct StartDialogueCommand :
-        ICommand
+        ICommand<DialogueStartResult>
     {
         public StartDialogueCommand(
             Guid initiatorInstanceId)

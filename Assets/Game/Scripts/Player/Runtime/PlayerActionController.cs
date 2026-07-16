@@ -13,14 +13,14 @@ namespace Game.Player
     {
         private readonly IPlayerActionInput _input;
         private readonly IPlayerControl _control;
-        private readonly ICommandDispatch _commands;
+        private readonly ICommandBus _commands;
         private readonly CancellationTokenSource _lifetime =
             new();
 
         public PlayerActionController(
             IPlayerActionInput input,
             IPlayerControl control,
-            ICommandDispatch commands)
+            ICommandBus commands)
         {
             _input = input;
             _control = control;
@@ -66,13 +66,11 @@ namespace Game.Player
                 return;
             }
 
-            var command = new InteractCommand(
-                interactorInstanceId,
-                _control.InteractionOrigin);
-
-            await _commands.SendAsync(
+            await _commands.RequestAsync(
                 target.InstanceId,
-                command,
+                new InteractCommand(
+                    interactorInstanceId,
+                    _control.InteractionOrigin),
                 _lifetime.Token);
         }
 

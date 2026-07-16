@@ -2,74 +2,53 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Commands;
+using Game.Core;
 
 namespace Game.Dialogue.Commands
 {
     public sealed class DialogueParticipantCoordinator :
         IDialogueParticipantCoordinator
     {
-        private readonly ICommandDispatch _commands;
+        private readonly ICommandBus _commands;
 
         public DialogueParticipantCoordinator(
-            ICommandDispatch commands)
+            ICommandBus commands)
         {
             _commands = commands
                 ?? throw new ArgumentNullException(nameof(commands));
         }
 
-        public async UniTask<IDialogueParticipantLease> EnterAsync(
+        public async UniTask<IUniTaskAsyncDisposable> EnterAsync(
             DialogueSession session,
             CancellationToken cancellationToken)
         {
-            var initiatorResult = await _commands.SendAsync(
-                session.InitiatorInstanceId,
-                new EnterDialogueCommand(
-                    session.Id,
-                    session.SpeakerInstanceId),
-                cancellationToken);
-
-            EnsureEntered(
-                session.InitiatorInstanceId,
-                initiatorResult);
+            var initiatorLease =
+                await _commands.RequestRequiredAsync(
+                    session.InitiatorInstanceId,
+                    new EnterDialogueCommand(
+                        session.Id,
+                        session.SpeakerInstanceId),
+                    cancellationToken);
 
             try
             {
-                var speakerResult = await _commands.SendAsync(
-                    session.SpeakerInstanceId,
-                    new EnterDialogueCommand(
-                        session.Id,
-                        session.InitiatorInstanceId),
-                    cancellationToken);
+                var speakerLease =
+                    await _commands.RequestRequiredAsync(
+                        session.SpeakerInstanceId,
+                        new EnterDialogueCommand(
+                            session.Id,
+                            session.InitiatorInstanceId),
+                        cancellationToken);
 
-                EnsureEntered(
-                    session.SpeakerInstanceId,
-                    speakerResult);
+                return AsyncLeaseGroup.Combine(
+                    initiatorLease,
+                    speakerLease);
             }
             catch
             {
-                await _commands.SendAsync(
-                    session.InitiatorInstanceId,
-                    new ExitDialogueCommand(session.Id),
-                    CancellationToken.None);
-
+                await initiatorLease.DisposeAsync();
                 throw;
             }
-
-            return new DialogueParticipantLease(
-                _commands,
-                session);
-        }
-
-        private static void EnsureEntered(
-            Guid participantInstanceId,
-            CommandResult result)
-        {
-            if (result == CommandResult.Completed)
-                return;
-
-            throw new InvalidOperationException(
-                $"Dialogue participant '{participantInstanceId}' " +
-                $"could not enter dialogue: {result}.");
         }
     }
 }

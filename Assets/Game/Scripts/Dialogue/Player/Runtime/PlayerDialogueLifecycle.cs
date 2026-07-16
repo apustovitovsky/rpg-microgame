@@ -28,7 +28,7 @@ namespace Game.Dialogue.Player
                 ?? throw new ArgumentNullException(nameof(input));
         }
 
-        public UniTask<IDialogueParticipantLease> EnterAsync(
+        public UniTask<IUniTaskAsyncDisposable> EnterAsync(
             DialogueParticipantContext context,
             CancellationToken cancellationToken)
         {
@@ -36,17 +36,17 @@ namespace Game.Dialogue.Player
 
             if (_control.ControlledInstanceId != _identity.InstanceId)
             {
-                return UniTask.FromResult<IDialogueParticipantLease>(
-                    EmptyDialogueParticipantLease.Instance);
+                return UniTask.FromResult<IUniTaskAsyncDisposable>(
+                    EmptyLease.Instance);
             }
 
-            return UniTask.FromResult<IDialogueParticipantLease>(
+            return UniTask.FromResult<IUniTaskAsyncDisposable>(
                 new PlayerUiInputLease(
                     _input.AcquireUiInput()));
         }
 
         private sealed class PlayerUiInputLease :
-            IDialogueParticipantLease
+            IUniTaskAsyncDisposable
         {
             private IDisposable _inputLease;
 
@@ -69,14 +69,13 @@ namespace Game.Dialogue.Player
             }
         }
 
-        private sealed class EmptyDialogueParticipantLease :
-            IDialogueParticipantLease
+        private sealed class EmptyLease :
+            IUniTaskAsyncDisposable
         {
-            public static readonly
-                EmptyDialogueParticipantLease Instance =
-                    new EmptyDialogueParticipantLease();
+            public static readonly EmptyLease Instance =
+                new EmptyLease();
 
-            private EmptyDialogueParticipantLease()
+            private EmptyLease()
             {
             }
 

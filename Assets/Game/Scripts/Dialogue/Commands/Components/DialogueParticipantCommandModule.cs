@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using Game.Commands;
 using Game.Core;
 using UnityEngine;
 using VContainer;
@@ -12,16 +14,13 @@ namespace Game.Dialogue.Commands
         public void Install(
             IContainerBuilder builder)
         {
-            builder.Register<DialogueParticipantSessionStore>(
-                Lifetime.Scoped);
+            builder.RegisterCommandRoutes<
+                DialogueParticipantRoutes>();
 
-            builder.Register<EnterDialogueCommandHandler>(
-                    Lifetime.Scoped)
-                .AsImplementedInterfaces();
-
-            builder.Register<ExitDialogueCommandHandler>(
-                    Lifetime.Scoped)
-                .AsImplementedInterfaces();
+            builder.RegisterCommandRoute<
+                DialogueParticipantRoutes,
+                EnterDialogueCommand,
+                IUniTaskAsyncDisposable>();
         }
     }
 }

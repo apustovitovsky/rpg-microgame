@@ -5,6 +5,7 @@
         "VContainer",
         "UniTask",
         "Game.Core",
+        "Game.Commands",
         "Game.Item",
         "Game.Inventory",
         "Game.Interaction"

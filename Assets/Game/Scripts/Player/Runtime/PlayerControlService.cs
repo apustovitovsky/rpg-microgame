@@ -14,7 +14,7 @@ namespace Game.Player
     public sealed class PlayerControlService :
         IPlayerControl
     {
-        private readonly ICommandDispatch _commands;
+        private readonly ICommandBus _commands;
         private readonly CinemachineCamera _camera;
         private readonly IControlInput _input;
 
@@ -23,7 +23,7 @@ namespace Game.Player
         private ITargetProvider _targetProvider;
 
         public PlayerControlService(
-            ICommandDispatch commands,
+            ICommandBus commands,
             CinemachineCamera camera,
             IControlInput input)
         {
@@ -51,26 +51,24 @@ namespace Game.Player
 
         public event Action CurrentTargetChanged;
 
-        public UniTask<CommandResult> PossessAsync(
+        public async UniTask<PossessionResult> PossessAsync(
             Guid targetInstanceId,
-            CancellationToken token)
+            CancellationToken cancellationToken)
         {
             if (targetInstanceId == Guid.Empty)
-            {
-                return UniTask.FromResult(
-                    CommandResult.Rejected);
-            }
+                return PossessionResult.Rejected;
 
             if (targetInstanceId == ControlledInstanceId)
-            {
-                return UniTask.FromResult(
-                    CommandResult.Completed);
-            }
+                return PossessionResult.Completed;
 
-            return _commands.SendAsync(
+            var result = await _commands.RequestAsync(
                 targetInstanceId,
                 new PossessCommand(),
-                token);
+                cancellationToken);
+
+            return result.IsDelivered
+                ? result.Value
+                : PossessionResult.Rejected;
         }
 
         public void Release()
@@ -84,7 +82,7 @@ namespace Game.Player
             CurrentTargetChanged?.Invoke();
         }
 
-        public CommandResult Attach(
+        public PossessionResult Attach(
             Guid instanceId,
             IPossessionEndpoint endpoint,
             IInteractor interactor,
@@ -95,11 +93,11 @@ namespace Game.Player
                 interactor == null ||
                 targetProvider == null)
             {
-                return CommandResult.Rejected;
+                return PossessionResult.Rejected;
             }
 
             if (instanceId == ControlledInstanceId)
-                return CommandResult.Completed;
+                return PossessionResult.Completed;
 
             ReleaseCurrent();
 
@@ -117,7 +115,7 @@ namespace Game.Player
             ControlledObjectChanged?.Invoke();
             CurrentTargetChanged?.Invoke();
 
-            return CommandResult.Completed;
+            return PossessionResult.Completed;
         }
 
         public void ReleaseIfCurrent(

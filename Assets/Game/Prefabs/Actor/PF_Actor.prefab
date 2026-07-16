@@ -738,7 +738,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2672110059924851859}
-  - component: {fileID: 5875835941068430729}
+  - component: {fileID: 3065405954558525884}
   m_Layer: 0
   m_Name: CommandReceiver
   m_TagString: Untagged
@@ -761,7 +761,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5186002720919307954}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5875835941068430729
+--- !u!114 &3065405954558525884
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -770,9 +770,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6168442160149048454}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aec1314982e26d648b006bd84179c43e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a97a29524056cd43b4fdfc7907fbcd5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Game.Commands::Game.Commands.CommandReceiverEndpoint
+  m_EditorClassIdentifier: Game.Commands::Game.Commands.CommandRouterModule
 --- !u!1 &6685597537023399589
 GameObject:
   m_ObjectHideFlags: 0
