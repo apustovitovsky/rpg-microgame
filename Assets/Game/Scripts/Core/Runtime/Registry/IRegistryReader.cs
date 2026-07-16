@@ -2,7 +2,7 @@ using System;
 
 namespace Game.Core
 {
-    public interface IRegistry<T>
+    public interface IRegistryReader<T>
         where T : class
     {
         bool TryGet(

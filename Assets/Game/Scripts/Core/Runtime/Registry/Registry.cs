@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Game.Core
 {
     public sealed class Registry<T> :
-        IRegistry<T>,
+        IRegistryReader<T>,
         IRegistryWriter<T>
         where T : class
     {
