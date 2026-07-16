@@ -6,7 +6,9 @@
         "Game.Core",
         "Etheria.Game",
         "Etheria.Navigation",
-        "Etheria.Core"
+        "Etheria.Core",
+        "UniTask",
+        "Game.Actor"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

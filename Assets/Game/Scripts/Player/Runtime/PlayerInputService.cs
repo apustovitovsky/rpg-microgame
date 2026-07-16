@@ -15,6 +15,8 @@ namespace Game.Player
     {
         private readonly InputActions_Generated _input;
 
+        private int _uiInputLeaseCount;
+
         public event Action InteractPerformed;
         public event Action ToggleJournalPerformed;
         public event Action UiSubmitPerformed;
@@ -31,39 +33,6 @@ namespace Game.Player
             _input.UI.SetCallbacks(this);
 
             EnterGameplayInput();
-        }
-
-        public void EnterGameplayInput()
-        {
-            _input.UI.Disable();
-            _input.Player.Enable();
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
-            LookDelta = Vector2.zero;
-            MoveComposite = Vector2.zero;
-            MovementInputDetected = false;
-        }
-
-        public void EnterUiInput()
-        {
-            _input.Player.Disable();
-            _input.UI.Enable();
-
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-
-            LookDelta = Vector2.zero;
-            MoveComposite = Vector2.zero;
-            MovementInputDetected = false;
-        }
-
-        public void Dispose()
-        {
-            _input.Player.SetCallbacks(null);
-            _input.UI.SetCallbacks(null);
-            _input.Disable();
         }
 
         public Vector2 LookDelta { get; set; }
@@ -83,6 +52,25 @@ namespace Game.Player
         public event Action OnSprintActivated;
         public event Action OnSprintDeactivated;
         public event Action OnWalkToggled;
+
+        public IDisposable AcquireUiInput()
+        {
+            if (_uiInputLeaseCount == 0)
+            {
+                EnterUiInput();
+            }
+
+            _uiInputLeaseCount++;
+
+            return new UiInputLease(this);
+        }
+
+        public void Dispose()
+        {
+            _input.Player.SetCallbacks(null);
+            _input.UI.SetCallbacks(null);
+            _input.Disable();
+        }
 
         public void OnLook(InputAction.CallbackContext context)
         {
@@ -271,6 +259,60 @@ namespace Game.Player
 
         public void OnMenu(InputAction.CallbackContext context)
         {
+        }
+
+        private void ReleaseUiInput()
+        {
+            _uiInputLeaseCount--;
+
+            if (_uiInputLeaseCount == 0)
+            {
+                EnterGameplayInput();
+            }
+        }
+
+        private void EnterGameplayInput()
+        {
+            _input.UI.Disable();
+            _input.Player.Enable();
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            LookDelta = Vector2.zero;
+            MoveComposite = Vector2.zero;
+            MovementInputDetected = false;
+        }
+
+        private void EnterUiInput()
+        {
+            _input.Player.Disable();
+            _input.UI.Enable();
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            LookDelta = Vector2.zero;
+            MoveComposite = Vector2.zero;
+            MovementInputDetected = false;
+        }
+
+        private sealed class UiInputLease : IDisposable
+        {
+            private PlayerInputService _owner;
+
+            public UiInputLease(PlayerInputService owner)
+            {
+                _owner = owner;
+            }
+
+            public void Dispose()
+            {
+                var owner = _owner;
+                _owner = null;
+
+                owner?.ReleaseUiInput();
+            }
         }
     }
 }

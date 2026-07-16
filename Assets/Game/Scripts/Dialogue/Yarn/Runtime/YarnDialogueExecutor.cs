@@ -51,6 +51,16 @@ namespace Game.Dialogue.Yarn
             await _runner.DialogueTask;
         }
 
+        public async UniTask StopAsync()
+        {
+            if (!_runner.IsDialogueRunning)
+            {
+                return;
+            }
+
+            await _runner.Stop();
+        }
+
         private void Stop()
         {
             if (_runner.IsDialogueRunning)

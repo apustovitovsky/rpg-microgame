@@ -1,5 +1,6 @@
 using Game.Core;
 using Game.Dialogue;
+using Game.Dialogue.Commands;
 using Game.Dialogue.Yarn;
 using UnityEngine;
 using VContainer;
@@ -29,6 +30,10 @@ namespace Game.Gameplay
                 Lifetime.Singleton);
 
             builder.Register<YarnDialogueExecutor>(
+                    Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
+            builder.Register<DialogueParticipantCoordinator>(
                     Lifetime.Singleton)
                 .AsImplementedInterfaces();
 

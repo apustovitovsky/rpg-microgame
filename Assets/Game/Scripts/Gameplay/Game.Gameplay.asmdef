@@ -18,6 +18,7 @@
         "Game.Loot",
         "Game.Interaction",
         "Game.Dialogue",
+        "Game.Dialogue.Commands",
         "Game.Dialogue.Yarn",
         "Game.Navigation",
         "Game.Commands",

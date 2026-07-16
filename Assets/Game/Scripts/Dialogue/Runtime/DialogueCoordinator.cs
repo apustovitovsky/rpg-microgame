@@ -8,14 +8,20 @@ namespace Game.Dialogue
         IDialogueCoordinator
     {
         private readonly IDialogueExecutor _executor;
+        private readonly IDialogueParticipantCoordinator _participants;
 
         private DialogueSession _activeSession;
 
         public DialogueCoordinator(
-            IDialogueExecutor executor)
+            IDialogueExecutor executor,
+            IDialogueParticipantCoordinator participants)
         {
             _executor = executor
                 ?? throw new ArgumentNullException(nameof(executor));
+
+            _participants = participants
+                ?? throw new ArgumentNullException(
+                    nameof(participants));
         }
 
         public bool TryGetActive(
@@ -67,12 +73,32 @@ namespace Game.Dialogue
                 DialogueStartResult.Started(session.Id));
         }
 
+        public UniTask StopAsync()
+        {
+            if (_activeSession == null)
+            {
+                return UniTask.CompletedTask;
+            }
+
+            return _executor.StopAsync();
+        }
+
         private async UniTask RunSessionAsync(
             DialogueSession session,
             CancellationToken cancellationToken)
         {
+            IDialogueParticipantLease participantLease = null;
+
             try
             {
+                await UniTask.Yield(
+                    PlayerLoopTiming.Update,
+                    cancellationToken);
+
+                participantLease = await _participants.EnterAsync(
+                    session,
+                    cancellationToken);
+
                 await _executor.ExecuteAsync(
                     session,
                     cancellationToken);
@@ -83,9 +109,19 @@ namespace Game.Dialogue
             }
             finally
             {
-                if (_activeSession == session)
+                try
                 {
-                    _activeSession = null;
+                    if (participantLease != null)
+                    {
+                        await participantLease.DisposeAsync();
+                    }
+                }
+                finally
+                {
+                    if (_activeSession == session)
+                    {
+                        _activeSession = null;
+                    }
                 }
             }
         }

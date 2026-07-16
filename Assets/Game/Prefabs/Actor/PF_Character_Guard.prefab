@@ -1,5 +1,120 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1001957614721016067
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7210221314388992732}
+  - component: {fileID: 4554784921228261410}
+  - component: {fileID: 913606726017835979}
+  - component: {fileID: 1680122134327476205}
+  m_Layer: 0
+  m_Name: Patrol
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7210221314388992732
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001957614721016067}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4326946942175359641}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4554784921228261410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001957614721016067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
+  m_Graph: {fileID: -4832113384068156502, guid: 7420687fc27b0d54d975491ba3ef87c8,
+    type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 1610866269427597431
+  - rid: 1610866270166843636
+  - rid: 1610866270166843643
+  m_OriginalGraph: {fileID: -4832113384068156502, guid: 7420687fc27b0d54d975491ba3ef87c8,
+    type: 2}
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 1610866269427597431
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 3042253684763455917}
+    - rid: 1610866270166843636
+      type: {class: 'BlackboardVariable`1[[Game.AI.NavigationPatrol, Game.AI]]', ns: Unity.Behavior,
+        asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 11362807183834001395
+          m_Value1: 2707852466211730758
+        Name: New Navigation Patrol
+        m_Value: {fileID: 1680122134327476205}
+    - rid: 1610866270166843643
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior,
+        asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 10161401193436682181
+          m_Value1: 14546731092383851870
+        Name: Delay
+        m_Value: 2
+--- !u!114 &913606726017835979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001957614721016067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea06f3edc292339499cbc34943eee8ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.AI::Game.AI.NavigationPatrolModule
+  _patrol: {fileID: 1680122134327476205}
+--- !u!114 &1680122134327476205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001957614721016067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a5245f9e10e5df4b98039e003bdad74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.AI::Game.AI.NavigationPatrol
+  _route: {fileID: 11400000, guid: 5850de7b81f25ef4ea9ade28994ccf6a, type: 2}
+  _initialStop:
+    _locationId: city_storage
+    _anchorKey: entrance_outer
 --- !u!1 &3866428601309190613
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,6 +125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1468953328830763898}
   - component: {fileID: 6971416908763349869}
+  - component: {fileID: 785083898840826437}
   m_Layer: 0
   m_Name: Dialogue
   m_TagString: Untagged
@@ -44,6 +160,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a626c5e4e3ce8504a8a52b7c8f989103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Dialogue.Actor::Game.Dialogue.Actor.DialogueParticipantModule
+--- !u!114 &785083898840826437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3866428601309190613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f227b382e9ef5d34887b31e606b07092, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Dialogue.Actor::Game.Dialogue.Actor.DialogueNavigationModule
 --- !u!1001 &5364421375585064619
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -120,15 +248,19 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1468953328830763898}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6168442160149048454, guid: ff419830c249fdb43a317a78c972d9bd,
+    - targetCorrespondingSourceObject: {fileID: 8538305375040021554, guid: ff419830c249fdb43a317a78c972d9bd,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3146951554576230186}
+      addedObject: {fileID: 7210221314388992732}
+    m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7820657305054395811, guid: ff419830c249fdb43a317a78c972d9bd,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2906818491364811643}
+    - targetCorrespondingSourceObject: {fileID: 6168442160149048454, guid: ff419830c249fdb43a317a78c972d9bd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3146951554576230186}
   m_SourcePrefab: {fileID: 100100000, guid: ff419830c249fdb43a317a78c972d9bd, type: 3}
 --- !u!1 &2299357710744336941 stripped
 GameObject:
@@ -168,6 +300,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Dialogue.Interaction::Game.Dialogue.Interaction.DialogueInteractionModule
   _interactionPoint: {fileID: 8618316088215971712}
   <MaxRange>k__BackingField: 5
+--- !u!1 &3042253684763455917 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
+    type: 3}
+  m_PrefabInstance: {fileID: 5364421375585064619}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4326946942175359641 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8538305375040021554, guid: ff419830c249fdb43a317a78c972d9bd,

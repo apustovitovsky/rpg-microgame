@@ -7,8 +7,6 @@ namespace Game.Player
         event Action UiSubmitPerformed;
         event Action UiCancelPerformed;
 
-        void EnterGameplayInput();
-
-        void EnterUiInput();
+        IDisposable AcquireUiInput();
     }
 }

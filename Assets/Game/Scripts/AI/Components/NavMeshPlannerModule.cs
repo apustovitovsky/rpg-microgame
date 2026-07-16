@@ -9,7 +9,7 @@ using VContainer.Unity;
 namespace Game.AI
 {
     [DisallowMultipleComponent]
-    public sealed class NavMeshPlannerEndpoint :
+    public sealed class NavMeshPlannerModule :
         MonoBehaviour,
         IModuleInstaller
     {
@@ -29,7 +29,7 @@ namespace Game.AI
                 _look == null)
             {
                 throw new InvalidOperationException(
-                    $"{nameof(NavMeshPlannerEndpoint)} requires " +
+                    $"{nameof(NavMeshPlannerModule)} requires " +
                     $"{nameof(NavMeshAgent)}, " +
                     $"{nameof(NavMeshActorInput)}, " +
                     $"{nameof(MovementController)} and " +

@@ -20,7 +20,7 @@ MonoBehaviour:
   - _definitionId: character.guard
     _locationId: city_storage
     _anchorKey: entrance_inner
-  - _definitionId: character.guard
+  - _definitionId: character.bandit
     _locationId: city_storage
     _anchorKey: corner_01
   - _definitionId: character.bandit

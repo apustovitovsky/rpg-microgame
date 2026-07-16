@@ -10,27 +10,38 @@ namespace Game.Navigation
     [CreateAssetMenu(
         fileName = "NavigationModuleBuilder",
         menuName = "Game/Navigation/Navigation Module Builder")]
-    public sealed class NavigationModuleBuilder : ModuleBuilder
+    public sealed class NavigationModuleBuilder :
+        ModuleBuilder
     {
-        public override void Install(IContainerBuilder builder)
+        public override void Install(
+            IContainerBuilder builder)
         {
             var locations =
-                SceneComponentLookup.GetComponentsInScene<NavigationLocation>(builder);
+                SceneComponentLookup.GetComponentsInScene<
+                    NavigationLocation>(builder);
 
             var waypoints =
-                SceneComponentLookup.GetComponentsInScene<NavigationWaypoint>(builder);
+                SceneComponentLookup.GetComponentsInScene<
+                    NavigationWaypoint>(builder);
 
             var graph =
                 NavigationGraphBuilder.Build(waypoints);
 
-            builder.Register<NavigationGraphProvider>(Lifetime.Singleton)
+            builder.Register<NavigationGraphProvider>(
+                    Lifetime.Singleton)
                 .WithParameter(graph)
                 .AsImplementedInterfaces();
 
-            builder.Register<NavigationPathfinder>(Lifetime.Singleton)
+            builder.Register<NavigationPathfinder>(
+                    Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<NavigationLocationResolver>(Lifetime.Singleton)
+            builder.Register<NavigationPathFollower>(
+                    Lifetime.Singleton)
+                .AsImplementedInterfaces();
+
+            builder.Register<NavigationLocationResolver>(
+                    Lifetime.Singleton)
                 .WithParameter(locations)
                 .AsImplementedInterfaces();
         }

@@ -8,5 +8,7 @@ namespace Game.Dialogue
         UniTask ExecuteAsync(
             DialogueSession session,
             CancellationToken cancellationToken);
+
+        UniTask StopAsync();
     }
 }

@@ -1771,7 +1771,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_storage_entrance_inner
   _radius: 0.5
-  _flags: 1
+  _flags: 0
   _neighbors:
   - _waypoint: {fileID: 1138597981}
     _flags: 0
@@ -8313,13 +8313,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Etheria.Navigation::Etheria.Navigation.WaypointNode
   _id: wp_storage_entrance_outer
   _radius: 0.5
-  _flags: 1
+  _flags: 0
   _neighbors:
   - _waypoint: {fileID: 1166865192}
     _flags: 0
   - _waypoint: {fileID: 1950380588}
     _flags: 0
   - _waypoint: {fileID: 2081629782}
+    _flags: 0
+  - _waypoint: {fileID: 542452325}
     _flags: 0
 --- !u!4 &2090973119
 Transform:
@@ -8697,7 +8699,6 @@ MonoBehaviour:
   _game: {fileID: 11400000, guid: 4d3e7eca3c1041b4b97e2009b739a078, type: 2}
   _world: {fileID: 11400000, guid: 3e03f365509f9cb4fb29837a14c13f33, type: 2}
   _commands: {fileID: 11400000, guid: a9300be20f9f927498448db848e6127c, type: 2}
-  _interaction: {fileID: 11400000, guid: 41c986978b742a746ab7c451b65dc6fb, type: 2}
   _dialogue: {fileID: 11400000, guid: 6180e1f32e031004e96f251bae9ac937, type: 2}
   _inventory: {fileID: 11400000, guid: 641bc45f5e671774b803f55d2c804cca, type: 2}
   _loot: {fileID: 11400000, guid: d654d4aacaf231247a509c3e17a836c0, type: 2}

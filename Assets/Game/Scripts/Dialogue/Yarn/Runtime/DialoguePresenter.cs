@@ -27,7 +27,6 @@ namespace Game.Dialogue.Yarn
         {
             _input.UiSubmitPerformed += TryContinue;
             _input.UiCancelPerformed += RequestCancel;
-            _input.EnterUiInput();
 
             _view.ClearOptions();
             _view.Show();
@@ -43,7 +42,6 @@ namespace Game.Dialogue.Yarn
 
             _input.UiSubmitPerformed -= TryContinue;
             _input.UiCancelPerformed -= RequestCancel;
-            _input.EnterGameplayInput();
 
             _view.Hide();
         }

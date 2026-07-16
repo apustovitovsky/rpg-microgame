@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Actor;
@@ -9,11 +10,13 @@ using VContainer.Unity;
 namespace Game.AI
 {
     [DisallowMultipleComponent]
-    public sealed class NavMeshTravelEndpoint :
+    public sealed class NavMeshNavigationModule :
         MonoBehaviour,
         IActorNavigation,
         IModuleInstaller
     {
+        private const float CenterArrivalRadius = 0.05f;
+
         private INavMeshPlanner _planner;
         private NavMeshActorInput _input;
 
@@ -48,7 +51,9 @@ namespace Game.AI
             CancellationToken cancellationToken)
         {
             if (_planner == null)
+            {
                 return;
+            }
 
             _planner.MoveTo(destination);
 
@@ -57,17 +62,48 @@ namespace Game.AI
                 cancellationToken: cancellationToken);
         }
 
+        public async UniTask MoveToAsync(
+            Vector3 destination,
+            float arrivalRadius,
+            CancellationToken cancellationToken)
+        {
+            if (_planner == null)
+            {
+                return;
+            }
+
+            _planner.MoveTo(
+                destination,
+                arrivalRadius);
+
+            await UniTask.WaitUntil(
+                () => _planner.HasArrived,
+                cancellationToken: cancellationToken);
+        }
+
+        public UniTask MoveToCenterAsync(
+            Vector3 destination,
+            CancellationToken cancellationToken)
+        {
+            return MoveToAsync(
+                destination,
+                CenterArrivalRadius,
+                cancellationToken);
+        }
+
         public async UniTask FaceDirectionAsync(
             Vector3 direction,
             CancellationToken cancellationToken)
         {
             if (_input == null)
+            {
                 return;
+            }
 
             _input.SetFacing(direction);
 
-            await UniTask.WaitUntil(
-                () => _input.IsFacingComplete,
+            await UniTask.Delay(
+                TimeSpan.FromSeconds(1f),
                 cancellationToken: cancellationToken);
         }
 
@@ -81,9 +117,29 @@ namespace Game.AI
             _planner?.Stop();
         }
 
+        public IDisposable AcquirePause()
+        {
+            _input?.Stop();
+
+            return _planner != null
+                ? _planner.AcquirePause()
+                : EmptyPause.Instance;
+        }
+
         public void ClearFacing()
         {
             _input?.ClearFacing();
+        }
+
+        private sealed class EmptyPause :
+            IDisposable
+        {
+            public static readonly EmptyPause Instance =
+                new();
+
+            public void Dispose()
+            {
+            }
         }
     }
 }

@@ -14,5 +14,7 @@ namespace Game.Dialogue
         UniTask<DialogueStartResult> StartAsync(
             DialogueRequest request,
             CancellationToken cancellationToken);
+
+        UniTask StopAsync();
     }
 }
