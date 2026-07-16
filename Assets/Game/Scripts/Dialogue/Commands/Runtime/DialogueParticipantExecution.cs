@@ -6,27 +6,27 @@ using Game.Core;
 
 namespace Game.Dialogue.Commands
 {
-    public sealed class DialogueParticipantRoutes :
-        ICommandRoutes,
-        ICommandHandler<
-            EnterDialogueCommand,
+    public sealed class DialogueParticipantExecution :
+        ICommandExecutionGroup,
+        ICommandExecution<
+            EnterDialogueSessionCommand,
             IUniTaskAsyncDisposable>
     {
         private readonly IEnumerable<IDialogueParticipantLifecycle>
             _lifecycles;
 
-        public DialogueParticipantRoutes(
+        public DialogueParticipantExecution(
             IEnumerable<IDialogueParticipantLifecycle> lifecycles)
         {
             _lifecycles = lifecycles
                 ?? throw new ArgumentNullException(nameof(lifecycles));
         }
 
-        public CommandOrdering Ordering =>
-            CommandOrdering.Sequential;
+        public CommandExecutionPolicy ExecutionPolicy =>
+            CommandExecutionPolicy.Sequential;
 
-        public async UniTask<IUniTaskAsyncDisposable> HandleAsync(
-            EnterDialogueCommand command,
+        public async UniTask<IUniTaskAsyncDisposable> ExecuteAsync(
+            EnterDialogueSessionCommand command,
             CommandContext context)
         {
             if (command.SessionId == Guid.Empty ||
@@ -45,7 +45,7 @@ namespace Game.Dialogue.Commands
             try
             {
                 var participantContext =
-                    new DialogueParticipantContext(
+                    new DialogueSessionContext(
                         command.SessionId,
                         command.OtherParticipantInstanceId);
 

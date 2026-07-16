@@ -2,18 +2,18 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.Commands
 {
-    public interface ICommandHandler<in TCommand>
+    public interface ICommandExecution<in TCommand>
         where TCommand : ICommand
     {
-        UniTask HandleAsync(
+        UniTask ExecuteAsync(
             TCommand command,
             CommandContext context);
     }
 
-    public interface ICommandHandler<in TCommand, TResult>
+    public interface ICommandExecution<in TCommand, TResult>
         where TCommand : ICommand<TResult>
     {
-        UniTask<TResult> HandleAsync(
+        UniTask<TResult> ExecuteAsync(
             TCommand command,
             CommandContext context);
     }

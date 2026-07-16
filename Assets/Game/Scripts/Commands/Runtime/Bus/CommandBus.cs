@@ -7,7 +7,7 @@ namespace Game.Commands
 {
     public sealed class CommandBus :
         ICommandBus,
-        ICommandRouterRegistration
+        ICommandRouterRegistrar
     {
         private readonly Dictionary<Guid, ICommandRouter> _routers =
             new();

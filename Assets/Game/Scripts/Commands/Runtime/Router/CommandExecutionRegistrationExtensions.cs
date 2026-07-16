@@ -3,60 +3,60 @@ using VContainer;
 
 namespace Game.Commands
 {
-    public static class CommandRoutesRegistrationExtensions
+    public static class CommandExecutionRegistrationExtensions
     {
-        public static void RegisterCommandRoutes<TRoutes>(
+        public static void RegisterCommandExecutionGroup<TExecutionGroup>(
             this IContainerBuilder builder)
-            where TRoutes : class, ICommandRoutes
+            where TExecutionGroup : class, ICommandExecutionGroup
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
 
-            builder.Register<TRoutes>(Lifetime.Scoped)
+            builder.Register<TExecutionGroup>(Lifetime.Scoped)
                 .AsImplementedInterfaces()
                 .AsSelf();
         }
 
-        public static void RegisterCommandRoute<
-            TRoutes,
+        public static void RegisterCommandExecution<
+            TExecutionGroup,
             TCommand>(
             this IContainerBuilder builder)
-            where TRoutes : class,
-                ICommandRoutes,
-                ICommandHandler<TCommand>
+            where TExecutionGroup : class,
+                ICommandExecutionGroup,
+                ICommandExecution<TCommand>
             where TCommand : ICommand
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
 
             builder.Register<
-                    CommandRoutesHandlerAdapter<
-                        TRoutes,
+                    CommandExecutionEntry<
+                        TExecutionGroup,
                         TCommand>>(
                     Lifetime.Scoped)
-                .As<ICommandHandlerAdapter>();
+                .As<ICommandExecutionEntry>();
         }
 
-        public static void RegisterCommandRoute<
-            TRoutes,
+        public static void RegisterCommandExecution<
+            TExecutionGroup,
             TCommand,
             TResult>(
             this IContainerBuilder builder)
-            where TRoutes : class,
-                ICommandRoutes,
-                ICommandHandler<TCommand, TResult>
+            where TExecutionGroup : class,
+                ICommandExecutionGroup,
+                ICommandExecution<TCommand, TResult>
             where TCommand : ICommand<TResult>
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
 
             builder.Register<
-                    CommandRoutesHandlerAdapter<
-                        TRoutes,
+                    CommandExecutionAdapter<
+                        TExecutionGroup,
                         TCommand,
                         TResult>>(
                     Lifetime.Scoped)
-                .As<ICommandHandlerAdapter>();
+                .As<ICommandExecutionEntry>();
         }
     }
 }

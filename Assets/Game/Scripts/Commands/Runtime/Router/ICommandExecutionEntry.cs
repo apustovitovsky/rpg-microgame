@@ -3,22 +3,22 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.Commands
 {
-    public interface ICommandHandlerAdapter
+    public interface ICommandExecutionEntry
     {
-        ICommandRoutes Owner { get; }
+        ICommandExecutionGroup ExecutionGroup { get; }
 
         Type CommandType { get; }
 
         Type ResultType { get; }
 
-        UniTask<CommandHandlerAdapterResult> RouteAsync(
+        UniTask<CommandExecutionEntryResult> ExecuteAsync(
             object command,
             CommandContext context);
     }
 
-    public readonly struct CommandHandlerAdapterResult
+    public readonly struct CommandExecutionEntryResult
     {
-        public CommandHandlerAdapterResult(
+        public CommandExecutionEntryResult(
             object value)
         {
             Value = value;

@@ -5,25 +5,25 @@ using UnityEngine;
 
 namespace Game.Interaction
 {
-    public sealed class InteractionRoutes :
-        ICommandRoutes,
-        ICommandHandler<
+    public sealed class InteractionExecution :
+        ICommandExecutionGroup,
+        ICommandExecution<
             InteractCommand,
             InteractionResult>
     {
         private readonly IInteractable _target;
 
-        public InteractionRoutes(
+        public InteractionExecution(
             IInteractable target)
         {
             _target = target
                 ?? throw new ArgumentNullException(nameof(target));
         }
 
-        public CommandOrdering Ordering =>
-            CommandOrdering.Drop;
+        public CommandExecutionPolicy ExecutionPolicy =>
+            CommandExecutionPolicy.Drop;
 
-        public UniTask<InteractionResult> HandleAsync(
+        public UniTask<InteractionResult> ExecuteAsync(
             InteractCommand command,
             CommandContext context)
         {

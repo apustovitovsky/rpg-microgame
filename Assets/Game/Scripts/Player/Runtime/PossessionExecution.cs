@@ -7,9 +7,9 @@ using Game.Targeting;
 
 namespace Game.Player
 {
-    public sealed class PossessionRoutes :
-        ICommandRoutes,
-        ICommandHandler<
+    public sealed class PossessionExecution :
+        ICommandExecutionGroup,
+        ICommandExecution<
             PossessCommand,
             PossessionResult>,
         IDisposable
@@ -19,7 +19,7 @@ namespace Game.Player
         private readonly IInteractor _interactor;
         private readonly ITargetProvider _targetProvider;
 
-        public PossessionRoutes(
+        public PossessionExecution(
             PlayerControlService playerControl,
             IPossessionEndpoint endpoint,
             IInteractor interactor,
@@ -42,10 +42,10 @@ namespace Game.Player
                     nameof(targetProvider));
         }
 
-        public CommandOrdering Ordering =>
-            CommandOrdering.Drop;
+        public CommandExecutionPolicy ExecutionPolicy =>
+            CommandExecutionPolicy.Drop;
 
-        public UniTask<PossessionResult> HandleAsync(
+        public UniTask<PossessionResult> ExecuteAsync(
             PossessCommand command,
             CommandContext context)
         {

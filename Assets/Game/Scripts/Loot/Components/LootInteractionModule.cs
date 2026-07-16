@@ -31,11 +31,11 @@ namespace Game.Loot
             builder.Register<LootInteraction>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
-            builder.RegisterCommandRoutes<
-                InteractionRoutes>();
+            builder.RegisterCommandExecutionGroup<
+                InteractionExecution>();
 
-            builder.RegisterCommandRoute<
-                InteractionRoutes,
+            builder.RegisterCommandExecution<
+                InteractionExecution,
                 InteractCommand,
                 InteractionResult>();
         }

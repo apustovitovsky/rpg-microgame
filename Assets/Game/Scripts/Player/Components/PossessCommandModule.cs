@@ -13,11 +13,11 @@ namespace Game.Player
         public void Install(
             IContainerBuilder builder)
         {
-            builder.RegisterCommandRoutes<
-                PossessionRoutes>();
+            builder.RegisterCommandExecutionGroup<
+                PossessionExecution>();
 
-            builder.RegisterCommandRoute<
-                PossessionRoutes,
+            builder.RegisterCommandExecution<
+                PossessionExecution,
                 PossessCommand,
                 PossessionResult>();
         }

@@ -31,11 +31,11 @@ namespace Game.Dialogue.Interaction
             builder.Register<DialogueInteraction>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
-            builder.RegisterCommandRoutes<
-                InteractionRoutes>();
+            builder.RegisterCommandExecutionGroup<
+                InteractionExecution>();
 
-            builder.RegisterCommandRoute<
-                InteractionRoutes,
+            builder.RegisterCommandExecution<
+                InteractionExecution,
                 InteractCommand,
                 InteractionResult>();
         }

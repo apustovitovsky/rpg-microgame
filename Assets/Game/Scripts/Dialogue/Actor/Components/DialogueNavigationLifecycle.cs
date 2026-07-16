@@ -18,7 +18,7 @@ namespace Game.Dialogue.Actor
         }
 
         public UniTask<IUniTaskAsyncDisposable> EnterAsync(
-            DialogueParticipantContext context,
+            DialogueSessionContext context,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();

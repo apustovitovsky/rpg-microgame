@@ -10,7 +10,7 @@ namespace Game.Commands
         UniTask<CommandScheduleResult> ScheduleAsync(
             Func<
                 CancellationToken,
-                UniTask<CommandHandlerAdapterResult>> operation,
+                UniTask<CommandExecutionEntryResult>> operation,
             CancellationToken cancellationToken);
     }
 
@@ -18,7 +18,7 @@ namespace Game.Commands
     {
         public CommandScheduleResult(
             bool wasDropped,
-            CommandHandlerAdapterResult result)
+            CommandExecutionEntryResult result)
         {
             WasDropped = wasDropped;
             Result = result;
@@ -26,13 +26,13 @@ namespace Game.Commands
 
         public bool WasDropped { get; }
 
-        public CommandHandlerAdapterResult Result { get; }
+        public CommandExecutionEntryResult Result { get; }
 
         public static CommandScheduleResult Dropped =>
             new(true, default);
 
         public static CommandScheduleResult Completed(
-            CommandHandlerAdapterResult result)
+            CommandExecutionEntryResult result)
         {
             return new CommandScheduleResult(
                 false,

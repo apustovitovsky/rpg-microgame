@@ -2,7 +2,7 @@ using System;
 
 namespace Game.Commands
 {
-    public interface ICommandRouterRegistration
+    public interface ICommandRouterRegistrar
     {
         void Register(
             Guid instanceId,

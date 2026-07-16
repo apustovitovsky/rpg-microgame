@@ -14,12 +14,12 @@ namespace Game.Dialogue.Commands
         public void Install(
             IContainerBuilder builder)
         {
-            builder.RegisterCommandRoutes<
-                DialogueParticipantRoutes>();
+            builder.RegisterCommandExecutionGroup<
+                DialogueParticipantExecution>();
 
-            builder.RegisterCommandRoute<
-                DialogueParticipantRoutes,
-                EnterDialogueCommand,
+            builder.RegisterCommandExecution<
+                DialogueParticipantExecution,
+                EnterDialogueSessionCommand,
                 IUniTaskAsyncDisposable>();
         }
     }

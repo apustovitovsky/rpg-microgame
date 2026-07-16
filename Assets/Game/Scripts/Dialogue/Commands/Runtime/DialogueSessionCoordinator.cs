@@ -6,12 +6,12 @@ using Game.Core;
 
 namespace Game.Dialogue.Commands
 {
-    public sealed class DialogueParticipantCoordinator :
+    public sealed class DialogueSessionCoordinator :
         IDialogueParticipantCoordinator
     {
         private readonly ICommandBus _commands;
 
-        public DialogueParticipantCoordinator(
+        public DialogueSessionCoordinator(
             ICommandBus commands)
         {
             _commands = commands
@@ -25,7 +25,7 @@ namespace Game.Dialogue.Commands
             var initiatorLease =
                 await _commands.RequestRequiredAsync(
                     session.InitiatorInstanceId,
-                    new EnterDialogueCommand(
+                    new EnterDialogueSessionCommand(
                         session.Id,
                         session.SpeakerInstanceId),
                     cancellationToken);
@@ -35,7 +35,7 @@ namespace Game.Dialogue.Commands
                 var speakerLease =
                     await _commands.RequestRequiredAsync(
                         session.SpeakerInstanceId,
-                        new EnterDialogueCommand(
+                        new EnterDialogueSessionCommand(
                             session.Id,
                             session.InitiatorInstanceId),
                         cancellationToken);

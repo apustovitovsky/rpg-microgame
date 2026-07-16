@@ -16,7 +16,7 @@ namespace Game.Commands
             builder.Register<CommandRouter>(Lifetime.Scoped)
                 .AsImplementedInterfaces();
 
-            builder.RegisterEntryPoint<CommandRouterBinding>(
+            builder.RegisterEntryPoint<CommandRouterRegistration>(
                 Lifetime.Scoped);
         }
     }

@@ -6,7 +6,7 @@ namespace Game.Dialogue
     public interface IDialogueParticipantLifecycle
     {
         UniTask<IUniTaskAsyncDisposable> EnterAsync(
-            DialogueParticipantContext context,
+            DialogueSessionContext context,
             CancellationToken cancellationToken);
     }
 }

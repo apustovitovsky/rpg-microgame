@@ -4,8 +4,7 @@
     "references": [
         "UniTask",
         "VContainer",
-        "Game.Core",
-        "Game.World"
+        "Game.Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

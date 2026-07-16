@@ -33,7 +33,7 @@ namespace Game.Gameplay
                     Lifetime.Singleton)
                 .AsImplementedInterfaces();
 
-            builder.Register<DialogueParticipantCoordinator>(
+            builder.Register<DialogueSessionCoordinator>(
                     Lifetime.Singleton)
                 .AsImplementedInterfaces();
 

@@ -7,45 +7,45 @@ namespace Game.Commands
     internal sealed class CommandScheduler :
         ICommandScheduler
     {
-        private readonly CommandOrdering _ordering;
+        private readonly CommandExecutionPolicy _policy;
         private readonly SemaphoreSlim _gate = new(1, 1);
 
         public CommandScheduler(
-            CommandOrdering ordering)
+            CommandExecutionPolicy policy)
         {
-            _ordering = ordering;
+            _policy = policy;
         }
 
         public UniTask<CommandScheduleResult> ScheduleAsync(
             Func<
                 CancellationToken,
-                UniTask<CommandHandlerAdapterResult>> operation,
+                UniTask<CommandExecutionEntryResult>> operation,
             CancellationToken cancellationToken)
         {
             if (operation == null)
                 throw new ArgumentNullException(nameof(operation));
 
-            return _ordering switch
+            return _policy switch
             {
-                CommandOrdering.Parallel =>
-                    RunParallelAsync(
+                CommandExecutionPolicy.Concurrent =>
+                    RunConcurrentAsync(
                         operation,
                         cancellationToken),
 
-                CommandOrdering.Drop =>
+                CommandExecutionPolicy.Drop =>
                     RunOrDropAsync(
                         operation,
                         cancellationToken),
 
-                CommandOrdering.Sequential =>
+                CommandExecutionPolicy.Sequential =>
                     RunSequentialAsync(
                         operation,
                         cancellationToken),
 
                 _ => throw new ArgumentOutOfRangeException(
-                    nameof(_ordering),
-                    _ordering,
-                    "Unknown command ordering.")
+                    nameof(_policy),
+                    _policy,
+                    "Unknown command execution policy.")
             };
         }
 
@@ -54,10 +54,10 @@ namespace Game.Commands
             _gate.Dispose();
         }
 
-        private static async UniTask<CommandScheduleResult> RunParallelAsync(
+        private static async UniTask<CommandScheduleResult> RunConcurrentAsync(
             Func<
                 CancellationToken,
-                UniTask<CommandHandlerAdapterResult>> operation,
+                UniTask<CommandExecutionEntryResult>> operation,
             CancellationToken cancellationToken)
         {
             return CommandScheduleResult.Completed(
@@ -67,7 +67,7 @@ namespace Game.Commands
         private async UniTask<CommandScheduleResult> RunOrDropAsync(
             Func<
                 CancellationToken,
-                UniTask<CommandHandlerAdapterResult>> operation,
+                UniTask<CommandExecutionEntryResult>> operation,
             CancellationToken cancellationToken)
         {
             if (!_gate.Wait(0))
@@ -87,7 +87,7 @@ namespace Game.Commands
         private async UniTask<CommandScheduleResult> RunSequentialAsync(
             Func<
                 CancellationToken,
-                UniTask<CommandHandlerAdapterResult>> operation,
+                UniTask<CommandExecutionEntryResult>> operation,
             CancellationToken cancellationToken)
         {
             await _gate.WaitAsync(cancellationToken);

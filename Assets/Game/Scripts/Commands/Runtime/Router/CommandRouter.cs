@@ -13,15 +13,15 @@ namespace Game.Commands
     {
         private readonly Guid _receiverId;
 
-        private readonly Dictionary<Type, ICommandHandlerAdapter>
-            _routes = new();
+        private readonly Dictionary<Type, ICommandExecutionEntry>
+            _entries = new();
 
-        private readonly Dictionary<ICommandRoutes, ICommandScheduler>
+        private readonly Dictionary<ICommandExecutionGroup, ICommandScheduler>
             _schedulers = new();
 
         public CommandRouter(
             IInstanceIdentity identity,
-            IEnumerable<ICommandHandlerAdapter> routes)
+            IEnumerable<ICommandExecutionEntry> entries)
         {
             if (identity == null)
                 throw new ArgumentNullException(nameof(identity));
@@ -35,29 +35,29 @@ namespace Game.Commands
                     nameof(identity));
             }
 
-            if (routes == null)
+            if (entries == null)
                 return;
 
-            foreach (var route in routes)
+            foreach (var entry in entries)
             {
-                if (route == null)
+                if (entry == null)
                     continue;
 
-                if (!_schedulers.ContainsKey(route.Owner))
+                if (!_schedulers.ContainsKey(entry.ExecutionGroup))
                 {
                     _schedulers.Add(
-                        route.Owner,
+                        entry.ExecutionGroup,
                         new CommandScheduler(
-                            route.Owner.Ordering));
+                            entry.ExecutionGroup.ExecutionPolicy));
                 }
 
-                if (!_routes.TryAdd(
-                        route.CommandType,
-                        route))
+                if (!_entries.TryAdd(
+                        entry.CommandType,
+                        entry))
                 {
                     throw new InvalidOperationException(
-                        $"Multiple handlers for command " +
-                        $"'{route.CommandType.Name}' are registered " +
+                        $"Multiple command executions for command " +
+                        $"'{entry.CommandType.Name}' are registered " +
                         "on one router.");
                 }
             }
@@ -76,10 +76,10 @@ namespace Game.Commands
                         : CommandDispatchStatus.Unsupported);
             }
 
-            if (!_routes.TryGetValue(
+            if (!_entries.TryGetValue(
                     command.GetType(),
-                    out var route) ||
-                route.ResultType != null)
+                    out var entry) ||
+                entry.ResultType != null)
             {
                 return new CommandDispatchResult(
                     CommandDispatchStatus.Unsupported);
@@ -88,7 +88,7 @@ namespace Game.Commands
             try
             {
                 var scheduleResult = await ScheduleAsync(
-                    route,
+                    entry,
                     command,
                     cancellationToken);
 
@@ -126,10 +126,10 @@ namespace Game.Commands
                     default);
             }
 
-            if (!_routes.TryGetValue(
+            if (!_entries.TryGetValue(
                     command.GetType(),
-                    out var route) ||
-                route.ResultType != typeof(TResult))
+                    out var entry) ||
+                entry.ResultType != typeof(TResult))
             {
                 return new CommandDispatchResult<TResult>(
                     CommandDispatchStatus.Unsupported,
@@ -139,7 +139,7 @@ namespace Game.Commands
             try
             {
                 var scheduleResult = await ScheduleAsync(
-                    route,
+                    entry,
                     command,
                     cancellationToken);
 
@@ -167,7 +167,7 @@ namespace Game.Commands
                 }
 
                 throw new InvalidOperationException(
-                    $"Handler for '{route.CommandType.Name}' returned " +
+                    $"Execution for '{entry.CommandType.Name}' returned " +
                     $"'{result.GetType().Name}' instead of " +
                     $"'{typeof(TResult).Name}'.");
             }
@@ -194,16 +194,16 @@ namespace Game.Commands
                 scheduler.Dispose();
 
             _schedulers.Clear();
-            _routes.Clear();
+            _entries.Clear();
         }
 
         private UniTask<CommandScheduleResult> ScheduleAsync(
-            ICommandHandlerAdapter route,
+            ICommandExecutionEntry entry,
             object command,
             CancellationToken cancellationToken)
         {
-            return _schedulers[route.Owner].ScheduleAsync(
-                schedulerToken => route.RouteAsync(
+            return _schedulers[entry.ExecutionGroup].ScheduleAsync(
+                schedulerToken => entry.ExecuteAsync(
                     command,
                     new CommandContext(
                         _receiverId,
