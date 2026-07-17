@@ -141,6 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Actor::Game.Actor.TargetingController
   _sensor: {fileID: 2013396884381996775}
   _look: {fileID: 6670009868325032160}
+  _maximumTargetAngle: 120
   _distanceScoreWeight: 100
   _angleScoreWeight: 40
 --- !u!1 &1781962995865054892

@@ -9,9 +9,15 @@ namespace Game.Targeting
             IReadOnlyCollection<ITargetable> candidates,
             Vector3 origin,
             Vector3 forward);
+
+        bool IsSelectable(
+            ITargetable target,
+            Vector3 origin,
+            Vector3 forward);
     }
 
-    public sealed class TargetSelector : ITargetSelector
+    public sealed class TargetSelector :
+        ITargetSelector
     {
         private readonly IReadOnlyList<ITargetFilter> _filters;
         private readonly IReadOnlyList<ITargetScorer> _scorers;
@@ -30,14 +36,19 @@ namespace Game.Targeting
             Vector3 forward)
         {
             ITargetable best = null;
-            float bestScore = float.NegativeInfinity;
+            var bestScore = float.NegativeInfinity;
 
             foreach (var candidate in candidates)
             {
-                if (!PassesFilters(candidate))
+                if (!IsSelectable(
+                        candidate,
+                        origin,
+                        forward))
+                {
                     continue;
+                }
 
-                float score = Score(
+                var score = Score(
                     candidate,
                     origin,
                     forward);
@@ -52,12 +63,20 @@ namespace Game.Targeting
             return best;
         }
 
-        private bool PassesFilters(ITargetable target)
+        public bool IsSelectable(
+            ITargetable target,
+            Vector3 origin,
+            Vector3 forward)
         {
             foreach (var filter in _filters)
             {
-                if (!filter.IsMatch(target))
+                if (!filter.IsMatch(
+                        target,
+                        origin,
+                        forward))
+                {
                     return false;
+                }
             }
 
             return true;
@@ -68,7 +87,7 @@ namespace Game.Targeting
             Vector3 origin,
             Vector3 forward)
         {
-            float score = 0f;
+            var score = 0f;
 
             foreach (var scorer in _scorers)
             {

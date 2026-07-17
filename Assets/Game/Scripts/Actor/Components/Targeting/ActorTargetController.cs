@@ -13,6 +13,10 @@ namespace Game.Actor
         [SerializeField] private TargetingSensor _sensor;
         [SerializeField] private ActorLookController _look;
 
+        [SerializeField]
+        [Range(0f, 180f)]
+        private float _maximumTargetAngle = 120f;
+
         [SerializeField] private float _distanceScoreWeight = 0f;
         [SerializeField] private float _angleScoreWeight = 100f;
 
@@ -20,6 +24,7 @@ namespace Game.Actor
         private ITargetSelector _selector;
 
         public ITargetable CurrentTarget { get; private set; }
+
         public bool IsLocked { get; private set; }
 
         public event Action<ITargetable> CurrentTargetChanged;
@@ -29,16 +34,21 @@ namespace Game.Actor
             _selector = new TargetSelector(
                 new ITargetFilter[]
                 {
-                    new TargetableFilter()
+                    new TargetableFilter(),
+                    new ViewAngleTargetFilter(
+                        _maximumTargetAngle)
                 },
                 new ITargetScorer[]
                 {
-                    new DistanceTargetScorer(_distanceScoreWeight),
-                    new AngleTargetScorer(_angleScoreWeight)
+                    new DistanceTargetScorer(
+                        _distanceScoreWeight),
+                    new AngleTargetScorer(
+                        _angleScoreWeight)
                 });
         }
 
-        public void Bind(IControlInput input)
+        public void Bind(
+            IControlInput input)
         {
             if (_input != null)
                 _input.OnLockOnToggled -= ToggleLock;
@@ -75,7 +85,8 @@ namespace Game.Actor
 
             if (bestTarget == null ||
                 CurrentTarget == null ||
-                !ContainsCurrentTarget())
+                !ContainsCurrentTarget() ||
+                !IsCurrentTargetSelectable())
             {
                 Unlock();
                 SetCurrentTarget(bestTarget);
@@ -146,7 +157,16 @@ namespace Game.Actor
             return false;
         }
 
-        private void ApplyTarget(ITargetable target)
+        private bool IsCurrentTargetSelectable()
+        {
+            return _selector.IsSelectable(
+                CurrentTarget,
+                _look.Position,
+                _look.Forward);
+        }
+
+        private void ApplyTarget(
+            ITargetable target)
         {
             if (target == null ||
                 target.TargetAnchor == null)
@@ -158,7 +178,8 @@ namespace Game.Actor
             _look.SetTarget(target.TargetAnchor);
         }
 
-        private void SetCurrentTarget(ITargetable target)
+        private void SetCurrentTarget(
+            ITargetable target)
         {
             if (ReferenceEquals(CurrentTarget, target))
                 return;
