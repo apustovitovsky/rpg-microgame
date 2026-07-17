@@ -9,12 +9,14 @@ namespace Game.Gameplay
     [CreateAssetMenu(
         fileName = "GameplayModuleBuilder",
         menuName = "Game/Gameplay/Gameplay Module Builder")]
-    public sealed class GameplayModuleBuilder : ModuleBuilder
+    public sealed class GameplayModuleBuilder :
+        ModuleBuilder
     {
         [SerializeField] private ActorSpawnCatalog _actors;
         [SerializeField] private PickupSpawnCatalog _pickups;
 
-        public override void Install(IContainerBuilder builder)
+        public override void Install(
+            IContainerBuilder builder)
         {
             if (_actors == null)
             {
@@ -32,6 +34,10 @@ namespace Game.Gameplay
 
             builder.RegisterInstance(_actors);
             builder.RegisterInstance(_pickups);
+
+            builder.Register<ActorPlacementService>(
+                    Lifetime.Singleton)
+                .AsImplementedInterfaces();
 
             builder.Register<SpawnPointResolver>(Lifetime.Singleton)
                 .AsImplementedInterfaces();

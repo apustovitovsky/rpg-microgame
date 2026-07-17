@@ -4291,6 +4291,12 @@ MonoBehaviour:
     _waypoint: {fileID: 542452325}
   - _key: entrance_outer
     _waypoint: {fileID: 2090973118}
+  - _key: guard_wp_01
+    _waypoint: {fileID: 1747698010}
+  - _key: guard_wp_02
+    _waypoint: {fileID: 1166865192}
+  - _key: bandit_spawn
+    _waypoint: {fileID: 450401405}
 --- !u!4 &1276872065
 Transform:
   m_ObjectHideFlags: 0
@@ -6695,6 +6701,8 @@ MonoBehaviour:
   _flags: 0
   _neighbors:
   - _waypoint: {fileID: 450401405}
+    _flags: 0
+  - _waypoint: {fileID: 1450685962}
     _flags: 0
 --- !u!1001 &1748147939
 PrefabInstance:

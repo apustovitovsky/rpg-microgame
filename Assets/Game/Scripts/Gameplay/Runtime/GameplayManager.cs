@@ -18,6 +18,7 @@ namespace Game.Gameplay
         private readonly PickupSpawnCatalog _pickupSpawnCatalog;
         private readonly IActorAssetCatalog _entityDefinitions;
         private readonly IPickupAssetCatalog _pickupDefinitions;
+        private readonly IActorPlacementService _actorPlacements;
         private readonly IActorSpawner _actorSpawner;
         private readonly IPickupSpawner _pickupSpawner;
         private readonly IPlayerControl _player;
@@ -28,6 +29,7 @@ namespace Game.Gameplay
             PickupSpawnCatalog pickupSpawnCatalog,
             IActorAssetCatalog entityDefinitions,
             IPickupAssetCatalog pickupDefinitions,
+            IActorPlacementService actorPlacements,
             IActorSpawner actorSpawner,
             IPickupSpawner pickupSpawner,
             ISpawnPointResolver spawnPoints,
@@ -37,6 +39,7 @@ namespace Game.Gameplay
             _pickupSpawnCatalog = pickupSpawnCatalog;
             _entityDefinitions = entityDefinitions;
             _pickupDefinitions = pickupDefinitions;
+            _actorPlacements = actorPlacements;
             _actorSpawner = actorSpawner;
             _pickupSpawner = pickupSpawner;
             _spawnPoints = spawnPoints;
@@ -52,22 +55,8 @@ namespace Game.Gameplay
 
         private void SpawnPlayer()
         {
-            var player = _entitySpawnCatalog.Player;
-
-            if (!_spawnPoints.TryResolve(
-                    player.LocationId,
-                    player.AnchorKey,
-                    out var node))
-            {
-                Debug.LogWarning(
-                    "Player was not spawned: spawn point could not be resolved.");
-
-                return;
-            }
-
             SpawnActor(
-                player,
-                node,
+                _entitySpawnCatalog.Player,
                 bindPlayer: true);
         }
 
@@ -75,49 +64,81 @@ namespace Game.Gameplay
         {
             foreach (var actor in _entitySpawnCatalog.Actors)
             {
-                if (!_spawnPoints.TryResolve(
-                        actor.LocationId,
-                        actor.AnchorKey,
-                        out var node))
-                {
-                    Debug.LogWarning(
-                        $"Entity '{actor?.DefinitionId}' was not spawned: " +
-                        "spawn point could not be resolved.");
-
-                    continue;
-                }
-
                 SpawnActor(
                     actor,
-                    node,
                     bindPlayer: false);
             }
         }
 
         private Guid SpawnActor(
             ActorSpawnCatalog.ActorEntry entry,
-            NavigationNode node,
             bool bindPlayer)
         {
             if (entry == null)
                 return Guid.Empty;
+
+            ActorPlacement placement;
+
+            try
+            {
+                placement = entry.CreatePlacement();
+            }
+            catch (InvalidOperationException exception)
+            {
+                Debug.LogWarning(
+                    $"Actor '{entry.DefinitionId}' was not spawned: " +
+                    exception.Message);
+
+                return Guid.Empty;
+            }
+
+            var spawnLocation = placement.SpawnLocation;
+
+            if (!_spawnPoints.TryResolve(
+                    spawnLocation.LocationId,
+                    spawnLocation.AnchorKey,
+                    out var node))
+            {
+                Debug.LogWarning(
+                    $"Actor '{entry.DefinitionId}' was not spawned: " +
+                    "spawn point could not be resolved.");
+
+                return Guid.Empty;
+            }
 
             if (!_entityDefinitions.TryGet(
                     entry.DefinitionId,
                     out var definition))
             {
                 Debug.LogWarning(
-                    $"Entity definition '{entry.DefinitionId}' was not found.");
+                    $"Actor definition '{entry.DefinitionId}' was not found.");
 
                 return Guid.Empty;
             }
 
-            var instance = _actorSpawner.Spawn(
-                new ActorSpawnRequest(
-                    definition,
-                    new SpawnPlacement(
-                        node.Position,
-                        node.Rotation)));
+            var instanceId = Guid.NewGuid();
+
+            _actorPlacements.Register(
+                instanceId,
+                placement);
+
+            ActorInstance instance;
+
+            try
+            {
+                instance = _actorSpawner.Spawn(
+                    new ActorSpawnRequest(
+                        definition,
+                        new SpawnPlacement(
+                            node.Position,
+                            node.Rotation),
+                        instanceId));
+            }
+            catch
+            {
+                _actorPlacements.Unregister(instanceId);
+                throw;
+            }
 
             if (bindPlayer)
             {

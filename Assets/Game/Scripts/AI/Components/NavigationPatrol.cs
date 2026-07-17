@@ -12,15 +12,10 @@ namespace Game.AI
     public sealed class NavigationPatrol :
         MonoBehaviour
     {
-        [SerializeField]
-        private NavigationPatrolRoute _route;
-
-        [SerializeField]
-        private NavigationPatrolRoute.Stop _initialStop =
-            new();
-
         private INavigationPathFollower _pathFollower;
         private IActorNavigation _navigation;
+        private IActorPlacementService _placements;
+        private Guid _instanceId;
 
         private string _currentLocationId;
         private string _currentAnchorKey;
@@ -30,30 +25,47 @@ namespace Game.AI
         [Inject]
         public void Construct(
             INavigationPathFollower pathFollower,
-            IActorNavigation navigation)
+            IActorNavigation navigation,
+            ActorInstance instance,
+            IActorPlacementService placements)
         {
             _pathFollower = pathFollower;
             _navigation = navigation;
+            _placements = placements;
+
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
+            if (_placements == null)
+            {
+                throw new ArgumentNullException(nameof(placements));
+            }
+
+            _instanceId = instance.InstanceId;
         }
 
         public async UniTask<bool> MoveToNextAsync(
             CancellationToken cancellationToken)
         {
-            if (_route == null)
+            if (!_placements.TryGet(
+                    _instanceId,
+                    out var placement))
             {
-                ReportFailure("Patrol route is not assigned.");
+                ReportFailure(
+                    $"Actor placement for instance " +
+                    $"'{_instanceId}' was not found.");
+
                 return false;
             }
 
-            if (!_initialStop.IsValid)
+            if (!placement.HasPatrol)
             {
-                ReportFailure("Initial patrol stop is invalid.");
-                return false;
-            }
+                ReportFailure(
+                    $"Actor placement for instance " +
+                    $"'{_instanceId}' has no patrol locations.");
 
-            if (_route.Stops.Count == 0)
-            {
-                ReportFailure("Patrol route has no stops.");
                 return false;
             }
 
@@ -61,6 +73,7 @@ namespace Game.AI
             {
                 ReportFailure(
                     "INavigationPathFollower was not injected.");
+
                 return false;
             }
 
@@ -68,6 +81,7 @@ namespace Game.AI
             {
                 ReportFailure(
                     "IActorNavigation was not injected.");
+
                 return false;
             }
 
@@ -75,23 +89,14 @@ namespace Game.AI
                     _currentLocationId))
             {
                 _currentLocationId =
-                    _initialStop.LocationId;
+                    placement.SpawnLocation.LocationId;
 
                 _currentAnchorKey =
-                    _initialStop.AnchorKey;
+                    placement.SpawnLocation.AnchorKey;
             }
 
-            var target = _route.Stops[
+            var target = placement.PatrolLocations[
                 _nextStopIndex];
-
-            if (target == null ||
-                !target.IsValid)
-            {
-                ReportFailure(
-                    $"Patrol stop {_nextStopIndex} is invalid.");
-
-                return false;
-            }
 
             var result = await _pathFollower.FollowAsync(
                 _navigation,
@@ -121,14 +126,9 @@ namespace Game.AI
 
             _nextStopIndex =
                 (_nextStopIndex + 1) %
-                _route.Stops.Count;
+                placement.PatrolLocations.Count;
 
             return true;
-        }
-
-        private void OnValidate()
-        {
-            _initialStop?.Normalize();
         }
 
         private void ReportFailure(

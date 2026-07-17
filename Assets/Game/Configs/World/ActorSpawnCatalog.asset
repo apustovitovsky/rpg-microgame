@@ -16,16 +16,29 @@ MonoBehaviour:
     _definitionId: character.player
     _locationId: city_storage
     _anchorKey: entrance_outer
+    _patrolPoints: []
   _actors:
   - _definitionId: character.guard
     _locationId: city_storage
     _anchorKey: entrance_inner
-  - _definitionId: character.bandit
+    _patrolPoints:
+    - _locationId: city_storage
+      _anchorKey: entrance_inner
+    - _locationId: city_storage
+      _anchorKey: entrance_outer
+  - _definitionId: character.guard
     _locationId: city_storage
     _anchorKey: corner_01
+    _patrolPoints:
+    - _locationId: city_storage
+      _anchorKey: guard_wp_01
+    - _locationId: city_storage
+      _anchorKey: guard_wp_02
   - _definitionId: character.bandit
     _locationId: city_storage
-    _anchorKey: corner_02
+    _anchorKey: bandit_spawn
+    _patrolPoints: []
   - _definitionId: world.chest
     _locationId: city_tavern
     _anchorKey: entrance_outer
+    _patrolPoints: []

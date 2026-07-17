@@ -19,7 +19,7 @@ MonoBehaviour:
   - rid: 1610866294224060504
   - rid: 1610866295380116105
   - rid: 1610866295380116207
-  m_VersionTimestamp: 639199049559545581
+  m_VersionTimestamp: 639199079239114834
   m_CommandBuffer:
     m_Commands: []
   m_RuntimeBlackboardAsset: {fileID: 9029034914752223956}
@@ -91,7 +91,7 @@ MonoBehaviour:
   - rid: 1610866294224060938
   - rid: 1610866295380116069
   - rid: 1610866295380116409
-  m_VersionTimestamp: 639199049792703602
+  m_VersionTimestamp: 639199079240905839
   m_SerializedVersion: 3
   m_DebugInfo: {fileID: -5724604204605363779}
   m_RuntimeGraph: {fileID: 7791993851170325552}
@@ -198,7 +198,7 @@ MonoBehaviour:
     - rid: 1610866294224060938
       type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: 49.90001, y: 305.29996}
+        Position: {x: 125.10002, y: 290.89993}
         ID:
           m_Value0: 14371661648109905313
           m_Value1: 4156735732301679315
@@ -332,7 +332,7 @@ MonoBehaviour:
         Name: Delay
         IsExposed: 1
         m_IsShared: 0
-        m_Value: 2
+        m_Value: 4
     - rid: 1610866295380116409
       type: {class: CompositeNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
@@ -404,8 +404,8 @@ MonoBehaviour:
           rid: 1610866294224060508
         BlackboardGroupReferences: []
         Root:
-          rid: 1610866295380116412
-        m_VersionTimestamp: 639199049792703602
+          rid: 1610866296959795474
+        m_VersionTimestamp: 639199079240905839
     - rid: 1610866294224060508
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -416,37 +416,10 @@ MonoBehaviour:
       type: {class: Blackboard, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         m_Variables:
-        - rid: 1610866295380116282
-        - rid: 1610866295380116283
-        - rid: 1610866295380116284
-    - rid: 1610866295380116282
-      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]',
-        ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 1
-          m_Value1: 0
-        Name: Self
-        m_Value: {fileID: 0}
-    - rid: 1610866295380116283
-      type: {class: 'BlackboardVariable`1[[Game.AI.NavigationPatrol, Game.AI]]', ns: Unity.Behavior,
-        asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 4175198444740080652
-          m_Value1: 1433170292145271768
-        Name: Patrol
-        m_Value: {fileID: 0}
-    - rid: 1610866295380116284
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior,
-        asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 8943343802110410741
-          m_Value1: 5456888730283180039
-        Name: Delay
-        m_Value: 2
-    - rid: 1610866295380116412
+        - rid: 1610866296959795476
+        - rid: 1610866296959795477
+        - rid: 1610866296959795478
+    - rid: 1610866296959795474
       type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -457,10 +430,10 @@ MonoBehaviour:
         m_Parent:
           rid: -2
         m_Child:
-          rid: 1610866295380116413
+          rid: 1610866296959795475
         Repeat: 1
         AllowMultipleRepeatsPerTick: 0
-    - rid: 1610866295380116413
+    - rid: 1610866296959795475
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -469,12 +442,39 @@ MonoBehaviour:
         Graph:
           rid: 1610866294224060507
         m_Parent:
-          rid: 1610866295380116412
+          rid: 1610866296959795474
         m_Children:
-        - rid: 1610866295380116414
-        - rid: 1610866295380116415
+        - rid: 1610866296959795479
+        - rid: 1610866296959795480
         m_RegisteredObservers: []
-    - rid: 1610866295380116414
+    - rid: 1610866296959795476
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 0}
+    - rid: 1610866296959795477
+      type: {class: 'BlackboardVariable`1[[Game.AI.NavigationPatrol, Game.AI]]', ns: Unity.Behavior,
+        asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 4175198444740080652
+          m_Value1: 1433170292145271768
+        Name: Patrol
+        m_Value: {fileID: 0}
+    - rid: 1610866296959795478
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior,
+        asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 8943343802110410741
+          m_Value1: 5456888730283180039
+        Name: Delay
+        m_Value: 2
+    - rid: 1610866296959795479
       type: {class: MoveToNextPatrolNodeAction, ns: Game.AI.Behavior, asm: Game.AI}
       data:
         ID:
@@ -483,10 +483,10 @@ MonoBehaviour:
         Graph:
           rid: 1610866294224060507
         m_Parent:
-          rid: 1610866295380116413
+          rid: 1610866296959795475
         Patrol:
-          rid: 1610866295380116283
-    - rid: 1610866295380116415
+          rid: 1610866296959795477
+    - rid: 1610866296959795480
       type: {class: WaitForSecondsAction, ns: Game.AI.Behavior, asm: Game.AI}
       data:
         ID:
@@ -495,9 +495,9 @@ MonoBehaviour:
         Graph:
           rid: 1610866294224060507
         m_Parent:
-          rid: 1610866295380116413
+          rid: 1610866296959795475
         Duration:
-          rid: 1610866295380116284
+          rid: 1610866296959795478
 --- !u!114 &9029034914752223956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,7 +510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
   m_Name: NpcPatrol Blackboard
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.RuntimeBlackboardAsset
-  VersionTimestamp: 639199049559545581
+  VersionTimestamp: 639199079239114834
   AssetID:
     m_Value0: 10691284506991049980
     m_Value1: 3204329360800258859
