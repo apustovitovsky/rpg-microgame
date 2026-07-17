@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Game.AI
@@ -20,7 +19,5 @@ namespace Game.AI
             float arrivalRadius);
 
         void Stop();
-
-        IDisposable AcquirePause();
     }
 }

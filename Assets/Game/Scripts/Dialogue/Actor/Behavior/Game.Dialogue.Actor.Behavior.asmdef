@@ -1,0 +1,19 @@
+{
+    "name": "Game.Dialogue.Actor.Behavior",
+    "rootNamespace": "",
+    "references": [
+        "Game.AI",
+        "Game.Dialogue",
+        "Game.Dialogue.Actor",
+        "Unity.Behavior"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

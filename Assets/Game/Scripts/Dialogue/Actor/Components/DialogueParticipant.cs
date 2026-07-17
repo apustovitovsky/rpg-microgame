@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Core;
+using UnityEngine;
 
 namespace Game.Dialogue.Actor
 {
@@ -52,27 +53,41 @@ namespace Game.Dialogue.Actor
         }
 
         public DialogueEvaluationStatus Evaluate(
-            Guid initiatorInstanceId)
+            Guid initiatorInstanceId,
+            Vector3 initiatorPosition,
+            Vector3 speakerPosition)
         {
             return _coordinator.Evaluate(
-                CreateRequest(initiatorInstanceId));
+                CreateRequest(
+                    initiatorInstanceId,
+                    initiatorPosition,
+                    speakerPosition));
         }
 
         public UniTask<DialogueStartResult> StartDialogueAsync(
             Guid initiatorInstanceId,
+            Vector3 initiatorPosition,
+            Vector3 speakerPosition,
             CancellationToken cancellationToken)
         {
             return _coordinator.StartAsync(
-                CreateRequest(initiatorInstanceId),
+                CreateRequest(
+                    initiatorInstanceId,
+                    initiatorPosition,
+                    speakerPosition),
                 cancellationToken);
         }
 
         private DialogueRequest CreateRequest(
-            Guid initiatorInstanceId)
+            Guid initiatorInstanceId,
+            Vector3 initiatorPosition,
+            Vector3 speakerPosition)
         {
             return new DialogueRequest(
                 initiatorInstanceId,
                 _speakerInstanceId,
+                initiatorPosition,
+                speakerPosition,
                 _entry);
         }
     }

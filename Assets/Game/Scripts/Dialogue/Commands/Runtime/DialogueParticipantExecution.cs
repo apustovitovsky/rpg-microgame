@@ -1,31 +1,31 @@
 using System;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Game.Commands;
-using Game.Core;
 
 namespace Game.Dialogue.Commands
 {
     public sealed class DialogueParticipantExecution :
         ICommandExecutionGroup,
         ICommandExecution<
-            EnterDialogueSessionCommand,
-            IUniTaskAsyncDisposable>
+            EnterDialogueSessionCommand>,
+        ICommandExecution<
+            ExitDialogueSessionCommand>
     {
-        private readonly IEnumerable<IDialogueParticipantLifecycle>
-            _lifecycles;
+        private readonly IDialogueParticipation
+            _participation;
 
         public DialogueParticipantExecution(
-            IEnumerable<IDialogueParticipantLifecycle> lifecycles)
+            IDialogueParticipation participation)
         {
-            _lifecycles = lifecycles
-                ?? throw new ArgumentNullException(nameof(lifecycles));
+            _participation = participation
+                ?? throw new ArgumentNullException(
+                    nameof(participation));
         }
 
         public CommandExecutionPolicy ExecutionPolicy =>
             CommandExecutionPolicy.Sequential;
 
-        public async UniTask<IUniTaskAsyncDisposable> ExecuteAsync(
+        public async UniTask ExecuteAsync(
             EnterDialogueSessionCommand command,
             CommandContext context)
         {
@@ -40,30 +40,52 @@ namespace Game.Dialogue.Commands
                     nameof(command));
             }
 
-            var leases = new AsyncLeaseGroup();
+            var participantContext =
+                new DialogueSessionContext(
+                    command.SessionId,
+                    command.OtherParticipantInstanceId,
+                    command.OtherParticipantPosition);
+
+            if (!_participation.TryEnter(
+                    participantContext))
+            {
+                throw new InvalidOperationException(
+                    "Actor is already participating in " +
+                    "another dialogue session.");
+            }
 
             try
             {
-                var participantContext =
-                    new DialogueSessionContext(
-                        command.SessionId,
-                        command.OtherParticipantInstanceId);
-
-                foreach (var lifecycle in _lifecycles)
-                {
-                    leases.Add(
-                        await lifecycle.EnterAsync(
-                            participantContext,
-                            context.CancellationToken));
-                }
-
-                return leases;
+                await UniTask.WaitUntil(
+                    () => _participation.IsReadyFor(
+                        command.SessionId),
+                    cancellationToken:
+                    context.CancellationToken);
             }
             catch
             {
-                await leases.DisposeAsync();
+                _participation.TryExit(
+                    command.SessionId);
+
                 throw;
             }
+        }
+
+        public UniTask ExecuteAsync(
+            ExitDialogueSessionCommand command,
+            CommandContext context)
+        {
+            if (command.SessionId == Guid.Empty ||
+                context.ReceiverId == Guid.Empty)
+            {
+                throw new ArgumentException(
+                    "Dialogue participant exit command is invalid.",
+                    nameof(command));
+            }
+
+            _participation.TryExit(command.SessionId);
+
+            return UniTask.CompletedTask;
         }
     }
 }

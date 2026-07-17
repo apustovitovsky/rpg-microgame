@@ -5,7 +5,11 @@ namespace Game.Dialogue
 {
     public interface IDialogueParticipantCoordinator
     {
-        UniTask<IUniTaskAsyncDisposable> EnterAsync(
+        UniTask EnterAsync(
+            DialogueSession session,
+            CancellationToken cancellationToken);
+
+        UniTask ExitAsync(
             DialogueSession session,
             CancellationToken cancellationToken);
     }

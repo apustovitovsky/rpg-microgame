@@ -32,7 +32,9 @@ namespace Game.Dialogue.Interaction
             InteractionContext context)
         {
             return _dialogue.Evaluate(
-                       context.InteractorInstanceId) ==
+                       context.InteractorInstanceId,
+                       context.Origin,
+                       InteractionPoint) ==
                    DialogueEvaluationStatus.Available;
         }
 
@@ -47,6 +49,8 @@ namespace Game.Dialogue.Interaction
 
             var result = await _dialogue.StartDialogueAsync(
                 context.InteractorInstanceId,
+                context.Origin,
+                InteractionPoint,
                 token);
 
             return result.Status switch

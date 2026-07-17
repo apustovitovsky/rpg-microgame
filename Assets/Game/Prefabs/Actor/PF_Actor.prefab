@@ -144,6 +144,64 @@ MonoBehaviour:
   _maximumTargetAngle: 120
   _distanceScoreWeight: 100
   _angleScoreWeight: 40
+--- !u!1 &1698196432709885458
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7394699184069241579}
+  - component: {fileID: 61264789197575504}
+  - component: {fileID: 1414847638636510432}
+  m_Layer: 0
+  m_Name: Dialogue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7394699184069241579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698196432709885458}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5186002720919307954}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &61264789197575504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698196432709885458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc0fe52ac5f5a63408d94fa6c91cb041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Dialogue.Actor::Game.Dialogue.Actor.DialogueParticipation
+--- !u!114 &1414847638636510432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698196432709885458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a626c5e4e3ce8504a8a52b7c8f989103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Dialogue.Actor::Game.Dialogue.Actor.DialogueParticipantModule
+  _participation: {fileID: 61264789197575504}
 --- !u!1 &1781962995865054892
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,63 +362,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7869591971293288977}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2423751493790401156
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4466172250627313813}
-  - component: {fileID: 4090886198469924922}
-  - component: {fileID: 7878446893165083074}
-  m_Layer: 0
-  m_Name: Dialogue
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4466172250627313813
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2423751493790401156}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5186002720919307954}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4090886198469924922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2423751493790401156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53edda4e30aa6ab429ae557fe9459b2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Dialogue.Commands::Game.Dialogue.Commands.DialogueParticipantCommandModule
---- !u!114 &7878446893165083074
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2423751493790401156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d47e2cd8ced5e904592744a7f2f1d638, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Dialogue.Player::Game.Dialogue.Player.PlayerDialogueModule
 --- !u!1 &3683214080218915046
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,7 +393,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7869591971293288977}
-  - {fileID: 4466172250627313813}
+  - {fileID: 7394699184069241579}
   - {fileID: 1805747911431770994}
   - {fileID: 7368301964978238535}
   - {fileID: 2672110059924851859}
@@ -517,7 +518,7 @@ GameObject:
   - component: {fileID: 1805747911431770994}
   - component: {fileID: 3014377428139242126}
   - component: {fileID: 5939613674092850085}
-  - component: {fileID: 7241559179587411253}
+  - component: {fileID: 8461398817495492521}
   m_Layer: 0
   m_Name: Control
   m_TagString: Untagged
@@ -569,7 +570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Control::Game.Control.PossessionEndpoint
   _root: {fileID: 8538305375040021554}
   _cameraPivot: {fileID: 2416931173838807167}
---- !u!114 &7241559179587411253
+--- !u!114 &8461398817495492521
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -578,9 +579,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5403951232980556087}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ff783d4a2c13504fb6d947181ff4de1, type: 3}
+  m_Script: {fileID: 11500000, guid: d47e2cd8ced5e904592744a7f2f1d638, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Game.Player::Game.Player.PossessCommandEndpoint
+  m_EditorClassIdentifier: Game.Dialogue.Player::Game.Dialogue.Player.PlayerDialogueModule
 --- !u!1 &5809602784777941306
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,8 +741,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2672110059924851859}
   - component: {fileID: 3065405954558525884}
+  - component: {fileID: 2223807216398304885}
+  - component: {fileID: 6148467547359990061}
   m_Layer: 0
-  m_Name: CommandReceiver
+  m_Name: Commands
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -774,6 +777,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a97a29524056cd43b4fdfc7907fbcd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Commands::Game.Commands.CommandRouterModule
+--- !u!114 &2223807216398304885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6168442160149048454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53edda4e30aa6ab429ae557fe9459b2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Dialogue.Commands::Game.Dialogue.Commands.DialogueCommandModule
+--- !u!114 &6148467547359990061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6168442160149048454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff783d4a2c13504fb6d947181ff4de1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Player::Game.Player.PossessCommandModule
 --- !u!1 &6685597537023399589
 GameObject:
   m_ObjectHideFlags: 0

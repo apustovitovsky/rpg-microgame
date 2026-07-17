@@ -4,8 +4,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.Commands
 {
-    internal interface ICommandScheduler :
-        IDisposable
+    internal interface ICommandScheduler
     {
         UniTask<CommandScheduleResult> ScheduleAsync(
             Func<

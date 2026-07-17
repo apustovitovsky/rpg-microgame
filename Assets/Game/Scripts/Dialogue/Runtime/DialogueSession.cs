@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Game.Dialogue
 {
@@ -35,6 +36,12 @@ namespace Game.Dialogue
 
         public Guid SpeakerInstanceId =>
             Request.SpeakerInstanceId;
+
+        public Vector3 InitiatorPosition =>
+            Request.InitiatorPosition;
+
+        public Vector3 SpeakerPosition =>
+            Request.SpeakerPosition;
 
         public DialogueEntry Entry =>
             Request.Entry;

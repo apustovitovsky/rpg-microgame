@@ -190,9 +190,6 @@ namespace Game.Commands
 
         public void Dispose()
         {
-            foreach (var scheduler in _schedulers.Values)
-                scheduler.Dispose();
-
             _schedulers.Clear();
             _entries.Clear();
         }

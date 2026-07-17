@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Commands;
-using Game.Core;
 
 namespace Game.Dialogue.Commands
 {
@@ -18,37 +17,80 @@ namespace Game.Dialogue.Commands
                 ?? throw new ArgumentNullException(nameof(commands));
         }
 
-        public async UniTask<IUniTaskAsyncDisposable> EnterAsync(
+        public async UniTask EnterAsync(
             DialogueSession session,
             CancellationToken cancellationToken)
         {
-            var initiatorLease =
-                await _commands.RequestRequiredAsync(
-                    session.InitiatorInstanceId,
-                    new EnterDialogueSessionCommand(
-                        session.Id,
-                        session.SpeakerInstanceId),
-                    cancellationToken);
+            await SendRequiredAsync(
+                session.InitiatorInstanceId,
+                new EnterDialogueSessionCommand(
+                    session.Id,
+                    session.SpeakerInstanceId,
+                    session.SpeakerPosition),
+                cancellationToken);
 
             try
             {
-                var speakerLease =
-                    await _commands.RequestRequiredAsync(
-                        session.SpeakerInstanceId,
-                        new EnterDialogueSessionCommand(
-                            session.Id,
-                            session.InitiatorInstanceId),
-                        cancellationToken);
-
-                return AsyncLeaseGroup.Combine(
-                    initiatorLease,
-                    speakerLease);
+                await SendRequiredAsync(
+                    session.SpeakerInstanceId,
+                    new EnterDialogueSessionCommand(
+                        session.Id,
+                        session.InitiatorInstanceId,
+                        session.InitiatorPosition),
+                    cancellationToken);
             }
             catch
             {
-                await initiatorLease.DisposeAsync();
+                await _commands.SendAsync(
+                    session.InitiatorInstanceId,
+                    new ExitDialogueSessionCommand(
+                        session.Id),
+                    CancellationToken.None);
+
                 throw;
             }
+        }
+
+        public async UniTask ExitAsync(
+            DialogueSession session,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                await SendRequiredAsync(
+                    session.InitiatorInstanceId,
+                    new ExitDialogueSessionCommand(
+                        session.Id),
+                    cancellationToken);
+            }
+            finally
+            {
+                await SendRequiredAsync(
+                    session.SpeakerInstanceId,
+                    new ExitDialogueSessionCommand(
+                        session.Id),
+                    cancellationToken);
+            }
+        }
+
+        private async UniTask SendRequiredAsync(
+            Guid targetInstanceId,
+            ICommand command,
+            CancellationToken cancellationToken)
+        {
+            var result = await _commands.SendAsync(
+                targetInstanceId,
+                command,
+                cancellationToken);
+
+            if (result.IsDelivered)
+            {
+                return;
+            }
+
+            throw new InvalidOperationException(
+                $"Command request to '{targetInstanceId}' failed: " +
+                $"{result.Status}.");
         }
     }
 }

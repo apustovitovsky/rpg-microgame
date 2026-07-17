@@ -1,6 +1,7 @@
 using Game.Core;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Game.Dialogue.Player
 {
@@ -12,9 +13,9 @@ namespace Game.Dialogue.Player
         public void Install(
             IContainerBuilder builder)
         {
-            builder.Register<PlayerDialogueLifecycle>(
-                    Lifetime.Scoped)
-                .AsImplementedInterfaces();
+            builder.RegisterEntryPoint<
+                PlayerDialogueInputController>(
+                Lifetime.Scoped);
         }
     }
 }

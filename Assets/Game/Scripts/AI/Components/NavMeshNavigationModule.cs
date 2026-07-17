@@ -46,39 +46,37 @@ namespace Game.AI
             _input = input;
         }
 
-        public async UniTask MoveToPositionAsync(
+        public UniTask MoveToPositionAsync(
             Vector3 destination,
             CancellationToken cancellationToken)
         {
             if (_planner == null)
             {
-                return;
+                return UniTask.CompletedTask;
             }
 
             _planner.MoveTo(destination);
 
-            await UniTask.WaitUntil(
-                () => _planner.HasArrived,
-                cancellationToken: cancellationToken);
+            return WaitForArrivalAsync(
+                cancellationToken);
         }
 
-        public async UniTask MoveToAsync(
+        public UniTask MoveToAsync(
             Vector3 destination,
             float arrivalRadius,
             CancellationToken cancellationToken)
         {
             if (_planner == null)
             {
-                return;
+                return UniTask.CompletedTask;
             }
 
             _planner.MoveTo(
                 destination,
                 arrivalRadius);
 
-            await UniTask.WaitUntil(
-                () => _planner.HasArrived,
-                cancellationToken: cancellationToken);
+            return WaitForArrivalAsync(
+                cancellationToken);
         }
 
         public UniTask MoveToCenterAsync(
@@ -102,9 +100,18 @@ namespace Game.AI
 
             _input.SetFacing(direction);
 
-            await UniTask.Delay(
-                TimeSpan.FromSeconds(1f),
-                cancellationToken: cancellationToken);
+            try
+            {
+                await UniTask.Delay(
+                    TimeSpan.FromSeconds(1f),
+                    cancellationToken: cancellationToken);
+            }
+            catch (OperationCanceledException)
+                when (cancellationToken.IsCancellationRequested)
+            {
+                _input.ClearFacing();
+                throw;
+            }
         }
 
         public void FaceDirection(Vector3 direction)
@@ -114,16 +121,8 @@ namespace Game.AI
 
         public void Stop()
         {
-            _planner?.Stop();
-        }
-
-        public IDisposable AcquirePause()
-        {
             _input?.Stop();
-
-            return _planner != null
-                ? _planner.AcquirePause()
-                : EmptyPause.Instance;
+            _planner?.Stop();
         }
 
         public void ClearFacing()
@@ -131,14 +130,20 @@ namespace Game.AI
             _input?.ClearFacing();
         }
 
-        private sealed class EmptyPause :
-            IDisposable
+        private async UniTask WaitForArrivalAsync(
+            CancellationToken cancellationToken)
         {
-            public static readonly EmptyPause Instance =
-                new();
-
-            public void Dispose()
+            try
             {
+                await UniTask.WaitUntil(
+                    () => _planner.HasArrived,
+                    cancellationToken: cancellationToken);
+            }
+            catch (OperationCanceledException)
+                when (cancellationToken.IsCancellationRequested)
+            {
+                Stop();
+                throw;
             }
         }
     }

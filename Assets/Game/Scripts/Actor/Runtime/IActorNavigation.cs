@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -33,8 +32,6 @@ namespace Game.Actor
         void FaceDirection(Vector3 direction);
 
         void Stop();
-
-        IDisposable AcquirePause();
 
         void ClearFacing();
     }

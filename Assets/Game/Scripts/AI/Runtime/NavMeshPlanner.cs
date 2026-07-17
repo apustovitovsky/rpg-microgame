@@ -1,4 +1,3 @@
-using System;
 using Game.Core;
 using UnityEngine;
 using UnityEngine.AI;
@@ -20,7 +19,6 @@ namespace Game.AI
         private float _destinationElapsedSeconds;
         private string _lastDiagnostic;
         private bool _hasDestination;
-        private int _pauseCount;
 
         public NavMeshPlanner(
             NavMeshAgent agent,
@@ -45,9 +43,6 @@ namespace Game.AI
             CanNavigate() && !CheckArrived();
 
         public Vector3 DesiredWorldDirection { get; private set; }
-
-        private bool IsPaused =>
-            _pauseCount > 0;
 
         public void Tick()
         {
@@ -144,7 +139,7 @@ namespace Game.AI
             _arrivalRadius = normalizedRadius;
             _hasDestination = true;
 
-            if (!shouldRepath || IsPaused)
+            if (!shouldRepath)
             {
                 return;
             }
@@ -181,43 +176,9 @@ namespace Game.AI
             _agent.nextPosition = _agent.transform.position;
         }
 
-        public IDisposable AcquirePause()
-        {
-            _pauseCount++;
-
-            if (CanUseAgent())
-            {
-                _agent.isStopped = true;
-            }
-
-            return new PauseLease(this);
-        }
-
-        private void ReleasePause()
-        {
-            if (_pauseCount == 0)
-            {
-                return;
-            }
-
-            _pauseCount--;
-
-            if (IsPaused ||
-                !_hasDestination ||
-                !CanUseAgent())
-            {
-                return;
-            }
-
-            _agent.stoppingDistance = _arrivalRadius;
-            _agent.isStopped = false;
-            _agent.SetDestination(_destination);
-        }
-
         private bool CanNavigate()
         {
-            return !IsPaused &&
-                   _hasDestination &&
+            return _hasDestination &&
                    CanUseAgent();
         }
 
@@ -310,26 +271,6 @@ namespace Game.AI
         private void ClearDiagnostic()
         {
             _lastDiagnostic = null;
-        }
-
-        private sealed class PauseLease :
-            IDisposable
-        {
-            private NavMeshPlanner _planner;
-
-            public PauseLease(
-                NavMeshPlanner planner)
-            {
-                _planner = planner;
-            }
-
-            public void Dispose()
-            {
-                var planner = _planner;
-                _planner = null;
-
-                planner?.ReleasePause();
-            }
         }
     }
 }

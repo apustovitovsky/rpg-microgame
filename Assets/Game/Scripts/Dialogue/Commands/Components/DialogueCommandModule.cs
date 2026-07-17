@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using Game.Commands;
 using Game.Core;
 using UnityEngine;
@@ -7,7 +6,7 @@ using VContainer;
 namespace Game.Dialogue.Commands
 {
     [DisallowMultipleComponent]
-    public sealed class DialogueParticipantCommandModule :
+    public sealed class DialogueCommandModule :
         MonoBehaviour,
         IModuleInstaller
     {
@@ -19,8 +18,11 @@ namespace Game.Dialogue.Commands
 
             builder.RegisterCommandExecution<
                 DialogueParticipantExecution,
-                EnterDialogueSessionCommand,
-                IUniTaskAsyncDisposable>();
+                EnterDialogueSessionCommand>();
+
+            builder.RegisterCommandExecution<
+                DialogueParticipantExecution,
+                ExitDialogueSessionCommand>();
         }
     }
 }

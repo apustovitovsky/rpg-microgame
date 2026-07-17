@@ -87,13 +87,15 @@ namespace Game.Dialogue
             DialogueSession session,
             CancellationToken cancellationToken)
         {
-            IUniTaskAsyncDisposable participantLease = null;
+            var participantsEntered = false;
 
             try
             {
-                participantLease = await _participants.EnterAsync(
+                await _participants.EnterAsync(
                     session,
                     cancellationToken);
+
+                participantsEntered = true;
 
                 await _executor.ExecuteAsync(
                     session,
@@ -107,9 +109,11 @@ namespace Game.Dialogue
             {
                 try
                 {
-                    if (participantLease != null)
+                    if (participantsEntered)
                     {
-                        await participantLease.DisposeAsync();
+                        await _participants.ExitAsync(
+                            session,
+                            CancellationToken.None);
                     }
                 }
                 finally

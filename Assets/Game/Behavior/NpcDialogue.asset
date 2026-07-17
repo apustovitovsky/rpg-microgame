@@ -1,0 +1,719 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6341227966414997300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
+  m_Name: NpcDialogue Blackboard
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.RuntimeBlackboardAsset
+  VersionTimestamp: 639199043201453107
+  AssetID:
+    m_Value0: 4901884208366266831
+    m_Value1: 13659438995331625978
+  m_Blackboard:
+    m_Variables:
+    - rid: 1610866294224060513
+    - rid: 1610866294224060523
+    - rid: 1610866295380115651
+  m_SharedBlackboardVariableGuids: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1610866294224060513
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 0}
+    - rid: 1610866294224060523
+      type: {class: 'BlackboardVariable`1[[Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 13282055586688809718
+          m_Value1: 11772946757862888864
+        Name: Participation
+        m_Value: {fileID: 0}
+    - rid: 1610866295380115651
+      type: {class: 'BlackboardVariable`1[[Game.AI.NavMeshNavigationModule, Game.AI]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 16967047922746503664
+          m_Value1: 18227891934609066762
+        Name: Navigation
+        m_Value: {fileID: 0}
+--- !u!114 &-6240947501347080358
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd922ae02c94c87a66e46a10a7319b9, type: 3}
+  m_Name: NpcDialogue Blackboard
+  m_EditorClassIdentifier: Unity.Behavior.Authoring::Unity.Behavior.BehaviorBlackboardAuthoringAsset
+  AssetID:
+    m_Value0: 4901884208366266831
+    m_Value1: 13659438995331625978
+  m_Variables:
+  - rid: 1610866294224060514
+  - rid: 1610866294224060522
+  - rid: 1610866295380115649
+  m_VersionTimestamp: 639199043201453107
+  m_CommandBuffer:
+    m_Commands: []
+  m_RuntimeBlackboardAsset: {fileID: -6341227966414997300}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1610866294224060514
+      type: {class: 'TypedVariableModel`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]',
+        ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+    - rid: 1610866294224060522
+      type: {class: 'TypedVariableModel`1[[Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor]]',
+        ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 13282055586688809718
+          m_Value1: 11772946757862888864
+        Name: Participation
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+    - rid: 1610866295380115649
+      type: {class: 'TypedVariableModel`1[[Game.AI.NavMeshNavigationModule, Game.AI]]',
+        ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 16967047922746503664
+          m_Value1: 18227891934609066762
+        Name: Navigation
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+--- !u!114 &-1927847880563364803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db920e62f70f420bb33c771449926fa4, type: 3}
+  m_Name: NpcDialogue
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraph
+  Graphs:
+  - rid: 1610866294224060515
+  m_DebugInfo: {fileID: 6975788080819622617}
+  m_WasCompileWithPlaceholderNode: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1610866294224060515
+      type: {class: BehaviorGraphModule, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        AuthoringAssetID:
+          m_Value0: 4901884208366266831
+          m_Value1: 13659438995331625978
+        m_DebugInfo: {fileID: 6975788080819622617}
+        BlackboardReference:
+          rid: 1610866294224060516
+        BlackboardGroupReferences: []
+        Root:
+          rid: 1610866295380115931
+        m_VersionTimestamp: 639199043271589865
+    - rid: 1610866294224060516
+      type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        m_Blackboard:
+          rid: 1610866294224060518
+        m_Source: {fileID: -6341227966414997300}
+    - rid: 1610866294224060518
+      type: {class: Blackboard, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        m_Variables:
+        - rid: 1610866295380115933
+        - rid: 1610866295380115934
+        - rid: 1610866295380115935
+    - rid: 1610866295380115861
+      type: {class: 'BlackboardVariable`1[[Game.AI.NavMeshNavigationModule, Game.AI]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {fileID: 0}
+    - rid: 1610866295380115931
+      type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        ID:
+          m_Value0: 633248844178017433
+          m_Value1: 6907999953077827050
+        Graph:
+          rid: 1610866294224060515
+        m_Parent:
+          rid: -2
+        m_Child:
+          rid: 1610866295380115932
+        Repeat: 0
+        AllowMultipleRepeatsPerTick: 0
+    - rid: 1610866295380115932
+      type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        ID:
+          m_Value0: 18019504849440034688
+          m_Value1: 8248894742720751060
+        Graph:
+          rid: 1610866294224060515
+        m_Parent:
+          rid: 1610866295380115931
+        m_Children:
+        - rid: 1610866295380115936
+        - rid: 1610866295380115937
+        - rid: 1610866295380115938
+        m_RegisteredObservers: []
+    - rid: 1610866295380115933
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 0}
+    - rid: 1610866295380115934
+      type: {class: 'BlackboardVariable`1[[Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 13282055586688809718
+          m_Value1: 11772946757862888864
+        Name: Participation
+        m_Value: {fileID: 0}
+    - rid: 1610866295380115935
+      type: {class: 'BlackboardVariable`1[[Game.AI.NavMeshNavigationModule, Game.AI]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 16967047922746503664
+          m_Value1: 18227891934609066762
+        Name: Navigation
+        m_Value: {fileID: 0}
+    - rid: 1610866295380115936
+      type: {class: FaceDialogueParticipantAction, ns: Game.Dialogue.Actor.Behavior,
+        asm: Game.Dialogue.Actor.Behavior}
+      data:
+        ID:
+          m_Value0: 17111515360833548244
+          m_Value1: 15990878522760221758
+        Graph:
+          rid: 1610866294224060515
+        m_Parent:
+          rid: 1610866295380115932
+        Participation:
+          rid: 1610866295380115934
+        Navigation:
+          rid: 1610866295380115935
+    - rid: 1610866295380115937
+      type: {class: MarkDialogueReadyAction, ns: Game.Dialogue.Actor.Behavior, asm: Game.Dialogue.Actor.Behavior}
+      data:
+        ID:
+          m_Value0: 11691306461899071054
+          m_Value1: 12935573196773871372
+        Graph:
+          rid: 1610866294224060515
+        m_Parent:
+          rid: 1610866295380115932
+        Participation:
+          rid: 1610866295380115934
+    - rid: 1610866295380115938
+      type: {class: WaitForDialogueEndAction, ns: Game.Dialogue.Actor.Behavior, asm: Game.Dialogue.Actor.Behavior}
+      data:
+        ID:
+          m_Value0: 7412365078348031164
+          m_Value1: 1767779677902630562
+        Graph:
+          rid: 1610866294224060515
+        m_Parent:
+          rid: 1610866295380115932
+        Participation:
+          rid: 1610866295380115934
+        Navigation:
+          rid: 1610866295380115861
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bad8f2220607dac4db5082ff333fafb8, type: 3}
+  m_Name: NpcDialogue
+  m_EditorClassIdentifier: Unity.Behavior.Authoring::Unity.Behavior.BehaviorAuthoringGraph
+  Blackboard: {fileID: -6240947501347080358}
+  m_Description: 
+  m_Nodes:
+  - rid: 1610866294224060520
+  - rid: 1610866294224060532
+  - rid: 1610866294224060542
+  - rid: 1610866294224060553
+  - rid: 1610866295380115576
+  m_VersionTimestamp: 639199043271589865
+  m_SerializedVersion: 3
+  m_DebugInfo: {fileID: 6975788080819622617}
+  m_RuntimeGraph: {fileID: -1927847880563364803}
+  AssetID:
+    m_Value0: 4901884208366266831
+    m_Value1: 13659438995331625978
+  Story:
+    Story: 
+    StoryVariableNames: []
+    Variables: []
+  m_NodeModelsInfo:
+  - Name: On Start
+    Story: 
+    RuntimeTypeString: Unity.Behavior.Start, Unity.Behavior, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    RuntimeTypeID:
+      m_Value0: 3335272451348827663
+      m_Value1: 11549843281177505721
+    Variables: []
+    NamedChildren: []
+    IsPlaceholder: 0
+  - Name: Mark Dialogue Ready
+    Story: '[Participation] is ready for dialogue'
+    RuntimeTypeString: Game.Dialogue.Actor.Behavior.MarkDialogueReadyAction, Game.Dialogue.Actor.Behavior,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    RuntimeTypeID:
+      m_Value0: 12700390215260978813
+      m_Value1: 3006696146791580079
+    Variables:
+    - Name: Participation
+      Type:
+        m_SerializableType: Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Tooltip: 
+    NamedChildren: []
+    IsPlaceholder: 0
+  - Name: Wait For Dialogue End
+    Story: wait until [Participation] leaves dialogue
+    RuntimeTypeString: Game.Dialogue.Actor.Behavior.WaitForDialogueEndAction, Game.Dialogue.Actor.Behavior,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    RuntimeTypeID:
+      m_Value0: 17532181549257678165
+      m_Value1: 1984981132640394378
+    Variables:
+    - Name: Participation
+      Type:
+        m_SerializableType: Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Tooltip: 
+    - Name: Navigation
+      Type:
+        m_SerializableType: Game.AI.NavMeshNavigationModule, Game.AI, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      Tooltip: 
+    NamedChildren: []
+    IsPlaceholder: 0
+  - Name: Sequence
+    Story: 
+    RuntimeTypeString: Unity.Behavior.SequenceComposite, Unity.Behavior, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    RuntimeTypeID:
+      m_Value0: 10181448252506100447
+      m_Value1: 8737116843063128493
+    Variables: []
+    NamedChildren: []
+    IsPlaceholder: 0
+  - Name: Face Dialogue Participant
+    Story: '[Navigation] faces dialogue participant from [Participation]'
+    RuntimeTypeString: Game.Dialogue.Actor.Behavior.FaceDialogueParticipantAction,
+      Game.Dialogue.Actor.Behavior, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    RuntimeTypeID:
+      m_Value0: 12775572009701783388
+      m_Value1: 12441410522415399331
+    Variables:
+    - Name: Participation
+      Type:
+        m_SerializableType: Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Tooltip: 
+    - Name: Navigation
+      Type:
+        m_SerializableType: Game.AI.NavMeshNavigationModule, Game.AI, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      Tooltip: 
+    NamedChildren: []
+    IsPlaceholder: 0
+  m_Blackboards: []
+  m_MainBlackboardAuthoringAsset: {fileID: -6240947501347080358}
+  m_CommandBuffer:
+    m_Commands: []
+  m_SubgraphsInfo: []
+  m_BlackboardMissingManagedRef: 0
+  m_GraphMissingManagedRef: 0
+  m_HasMissingTypeInManagedRef: 0
+  m_EnumDependencyCache:
+    Entries: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1610866294224060520
+      type: {class: StartNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -131.20001, y: -180.00006}
+        ID:
+          m_Value0: 633248844178017433
+          m_Value1: 6907999953077827050
+        Parents: []
+        PortModels:
+        - rid: 1610866294224060521
+        NodeType:
+          m_SerializableType: Unity.Behavior.Start, Unity.Behavior, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 3335272451348827663
+          m_Value1: 11549843281177505721
+        m_FieldValues: []
+        Repeat: 0
+        AllowMultipleRepeatsPerTick: 0
+    - rid: 1610866294224060521
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866294224060520
+        m_Connections:
+        - rid: 1610866294224060554
+    - rid: 1610866294224060532
+      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -85.30001, y: 135.70003}
+        ID:
+          m_Value0: 11691306461899071054
+          m_Value1: 12935573196773871372
+        Parents: []
+        PortModels:
+        - rid: 1610866294224060533
+        - rid: 1610866294224060534
+        NodeType:
+          m_SerializableType: Game.Dialogue.Actor.Behavior.MarkDialogueReadyAction,
+            Game.Dialogue.Actor.Behavior, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 12700390215260978813
+          m_Value1: 3006696146791580079
+        m_FieldValues:
+        - rid: 1610866294224060535
+    - rid: 1610866294224060533
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866294224060532
+        m_Connections:
+        - rid: 1610866294224060555
+    - rid: 1610866294224060534
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866294224060532
+        m_Connections: []
+    - rid: 1610866294224060535
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Participation
+        Type:
+          m_SerializableType: Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        LocalValue:
+          rid: 1610866294224060536
+        LinkedVariable:
+          rid: 1610866294224060538
+    - rid: 1610866294224060536
+      type: {class: 'BlackboardVariable`1[[Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {fileID: 0}
+    - rid: 1610866294224060538
+      type: {class: 'TypedVariableModel`1[[Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor]]',
+        ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 13282055586688809718
+          m_Value1: 11772946757862888864
+        Name: Participation
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+    - rid: 1610866294224060542
+      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 216.30005, y: 79.700005}
+        ID:
+          m_Value0: 7412365078348031164
+          m_Value1: 1767779677902630562
+        Parents: []
+        PortModels:
+        - rid: 1610866294224060543
+        - rid: 1610866294224060544
+        NodeType:
+          m_SerializableType: Game.Dialogue.Actor.Behavior.WaitForDialogueEndAction,
+            Game.Dialogue.Actor.Behavior, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 17532181549257678165
+          m_Value1: 1984981132640394378
+        m_FieldValues:
+        - rid: 1610866294224060545
+        - rid: 1610866295380115574
+    - rid: 1610866294224060543
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866294224060542
+        m_Connections:
+        - rid: 1610866294224060555
+    - rid: 1610866294224060544
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866294224060542
+        m_Connections: []
+    - rid: 1610866294224060545
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Participation
+        Type:
+          m_SerializableType: Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        LocalValue:
+          rid: 1610866294224060546
+        LinkedVariable:
+          rid: 1610866294224060538
+    - rid: 1610866294224060546
+      type: {class: 'BlackboardVariable`1[[Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {fileID: 0}
+    - rid: 1610866294224060553
+      type: {class: CompositeNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -178.09998, y: -49.099983}
+        ID:
+          m_Value0: 18019504849440034688
+          m_Value1: 8248894742720751060
+        Parents: []
+        PortModels:
+        - rid: 1610866294224060554
+        - rid: 1610866294224060555
+        NodeType:
+          m_SerializableType: Unity.Behavior.SequenceComposite, Unity.Behavior, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 10181448252506100447
+          m_Value1: 8737116843063128493
+        m_FieldValues: []
+    - rid: 1610866294224060554
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866294224060553
+        m_Connections:
+        - rid: 1610866294224060521
+    - rid: 1610866294224060555
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866294224060553
+        m_Connections:
+        - rid: 1610866295380115577
+        - rid: 1610866294224060533
+        - rid: 1610866294224060543
+    - rid: 1610866295380115574
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Navigation
+        Type:
+          m_SerializableType: Game.AI.NavMeshNavigationModule, Game.AI, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        LocalValue:
+          rid: 1610866295380115575
+        LinkedVariable:
+          rid: -2
+    - rid: 1610866295380115575
+      type: {class: 'BlackboardVariable`1[[Game.AI.NavMeshNavigationModule, Game.AI]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {fileID: 0}
+    - rid: 1610866295380115576
+      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -411.30005, y: 82.45001}
+        ID:
+          m_Value0: 17111515360833548244
+          m_Value1: 15990878522760221758
+        Parents: []
+        PortModels:
+        - rid: 1610866295380115577
+        - rid: 1610866295380115578
+        NodeType:
+          m_SerializableType: Game.Dialogue.Actor.Behavior.FaceDialogueParticipantAction,
+            Game.Dialogue.Actor.Behavior, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 12775572009701783388
+          m_Value1: 12441410522415399331
+        m_FieldValues:
+        - rid: 1610866295380115579
+        - rid: 1610866295380115580
+    - rid: 1610866295380115577
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866295380115576
+        m_Connections:
+        - rid: 1610866294224060555
+    - rid: 1610866295380115578
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866295380115576
+        m_Connections: []
+    - rid: 1610866295380115579
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Participation
+        Type:
+          m_SerializableType: Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        LocalValue:
+          rid: 1610866295380115581
+        LinkedVariable:
+          rid: 1610866295380115930
+    - rid: 1610866295380115580
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Navigation
+        Type:
+          m_SerializableType: Game.AI.NavMeshNavigationModule, Game.AI, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        LocalValue:
+          rid: 1610866295380115582
+        LinkedVariable:
+          rid: 1610866295380115650
+    - rid: 1610866295380115581
+      type: {class: 'BlackboardVariable`1[[Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {fileID: 0}
+    - rid: 1610866295380115582
+      type: {class: 'BlackboardVariable`1[[Game.AI.NavMeshNavigationModule, Game.AI]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {fileID: 0}
+    - rid: 1610866295380115650
+      type: {class: 'TypedVariableModel`1[[Game.AI.NavMeshNavigationModule, Game.AI]]',
+        ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 16967047922746503664
+          m_Value1: 18227891934609066762
+        Name: Navigation
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+    - rid: 1610866295380115930
+      type: {class: 'TypedVariableModel`1[[Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor]]',
+        ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 13282055586688809718
+          m_Value1: 11772946757862888864
+        Name: Participation
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+--- !u!114 &6975788080819622617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b27bb6d9a2c8d540a10dff10acc543e, type: 3}
+  m_Name: NpcDialogue Debug Info
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphDebugInfo
+  m_CodeBreakPointsList: []

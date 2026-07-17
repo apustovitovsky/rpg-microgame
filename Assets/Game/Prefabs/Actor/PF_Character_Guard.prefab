@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 913606726017835979}
   - component: {fileID: 1680122134327476205}
   m_Layer: 0
-  m_Name: Patrol
+  m_Name: Behavior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,20 +46,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
-  m_Graph: {fileID: -4832113384068156502, guid: 7420687fc27b0d54d975491ba3ef87c8,
-    type: 2}
+  m_Graph: {fileID: 6486224077784865153, guid: 51acec22a8a3857438f14240e302b14c, type: 2}
   m_BlackboardVariableOverridesList:
-  - rid: 1610866269427597431
-  - rid: 1610866270166843636
-  - rid: 1610866270166843643
-  m_OriginalGraph: {fileID: -4832113384068156502, guid: 7420687fc27b0d54d975491ba3ef87c8,
+  - rid: 1610866294224060815
+  - rid: 1610866294224060816
+  - rid: 1610866295380116068
+  - rid: 1610866296959795276
+  m_OriginalGraph: {fileID: 6486224077784865153, guid: 51acec22a8a3857438f14240e302b14c,
     type: 2}
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
     version: 2
     RefIds:
-    - rid: 1610866269427597431
+    - rid: 1610866294224060815
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]',
         ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -67,25 +67,34 @@ MonoBehaviour:
           m_Value0: 1
           m_Value1: 0
         Name: Self
-        m_Value: {fileID: 3042253684763455917}
-    - rid: 1610866270166843636
+        m_Value: {fileID: 1001957614721016067}
+    - rid: 1610866294224060816
+      type: {class: 'BlackboardVariable`1[[Game.Dialogue.Actor.DialogueParticipation, Game.Dialogue.Actor]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 17472444531976337631
+          m_Value1: 5597878676120367438
+        Name: Participant
+        m_Value: {fileID: 5380650168332764155}
+    - rid: 1610866295380116068
+      type: {class: 'BlackboardVariable`1[[Game.AI.NavMeshNavigationModule, Game.AI]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 526101310036024840
+          m_Value1: 11830744737561097228
+        Name: Navigation
+        m_Value: {fileID: 5588775038010859008}
+    - rid: 1610866296959795276
       type: {class: 'BlackboardVariable`1[[Game.AI.NavigationPatrol, Game.AI]]', ns: Unity.Behavior,
         asm: Unity.Behavior}
       data:
         GUID:
-          m_Value0: 11362807183834001395
-          m_Value1: 2707852466211730758
-        Name: New Navigation Patrol
+          m_Value0: 693030595440797477
+          m_Value1: 14106549000510509112
+        Name: Patrol
         m_Value: {fileID: 1680122134327476205}
-    - rid: 1610866270166843643
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior,
-        asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 10161401193436682181
-          m_Value1: 14546731092383851870
-        Name: Delay
-        m_Value: 2
 --- !u!114 &913606726017835979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,63 +124,6 @@ MonoBehaviour:
   _initialStop:
     _locationId: city_storage
     _anchorKey: entrance_outer
---- !u!1 &3866428601309190613
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1468953328830763898}
-  - component: {fileID: 6971416908763349869}
-  - component: {fileID: 785083898840826437}
-  m_Layer: 0
-  m_Name: Dialogue
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1468953328830763898
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3866428601309190613}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4326946942175359641}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6971416908763349869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3866428601309190613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a626c5e4e3ce8504a8a52b7c8f989103, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Dialogue.Actor::Game.Dialogue.Actor.DialogueParticipantModule
---- !u!114 &785083898840826437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3866428601309190613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f227b382e9ef5d34887b31e606b07092, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Dialogue.Actor::Game.Dialogue.Actor.DialogueNavigationModule
 --- !u!1001 &5364421375585064619
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -186,6 +138,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 65be428b9dae3aa44a54c517886a77e9,
         type: 2}
+    - target: {fileID: 6168442160149048454, guid: ff419830c249fdb43a317a78c972d9bd,
+        type: 3}
+      propertyPath: m_Name
+      value: Commands
+      objectReference: {fileID: 0}
     - target: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
         type: 3}
       propertyPath: m_Name
@@ -247,39 +204,13 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8538305375040021554, guid: ff419830c249fdb43a317a78c972d9bd,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1468953328830763898}
-    - targetCorrespondingSourceObject: {fileID: 8538305375040021554, guid: ff419830c249fdb43a317a78c972d9bd,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7210221314388992732}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7820657305054395811, guid: ff419830c249fdb43a317a78c972d9bd,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2906818491364811643}
-    - targetCorrespondingSourceObject: {fileID: 6168442160149048454, guid: ff419830c249fdb43a317a78c972d9bd,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3146951554576230186}
   m_SourcePrefab: {fileID: 100100000, guid: ff419830c249fdb43a317a78c972d9bd, type: 3}
---- !u!1 &2299357710744336941 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6168442160149048454, guid: ff419830c249fdb43a317a78c972d9bd,
-    type: 3}
-  m_PrefabInstance: {fileID: 5364421375585064619}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3146951554576230186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2299357710744336941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c76d58f6a3df844bbba507e7c47fcd2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Dialogue.Commands::Game.Dialogue.Commands.DialogueCommandModule
 --- !u!1 &2808784588306262792 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7820657305054395811, guid: ff419830c249fdb43a317a78c972d9bd,
@@ -300,18 +231,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Dialogue.Interaction::Game.Dialogue.Interaction.DialogueInteractionModule
   _interactionPoint: {fileID: 8618316088215971712}
   <MaxRange>k__BackingField: 5
---- !u!1 &3042253684763455917 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6938359593822086918, guid: ff419830c249fdb43a317a78c972d9bd,
-    type: 3}
-  m_PrefabInstance: {fileID: 5364421375585064619}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4326946942175359641 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8538305375040021554, guid: ff419830c249fdb43a317a78c972d9bd,
     type: 3}
   m_PrefabInstance: {fileID: 5364421375585064619}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5380650168332764155 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 61264789197575504, guid: ff419830c249fdb43a317a78c972d9bd,
+    type: 3}
+  m_PrefabInstance: {fileID: 5364421375585064619}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc0fe52ac5f5a63408d94fa6c91cb041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Dialogue.Actor::Game.Dialogue.Actor.DialogueParticipation
+--- !u!114 &5588775038010859008 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 575635675722254507, guid: ff419830c249fdb43a317a78c972d9bd,
+    type: 3}
+  m_PrefabInstance: {fileID: 5364421375585064619}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b5a78ac5d0394b40b602d6d96f64c1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.AI::Game.AI.NavMeshTravelEndpoint
 --- !u!4 &8618316088215971712 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4460859427438145835, guid: ff419830c249fdb43a317a78c972d9bd,

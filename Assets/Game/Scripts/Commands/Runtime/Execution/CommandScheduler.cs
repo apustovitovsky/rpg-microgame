@@ -49,11 +49,6 @@ namespace Game.Commands
             };
         }
 
-        public void Dispose()
-        {
-            _gate.Dispose();
-        }
-
         private static async UniTask<CommandScheduleResult> RunConcurrentAsync(
             Func<
                 CancellationToken,

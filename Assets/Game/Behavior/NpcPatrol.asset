@@ -1,0 +1,552 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6290647834127466823
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd922ae02c94c87a66e46a10a7319b9, type: 3}
+  m_Name: NpcPatrol Blackboard
+  m_EditorClassIdentifier: Unity.Behavior.Authoring::Unity.Behavior.BehaviorBlackboardAuthoringAsset
+  AssetID:
+    m_Value0: 10691284506991049980
+    m_Value1: 3204329360800258859
+  m_Variables:
+  - rid: 1610866294224060504
+  - rid: 1610866295380116105
+  - rid: 1610866295380116207
+  m_VersionTimestamp: 639199049559545581
+  m_CommandBuffer:
+    m_Commands: []
+  m_RuntimeBlackboardAsset: {fileID: 9029034914752223956}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1610866294224060504
+      type: {class: 'TypedVariableModel`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]',
+        ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+    - rid: 1610866295380116105
+      type: {class: 'TypedVariableModel`1[[Game.AI.NavigationPatrol, Game.AI]]', ns: Unity.Behavior.GraphFramework,
+        asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 4175198444740080652
+          m_Value1: 1433170292145271768
+        Name: Patrol
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+    - rid: 1610866295380116207
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework,
+        asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 8943343802110410741
+          m_Value1: 5456888730283180039
+        Name: Delay
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: 2
+--- !u!114 &-5724604204605363779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b27bb6d9a2c8d540a10dff10acc543e, type: 3}
+  m_Name: NpcPatrol Debug Info
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphDebugInfo
+  m_CodeBreakPointsList: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bad8f2220607dac4db5082ff333fafb8, type: 3}
+  m_Name: NpcPatrol
+  m_EditorClassIdentifier: Unity.Behavior.Authoring::Unity.Behavior.BehaviorAuthoringGraph
+  Blackboard: {fileID: -6290647834127466823}
+  m_Description: 
+  m_Nodes:
+  - rid: 1610866294224060505
+  - rid: 1610866294224060938
+  - rid: 1610866295380116069
+  - rid: 1610866295380116409
+  m_VersionTimestamp: 639199049792703602
+  m_SerializedVersion: 3
+  m_DebugInfo: {fileID: -5724604204605363779}
+  m_RuntimeGraph: {fileID: 7791993851170325552}
+  AssetID:
+    m_Value0: 10691284506991049980
+    m_Value1: 3204329360800258859
+  Story:
+    Story: 
+    StoryVariableNames: []
+    Variables: []
+  m_NodeModelsInfo:
+  - Name: On Start
+    Story: 
+    RuntimeTypeString: Unity.Behavior.Start, Unity.Behavior, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    RuntimeTypeID:
+      m_Value0: 3335272451348827663
+      m_Value1: 11549843281177505721
+    Variables: []
+    NamedChildren: []
+    IsPlaceholder: 0
+  - Name: Wait For Seconds
+    Story: waits [Duration] seconds
+    RuntimeTypeString: Game.AI.Behavior.WaitForSecondsAction, Game.AI, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    RuntimeTypeID:
+      m_Value0: 7370883024735477680
+      m_Value1: 2144283398838706066
+    Variables:
+    - Name: Duration
+      Type:
+        m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089
+      Tooltip: 
+    NamedChildren: []
+    IsPlaceholder: 0
+  - Name: Move To Next Patrol Node
+    Story: '[Patrol] moves to its next route node'
+    RuntimeTypeString: Game.AI.Behavior.MoveToNextPatrolNodeAction, Game.AI, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    RuntimeTypeID:
+      m_Value0: 2039450193912679502
+      m_Value1: 9965725539627250828
+    Variables:
+    - Name: Patrol
+      Type:
+        m_SerializableType: Game.AI.NavigationPatrol, Game.AI, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+      Tooltip: 
+    NamedChildren: []
+    IsPlaceholder: 0
+  - Name: Sequence
+    Story: 
+    RuntimeTypeString: Unity.Behavior.SequenceComposite, Unity.Behavior, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    RuntimeTypeID:
+      m_Value0: 10181448252506100447
+      m_Value1: 8737116843063128493
+    Variables: []
+    NamedChildren: []
+    IsPlaceholder: 0
+  m_Blackboards: []
+  m_MainBlackboardAuthoringAsset: {fileID: -6290647834127466823}
+  m_CommandBuffer:
+    m_Commands: []
+  m_SubgraphsInfo: []
+  m_BlackboardMissingManagedRef: 0
+  m_GraphMissingManagedRef: 0
+  m_HasMissingTypeInManagedRef: 0
+  m_EnumDependencyCache:
+    Entries: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1610866294224060505
+      type: {class: StartNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 0, y: 0}
+        ID:
+          m_Value0: 12135755742567601049
+          m_Value1: 17835631768324877330
+        Parents: []
+        PortModels:
+        - rid: 1610866294224060506
+        NodeType:
+          m_SerializableType: Unity.Behavior.Start, Unity.Behavior, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 3335272451348827663
+          m_Value1: 11549843281177505721
+        m_FieldValues: []
+        Repeat: 1
+        AllowMultipleRepeatsPerTick: 0
+    - rid: 1610866294224060506
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866294224060505
+        m_Connections:
+        - rid: 1610866295380116410
+    - rid: 1610866294224060938
+      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 49.90001, y: 305.29996}
+        ID:
+          m_Value0: 14371661648109905313
+          m_Value1: 4156735732301679315
+        Parents: []
+        PortModels:
+        - rid: 1610866294224060939
+        - rid: 1610866294224060940
+        NodeType:
+          m_SerializableType: Game.AI.Behavior.WaitForSecondsAction, Game.AI, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 7370883024735477680
+          m_Value1: 2144283398838706066
+        m_FieldValues:
+        - rid: 1610866294224060941
+    - rid: 1610866294224060939
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866294224060938
+        m_Connections:
+        - rid: 1610866295380116411
+    - rid: 1610866294224060940
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866294224060938
+        m_Connections: []
+    - rid: 1610866294224060941
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Duration
+        Type:
+          m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        LocalValue:
+          rid: 1610866294224060942
+        LinkedVariable:
+          rid: 1610866295380116208
+    - rid: 1610866294224060942
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior,
+        asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: 1
+    - rid: 1610866295380116069
+      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -168.04996, y: 298.05}
+        ID:
+          m_Value0: 2908941249099632727
+          m_Value1: 13461056208662562601
+        Parents: []
+        PortModels:
+        - rid: 1610866295380116070
+        - rid: 1610866295380116071
+        NodeType:
+          m_SerializableType: Game.AI.Behavior.MoveToNextPatrolNodeAction, Game.AI,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 2039450193912679502
+          m_Value1: 9965725539627250828
+        m_FieldValues:
+        - rid: 1610866295380116072
+    - rid: 1610866295380116070
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866295380116069
+        m_Connections:
+        - rid: 1610866295380116411
+    - rid: 1610866295380116071
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866295380116069
+        m_Connections: []
+    - rid: 1610866295380116072
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Patrol
+        Type:
+          m_SerializableType: Game.AI.NavigationPatrol, Game.AI, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        LocalValue:
+          rid: 1610866295380116073
+        LinkedVariable:
+          rid: 1610866295380116106
+    - rid: 1610866295380116073
+      type: {class: 'BlackboardVariable`1[[Game.AI.NavigationPatrol, Game.AI]]', ns: Unity.Behavior,
+        asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {fileID: 0}
+    - rid: 1610866295380116106
+      type: {class: 'TypedVariableModel`1[[Game.AI.NavigationPatrol, Game.AI]]', ns: Unity.Behavior.GraphFramework,
+        asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 4175198444740080652
+          m_Value1: 1433170292145271768
+        Name: Patrol
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+    - rid: 1610866295380116208
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework,
+        asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 8943343802110410741
+          m_Value1: 5456888730283180039
+        Name: Delay
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: 2
+    - rid: 1610866295380116409
+      type: {class: CompositeNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -19.224983, y: 132.62502}
+        ID:
+          m_Value0: 14175273330896903829
+          m_Value1: 12436626773563378739
+        Parents: []
+        PortModels:
+        - rid: 1610866295380116410
+        - rid: 1610866295380116411
+        NodeType:
+          m_SerializableType: Unity.Behavior.SequenceComposite, Unity.Behavior, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 10181448252506100447
+          m_Value1: 8737116843063128493
+        m_FieldValues: []
+    - rid: 1610866295380116410
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866295380116409
+        m_Connections:
+        - rid: 1610866294224060506
+    - rid: 1610866295380116411
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 1610866295380116409
+        m_Connections:
+        - rid: 1610866295380116070
+        - rid: 1610866294224060939
+--- !u!114 &7791993851170325552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db920e62f70f420bb33c771449926fa4, type: 3}
+  m_Name: NpcPatrol
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraph
+  Graphs:
+  - rid: 1610866294224060507
+  m_DebugInfo: {fileID: -5724604204605363779}
+  m_WasCompileWithPlaceholderNode: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1610866294224060507
+      type: {class: BehaviorGraphModule, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        AuthoringAssetID:
+          m_Value0: 10691284506991049980
+          m_Value1: 3204329360800258859
+        m_DebugInfo: {fileID: -5724604204605363779}
+        BlackboardReference:
+          rid: 1610866294224060508
+        BlackboardGroupReferences: []
+        Root:
+          rid: 1610866295380116412
+        m_VersionTimestamp: 639199049792703602
+    - rid: 1610866294224060508
+      type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        m_Blackboard:
+          rid: 1610866294224060510
+        m_Source: {fileID: 9029034914752223956}
+    - rid: 1610866294224060510
+      type: {class: Blackboard, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        m_Variables:
+        - rid: 1610866295380116282
+        - rid: 1610866295380116283
+        - rid: 1610866295380116284
+    - rid: 1610866295380116282
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 0}
+    - rid: 1610866295380116283
+      type: {class: 'BlackboardVariable`1[[Game.AI.NavigationPatrol, Game.AI]]', ns: Unity.Behavior,
+        asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 4175198444740080652
+          m_Value1: 1433170292145271768
+        Name: Patrol
+        m_Value: {fileID: 0}
+    - rid: 1610866295380116284
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior,
+        asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 8943343802110410741
+          m_Value1: 5456888730283180039
+        Name: Delay
+        m_Value: 2
+    - rid: 1610866295380116412
+      type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        ID:
+          m_Value0: 12135755742567601049
+          m_Value1: 17835631768324877330
+        Graph:
+          rid: 1610866294224060507
+        m_Parent:
+          rid: -2
+        m_Child:
+          rid: 1610866295380116413
+        Repeat: 1
+        AllowMultipleRepeatsPerTick: 0
+    - rid: 1610866295380116413
+      type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        ID:
+          m_Value0: 14175273330896903829
+          m_Value1: 12436626773563378739
+        Graph:
+          rid: 1610866294224060507
+        m_Parent:
+          rid: 1610866295380116412
+        m_Children:
+        - rid: 1610866295380116414
+        - rid: 1610866295380116415
+        m_RegisteredObservers: []
+    - rid: 1610866295380116414
+      type: {class: MoveToNextPatrolNodeAction, ns: Game.AI.Behavior, asm: Game.AI}
+      data:
+        ID:
+          m_Value0: 2908941249099632727
+          m_Value1: 13461056208662562601
+        Graph:
+          rid: 1610866294224060507
+        m_Parent:
+          rid: 1610866295380116413
+        Patrol:
+          rid: 1610866295380116283
+    - rid: 1610866295380116415
+      type: {class: WaitForSecondsAction, ns: Game.AI.Behavior, asm: Game.AI}
+      data:
+        ID:
+          m_Value0: 14371661648109905313
+          m_Value1: 4156735732301679315
+        Graph:
+          rid: 1610866294224060507
+        m_Parent:
+          rid: 1610866295380116413
+        Duration:
+          rid: 1610866295380116284
+--- !u!114 &9029034914752223956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
+  m_Name: NpcPatrol Blackboard
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.RuntimeBlackboardAsset
+  VersionTimestamp: 639199049559545581
+  AssetID:
+    m_Value0: 10691284506991049980
+    m_Value1: 3204329360800258859
+  m_Blackboard:
+    m_Variables:
+    - rid: 1610866294224060512
+    - rid: 1610866295380116111
+    - rid: 1610866295380116214
+  m_SharedBlackboardVariableGuids: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1610866294224060512
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]',
+        ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 0}
+    - rid: 1610866295380116111
+      type: {class: 'BlackboardVariable`1[[Game.AI.NavigationPatrol, Game.AI]]', ns: Unity.Behavior,
+        asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 4175198444740080652
+          m_Value1: 1433170292145271768
+        Name: Patrol
+        m_Value: {fileID: 0}
+    - rid: 1610866295380116214
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior,
+        asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 8943343802110410741
+          m_Value1: 5456888730283180039
+        Name: Delay
+        m_Value: 2
