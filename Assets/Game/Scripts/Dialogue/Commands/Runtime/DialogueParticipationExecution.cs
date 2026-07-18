@@ -4,7 +4,7 @@ using Game.Commands;
 
 namespace Game.Dialogue.Commands
 {
-    public sealed class DialogueParticipantExecution :
+    public sealed class DialogueParticipationExecution :
         ICommandExecutionGroup,
         ICommandExecution<
             EnterDialogueSessionCommand>,
@@ -14,7 +14,7 @@ namespace Game.Dialogue.Commands
         private readonly IDialogueParticipation
             _participation;
 
-        public DialogueParticipantExecution(
+        public DialogueParticipationExecution(
             IDialogueParticipation participation)
         {
             _participation = participation
@@ -23,7 +23,7 @@ namespace Game.Dialogue.Commands
         }
 
         public CommandExecutionPolicy ExecutionPolicy =>
-            CommandExecutionPolicy.Sequential;
+            CommandExecutionPolicy.Switch;
 
         public async UniTask ExecuteAsync(
             EnterDialogueSessionCommand command,
@@ -56,10 +56,8 @@ namespace Game.Dialogue.Commands
 
             try
             {
-                await UniTask.WaitUntil(
-                    () => _participation.IsReadyFor(
-                        command.SessionId),
-                    cancellationToken:
+                await _participation.WaitUntilReadyAsync(
+                    command.SessionId,
                     context.CancellationToken);
             }
             catch

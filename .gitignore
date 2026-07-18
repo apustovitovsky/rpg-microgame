@@ -118,3 +118,5 @@ InitTestScene*.unity*
 
 # Local editor config
 .editorconfig
+
+/.agents/

@@ -18,7 +18,7 @@ namespace Game.Gameplay
         private readonly PickupSpawnCatalog _pickupSpawnCatalog;
         private readonly IActorAssetCatalog _entityDefinitions;
         private readonly IPickupAssetCatalog _pickupDefinitions;
-        private readonly IActorPlacementService _actorPlacements;
+        private readonly IActorRuntimeRegistry _actorRuntimes;
         private readonly IActorSpawner _actorSpawner;
         private readonly IPickupSpawner _pickupSpawner;
         private readonly IPlayerControl _player;
@@ -29,7 +29,7 @@ namespace Game.Gameplay
             PickupSpawnCatalog pickupSpawnCatalog,
             IActorAssetCatalog entityDefinitions,
             IPickupAssetCatalog pickupDefinitions,
-            IActorPlacementService actorPlacements,
+            IActorRuntimeRegistry actorRuntimes,
             IActorSpawner actorSpawner,
             IPickupSpawner pickupSpawner,
             ISpawnPointResolver spawnPoints,
@@ -39,7 +39,7 @@ namespace Game.Gameplay
             _pickupSpawnCatalog = pickupSpawnCatalog;
             _entityDefinitions = entityDefinitions;
             _pickupDefinitions = pickupDefinitions;
-            _actorPlacements = actorPlacements;
+            _actorRuntimes = actorRuntimes;
             _actorSpawner = actorSpawner;
             _pickupSpawner = pickupSpawner;
             _spawnPoints = spawnPoints;
@@ -77,11 +77,20 @@ namespace Game.Gameplay
             if (entry == null)
                 return Guid.Empty;
 
-            ActorPlacement placement;
+            var instanceId = Guid.NewGuid();
+            ActorRuntime runtime;
 
             try
             {
-                placement = entry.CreatePlacement();
+                runtime = entry.CreateRuntime(instanceId);
+            }
+            catch (ArgumentException exception)
+            {
+                Debug.LogWarning(
+                    $"Actor '{entry.DefinitionId}' was not spawned: " +
+                    exception.Message);
+
+                return Guid.Empty;
             }
             catch (InvalidOperationException exception)
             {
@@ -92,7 +101,7 @@ namespace Game.Gameplay
                 return Guid.Empty;
             }
 
-            var spawnLocation = placement.SpawnLocation;
+            var spawnLocation = runtime.SpawnLocation;
 
             if (!_spawnPoints.TryResolve(
                     spawnLocation.LocationId,
@@ -116,11 +125,7 @@ namespace Game.Gameplay
                 return Guid.Empty;
             }
 
-            var instanceId = Guid.NewGuid();
-
-            _actorPlacements.Register(
-                instanceId,
-                placement);
+            _actorRuntimes.Register(runtime);
 
             ActorInstance instance;
 
@@ -132,11 +137,11 @@ namespace Game.Gameplay
                         new SpawnPlacement(
                             node.Position,
                             node.Rotation),
-                        instanceId));
+                        runtime.InstanceId));
             }
             catch
             {
-                _actorPlacements.Unregister(instanceId);
+                _actorRuntimes.Unregister(runtime.InstanceId);
                 throw;
             }
 

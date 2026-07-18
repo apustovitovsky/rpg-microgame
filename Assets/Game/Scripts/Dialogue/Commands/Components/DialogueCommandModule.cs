@@ -14,14 +14,14 @@ namespace Game.Dialogue.Commands
             IContainerBuilder builder)
         {
             builder.RegisterCommandExecutionGroup<
-                DialogueParticipantExecution>();
+                DialogueParticipationExecution>();
 
             builder.RegisterCommandExecution<
-                DialogueParticipantExecution,
+                DialogueParticipationExecution,
                 EnterDialogueSessionCommand>();
 
             builder.RegisterCommandExecution<
-                DialogueParticipantExecution,
+                DialogueParticipationExecution,
                 ExitDialogueSessionCommand>();
         }
     }

@@ -56,16 +56,14 @@ namespace Game.Gameplay
             public IReadOnlyList<PatrolPoint> PatrolPoints =>
                 _patrolPoints;
 
-            public ActorPlacement CreatePlacement()
+            public ActorRuntime CreateRuntime(Guid instanceId)
             {
-                var patrolLocations =
-                    CreatePatrolLocations();
-
-                return new ActorPlacement(
+                return new ActorRuntime(
+                    instanceId,
                     new ActorLocation(
                         _locationId,
                         _anchorKey),
-                    patrolLocations);
+                    CreatePatrolLocations());
             }
 
             public void Normalize()

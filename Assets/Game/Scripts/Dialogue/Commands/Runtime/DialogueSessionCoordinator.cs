@@ -21,39 +21,42 @@ namespace Game.Dialogue.Commands
             DialogueSession session,
             CancellationToken cancellationToken)
         {
-            await SendRequiredAsync(
-                session.InitiatorInstanceId,
-                new EnterDialogueSessionCommand(
-                    session.Id,
-                    session.SpeakerInstanceId,
-                    session.SpeakerPosition),
-                cancellationToken);
-
             try
             {
-                await SendRequiredAsync(
-                    session.SpeakerInstanceId,
-                    new EnterDialogueSessionCommand(
-                        session.Id,
+                await UniTask.WhenAll(
+                    SendRequiredAsync(
                         session.InitiatorInstanceId,
-                        session.InitiatorPosition),
-                    cancellationToken);
+                        new EnterDialogueSessionCommand(
+                            session.Id,
+                            session.SpeakerInstanceId,
+                            session.SpeakerPosition),
+                        cancellationToken),
+
+                    SendRequiredAsync(
+                        session.SpeakerInstanceId,
+                        new EnterDialogueSessionCommand(
+                            session.Id,
+                            session.InitiatorInstanceId,
+                            session.InitiatorPosition),
+                        cancellationToken));
             }
             catch
             {
-                await _commands.SendAsync(
-                    session.InitiatorInstanceId,
-                    new ExitDialogueSessionCommand(
-                        session.Id),
-                    CancellationToken.None);
+                await ExitBothAsync(session);
 
                 throw;
             }
         }
 
-        public async UniTask ExitAsync(
+        public UniTask ExitAsync(
             DialogueSession session,
-            CancellationToken cancellationToken)
+            CancellationToken _)
+        {
+            return ExitBothAsync(session);
+        }
+
+        private async UniTask ExitBothAsync(
+            DialogueSession session)
         {
             try
             {
@@ -61,7 +64,7 @@ namespace Game.Dialogue.Commands
                     session.InitiatorInstanceId,
                     new ExitDialogueSessionCommand(
                         session.Id),
-                    cancellationToken);
+                    CancellationToken.None);
             }
             finally
             {
@@ -69,7 +72,7 @@ namespace Game.Dialogue.Commands
                     session.SpeakerInstanceId,
                     new ExitDialogueSessionCommand(
                         session.Id),
-                    cancellationToken);
+                    CancellationToken.None);
             }
         }
 

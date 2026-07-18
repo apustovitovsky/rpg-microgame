@@ -35,7 +35,7 @@ namespace Game.Gameplay
             builder.RegisterInstance(_actors);
             builder.RegisterInstance(_pickups);
 
-            builder.Register<ActorPlacementService>(
+            builder.Register<ActorRuntimeRegistry>(
                     Lifetime.Singleton)
                 .AsImplementedInterfaces();
 

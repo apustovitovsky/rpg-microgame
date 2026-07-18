@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Game.Dialogue;
 using UnityEngine;
 
@@ -11,6 +13,7 @@ namespace Game.Dialogue.Actor
     {
         private DialogueSessionContext? _context;
         private Guid _readySessionId;
+        private UniTaskCompletionSource _readyCompletion;
 
         public event Action<DialogueSessionContext>
             ContextEntered;
@@ -34,15 +37,6 @@ namespace Game.Dialogue.Actor
             return false;
         }
 
-        public bool IsReadyFor(
-            Guid sessionId)
-        {
-            return _context.HasValue &&
-                   sessionId != Guid.Empty &&
-                   _context.Value.SessionId == sessionId &&
-                   _readySessionId == sessionId;
-        }
-
         public bool TryEnter(
             DialogueSessionContext context)
         {
@@ -62,10 +56,45 @@ namespace Game.Dialogue.Actor
 
             _context = context;
             _readySessionId = Guid.Empty;
+            _readyCompletion =
+                new UniTaskCompletionSource();
 
             ContextEntered?.Invoke(context);
 
             return true;
+        }
+
+        public async UniTask WaitUntilReadyAsync(
+            Guid sessionId,
+            CancellationToken cancellationToken)
+        {
+            if (!_context.HasValue ||
+                sessionId == Guid.Empty ||
+                _context.Value.SessionId != sessionId)
+            {
+                throw new InvalidOperationException(
+                    "Dialogue session is not active.");
+            }
+
+            if (_readySessionId == sessionId)
+            {
+                return;
+            }
+
+            var readyCompletion = _readyCompletion;
+
+            if (readyCompletion == null)
+            {
+                throw new InvalidOperationException(
+                    "Dialogue readiness is not initialized.");
+            }
+
+            using (cancellationToken.Register(
+                       () => readyCompletion.TrySetCanceled(
+                           cancellationToken)))
+            {
+                await readyCompletion.Task;
+            }
         }
 
         public bool TryMarkReady(
@@ -73,7 +102,9 @@ namespace Game.Dialogue.Actor
         {
             if (!_context.HasValue ||
                 sessionId == Guid.Empty ||
-                _context.Value.SessionId != sessionId)
+                _context.Value.SessionId != sessionId ||
+                _readyCompletion == null ||
+                !_readyCompletion.TrySetResult())
             {
                 return false;
             }
@@ -94,9 +125,13 @@ namespace Game.Dialogue.Actor
             }
 
             var context = _context.Value;
+            var readyCompletion = _readyCompletion;
 
             _context = null;
             _readySessionId = Guid.Empty;
+            _readyCompletion = null;
+
+            readyCompletion?.TrySetCanceled();
 
             ContextExited?.Invoke(context);
 

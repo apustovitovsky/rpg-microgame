@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Game.Dialogue
 {
@@ -8,11 +10,12 @@ namespace Game.Dialogue
 
         event Action<DialogueSessionContext> ContextExited;
 
-        bool IsReadyFor(
-            Guid sessionId);
-
         bool TryEnter(
             DialogueSessionContext context);
+
+        UniTask WaitUntilReadyAsync(
+            Guid sessionId,
+            CancellationToken cancellationToken);
 
         bool TryMarkReady(
             Guid sessionId);

@@ -14,7 +14,7 @@ namespace Game.AI
     {
         private INavigationPathFollower _pathFollower;
         private IActorNavigation _navigation;
-        private IActorPlacementService _placements;
+        private IActorRuntimeRegistry _runtimes;
         private Guid _instanceId;
 
         private string _currentLocationId;
@@ -27,21 +27,17 @@ namespace Game.AI
             INavigationPathFollower pathFollower,
             IActorNavigation navigation,
             ActorInstance instance,
-            IActorPlacementService placements)
+            IActorRuntimeRegistry runtimes)
         {
             _pathFollower = pathFollower;
             _navigation = navigation;
-            _placements = placements;
+            _runtimes = runtimes;
 
             if (instance == null)
-            {
                 throw new ArgumentNullException(nameof(instance));
-            }
 
-            if (_placements == null)
-            {
-                throw new ArgumentNullException(nameof(placements));
-            }
+            if (_runtimes == null)
+                throw new ArgumentNullException(nameof(runtimes));
 
             _instanceId = instance.InstanceId;
         }
@@ -49,21 +45,21 @@ namespace Game.AI
         public async UniTask<bool> MoveToNextAsync(
             CancellationToken cancellationToken)
         {
-            if (!_placements.TryGet(
+            if (!_runtimes.TryGet(
                     _instanceId,
-                    out var placement))
+                    out var runtime))
             {
                 ReportFailure(
-                    $"Actor placement for instance " +
+                    $"Actor runtime for instance " +
                     $"'{_instanceId}' was not found.");
 
                 return false;
             }
 
-            if (!placement.HasPatrol)
+            if (!runtime.HasPatrol)
             {
                 ReportFailure(
-                    $"Actor placement for instance " +
+                    $"Actor runtime for instance " +
                     $"'{_instanceId}' has no patrol locations.");
 
                 return false;
@@ -89,13 +85,13 @@ namespace Game.AI
                     _currentLocationId))
             {
                 _currentLocationId =
-                    placement.SpawnLocation.LocationId;
+                    runtime.SpawnLocation.LocationId;
 
                 _currentAnchorKey =
-                    placement.SpawnLocation.AnchorKey;
+                    runtime.SpawnLocation.AnchorKey;
             }
 
-            var target = placement.PatrolLocations[
+            var target = runtime.PatrolLocations[
                 _nextStopIndex];
 
             var result = await _pathFollower.FollowAsync(
@@ -126,7 +122,7 @@ namespace Game.AI
 
             _nextStopIndex =
                 (_nextStopIndex + 1) %
-                placement.PatrolLocations.Count;
+                runtime.PatrolLocations.Count;
 
             return true;
         }
@@ -135,9 +131,7 @@ namespace Game.AI
             string message)
         {
             if (_lastFailure == message)
-            {
                 return;
-            }
 
             _lastFailure = message;
 
